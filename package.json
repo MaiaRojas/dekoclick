@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify src/index.js -o www/bundle.js -t [ babelify --presets [ es2015 react ] ] -t [ envify --NODE_ENV production ]",
+    "build-css": "node-sass --include-path scss scss/main.scss www/style.css",
     "watch": "watchify src/index.js -o www/bundle.js -t [ babelify --presets [ es2015 react ] ] -t [ envify --NODE_ENV development ] -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +17,7 @@
     "browserify": "^14.1.0",
     "codemirror": "^5.25.0",
     "envify": "^4.0.0",
+    "node-sass": "^4.5.2",
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.2",

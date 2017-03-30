@@ -1,0 +1,51 @@
+//------------------------------------
+// Functions and Mixins related to Fonts
+//
+// Description: We use this file to define the fonts for all the project and we
+// can use the font classes to for different font weight.
+//
+// Usage:
+//
+// <p class="thin">Laboratoria</p> this will have font-weight: 100
+// <p class="bold">Laboratoria</p> this will have font-weight: 500
+//
+//------------------------------------
+
+$default-font-size: 16; //Base font is used in body tag to do rem calculation
+
+$font-family-sans-serif:   museo-sans, "Helvetica Neue", Helvetica, Arial, sans-serif !default; //Museo sans is imported using type-kit
+$font-family-serif:        Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:    Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$default-font-family:      $font-family-sans-serif !default;
+
+$use-rem: true; //Modern browser supports rem, for IE8 and older classes we degrade to px
+
+@mixin default-font-family {
+  font-family: $default-font-family;
+  font-style: normal;
+}
+
+@mixin thin {
+  @include default-font-family;
+  font-weight: 100;
+}
+
+@mixin light {
+  @include default-font-family;
+  font-weight: 300;
+}
+
+@mixin medium {
+  @include default-font-family;
+  font-weight: 500;
+}
+
+@mixin bold {
+  @include default-font-family;
+  font-weight: 700;
+}
+
+.thin {@include thin;}
+.light {@include light;}
+.medium {@include medium;}
+.bold {@include bold;}
