@@ -1,13 +1,18 @@
 {
   "name": "capitan-www",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.0",
+  "main": "www/index.html",
   "scripts": {
     "build": "browserify src/index.js -o www/bundle.js -t [ babelify --presets [ es2015 react ] ] -t [ envify --NODE_ENV production ]",
     "watch": "watchify src/index.js -o www/bundle.js -t [ babelify --presets [ es2015 react ] ] -t [ envify --NODE_ENV development ] -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "Apache 2.0",
+  "author": "Laboratoria <sumate@laboratoria.la> (http://laboratoria.la/)",
+  "contributors": [
+    "Lupo Montero <lupo@laboratoria.la> (https://github.com/lupomontero)",
+    "Giancarlo Corzo <gian@laboratoria.la> (https://github.com/giancorzo)"
+  ],
+  "license": "Apache-2.0",
   "devDependencies": {
     "axios": "^0.15.3",
     "babel-preset-es2015": "^6.24.0",
