@@ -3,38 +3,45 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setTitle, fetchGroups } from '../actions';
+import { setTitle, fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
+import CoursesList from '../components/courses-list';
 
 
 class Dashboard extends React.Component {
-
-  constructor(props) {
-
-    super(props);
-    this.goToGroup = this.goToGroup.bind(this);
-  }
 
   componentWillMount() {
 
     this.props.setTitle('Dashboard');
     this.props.fetchGroups();
+    this.props.fetchCourses();
   }
 
-  goToGroup(group) {
-
-    this.props.router.push('/groups/' + encodeURIComponent(group._id));
-  }
   render() {
 
-    if (!this.props.hasLoaded) {
+    const groups = this.props.groups;
+    const courses = this.props.courses;
+
+    const goToCourse = (course) => {
+
+      this.props.router.push('/courses/' + encodeURIComponent(course._id));
+    };
+
+    const goToGroup = (group) => {
+
+      this.props.router.push('/groups/' + encodeURIComponent(group._id));
+    };
+
+    if (!groups.hasLoaded || !courses.hasLoaded) {
       return null;
     }
 
     return (
       <div>
-        <h1>Grupos matriculados</h1>
-        <GroupsList groups={this.props.groups} goToGroup={this.goToGroup} />
+        <h2>Cursos</h2>
+        <CoursesList courses={courses.courses} goToCourse={goToCourse} />
+        <h2>Grupos matriculados</h2>
+        <GroupsList groups={groups.groups} goToGroup={goToGroup} />
       </div>
     );
   }
@@ -44,14 +51,15 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
   userCtx: state.session.userCtx,
-  hasLoaded: state.groups.hasLoaded,
-  groups: state.groups.groups
+  groups: state.groups,
+  courses: state.courses
 });
 
 
 const mapDispatchToProps = {
   setTitle,
-  fetchGroups
+  fetchGroups,
+  fetchCourses
 };
 
 

@@ -5,6 +5,7 @@ import * as ActionTypes from '../actions';
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import session from './session';
+import courses from './courses';
 import groups from './groups';
 import tracks from './tracks';
 import lessons from './lessons';
@@ -40,6 +41,7 @@ const errorMessage = (state = null, action) => {
 const rootReducer = combineReducers({
   app,
   session,
+  courses,
   groups,
   tracks,
   lessons,

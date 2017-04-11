@@ -61500,6 +61500,17 @@ var fetchGroups = exports.fetchGroups = function fetchGroups() {
   };
 };
 
+var fetchCourses = exports.fetchCourses = function fetchCourses() {
+  return {
+    type: 'API_REQUEST',
+    payload: {
+      id: 'FETCH_COURSES',
+      path: '/_courses',
+      method: 'GET'
+    }
+  };
+};
+
 var fetchTracks = exports.fetchTracks = function fetchTracks() {
   return {
     type: 'API_REQUEST',
@@ -61548,6 +61559,63 @@ var updateProblemCode = exports.updateProblemCode = function updateProblemCode(c
 };
 
 },{}],438:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactMdl = require('react-mdl');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CourseCard = function CourseCard(props) {
+
+  var goToCourse = props.goToCourse.bind(null, props.course);
+
+  return _react2.default.createElement(
+    _reactMdl.Card,
+    { shadow: 0 },
+    _react2.default.createElement(
+      _reactMdl.CardTitle,
+      null,
+      props.course.title
+    ),
+    _react2.default.createElement(
+      _reactMdl.CardText,
+      null,
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...'
+    ),
+    _react2.default.createElement(
+      _reactMdl.CardActions,
+      { border: true },
+      _react2.default.createElement(
+        _reactMdl.Button,
+        { raised: true, colored: true, onClick: goToCourse },
+        'Ver curso'
+      )
+    )
+  );
+};
+
+var CoursesList = function CoursesList(props) {
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    props.courses.map(function (course) {
+      return _react2.default.createElement(CourseCard, { key: course._id, course: course, goToCourse: props.goToCourse });
+    })
+  );
+};
+
+exports.default = CoursesList;
+
+},{"react":358,"react-mdl":274}],439:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -61643,7 +61711,7 @@ var GroupsList = function (_React$Component2) {
 
 exports.default = GroupsList;
 
-},{"react":358,"react-mdl":274}],439:[function(require,module,exports){
+},{"react":358,"react-mdl":274}],440:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -61797,7 +61865,112 @@ var mapDispatchToProps = {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(App);
 
-},{"../actions":437,"./signin":445,"react":358,"react-mdl":274,"react-redux":290,"react-router":327}],440:[function(require,module,exports){
+},{"../actions":437,"./signin":447,"react":358,"react-mdl":274,"react-redux":290,"react-router":327}],441:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactRouter = require('react-router');
+
+var _actions = require('../actions');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+// Group page/container
+//
+
+var Lesson = function Lesson(props) {
+
+  return _react2.default.createElement(
+    'li',
+    null,
+    props.lesson.title
+  );
+};
+
+var Unit = function Unit(props) {
+
+  var lessons = props.unit.lessons || [];
+
+  return _react2.default.createElement(
+    'li',
+    null,
+    _react2.default.createElement(
+      'h4',
+      null,
+      props.unit.title
+    ),
+    _react2.default.createElement(
+      'ul',
+      null,
+      lessons.map(function (lesson, i) {
+        return _react2.default.createElement(Lesson, { key: i, lesson: lesson });
+      })
+    )
+  );
+};
+
+var Course = function Course(props) {
+
+  if (!props.courses.hasLoaded) {
+    return props.fetchCourses();
+  }
+
+  var courseid = props.params.courseid;
+  var courses = props.courses.courses;
+  var course = courses.filter(function (course) {
+    return course._id === courseid;
+  }).shift();
+
+  console.log(course);
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'h1',
+      null,
+      'Curso: ',
+      course.title
+    ),
+    _react2.default.createElement(
+      'h2',
+      null,
+      'Unidades'
+    ),
+    _react2.default.createElement(
+      'ul',
+      null,
+      course.units.map(function (unit, i) {
+        return _react2.default.createElement(Unit, { key: i, unit: unit });
+      })
+    )
+  );
+};
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    courses: state.courses
+  };
+};
+
+var mapDispatchToProps = {
+  setTitle: _actions.setTitle,
+  fetchCourses: _actions.fetchCourses
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Course);
+
+},{"../actions":437,"react":358,"react-redux":290,"react-router":327}],442:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -61818,6 +61991,10 @@ var _groupsList = require('../components/groups-list');
 
 var _groupsList2 = _interopRequireDefault(_groupsList);
 
+var _coursesList = require('../components/courses-list');
+
+var _coursesList2 = _interopRequireDefault(_coursesList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61829,13 +62006,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Dashboard = function (_React$Component) {
   _inherits(Dashboard, _React$Component);
 
-  function Dashboard(props) {
+  function Dashboard() {
     _classCallCheck(this, Dashboard);
 
-    var _this = _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).call(this, props));
-
-    _this.goToGroup = _this.goToGroup.bind(_this);
-    return _this;
+    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
   }
 
   _createClass(Dashboard, [{
@@ -61844,18 +62018,27 @@ var Dashboard = function (_React$Component) {
 
       this.props.setTitle('Dashboard');
       this.props.fetchGroups();
-    }
-  }, {
-    key: 'goToGroup',
-    value: function goToGroup(group) {
-
-      this.props.router.push('/groups/' + encodeURIComponent(group._id));
+      this.props.fetchCourses();
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
 
-      if (!this.props.hasLoaded) {
+      var groups = this.props.groups;
+      var courses = this.props.courses;
+
+      var goToCourse = function goToCourse(course) {
+
+        _this2.props.router.push('/courses/' + encodeURIComponent(course._id));
+      };
+
+      var goToGroup = function goToGroup(group) {
+
+        _this2.props.router.push('/groups/' + encodeURIComponent(group._id));
+      };
+
+      if (!groups.hasLoaded || !courses.hasLoaded) {
         return null;
       }
 
@@ -61863,11 +62046,17 @@ var Dashboard = function (_React$Component) {
         'div',
         null,
         _react2.default.createElement(
-          'h1',
+          'h2',
+          null,
+          'Cursos'
+        ),
+        _react2.default.createElement(_coursesList2.default, { courses: courses.courses, goToCourse: goToCourse }),
+        _react2.default.createElement(
+          'h2',
           null,
           'Grupos matriculados'
         ),
-        _react2.default.createElement(_groupsList2.default, { groups: this.props.groups, goToGroup: this.goToGroup })
+        _react2.default.createElement(_groupsList2.default, { groups: groups.groups, goToGroup: goToGroup })
       );
     }
   }]);
@@ -61878,19 +62067,20 @@ var Dashboard = function (_React$Component) {
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     userCtx: state.session.userCtx,
-    hasLoaded: state.groups.hasLoaded,
-    groups: state.groups.groups
+    groups: state.groups,
+    courses: state.courses
   };
 };
 
 var mapDispatchToProps = {
   setTitle: _actions.setTitle,
-  fetchGroups: _actions.fetchGroups
+  fetchGroups: _actions.fetchGroups,
+  fetchCourses: _actions.fetchCourses
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Dashboard);
 
-},{"../actions":437,"../components/groups-list":438,"react":358,"react-redux":290}],441:[function(require,module,exports){
+},{"../actions":437,"../components/courses-list":438,"../components/groups-list":439,"react":358,"react-redux":290}],443:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62053,7 +62243,7 @@ var mapDispatchToProps = {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Group);
 
-},{"../actions":437,"react":358,"react-mdl":274,"react-redux":290,"react-router":327}],442:[function(require,module,exports){
+},{"../actions":437,"react":358,"react-mdl":274,"react-redux":290,"react-router":327}],444:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62202,7 +62392,7 @@ var mapDispatchToProps = {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Lesson);
 
-},{"../actions":437,"react":358,"react-mdl":274,"react-redux":290}],443:[function(require,module,exports){
+},{"../actions":437,"react":358,"react-mdl":274,"react-redux":290}],445:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62498,7 +62688,7 @@ var mapDispatchToProps = {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Problem);
 
-},{"../actions":437,"codemirror/mode/javascript/javascript":30,"react":358,"react-codemirror":89,"react-mdl":274,"react-redux":290,"remarkable":372}],444:[function(require,module,exports){
+},{"../actions":437,"codemirror/mode/javascript/javascript":30,"react":358,"react-codemirror":89,"react-mdl":274,"react-redux":290,"remarkable":372}],446:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62536,7 +62726,7 @@ Root.propTypes = {
 
 exports.default = Root;
 
-},{"../routes":454,"react":358,"react-redux":290,"react-router":327}],445:[function(require,module,exports){
+},{"../routes":457,"react":358,"react-redux":290,"react-router":327}],447:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62614,7 +62804,7 @@ var SignIn = function (_Component) {
 
 exports.default = SignIn;
 
-},{"react":358,"react-mdl":274}],446:[function(require,module,exports){
+},{"react":358,"react-mdl":274}],448:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -62653,7 +62843,7 @@ if (hash && /^(problems|challenges|groups)/.test(hash)) {
 
 (0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store, history: history }), document.getElementById('root'));
 
-},{"./containers/root":444,"./store/configure":455,"react":358,"react-dom":90,"react-mdl/extra/material":217,"react-router":327,"react-router-redux":297}],447:[function(require,module,exports){
+},{"./containers/root":446,"./store/configure":458,"react":358,"react-dom":90,"react-mdl/extra/material":217,"react-router":327,"react-router-redux":297}],449:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62707,7 +62897,46 @@ exports.default = function (store) {
 // API Middleware
 //
 
-},{"axios":2}],448:[function(require,module,exports){
+},{"axios":2}],450:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+// Courses reducer
+//
+
+var defaults = {
+  hasLoaded: false,
+  courses: []
+};
+
+var courses = function courses() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaults;
+  var action = arguments[1];
+
+
+  if (action.type === 'FETCH_COURSES_PENDING') {
+    return Object.assign({}, state, { hasLoaded: false });
+  } else if (action.type === 'FETCH_COURSES_FAILURE') {
+    return Object.assign({}, state, {
+      hasLoaded: true,
+      error: action.payload
+    });
+  } else if (action.type === 'FETCH_COURSES_SUCCESS') {
+    return Object.assign({}, state, {
+      hasLoaded: true,
+      courses: action.payload.slice(0)
+    });
+  }
+
+  return state;
+};
+
+exports.default = courses;
+
+},{}],451:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62746,7 +62975,7 @@ var groups = function groups() {
 
 exports.default = groups;
 
-},{}],449:[function(require,module,exports){
+},{}],452:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62764,6 +62993,10 @@ var _redux = require('redux');
 var _session = require('./session');
 
 var _session2 = _interopRequireDefault(_session);
+
+var _courses = require('./courses');
+
+var _courses2 = _interopRequireDefault(_courses);
 
 var _groups = require('./groups');
 
@@ -62817,6 +63050,7 @@ var errorMessage = function errorMessage() {
 var rootReducer = (0, _redux.combineReducers)({
   app: app,
   session: _session2.default,
+  courses: _courses2.default,
   groups: _groups2.default,
   tracks: _tracks2.default,
   lessons: _lessons2.default,
@@ -62827,7 +63061,7 @@ var rootReducer = (0, _redux.combineReducers)({
 
 exports.default = rootReducer;
 
-},{"../actions":437,"./groups":448,"./lessons":450,"./problems":451,"./session":452,"./tracks":453,"react-router-redux":297,"redux":370}],450:[function(require,module,exports){
+},{"../actions":437,"./courses":450,"./groups":451,"./lessons":453,"./problems":454,"./session":455,"./tracks":456,"react-router-redux":297,"redux":370}],453:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62866,7 +63100,7 @@ var lessons = function lessons() {
 
 exports.default = lessons;
 
-},{}],451:[function(require,module,exports){
+},{}],454:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62918,7 +63152,7 @@ var problems = function problems() {
 
 exports.default = problems;
 
-},{}],452:[function(require,module,exports){
+},{}],455:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62974,7 +63208,7 @@ var session = function session() {
 
 exports.default = session;
 
-},{}],453:[function(require,module,exports){
+},{}],456:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -63013,7 +63247,7 @@ var tracks = function tracks() {
 
 exports.default = tracks;
 
-},{}],454:[function(require,module,exports){
+},{}],457:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -63034,6 +63268,10 @@ var _dashboard = require('./containers/dashboard');
 
 var _dashboard2 = _interopRequireDefault(_dashboard);
 
+var _course = require('./containers/course');
+
+var _course2 = _interopRequireDefault(_course);
+
 var _group = require('./containers/group');
 
 var _group2 = _interopRequireDefault(_group);
@@ -63052,12 +63290,13 @@ exports.default = _react2.default.createElement(
   _reactRouter.Route,
   { path: '/', component: _app2.default },
   _react2.default.createElement(_reactRouter.IndexRoute, { component: _dashboard2.default }),
+  _react2.default.createElement(_reactRouter.Route, { path: '/courses/:courseid', component: _course2.default }),
   _react2.default.createElement(_reactRouter.Route, { path: '/groups/:groupid', component: _group2.default }),
   _react2.default.createElement(_reactRouter.Route, { path: '/groups/:groupid/lessons/:lessonid', component: _lesson2.default }),
   _react2.default.createElement(_reactRouter.Route, { path: '/groups/:groupid/lessons/:lessonid/problems/:problemid', component: _problem2.default })
 );
 
-},{"./containers/app":439,"./containers/dashboard":440,"./containers/group":441,"./containers/lesson":442,"./containers/problem":443,"react":358,"react-router":327}],455:[function(require,module,exports){
+},{"./containers/app":440,"./containers/course":441,"./containers/dashboard":442,"./containers/group":443,"./containers/lesson":444,"./containers/problem":445,"react":358,"react-router":327}],458:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -63095,4 +63334,4 @@ var configure = function configure(preloadedState) {
 
 exports.default = configure;
 
-},{"../middleware/api":447,"../reducers":449,"redux":370,"redux-logger":363,"redux-thunk":364}]},{},[446]);
+},{"../middleware/api":449,"../reducers":452,"redux":370,"redux-logger":363,"redux-thunk":364}]},{},[448]);

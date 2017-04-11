@@ -60,6 +60,16 @@ export const fetchGroups = () => ({
 });
 
 
+export const fetchCourses = () => ({
+  type: 'API_REQUEST',
+  payload: {
+    id: 'FETCH_COURSES',
+    path: '/_courses',
+    method: 'GET'
+  }
+});
+
+
 export const fetchTracks = () => ({
   type: 'API_REQUEST',
   payload: {
