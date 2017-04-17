@@ -6,6 +6,16 @@
 import Axios from 'axios';
 
 
+const internals = {
+  baseUrl: 'http://api.laboratoria.la'
+};
+
+
+if (process.env.NODE_ENV === 'development') {
+  internals.baseUrl = 'http://lvh.me:3001';
+}
+
+
 export default store => next => action => {
 
   if (action.type !== 'API_REQUEST') {
@@ -16,7 +26,7 @@ export default store => next => action => {
 
   const options = {
     method: action.payload.method,
-    url: 'http://lvh.me:3001' + action.payload.path,
+    url: internals.baseUrl + action.payload.path,
     withCredentials: true
   };
 

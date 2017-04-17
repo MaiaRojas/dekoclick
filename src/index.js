@@ -16,7 +16,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 const hash = window.location.hash.slice(1);
 
-if (hash && /^(problems|challenges|groups)/.test(hash)) {
+if (hash && /^(courses|problems|challenges|groups)/.test(hash)) {
   window.history.pushState({}, '', '/' + hash);
 }
 

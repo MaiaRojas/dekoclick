@@ -62837,7 +62837,7 @@ var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHi
 
 var hash = window.location.hash.slice(1);
 
-if (hash && /^(problems|challenges|groups)/.test(hash)) {
+if (hash && /^(courses|problems|challenges|groups)/.test(hash)) {
   window.history.pushState({}, '', '/' + hash);
 }
 
@@ -62856,6 +62856,17 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var internals = {
+  baseUrl: 'http://api.laboratoria.la'
+}; //
+// API Middleware
+//
+
+
+if ("development" === 'development') {
+  internals.baseUrl = 'http://lvh.me:3001';
+}
+
 exports.default = function (store) {
   return function (next) {
     return function (action) {
@@ -62868,7 +62879,7 @@ exports.default = function (store) {
 
       var options = {
         method: action.payload.method,
-        url: 'http://lvh.me:3001' + action.payload.path,
+        url: internals.baseUrl + action.payload.path,
         withCredentials: true
       };
 
@@ -62893,9 +62904,7 @@ exports.default = function (store) {
       });
     };
   };
-}; //
-// API Middleware
-//
+};
 
 },{"axios":2}],450:[function(require,module,exports){
 'use strict';
