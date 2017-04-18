@@ -36,7 +36,8 @@ const Unit = (props) => {
 const Course = (props) => {
 
   if (!props.courses.hasLoaded) {
-    return props.fetchCourses();
+    props.fetchCourses();
+    return null;
   }
 
   const courseid = props.params.courseid;

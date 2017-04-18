@@ -4,23 +4,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory, Link } from 'react-router';
-import { Layout, Header, Drawer, Content, Navigation } from 'react-mdl';
 import { resetErrorMessage, loadSession, signIn, signOut } from '../actions';
 import SignIn from './signin';
-
-
-const AdminNav = (props) => {
-
-  return (
-    <Navigation>
-      <Link to="/users">Users</Link>
-      <Link to="/tracks">Tracks</Link>
-      <Link to="/locations">Locations</Link>
-      <Link to="/groups">Groups</Link>
-      <Link to="/lessons">Lessons</Link>
-    </Navigation>
-  );
-};
+import { Nav } from 'react-laboratoria-ui';
 
 
 class App extends Component {
@@ -42,27 +28,35 @@ class App extends Component {
       );
     }
 
-    let adminNav = null;
+    const goTo = (path) => {
 
-    if (this.props.userCtx.roles.indexOf('_admin') >= 0) {
-      adminNav = <AdminNav />
-    }
+      this.props.router.push(path);
+    };
 
     return (
-      <Layout fixedHeader={true} fixedDrawer={true}>
-        <Header title={this.props.app.title}></Header>
-        <Drawer>
-          <img className="logo" src="/img/logo.svg" />
-          <Navigation>
-            <Link to="/">Dashboard</Link>
-            <a href="#" onClick={this.props.signOut}>Sign out</a>
-          </Navigation>
-          {adminNav}
-        </Drawer>
-        <Content>
+      <div>
+        <Nav>
+          <div className="nav-left">
+          </div>
+          <span className="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <div className="nav-right nav-menu">
+            <a className="nav-item is-tab">
+              <figure className="image is-16x16" style={{'marginRight': '8px'}}>
+                <img src="http://bulma.io/images/jgthms.png" alt="{this.props.userCtx.name}" />
+              </figure>
+              {this.props.userCtx.name}
+            </a>
+            <a className="nav-item is-tab" onClick={this.props.signOut}>Log out</a>
+          </div>
+        </Nav>
+        <section className="section">
           {this.props.children}
-        </Content>
-      </Layout>
+        </section>
+      </div>
     );
   }
 

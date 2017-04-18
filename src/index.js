@@ -14,13 +14,6 @@ const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
 
 
-const hash = window.location.hash.slice(1);
-
-if (hash && /^(courses|problems|challenges|groups)/.test(hash)) {
-  window.history.pushState({}, '', '/' + hash);
-}
-
-
 render((
   <Root store={store} history={history} />
 ), document.getElementById('root'));

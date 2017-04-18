@@ -35,5 +35,8 @@
     "redux-thunk": "^2.2.0",
     "remarkable": "^1.7.1",
     "watchify": "^3.9.0"
+  },
+  "browserify": {
+    "transform": [["babelify", { "presets": ["es2015", "react"] }]]
   }
 }

@@ -2,7 +2,6 @@
 
 
 import React, { Component, PropTypes } from 'react';
-import { Button, Textfield } from 'react-mdl';
 
 
 export default class SignIn extends Component {
@@ -17,8 +16,8 @@ export default class SignIn extends Component {
 
     e.preventDefault();
 
-    const email = this.refs.email.inputRef.value;
-    const password = this.refs.password.inputRef.value;
+    const email = this.refs.email.value;
+    const password = this.refs.password.value;
 
     // TODO: validate email and password!!!
 
@@ -32,10 +31,29 @@ export default class SignIn extends Component {
     return (
       <div className="signin-form-wrapper">
         <form className="signin-form" onSubmit={this.handleSubmit}>
-          <img className="logo" src="/img/logo.svg" />
-          <Textfield label="email" ref="email" />
-          <Textfield label="password" ref="password" type="password" />
-          <Button raised colored>Inciar sessión</Button>
+          <div className="field">
+            <p className="control has-icons-left">
+              <input ref="email" className="input" type="email" placeholder="Email" />
+              <span className="icon is-small is-left">
+                <i className="fa fa-envelope"></i>
+              </span>
+            </p>
+            </div>
+            <div className="field">
+            <p className="control has-icons-left">
+              <input ref="password" className="input" type="password" placeholder="Password" />
+              <span className="icon is-small is-left">
+                <i className="fa fa-lock"></i>
+              </span>
+            </p>
+            </div>
+            <div className="field">
+            <p className="control">
+              <button className="button is-primary">
+                Login
+              </button>
+            </p>
+            </div>
         </form>
       </div>
     );
