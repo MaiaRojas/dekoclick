@@ -1,0 +1,60 @@
+//------------------------------------
+// Separators
+//
+// Description: Create a separator csss
+//
+//------------------------------------
+
+$separator-width-control: 210px;
+$separator-height-control: 1px;
+$separator-margin: 28px;
+
+.separator {
+	width: $separator-width-control;
+	height: $separator-height-control;
+	margin-bottom: $separator-margin;
+	&.separator-xs {
+		width: $separator-width-control - 70px;
+	}
+	&.separator-sm {
+		width: $separator-width-control - 35px;
+	}
+	&.separator-lg {
+		width: $separator-width-control + 70px;
+	}
+	&.separator-centered {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	&.separator-right {
+		float: right;
+	}
+}
+
+$separator-width: 28px;
+$separator-height: 1px;
+$separator-style: solid;
+$separator-margin-top: $separator-margin / 2;
+$separator-margin-bottom: $separator-margin;
+$brand-colors-sufix-list: 'primary', 'success', 'info', 'warning', 'danger';
+$brand-colors-list: $primary, $success, $info, $warning, $danger;
+
+@for $i from 1 through length($brand-colors-sufix-list) {
+	.separator-#{nth($brand-colors-sufix-list, $i)} {
+		border-top: $separator-height $separator-style #{nth($brand-colors-list, $i)} !important;
+		margin-top: $separator-margin-top;
+		margin-bottom: $separator-margin-bottom;
+		width: $separator-width;
+		height: $separator-height;
+	}
+}
+
+.separator {
+	&.separator-centered {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	&.separator-full-width {
+		width: 100%;
+	}
+}

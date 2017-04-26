@@ -36,6 +36,19 @@
     "watchify": "^3.9.0"
   },
   "browserify": {
-    "transform": [["babelify", { "presets": ["es2015", "react"] }]]
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015",
+            "react"
+          ]
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "react-mdl": "^1.10.1"
   }
 }

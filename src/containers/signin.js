@@ -2,7 +2,7 @@
 
 
 import React, { Component, PropTypes } from 'react';
-import { Field, Input } from 'react-laboratoria-ui';
+import { Field, Control, Input, Section, Container, Box } from 'react-laboratoria-ui';
 
 
 export default class SignIn extends Component {
@@ -29,32 +29,40 @@ export default class SignIn extends Component {
   render() {
 
     return (
-      <div className="signin-form-wrapper">
+      <div className="wrapper">
+        <header className="has-text-centered pv-14">
+          <img alt="Laboratoria código que transforma" className="logo" src="img/logo.svg"/>
+        </header>
+        <Section className="login">
+          <Container>
+            <h2 className="is-hidden-mobile">ingresa</h2>
+            <div className="is-hidden-mobile separator separator-primary separator-centered"></div>
+            <h4>Bienvenido al capitán <br/> Ingresa a tu cuenta</h4>
+            <Box>
+              <form onSubmit={this.handleSubmit}>
+                <Field>
+                  <label className="label">Email:</label>
+                  <Control>
+                    <Input ref="email" type="email" placeholder="example@laboratoria.la"/>
+                  </Control>
+                </Field>
 
-        <form className="signin-form" onSubmit={this.handleSubmit}>
+                <Field>
+                  <label className="label">Password:</label>
+                  <Control>
+                    <Input ref="password" type="password" placeholder="your password"/>
+                  </Control>
+                </Field>
 
-          <Field>
-            <p className="control has-icons-left">
-              <Input ref="email" type="email" placeholder="Email" />
-            </p>
-          </Field>
-
-          <Field>
-            <p className="control has-icons-left">
-              <Input ref="password" type="password" placeholder="Password" />
-            </p>
-          </Field>
-
-          <Field>
-            <p className="control">
-              <button className="button is-primary">
-                Login
-              </button>
-            </p>
-          </Field>
-
-        </form>
-
+                <Field className="is-grouped">
+                  <Control>
+                    <button className="button is-primary">Login</button>
+                  </Control>
+                </Field>
+              </form>
+            </Box>
+          </Container>
+        </Section>
       </div>
     );
   }

@@ -102,7 +102,7 @@ button,
 input,
 select,
 textarea {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif; }
+  font-family: "museo-sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 code,
 pre {
@@ -3930,3 +3930,116 @@ label.panel-block {
 .footer {
   background-color: whitesmoke;
   padding: 3rem 1.5rem 6rem; }
+
+@media screen and (min-width: 1384px) {
+  .container {
+    max-width: 1344px; } }
+
+.label {
+  font-weight: 300;
+  font-size: 0.9rem; }
+
+.input {
+  height: 48px;
+  font-weight: 300; }
+
+.button.is-primary {
+  color: white;
+  font-weight: 300;
+  padding-left: 0.9em;
+  padding-right: 0.9em; }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset; }
+
+.separator {
+  width: 210px;
+  height: 1px;
+  margin-bottom: 28px; }
+  .separator.separator-xs {
+    width: 140px; }
+  .separator.separator-sm {
+    width: 175px; }
+  .separator.separator-lg {
+    width: 280px; }
+  .separator.separator-centered {
+    margin-left: auto;
+    margin-right: auto; }
+  .separator.separator-right {
+    float: right; }
+
+.separator-primary {
+  border-top: 1px solid #f7b718 !important;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  width: 28px;
+  height: 1px; }
+
+.separator-success {
+  border-top: 1px solid #2bb174 !important;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  width: 28px;
+  height: 1px; }
+
+.separator-info {
+  border-top: 1px solid #3cb1c8 !important;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  width: 28px;
+  height: 1px; }
+
+.separator-warning {
+  border-top: 1px solid #ea8d62 !important;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  width: 28px;
+  height: 1px; }
+
+.separator-danger {
+  border-top: 1px solid #cd3232 !important;
+  margin-top: 14px;
+  margin-bottom: 28px;
+  width: 28px;
+  height: 1px; }
+
+.separator.separator-centered {
+  margin-left: auto;
+  margin-right: auto; }
+
+.separator.separator-full-width {
+  width: 100%; }
+
+.logo {
+  width: 220px;
+  font-size: 100; }
+
+.login h2 {
+  font-size: 2rem;
+  line-height: 1.1;
+  text-align: center;
+  font-weight: 100; }
+
+.login h4 {
+  font-size: 18px;
+  margin-top: 21px;
+  margin-bottom: 21px;
+  line-height: 28px;
+  font-weight: 100;
+  text-align: center; }
+
+.login .box {
+  max-width: 36%;
+  margin: 0px auto; }
+
+@media screen and (max-width: 769px) {
+  .login .box {
+    max-width: 100%; } }
+
+@media screen and (min-width: 769px) and (max-width: 1000px) {
+  .login .box {
+    max-width: 60%; } }
+
+.pv-14 {
+  margin-top: 14px;
+  margin-bottom: 14px; }
