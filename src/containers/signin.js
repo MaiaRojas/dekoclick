@@ -2,6 +2,7 @@
 
 
 import React, { Component, PropTypes } from 'react';
+import { Field, Input } from 'react-laboratoria-ui';
 
 
 export default class SignIn extends Component {
@@ -20,7 +21,6 @@ export default class SignIn extends Component {
     const password = this.refs.password.value;
 
     // TODO: validate email and password!!!
-
     this.props.signIn(email, password);
 
     return false;
@@ -30,31 +30,31 @@ export default class SignIn extends Component {
 
     return (
       <div className="signin-form-wrapper">
+
         <form className="signin-form" onSubmit={this.handleSubmit}>
-          <div className="field">
+
+          <Field>
             <p className="control has-icons-left">
-              <input ref="email" className="input" type="email" placeholder="Email" />
-              <span className="icon is-small is-left">
-                <i className="fa fa-envelope"></i>
-              </span>
+              <Input ref="email" type="email" placeholder="Email" />
             </p>
-            </div>
-            <div className="field">
+          </Field>
+
+          <Field>
             <p className="control has-icons-left">
-              <input ref="password" className="input" type="password" placeholder="Password" />
-              <span className="icon is-small is-left">
-                <i className="fa fa-lock"></i>
-              </span>
+              <Input ref="password" type="password" placeholder="Password" />
             </p>
-            </div>
-            <div className="field">
+          </Field>
+
+          <Field>
             <p className="control">
               <button className="button is-primary">
                 Login
               </button>
             </p>
-            </div>
+          </Field>
+
         </form>
+
       </div>
     );
   }
