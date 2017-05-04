@@ -2,7 +2,7 @@
 
 
 import * as ActionTypes from '../actions';
-import { routerReducer as routing } from 'react-router-redux';
+import { routerReducer as router } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import session from './session';
 import courses from './courses';
@@ -23,19 +23,19 @@ const app = (state = { title: 'Cargando...' }, action) => {
 
 
 // Updates error message to notify about the failed fetches.
-const errorMessage = (state = null, action) => {
-
-  const { type, error } = action;
-
-  if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-    return null;
-  }
-  else if (error) {
-    return error;
-  }
-
-  return state;
-};
+// const errorMessage = (state = null, action) => {
+//
+//   const { type, error } = action;
+//
+//   if (type === ActionTypes.RESET_ERROR_MESSAGE) {
+//     return null;
+//   }
+//   else if (error) {
+//     return error;
+//   }
+//
+//   return state;
+// };
 
 
 const rootReducer = combineReducers({
@@ -46,8 +46,8 @@ const rootReducer = combineReducers({
   tracks,
   lessons,
   problems,
-  errorMessage,
-  routing
+  //errorMessage,
+  router
 });
 
 

@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { List, ListItem, ListItemContent, ListItemAction, Icon } from 'react-mdl';
 import { setTitle, fetchLessons } from '../actions';
 
 

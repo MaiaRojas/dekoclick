@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Spinner, FABButton, Icon, Grid, Cell } from 'react-mdl';
 import Remarkable from 'remarkable';
 import CodeMirror from 'react-codemirror';
 import JSMode from 'codemirror/mode/javascript/javascript';

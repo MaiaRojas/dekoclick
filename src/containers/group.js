@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Card, CardTitle, CardText, CardActions, CardMenu, Button, IconButton } from 'react-mdl';
 import { setTitle, fetchTracks } from '../actions';
 
 

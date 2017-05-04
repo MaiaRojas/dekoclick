@@ -2,7 +2,6 @@
 
 
 import React from 'react';
-import { Card, CardTitle, CardText, CardActions, CardMenu, Button, IconButton } from 'react-mdl';
 
 
 const CourseCard = (props) => {
@@ -10,16 +9,16 @@ const CourseCard = (props) => {
   const goToCourse = props.goToCourse.bind(null, props.course);
 
   return (
-    <Card shadow={0}>
-      <CardTitle>{props.course.title}</CardTitle>
-      <CardText>
+    <div className="card">
+      <div className="card-title">{props.course.title}</div>
+      <div className="card-text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Mauris sagittis pellentesque lacus eleifend lacinia...
-      </CardText>
-      <CardActions border>
-        <Button raised colored onClick={goToCourse}>Ver curso</Button>
-      </CardActions>
-    </Card>
+      </div>
+      <div className="card-actions">
+        <button onClick={goToCourse}>Ver curso</button>
+      </div>
+    </div>
   );
 }
 

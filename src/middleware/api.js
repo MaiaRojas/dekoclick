@@ -11,7 +11,7 @@ const internals = {
 };
 
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   internals.baseUrl = 'http://lvh.me:3001';
 }
 
