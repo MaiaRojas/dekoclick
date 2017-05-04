@@ -1,11 +1,10 @@
 {
   "name": "capitan-www",
   "version": "0.0.0",
-  "main": "www/index.html",
+  "main": "public/index.html",
   "scripts": {
-    "build": "webpack",
-    "build-css": "node-sass --include-path scss scss/main.scss www/style.css",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
     "start": "webpack-dev-server"
   },
   "author": "Laboratoria <sumate@laboratoria.la> (http://laboratoria.la/)",
@@ -22,7 +21,6 @@
     "babel-preset-react": "^6.24.1",
     "blueimp-md5": "^2.7.0",
     "codemirror": "^5.25.2",
-    "node-sass": "^4.5.2",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-codemirror": "^0.3.0",
