@@ -21,8 +21,27 @@ if (process.env.NODE_ENV !== 'production') {
 const store = createStore(reducers, applyMiddleware(...middlewares));
 
 
-ReactDOM.render((
-  <Provider store={store}>
-    <App />
-  </Provider>
-), document.getElementById('root'));
+import { AppContainer } from 'react-hot-loader';
+
+
+const render = (Component) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
+};
+
+render(App);
+
+
+// Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./containers/app', () => {
+
+    render(App);
+  });
+}

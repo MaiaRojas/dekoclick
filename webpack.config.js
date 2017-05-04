@@ -6,9 +6,17 @@ const Webpack = require('webpack');
 
 
 module.exports = {
-  entry: './src/index.js',
+  context: Path.resolve(__dirname, 'src'),
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './index.js'
+  ],
   output: {
-    filename: 'public/bundle.js'
+    filename: 'bundle.js',
+    path: Path.resolve(__dirname, 'public'),
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -19,10 +27,12 @@ module.exports = {
       }
     ]
   },
+  devtool: 'inline-source-map',
   devServer: {
     hot: true,
     contentBase: Path.resolve(__dirname, 'public'),
-    publicPath: '/'
+    publicPath: '/',
+    historyApiFallback: true
   },
   plugins: [
     new Webpack.HotModuleReplacementPlugin(),

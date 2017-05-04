@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "993d1e0aa83d1540f6a7"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "f453fdf533b066c22e10"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -55158,7 +55158,9 @@ var App = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var userCtx = this.props.session.userCtx;
+      var _props$session = this.props.session,
+          userCtx = _props$session.userCtx,
+          error = _props$session.error;
 
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -55167,7 +55169,7 @@ var App = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__components_navbar__["a" /* default */], { userCtx: userCtx, signOut: this.props.signOut }),
+          userCtx && userCtx.name && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__components_navbar__["a" /* default */], { userCtx: userCtx, signOut: this.props.signOut }),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_react_spinner___default.a, null),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Switch */],
@@ -55178,7 +55180,7 @@ var App = function (_React$Component) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PrivateRoute, { path: '/groups/:groupid/lessons/:lessonid', component: __WEBPACK_IMPORTED_MODULE_10__lesson__["a" /* default */] }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(PrivateRoute, { path: '/groups/:groupid/lessons/:lessonid/problems/:problemid', component: __WEBPACK_IMPORTED_MODULE_11__problem__["a" /* default */] }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["a" /* Route */], { path: '/signin', render: function render() {
-                return userCtx && userCtx.name ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Redirect */], { to: '/' }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__signin__["a" /* default */], { signIn: _this2.props.signIn });
+                return userCtx && userCtx.name ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Redirect */], { to: '/' }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__signin__["a" /* default */], { signIn: _this2.props.signIn, error: error });
               } })
           )
         )
@@ -56064,52 +56066,63 @@ var SignIn = function (_Component) {
 
       var formStyle = {
         display: 'flex',
-        'justify-content': 'center',
-        'align-items': 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
       };
 
+      console.log(this.props.error);
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'form',
-        { onSubmit: this.handleSubmit, style: formStyle },
+        'div',
+        { style: formStyle },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'field' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
-            { className: 'label' },
-            'Email:'
-          ),
+          'form',
+          { onSubmit: this.handleSubmit },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
-            { className: 'control' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'email', type: 'email', placeholder: 'example@laboratoria.la' })
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'field' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
-            { className: 'label' },
-            'Password:'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'div',
-            { className: 'control' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'password', type: 'password', placeholder: 'your password' })
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          { className: 'field' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'div',
-            { className: 'control' },
+            { className: 'field' },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'button',
-              { className: 'button is-primary' },
-              'Login'
+              'label',
+              { className: 'label' },
+              'Email:'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'control' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'email', type: 'email', placeholder: 'example@laboratoria.la' })
             )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'field' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'label',
+              { className: 'label' },
+              'Password:'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'control' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'password', type: 'password', placeholder: 'your password' })
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'field' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'control' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                { className: 'button is-primary' },
+                'Login'
+              )
+            )
+          ),
+          this.props.error && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'error' },
+            this.props.error.response.data.message
           )
         )
       );

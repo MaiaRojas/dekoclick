@@ -12,7 +12,7 @@ import Dashboard from './dashboard';
 import Course from './course';
 import Group from './group';
 import Lesson from './lesson';
-import Problem from './problem';
+//import Problem from './problem';
 
 
 const PrivateRoute = ({ component: Component, userCtx, path, exact }) => (
@@ -33,23 +33,24 @@ class App extends React.Component {
 
   render() {
 
-    const { userCtx } = this.props.session;
+    const { userCtx, error } = this.props.session;
 
     return (
       <Router>
         <div>
-          <Navbar userCtx={userCtx} signOut={this.props.signOut} />
+          {userCtx && userCtx.name &&
+            <Navbar userCtx={userCtx} signOut={this.props.signOut} />}
           <Spinner />
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} />
             <PrivateRoute path="/courses/:courseid" component={Course} />
             <PrivateRoute path="/groups/:groupid" component={Group} />
             <PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} />
-            <PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} />
+            {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} />*/}
             <Route path="/signin" render={() => (
               userCtx && userCtx.name ?
                 <Redirect to="/" /> :
-                <SignIn signIn={this.props.signIn} />
+                <SignIn signIn={this.props.signIn} error={error} />
             )} />
           </Switch>
         </div>

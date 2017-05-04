@@ -29,34 +29,40 @@ export default class SignIn extends Component {
 
     const formStyle = {
       display: 'flex',
-      'justify-content': 'center',
-      'align-items': 'center'
+      justifyContent: 'center',
+      alignItems: 'center'
     };
 
     return (
-      <form onSubmit={this.handleSubmit} style={formStyle}>
+      <div style={formStyle}>
+        <form onSubmit={this.handleSubmit}>
 
-        <div className="field">
-          <label className="label">Email:</label>
-          <div className="control">
-            <input ref="email" type="email" placeholder="example@laboratoria.la" />
+          <div className="field">
+            <label className="label">Email:</label>
+            <div className="control">
+              <input ref="email" type="email" placeholder="example@laboratoria.la" />
+            </div>
           </div>
-        </div>
 
-        <div className="field">
-          <label className="label">Password:</label>
-          <div className="control">
-            <input ref="password" type="password" placeholder="your password" />
+          <div className="field">
+            <label className="label">Password:</label>
+            <div className="control">
+              <input ref="password" type="password" placeholder="your password" />
+            </div>
           </div>
-        </div>
 
-        <div className="field">
-          <div className="control">
-            <button className="button is-primary">Login</button>
+          <div className="field">
+            <div className="control">
+              <button>Ingresar</button>
+            </div>
           </div>
-        </div>
 
-      </form>
+          {this.props.error && <div className="error">
+            {this.props.error.response.data.message}
+          </div>}
+
+        </form>
+      </div>
     );
   }
 }
