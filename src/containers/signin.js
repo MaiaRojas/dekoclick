@@ -1,10 +1,10 @@
 'use strict';
 
 
-import React, { Component } from 'react';
+import React from 'react';
 
 
-export default class SignIn extends Component {
+export default class SignIn extends React.Component {
 
   constructor(props) {
 
@@ -30,32 +30,19 @@ export default class SignIn extends Component {
     const formStyle = {
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      width: '100%',
+      height: '100%'
     };
 
     return (
-      <div style={formStyle}>
-        <form onSubmit={this.handleSubmit}>
+      <div className="signin" style={formStyle}>
+        <form onSubmit={this.handleSubmit} style={{width: '90%', maxWidth: '300px'}}>
 
-          <div className="field">
-            <label className="label">Email:</label>
-            <div className="control">
-              <input ref="email" type="email" placeholder="example@laboratoria.la" />
-            </div>
-          </div>
-
-          <div className="field">
-            <label className="label">Password:</label>
-            <div className="control">
-              <input ref="password" type="password" placeholder="your password" />
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="control">
-              <button>Ingresar</button>
-            </div>
-          </div>
+          <input ref="email" type="email" placeholder="Email" />
+          <input ref="password" type="password" placeholder="Contraseña" />
+          <button style={{width: '100%'}}>Ingresar</button>
+          <button type="button" style={{width: '100%', backgroundColor: 'transparent', textTransform: 'none', border: 'none' }}>Olvidaste tu contraseña?</button>
 
           {this.props.error && <div className="error">
             {this.props.error.response.data.message}

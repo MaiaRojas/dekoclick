@@ -6,12 +6,12 @@ import React from 'react';
 
 const Burger = (props) => {
 
-  if (!props.userCtx || !props.userCtx.name) {
-    return null;
-  }
+  //if (!props.userCtx || !props.userCtx.name) {
+  //  return null;
+  //}
 
   return (
-    <span className="nav-toggle">
+    <span className="burger">
       <span></span>
       <span></span>
       <span></span>
@@ -28,14 +28,28 @@ const UserMenu = (props) => {
     return null;
   }
 
-  const gravatar = 'https://www.gravatar.com/avatar/' + userCtx.md5 + '?s=16';
+  const imgStyle = {
+    borderRadius: '100%'
+  };
+
+  const aStyle = {
+    //textDecoration: 'none',
+    //marginTop: '-10px',
+    //marginLeft: '-10px'
+  };
+
+  const gravatar = 'https://www.gravatar.com/avatar/' + userCtx.md5 + '?s=28';
 
   return (
-    <div className="nav-right nav-menu">
-      <a className="nav-item is-tab">
-        <img src={gravatar} alt="{userCtx.name}" /> {userCtx.name}
+    <div className="menu">
+      <a style={aStyle}>
+        <img src={gravatar} alt="{userCtx.name}" style={imgStyle} /> {/*userCtx.name*/}
       </a>
-      <a className="nav-item is-tab" onClick={props.signOut}>Log out</a>
+      <ul>
+        <li><a href="#">Mi perfil</a></li>
+        <li><a href="#">Mi cuenta</a></li>
+        <li><a onClick={props.signOut}>Salir</a></li>
+      </ul>
     </div>
   );
 };
@@ -43,13 +57,41 @@ const UserMenu = (props) => {
 
 const Navbar = (props) => {
 
+  const navStyle = {
+    //backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    //display: 'flex',
+    //height: '60px',
+    //position: 'fixed',
+    //width: '100%',
+
+    //flexDirection: 'row',
+    //justifyContent: 'space-between',
+    //justifyContent: 'center',
+    //alignItems: 'center',
+  };
+
+  const navCenterStyle = {
+    //textAlign: 'center',
+    //width: '100%',
+    //flex: 1
+  };
+
+  const logoStyle = {
+    width: '120px',
+    paddingTop: '12px'
+  };
+
   return (
-    <div className="nav">
+    <div className="nav" style={navStyle}>
       <div className="nav-left">
-        <img alt="Laboratoria código que transforma" className="logo" src="img/logo.svg"/>
+        {/*<Burger userCtx={props.userCtx} />*/}
       </div>
-      <Burger userCtx={props.userCtx} />
-      <UserMenu userCtx={props.userCtx} signOut={props.signOut} />
+      <div className="nav-center" style={navCenterStyle}>
+        <img alt="Laboratoria, código que transforma" style={logoStyle} src="img/logo.svg"/>
+      </div>
+      <div className="nav-right">
+        <UserMenu userCtx={props.userCtx} signOut={props.signOut} />
+      </div>
     </div>
   );
 };
