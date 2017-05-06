@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setTitle, fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
-//import CoursesList from '../components/courses-list';
+import CoursesList from '../components/courses-list';
 
 
 class Dashboard extends React.Component {
@@ -24,12 +24,13 @@ class Dashboard extends React.Component {
 
     const goToCourse = (course) => {
 
-      this.props.router.push('/courses/' + encodeURIComponent(course._id));
+      alert('go to course!');
+      //this.props.router.push('/courses/' + encodeURIComponent(course._id));
     };
 
     const goToGroup = (group) => {
 
-      this.props.router.push('/groups/' + encodeURIComponent(group._id));
+      //this.props.router.push('/groups/' + encodeURIComponent(group._id));
     };
 
     if (!groups.hasLoaded || !courses.hasLoaded) {
@@ -38,19 +39,12 @@ class Dashboard extends React.Component {
 
     return (
       <div>
-        <h2>Grupos matriculados</h2>
-        <GroupsList groups={groups.groups} goToGroup={goToGroup} />
+        <h2>Cursos</h2>
+        <CoursesList courses={courses.courses} goToCourse={goToCourse} />
+        {/*<h2>Grupos matriculados</h2>*/}
+        {/*<GroupsList groups={groups.groups} goToGroup={goToGroup} />*/}
       </div>
     );
-
-    // return (
-    //   <div>
-    //     <h2>Cursos</h2>
-    //     <CoursesList courses={courses.courses} goToCourse={goToCourse} />
-    //     <h2>Grupos matriculados</h2>
-    //     <GroupsList groups={groups.groups} goToGroup={goToGroup} />
-    //   </div>
-    // );
   }
 
 }
