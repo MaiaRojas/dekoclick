@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setTitle, fetchLessons } from '../actions';
+import { fetchLessons } from '../actions';
 
 
 const Problem = (props) => {
@@ -42,7 +42,7 @@ class Lesson extends React.Component {
 
   componentWillMount() {
 
-    this.props.setTitle('Lección: ' + this.props.params.lessonid);
+    document.title = 'Lección: ' + this.props.params.lessonid;
     this.props.fetchLessons();
   }
 
@@ -91,7 +91,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchLessons
 };
 

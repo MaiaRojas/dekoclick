@@ -7,12 +7,6 @@ export const resetErrorMessage = () => ({
 });
 
 
-export const setTitle = (text) => ({
-  type: 'SET_TITLE',
-  payload: { text: text }
-});
-
-
 export const loadSession = () => ({
   type: 'API_REQUEST',
   payload: {

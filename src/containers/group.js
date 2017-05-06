@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { setTitle, fetchTracks } from '../actions';
+import { fetchTracks } from '../actions';
 
 
 const LessonSummary = (props) => {
@@ -68,7 +68,7 @@ class Group extends React.Component {
 
   componentWillMount() {
 
-    this.props.setTitle('Grupo: ' + this.props.params.groupid);
+    document.title = 'Grupo: ' + this.props.params.groupid;
     this.props.fetchTracks();
   }
 
@@ -106,7 +106,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchTracks
 };
 

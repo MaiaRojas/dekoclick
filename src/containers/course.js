@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { setTitle, fetchCourses } from '../actions';
+import { fetchCourses } from '../actions';
 
 
 const Lesson = (props) => {
@@ -66,7 +66,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchCourses
 };
 

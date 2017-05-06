@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setTitle, fetchGroups, fetchCourses } from '../actions';
+import { fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
 import CoursesList from '../components/courses-list';
 
@@ -12,7 +12,7 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
 
-    this.props.setTitle('Dashboard');
+    document.title = 'Dashboard';
     this.props.fetchGroups();
     this.props.fetchCourses();
   }
@@ -58,7 +58,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchGroups,
   fetchCourses
 };
