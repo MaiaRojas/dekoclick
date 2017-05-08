@@ -6,23 +6,43 @@ import React from 'react';
 
 const CourseCard = (props) => {
 
-  const goToCourse = props.goToCourse.bind(null, props.course);
+  const { course } = props;
+  const goToCourse = props.goToCourse.bind(null, course);
 
-  const cardStyle = {
-    flex: 1
+  const style = {
+    card: {
+      flex: 1
+    },
+    header: {
+
+    },
+    infoList: {
+      listStyle: 'none'
+    },
+    infoListItem: {
+      paddingBottom: '8px'
+    },
+    body: {}
   };
 
-  const headerStyle = {};
-  const bodyStyle = {};
-
   return (
-    <div className="card" style={cardStyle}>
-      <div className="card-header">
-        <h3 className="card-title">{props.course.title}</h3>
+    <div className="card" style={style.card}>
+      <div className="card-header" style={style.header}>
+        <h3 className="card-title">{course.title}</h3>
+        <ul style={style.infoList}>
+          <li style={style.infoListItem}>Duración: {course.duration}</li>
+          <li style={style.infoListItem}>Track: <span className="chip">{course.track}</span></li>
+          {course.dependencies &&
+            <li style={style.infoListItem}>
+              Requisitos: {course.dependencies.map(dep =>
+                <span key={dep} className="chip">{dep}</span>
+              )}
+            </li>
+          }
+        </ul>
       </div>
-      <div className="card-body" onClick={goToCourse}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Mauris sagittis pellentesque lacus eleifend lacinia...
+      <div className="card-body" onClick={goToCourse} style={style.body}>
+        {course.description}
       </div>
     </div>
   );

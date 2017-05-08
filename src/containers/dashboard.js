@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
 import CoursesList from '../components/courses-list';
@@ -15,34 +16,42 @@ class Dashboard extends React.Component {
     document.title = 'Dashboard';
     this.props.fetchGroups();
     this.props.fetchCourses();
+    this.goToCourse = this.goToCourse.bind(this);
+    this.state = { redirect: false };
+  }
+
+  goToCourse(course) {
+
+    this.setState((prevState, props) => ({
+      redirect: '/courses/' + encodeURIComponent(course._id)
+    }))
+  }
+
+  goToGroup(group) {
+
+    this.setState((prevState, props) => ({
+      redirect: '/groups/' + encodeURIComponent(group._id)
+    }))
   }
 
   render() {
 
-    const groups = this.props.groups;
-    const courses = this.props.courses;
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
 
-    const goToCourse = (course) => {
+    const { courses, groups } = this.props;
 
-      alert('go to course!');
-      //this.props.router.push('/courses/' + encodeURIComponent(course._id));
-    };
-
-    const goToGroup = (group) => {
-
-      //this.props.router.push('/groups/' + encodeURIComponent(group._id));
-    };
-
-    if (!groups.hasLoaded || !courses.hasLoaded) {
+    if (!courses.hasLoaded || !groups.hasLoaded) {
       return null;
     }
 
     return (
       <div>
         <h2>Cursos</h2>
-        <CoursesList courses={courses.courses} goToCourse={goToCourse} />
+        <CoursesList courses={courses.courses} goToCourse={this.goToCourse} />
         {/*<h2>Grupos matriculados</h2>*/}
-        {/*<GroupsList groups={groups.groups} goToGroup={goToGroup} />*/}
+        {/*<GroupsList groups={groups.groups} goToGroup={this.goToGroup} />*/}
       </div>
     );
   }

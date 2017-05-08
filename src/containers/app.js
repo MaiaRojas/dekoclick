@@ -45,10 +45,10 @@ class App extends React.Component {
           <div className="main">
             <Switch>
               <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} />
-              <PrivateRoute path="/courses/:courseid" component={Course} />
-              <PrivateRoute path="/groups/:groupid" component={Group} />
-              <PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} />
-              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} />*/}
+              <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
+              {/*<PrivateRoute path="/groups/:groupid" component={Group} userCtx={userCtx} />*/}
+              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} userCtx={userCtx} />*/}
+              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} userCtx={userCtx} />*/}
               <Route path="/signin" render={() => (
                 userCtx && userCtx.name ?
                   <Redirect to="/" /> :
