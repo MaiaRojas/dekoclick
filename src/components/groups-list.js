@@ -1,5 +1,7 @@
+'use strict';
+
+
 import React from 'react';
-import { Card, CardTitle, CardText, CardActions, CardMenu, Button, IconButton } from 'react-mdl';
 
 
 class GroupCard extends React.Component {
@@ -9,16 +11,16 @@ class GroupCard extends React.Component {
     const goToGroup = this.props.goToGroup.bind(null, this.props.group);
 
     return (
-      <Card>
-        <CardTitle>{this.props.group._id}</CardTitle>
-        <CardText>
+      <div className="card">
+        <div className="card-title">{this.props.group._id}</div>
+        <div className="card-text">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Mauris sagittis pellentesque lacus eleifend lacinia...
-        </CardText>
-        <CardActions border>
-          <Button raised colored onClick={goToGroup}>Ver grupo</Button>
-        </CardActions>
-      </Card>
+        </div>
+        <div className="card-actions">
+          <button onClick={goToGroup}>Ver grupo</button>
+        </div>
+      </div>
     );
   }
 }

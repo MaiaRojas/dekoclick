@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { setTitle, fetchCourses } from '../actions';
+import { Link } from 'react-router-dom';
+import { fetchCourses } from '../actions';
 
 
 const Lesson = (props) => {
@@ -40,7 +40,7 @@ const Course = (props) => {
     return null;
   }
 
-  const courseid = props.params.courseid;
+  const courseid = props.match.params.courseid;
   const courses = props.courses.courses;
   const course = courses.filter(course => course._id === courseid).shift();
 
@@ -49,9 +49,9 @@ const Course = (props) => {
   return (
     <div>
       <h1>Curso: {course.title}</h1>
-      <h2>Unidades</h2>
+      <h2>Syllabus</h2>
       <ul>
-      {course.units.map((unit, i) =>
+      {course.syllabus.map((unit, i) =>
         <Unit key={i} unit={unit} />
       )}
       </ul>
@@ -66,7 +66,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchCourses
 };
 

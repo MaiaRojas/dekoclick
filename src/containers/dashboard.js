@@ -3,7 +3,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setTitle, fetchGroups, fetchCourses } from '../actions';
+import { Redirect } from 'react-router-dom';
+import { fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
 import CoursesList from '../components/courses-list';
 
@@ -12,36 +13,25 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
 
-    this.props.setTitle('Dashboard');
-    this.props.fetchGroups();
+    document.title = 'Dashboard';
+    //this.props.fetchGroups();
     this.props.fetchCourses();
   }
 
   render() {
 
-    const groups = this.props.groups;
-    const courses = this.props.courses;
+    const { courses, groups } = this.props;
 
-    const goToCourse = (course) => {
-
-      this.props.router.push('/courses/' + encodeURIComponent(course._id));
-    };
-
-    const goToGroup = (group) => {
-
-      this.props.router.push('/groups/' + encodeURIComponent(group._id));
-    };
-
-    if (!groups.hasLoaded || !courses.hasLoaded) {
+    if (!courses.hasLoaded/* || !groups.hasLoaded*/) {
       return null;
     }
 
     return (
       <div>
         <h2>Cursos</h2>
-        <CoursesList courses={courses.courses} goToCourse={goToCourse} />
-        <h2>Grupos matriculados</h2>
-        <GroupsList groups={groups.groups} goToGroup={goToGroup} />
+        <CoursesList courses={courses.courses} />
+        {/*<h2>Grupos matriculados</h2>*/}
+        {/*<GroupsList groups={groups.groups} />*/}
       </div>
     );
   }
@@ -57,7 +47,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  setTitle,
   fetchGroups,
   fetchCourses
 };

@@ -2,33 +2,62 @@
 
 
 import React from 'react';
-import { Card, CardTitle, CardText, CardActions, CardMenu, Button, IconButton } from 'react-mdl';
+import { Link } from 'react-router-dom';
 
 
 const CourseCard = (props) => {
 
-  const goToCourse = props.goToCourse.bind(null, props.course);
+  const { course, redirect } = props;
+
+  const style = {
+    card: {
+      flex: 1
+    },
+    header: {},
+    infoList: {
+      listStyle: 'none'
+    },
+    infoListItem: {
+      paddingBottom: '8px'
+    },
+    body: {}
+  };
 
   return (
-    <Card shadow={0}>
-      <CardTitle>{props.course.title}</CardTitle>
-      <CardText>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Mauris sagittis pellentesque lacus eleifend lacinia...
-      </CardText>
-      <CardActions border>
-        <Button raised colored onClick={goToCourse}>Ver curso</Button>
-      </CardActions>
-    </Card>
+    <div className="card" style={style.card}>
+      <div className="card-header" style={style.header}>
+        <h3 className="card-title">{course.title}</h3>
+        <ul style={style.infoList}>
+          <li style={style.infoListItem}>
+            Duración: {course.duration}
+          </li>
+          <li style={style.infoListItem}>
+            Track: <span className="chip">{course.track}</span>
+          </li>
+          {course.dependencies && <li style={style.infoListItem}>
+            Requisitos: {course.dependencies.map(dep =>
+              <span key={dep} className="chip">{dep}</span>
+            )}
+          </li>}
+        </ul>
+      </div>
+      <div className="card-body" style={style.body}>
+        <p>{course.description}</p>
+        <Link to={`/courses/${course._id}`}>
+          Ver más
+        </Link>
+      </div>
+    </div>
   );
 }
+
 
 const CoursesList = (props) => {
 
   return (
-    <div>
+    <div className="card-grid">
       {props.courses.map(course =>
-        <CourseCard key={course._id} course={course} goToCourse={props.goToCourse} />
+        <CourseCard key={course._id} course={course} />
       )}
     </div>
   );

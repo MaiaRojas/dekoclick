@@ -1,15 +1,30 @@
 'use strict';
 
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory, Link } from 'react-router';
+import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
 import { resetErrorMessage, loadSession, signIn, signOut } from '../actions';
+import Spinner from 'react-spinner';
+import Navbar from '../components/navbar';
 import SignIn from './signin';
-import { Nav } from 'react-laboratoria-ui';
+import Dashboard from './dashboard';
+import Course from './course';
+import Group from './group';
+import Lesson from './lesson';
+//import Problem from './problem';
 
 
-class App extends Component {
+const PrivateRoute = ({ component: Component, userCtx, path, exact }) => (
+  <Route path={path} exact={exact} render={props => (
+    userCtx && userCtx.name ?
+      <Component userCtx={userCtx} {...props} /> :
+      <Redirect to="/signin" />
+  )}/>
+);
+
+
+class App extends React.Component {
 
   componentWillMount() {
 
@@ -18,61 +33,41 @@ class App extends Component {
 
   render() {
 
-    if (!this.props.hasLoaded) {
-      return null;
-    }
-
-    if (!this.props.isSignedIn) {
-      return (
-        <SignIn signIn={this.props.signIn} />
-      );
-    }
-
-    const goTo = (path) => {
-
-      this.props.router.push(path);
-    };
+    const { userCtx, error } = this.props.session;
 
     return (
-      <div>
-        <Nav>
-          <div className="nav-left">
+      <Router>
+        <div className="app">
+          <div className="top">
+            <Navbar userCtx={userCtx} signOut={this.props.signOut} />
           </div>
-          <span className="nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-          <div className="nav-right nav-menu">
-            <a className="nav-item is-tab">
-              <figure className="image is-16x16" style={{'marginRight': '8px'}}>
-                <img src="http://bulma.io/images/jgthms.png" alt="{this.props.userCtx.name}" />
-              </figure>
-              {this.props.userCtx.name}
-            </a>
-            <a className="nav-item is-tab" onClick={this.props.signOut}>Log out</a>
+          {/*<Spinner />*/}
+          <div className="main">
+            <Switch>
+              <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} />
+              <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
+              {/*<PrivateRoute path="/groups/:groupid" component={Group} userCtx={userCtx} />*/}
+              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} userCtx={userCtx} />*/}
+              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} userCtx={userCtx} />*/}
+              <Route path="/signin" render={() => (
+                userCtx && userCtx.name ?
+                  <Redirect to="/" /> :
+                  <SignIn signIn={this.props.signIn} error={error} />
+              )} />
+            </Switch>
           </div>
-        </Nav>
-        <section className="section">
-          {this.props.children}
-        </section>
-      </div>
+        </div>
+      </Router>
     );
   }
 
 }
 
 
-const mapStateToProps = (state, ownProps) => {
-
-  return {
-    app: state.app,
-    hasLoaded: state.session.hasLoaded,
-    isSignedIn: state.session.isSignedIn,
-    userCtx: state.session.userCtx,
-    //errorMessage: state.errorMessage,
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  app: state.app,
+  session: state.session
+});
 
 
 const mapDispatchToProps = {

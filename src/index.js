@@ -2,17 +2,46 @@
 
 
 import React from 'react';
-import { render } from 'react-dom';
-import { browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import Root from './containers/root';
-import configureStore from './store/configure';
+import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import api from './middleware/api';
+import reducers from './reducers';
+import App from './containers/app';
 
 
-const store = configureStore();
-const history = syncHistoryWithStore(browserHistory, store);
+const middlewares = [thunk, api];
+
+if (process.env.NODE_ENV !== 'production') {
+  const { logger } = require('redux-logger');
+  middlewares.push(logger);
+}
+
+const store = createStore(reducers, applyMiddleware(...middlewares));
 
 
-render((
-  <Root store={store} history={history} />
-), document.getElementById('root'));
+import { AppContainer } from 'react-hot-loader';
+
+
+const render = (Component) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
+};
+
+render(App);
+
+
+// Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./containers/app', () => {
+
+    render(App);
+  });
+}
