@@ -14,44 +14,24 @@ class Dashboard extends React.Component {
   componentWillMount() {
 
     document.title = 'Dashboard';
-    this.props.fetchGroups();
+    //this.props.fetchGroups();
     this.props.fetchCourses();
-    this.goToCourse = this.goToCourse.bind(this);
-    this.state = { redirect: false };
-  }
-
-  goToCourse(course) {
-
-    this.setState((prevState, props) => ({
-      redirect: '/courses/' + encodeURIComponent(course._id)
-    }))
-  }
-
-  goToGroup(group) {
-
-    this.setState((prevState, props) => ({
-      redirect: '/groups/' + encodeURIComponent(group._id)
-    }))
   }
 
   render() {
 
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />;
-    }
-
     const { courses, groups } = this.props;
 
-    if (!courses.hasLoaded || !groups.hasLoaded) {
+    if (!courses.hasLoaded/* || !groups.hasLoaded*/) {
       return null;
     }
 
     return (
       <div>
         <h2>Cursos</h2>
-        <CoursesList courses={courses.courses} goToCourse={this.goToCourse} />
+        <CoursesList courses={courses.courses} />
         {/*<h2>Grupos matriculados</h2>*/}
-        {/*<GroupsList groups={groups.groups} goToGroup={this.goToGroup} />*/}
+        {/*<GroupsList groups={groups.groups} />*/}
       </div>
     );
   }

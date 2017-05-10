@@ -2,6 +2,7 @@
 
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const Burger = (props) => {
@@ -87,7 +88,9 @@ const Navbar = (props) => {
         {/*<Burger userCtx={props.userCtx} />*/}
       </div>
       <div className="nav-center" style={navCenterStyle}>
-        <img alt="Laboratoria, código que transforma" style={logoStyle} src="img/logo.svg"/>
+        <Link to="/">
+          <img alt="Laboratoria, código que transforma" style={logoStyle} src="img/logo.svg"/>
+        </Link>
       </div>
       <div className="nav-right">
         <UserMenu userCtx={props.userCtx} signOut={props.signOut} />

@@ -48,7 +48,7 @@ export const fetchGroups = () => ({
   type: 'API_REQUEST',
   payload: {
     id: 'FETCH_GROUPS',
-    path: '/_groups',
+    path: '/groups',
     method: 'GET'
   }
 });
@@ -58,26 +58,17 @@ export const fetchCourses = () => ({
   type: 'API_REQUEST',
   payload: {
     id: 'FETCH_COURSES',
-    path: '/_courses',
+    path: '/courses',
     method: 'GET'
   }
 });
 
-
-export const fetchTracks = () => ({
-  type: 'API_REQUEST',
-  payload: {
-    id: 'FETCH_TRACKS',
-    path: '/_tracks',
-    method: 'GET'
-  }
-});
 
 export const fetchLessons = () => ({
   type: 'API_REQUEST',
   payload: {
     id: 'FETCH_LESSONS',
-    path: '/_lessons',
+    path: '/lessons',
     method: 'GET'
   }
 });
@@ -87,7 +78,7 @@ export const fetchProblems = () => ({
   type: 'API_REQUEST',
   payload: {
     id: 'FETCH_PROBLEMS',
-    path: '/_problems',
+    path: '/problems',
     method: 'GET'
   }
 });
