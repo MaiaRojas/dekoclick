@@ -12,51 +12,56 @@ import Dashboard from './dashboard';
 import Course from './course';
 import Group from './group';
 import Lesson from './lesson';
+import Enrollment from './enrollment';
 //import Problem from './problem';
 
 
-const PrivateRoute = ({ component: Component, userCtx, path, exact }) => (
+
+const PrivateRoute = ({ component: Component, userCtx, signOut, path, exact }) => (
   <Route path={path} exact={exact} render={props => (
-    userCtx && userCtx.name ?
-      <Component userCtx={userCtx} {...props} /> :
-      <Redirect to="/signin" />
+    <div className="app">
+      <Navbar userCtx={userCtx} signOut={signOut} linkable={true} />
+      {userCtx && userCtx.name ?
+        <Component userCtx={userCtx} {...props} /> :
+        <Redirect to="/signin" />}
+    </div>
   )}/>
 );
-
 
 class App extends React.Component {
 
   componentWillMount() {
-
     this.props.loadSession();
   }
 
   render() {
-
     const { userCtx, error } = this.props.session;
 
     return (
       <Router>
-        <div className="app">
-          <div className="top">
-            <Navbar userCtx={userCtx} signOut={this.props.signOut} />
-          </div>
-          {/*<Spinner />*/}
-          <div className="main">
-            <Switch>
-              <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} />
-              <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
-              {/*<PrivateRoute path="/groups/:groupid" component={Group} userCtx={userCtx} />*/}
-              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} userCtx={userCtx} />*/}
-              {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} userCtx={userCtx} />*/}
-              <Route path="/signin" render={() => (
-                userCtx && userCtx.name ?
-                  <Redirect to="/" /> :
-                  <SignIn signIn={this.props.signIn} error={error} />
-              )} />
-            </Switch>
-          </div>
-        </div>
+        <Switch>
+          <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} signOut={this.props.signOut} />
+          <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
+          {/*<PrivateRoute path="/groups/:groupid" component={Group} userCtx={userCtx} />*/}
+          {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid" component={Lesson} userCtx={userCtx} />*/}
+          {/*<PrivateRoute path="/groups/:groupid/lessons/:lessonid/problems/:problemid" component={Problem} userCtx={userCtx} />*/}
+          <Route path="/signin" render={() => (
+            <div className="app">
+              <Navbar userCtx={userCtx} signOut={signOut} linkable={false} />
+              {userCtx && userCtx.name ?
+                <Redirect to="/" /> :
+                <SignIn signIn={this.props.signIn} error={error} />}
+            </div>
+          )} />
+          <Route path="/enrollment" render={() => (
+            <div className="app">
+              <Navbar userCtx={userCtx} signOut={signOut} linkable={false} />
+              {userCtx && userCtx.name ?
+                <Redirect to="/" /> :
+                <Enrollment error={error} />}
+            </div>
+          )} />
+        </Switch>
       </Router>
     );
   }
