@@ -62,6 +62,7 @@ const Navbar = (props) => {
       display: 'flex',
       flexDirection: 'row',
       padding: '14px 0px',
+      minHeight: '65px',
       left: {
         flex: 1,
         textAlign: 'left',

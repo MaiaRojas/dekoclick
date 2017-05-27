@@ -3,21 +3,7 @@
 import React from 'react';
 
 const style = {
-  title: {
-    marginBottom: '35px',
-    image: {
-      width: '75px',
-      height: '75px',
-      backgroundColor: 'lightgray',
-      borderRadius: '100%'
-    },
-    h2: {
-      fontSize: '20px',
-      letterSpacing: '1px',
-      display: 'inline-block',
-      paddingLeft: '35px'
-    }
-  }
+
 };
 
 const Title = (props) => {
@@ -36,7 +22,7 @@ class InputText extends React.Component {
   render() {
     return (
       <div className="form-group">
-        <label className="form-label" for={this.props.id}>
+        <label className="form-label" htmlFor={this.props.id}>
           {this.props.label}
           {this.props.instructions && <p>{this.props.instructions}</p> }
         </label>
@@ -44,6 +30,47 @@ class InputText extends React.Component {
       </div>
     );
   }
+}
+
+class TypeForm extends React.Component {
+
+    constructor(props) {
+      super(props);
+      this.style = {
+        display: 'flex',
+        width: '100%',
+        height: '100%'
+      }
+    }
+
+    componentDidMount() {
+      let s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      const scriptContent = ['var qs,js,q,s,d=document, ',
+                             'gi=d.getElementById,',
+                             'ce=d.createElement,',
+                             'gt=d.getElementsByTagName, ',
+                             'id="typef_orm", ',
+                             'b="https://embed.typeform.com/";',
+                             'if(!gi.call(d,id)) { ',
+                             'js=ce.call(d,"script"); ',
+                             'js.id=id; ',
+                             'js.src=b+"embed.js"; ',
+                             'q=gt.call(d,"script")[0]; ',
+                             'q.parentNode.insertBefore(js,q) }'].join('');
+
+      s.innerHTML = scriptContent;
+      this.instance.appendChild(s);
+    }
+
+    render() {
+      return (<div className="typeform-widget"
+                    style={this.style}
+                    data-url={this.props.url}
+                    ref={(el) => (this.instance = el)}>
+              </div>);
+    }
 }
 
 export default class Enrollment extends React.Component {
@@ -59,19 +86,9 @@ export default class Enrollment extends React.Component {
   }
 
   render() {
-
     return (
       <div className="enrollment">
-        <div className="container">
-          <Title image="img/enrollment/datos_personales.png" text="datos generales"/>
-          <InputText id="name" label="1. Nombre y Apellidos" placeholder="Nombre"/>
-          <InputText id="email" label="2. Correo Electrónico" placeholder="ej: ejemplo@gmail.com"/>
-          <InputText id="identityId" label="3. Documento de Identidad" instructions="Indica el número de tu DNI/CURP/Cédula de identidad o documento de extranjería" placeholder="ej. 95749345"/>
-          <Title image="img/enrollment/blackboard.png" text="educación"/>
-          <Title image="img/enrollment/experiencia_laboral.png" text="trabajo"/>
-          <Title image="img/enrollment/familia.png" text="contexto familiar"/>
-          <Title image="img/enrollment/intereses.png" text="intereses"/>
-        </div>
+        <TypeForm url="https://tuexperiencia.typeform.com/to/JHrbZ1"/>
       </div>
     );
   }
