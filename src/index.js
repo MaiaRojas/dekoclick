@@ -1,6 +1,11 @@
 'use strict';
 
 
+import './style/main.css';
+import './img/favicon.png';
+import './img/logo.svg';
+import './worker.js';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';

@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { fetchTracks } from '../actions';
+//import { fetchTracks } from '../actions';
 
 
 const LessonSummary = (props) => {
@@ -69,7 +69,7 @@ class Group extends React.Component {
   componentWillMount() {
 
     document.title = 'Grupo: ' + this.props.params.groupid;
-    this.props.fetchTracks();
+    //this.props.fetchTracks();
   }
 
   goToLesson(id) {
@@ -106,7 +106,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  fetchTracks
+  //fetchTracks
 };
 
 

@@ -3,20 +3,26 @@
 
 const Path = require('path');
 const Webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+
+const extractTextWebpackPlugin = new ExtractTextWebpackPlugin({
+  filename: 'main.css'
+});
+
+const isProduction = process.env.NODE_ENV === 'production';
+const targetPathRel = 'dist';
+const targetPathAbs = Path.resolve(__dirname, targetPathRel);
 
 
 module.exports = {
   context: Path.resolve(__dirname, 'src'),
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './index.js'
-  ],
+  entry: ['./index.js'],
   output: {
     filename: 'bundle.js',
-    path: Path.resolve(__dirname, 'public'),
-    publicPath: '/'
+    path: targetPathAbs,
+    //publicPath: '/'
   },
   module: {
     rules: [
@@ -24,18 +30,87 @@ module.exports = {
         test: /\.jsx?$/,
         use: ['babel-loader'],
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: extractTextWebpackPlugin.extract({
+          use: ['css-loader'],
+          //exclude: /node_modules/
+        })
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader'
+      },
+      {
+        test: /\.html$/,
+        use: ['html-loader']
+      },
+      {
+        test: /\.(svg|png|jpg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'img/',
+              publicPath: 'img/'
+            }
+          }
+        ]
+      },
+      {
+        test: /worker\.js$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: '',
+              publicPath: ''
+            }
+          }
+        ]
       }
     ]
   },
-  devtool: 'inline-source-map',
-  devServer: {
-    hot: true,
-    contentBase: Path.resolve(__dirname, 'public'),
-    publicPath: '/',
-    historyApiFallback: true
-  },
   plugins: [
-    new Webpack.HotModuleReplacementPlugin(),
+    extractTextWebpackPlugin,
     new Webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    }),
+    new HtmlWebpackPlugin({
+      template: './404.html',
+      filename: '404.html',
+      chunks: []
+    })
   ]
 };
+
+
+if (!isProduction) { // Development environment
+
+  module.exports.entry = [
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server'
+  ].concat(module.exports.entry);
+
+  module.exports.devtool = 'inline-source-map';
+
+  module.exports.devServer = {
+    hot: true,
+    contentBase: targetPathAbs,
+    publicPath: '/',
+    historyApiFallback: true
+  };
+
+  module.exports.plugins.unshift(new Webpack.HotModuleReplacementPlugin());
+
+}
+else { // Production environment
+
+  module.exports.plugins.push(new CleanWebpackPlugin([targetPathRel]));
+
+}
