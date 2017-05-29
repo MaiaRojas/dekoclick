@@ -1,15 +1,10 @@
 'use strict';
 
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 
 const Burger = (props) => {
-
-  //if (!props.userCtx || !props.userCtx.name) {
-  //  return null;
-  //}
 
   return (
     <span className="burger">
@@ -33,18 +28,12 @@ const UserMenu = (props) => {
     borderRadius: '100%'
   };
 
-  const aStyle = {
-    //textDecoration: 'none',
-    //marginTop: '-10px',
-    //marginLeft: '-10px'
-  };
-
   const gravatar = 'https://www.gravatar.com/avatar/' + userCtx.md5 + '?s=28';
 
   return (
     <div className="menu">
       <a style={aStyle}>
-        <img src={gravatar} alt="{userCtx.name}" style={imgStyle} /> {/*userCtx.name*/}
+        <img src={gravatar} alt="{userCtx.name}" style={imgStyle} />
       </a>
       <ul>
         <li><a href="#">Mi perfil</a></li>
@@ -58,41 +47,48 @@ const UserMenu = (props) => {
 
 const Navbar = (props) => {
 
-  const navStyle = {
-    //backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    //display: 'flex',
-    //height: '60px',
-    //position: 'fixed',
-    //width: '100%',
-
-    //flexDirection: 'row',
-    //justifyContent: 'space-between',
-    //justifyContent: 'center',
-    //alignItems: 'center',
-  };
-
-  const navCenterStyle = {
-    //textAlign: 'center',
-    //width: '100%',
-    //flex: 1
-  };
-
-  const logoStyle = {
-    width: '120px',
-    paddingTop: '12px'
+  const style = {
+    nav: {
+      display: 'flex',
+      flexDirection: 'row',
+      padding: '14px 0px',
+      minHeight: '65px',
+      left: {
+        flex: 1,
+        textAlign: 'left',
+        paddingLeft: '20px'
+      },
+      center: {
+        flex: 1,
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        logo: {
+          width: '190px'
+        }
+      },
+      right: {
+        flex: 1,
+        textAlign: 'right',
+        paddingRight: '20px'
+      }
+    }
   };
 
   return (
-    <div className="nav" style={navStyle}>
-      <div className="nav-left">
-        {/*<Burger userCtx={props.userCtx} />*/}
+    <div className="nav" style={style.nav}>
+      <div className="left" style={style.nav.left}>
       </div>
-      <div className="nav-center" style={navCenterStyle}>
-        <Link to="/">
-          <img alt="Laboratoria, código que transforma" style={logoStyle} src="img/logo.svg"/>
-        </Link>
+      <div className="center" style={style.nav.center}>
+        {props.linkable ?
+          <Link to="/">
+            <img alt="Laboratoria, código que transforma" style={style.nav.center.logo} src="img/logo.svg"/>
+          </Link> :
+          <img alt="Laboratoria, código que transforma" style={style.nav.center.logo} src="img/logo.svg"/>
+        }
       </div>
-      <div className="nav-right">
+      <div className="right" style={style.nav.right}>
         <UserMenu userCtx={props.userCtx} signOut={props.signOut} />
       </div>
     </div>
