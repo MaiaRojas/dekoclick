@@ -49,7 +49,7 @@ const CourseCard = (props) => {
       </div>
     </div>
   );
-}
+};
 
 
 const CoursesList = (props) => {
