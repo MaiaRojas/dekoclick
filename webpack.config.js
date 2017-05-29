@@ -32,10 +32,9 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: extractTextWebpackPlugin.extract({
-          use: ['css-loader'],
-          //exclude: /node_modules/
+          use: ['css-loader', 'sass-loader']
         })
       },
       {
