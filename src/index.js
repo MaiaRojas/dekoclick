@@ -1,7 +1,7 @@
 'use strict';
 
 
-import './style/main.css';
+import './style/main.scss';
 import './img/favicon.png';
 import './img/logo.svg';
 import './worker.js';

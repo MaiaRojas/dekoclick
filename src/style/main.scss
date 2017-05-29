@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+//Config variables
+@import "base/colors.scss";
+
+//All available fonts in the application
+@import "base/fonts.scss";
+
+//Misc CSS that apply to all containers / components
+@import "base/common.scss";
+
+//Custom CSS related to a single page
+@import "containers/enrollment.scss";
