@@ -32,7 +32,7 @@ const UserMenu = (props) => {
 
   return (
     <div className="menu">
-      <a style={aStyle}>
+      <a>
         <img src={gravatar} alt="{userCtx.name}" style={imgStyle} />
       </a>
       <ul>

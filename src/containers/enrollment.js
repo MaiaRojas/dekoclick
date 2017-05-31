@@ -11,13 +11,19 @@ export default class Enrollment extends React.Component {
 
   componentWillMount() {
     this.typeformUrl = "https://tuexperiencia.typeform.com/to/mnfdER";
-    if (window.location.search != "") {
-      const searchParams = new URLSearchParams(window.location.search);
-      this.typeformUrl += (searchParams.has("name") ? "?name="+searchParams.get("name")   : "");
-      this.typeformUrl += (searchParams.has("email") ? "&email="+searchParams.get("email") : "");
-      this.typeformUrl += (searchParams.has("phone") ? "&phone="+searchParams.get("phone") : "");
-      this.typeformUrl += (searchParams.has("city") ? "&city="+searchParams.get("city")   : "");
-      this.typeformUrl += (searchParams.has("token") ? "&token="+searchParams.get("token") : "");
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    if (window.location.search != "" && searchParams.has("name")  &&
+        searchParams.has("email") && searchParams.has("phone") &&
+        searchParams.has("city")  && searchParams.has("token")) {
+
+        this.typeformUrl += "?name="+searchParams.get("name");
+        this.typeformUrl += "&email="+searchParams.get("email");
+        this.typeformUrl += "&phone="+searchParams.get("phone");
+        this.typeformUrl += "&city="+searchParams.get("city");
+        this.typeformUrl += "&token="+searchParams.get("token");
+    } else {
+      window.location = "http://laboratoria.la/postulacion";
     }
   }
 

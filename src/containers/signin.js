@@ -19,8 +19,9 @@ export default class SignIn extends React.Component {
     const email = this.refs.email.value;
     const password = this.refs.password.value;
 
-    // TODO: validate email and password!!!
-    this.props.signIn(email, password);
+    if (email && password) {
+      this.props.signIn(email, password);
+    }
 
     return false;
   }
@@ -44,7 +45,7 @@ export default class SignIn extends React.Component {
           <button style={{width: '100%'}}>Ingresar</button>
           <button type="button" style={{width: '100%', backgroundColor: 'transparent', textTransform: 'none', border: 'none' }}>Olvidaste tu contraseña?</button>
 
-          {this.props.error && <div className="error">
+          {(this.props.error && this.props.error.response) && <div className="error">
             {this.props.error.response.data.message}
           </div>}
 
