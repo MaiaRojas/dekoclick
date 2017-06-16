@@ -56,16 +56,13 @@ class App extends React.Component {
           <Route path="/enrollment" render={() => (
             <div className="app">
               <Navbar userCtx={userCtx} signOut={signOut} linkable={false} />
-              {userCtx && userCtx.name ?
-                <Redirect to="/" /> :
-                <Enrollment error={error} />}
+              <Enrollment userCtx={userCtx} error={error} />
             </div>
           )} />
         </Switch>
       </Router>
     );
   }
-
 }
 
 
