@@ -50,7 +50,7 @@ class Enrollment extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  userCreated: state.enrollment.userCreated
+  userCreated: state.enrollment.userCreated,
   user: state.enrollment.user
 });
 
