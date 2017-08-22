@@ -3,7 +3,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { resetErrorMessage, loadSession, signIn, signOut } from '../actions';
 
@@ -28,29 +27,26 @@ const PrivateRoute = ({ component: Component, userCtx, signOut, path, exact }) =
 class App extends React.Component {
 
   componentWillMount() {
-    this.props.loadSession();
+    //this.props.loadSession();
   }
 
   render() {
     const { userCtx, error } = this.props.session;
 
     return (
-      <MuiThemeProvider>
-        <Router>
-          <Switch>
-            <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} signOut={this.props.signOut} />
-            <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
-            <Route path="/signin" render={() => (
-              <div className="app">
-                <Navbar userCtx={userCtx} signOut={signOut} linkable={false} />
-                {userCtx && userCtx.name ?
-                  <Redirect to="/" /> :
-                  <SignIn signIn={this.props.signIn} error={error} />}
-              </div>
-            )} />
-          </Switch>
-        </Router>
-      </MuiThemeProvider>
+      <Router>
+        <Switch>
+          <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} signOut={this.props.signOut} />
+          <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
+          <Route path="/signin" render={() => (
+            <div className="app">
+              {userCtx && userCtx.name ?
+                <Redirect to="/" /> :
+                <SignIn signIn={this.props.signIn} error={error} />}
+            </div>
+          )} />
+        </Switch>
+      </Router>
     );
   }
 }

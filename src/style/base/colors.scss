@@ -1,14 +1,343 @@
 /*
-  Application Fonts
+  Application Colors
   ------------------
   Based on laboratoria styleguide use this color in the application, try to keep this list short.
 */
 
-$yellow:                    #F7B617 !default;
-$gray:                      #1C2E36 !default;
-$gray-light:                #D6E1E4 !default;
-$gray-lighter:              #E6EDEF !default;
-$white:                     #FFFFFF !default;
+
+/*
+	Yellow
+*/
+$yellow-darker:               #CB9513 !default;
+$yellow-dark:                 #E1A615 !default;
+$yellow:                      #F7B617 !default;
+$yellow-light:                #F7BC2C !default;
+$yellow-lighter:              #F8C341 !default;
+
+/*
+	Gray
+*/
+$gray-darker:               #9E9E9E !default;
+$gray-dark:                 #B4B4B4 !default;
+$gray:                      #CBCBCB !default;
+$gray-light:                #E1E1E1 !default;
+$gray-lighter:              #F7F7F7 !default;
+
+/*
+	Black
+*/
+$black-darker:               #242424 !default;
+$black-dark:                 #282828 !default;
+$black:                      #2B2B2B !default;
+$black-light:                #3E3E3E !default;
+$black-lighter:              #515151 !default;
+
+/*
+	Green
+*/
+$green-darker:               #68AD1C !default;
+$green-dark:                 #73C01E !default;
+$green:                      #7ED321 !default;
+$green-light:                #89D735 !default;
+$green-lighter:              #95DB49 !default;
+
+/*
+	Blue
+*/
+$blue-darker:               #3C76B9 !default;
+$blue-dark:                 #4383CE !default;
 $blue:                      #4990E2 !default;
-$green:                     #28EB95 !default;
-$red:                       #E84040 !default;
+$blue-light:                #599AE4 !default;
+$blue-lighter:              #6AA4E7 !default;
+
+/*
+	Red
+*/
+$red-darker:               #BE3535 !default;
+$red-dark:                 #D33B3B !default;
+$red:                      #E84040 !default;
+$red-light:                #EA5151 !default;
+$red-lighter:              #EC6262 !default;
+
+/*
+	White
+*/
+$white:                     #FFFFFF !default;
+
+
+//White
+.white {
+	color: $white;
+}
+
+//Yellow
+.yellow-lighter {
+	color: $yellow-lighter;
+}
+
+.yellow-light {
+	color: $yellow-light;
+}
+
+.yellow {
+	color: $yellow;
+}
+
+.yellow-dark {
+	color: $yellow-dark;
+}
+
+.yellow-darker {
+	color: $yellow-darker;
+}
+
+//Black
+.black-lighter {
+	color: $yellow-lighter;
+}
+
+.black-light {
+	color: $yellow-light;
+}
+
+.black {
+	color: $yellow;
+}
+
+.black-dark {
+	color: $yellow-dark;
+}
+
+.black-darker {
+	color: $yellow-darker;
+}
+
+//Gray
+.gray-lighter {
+	color: $gray-lighter;
+}
+
+.gray-light {
+	color: $gray-light;
+}
+
+.gray {
+	color: $gray;
+}
+
+.gray-dark {
+	color: $gray-dark;
+}
+
+.gray-darker {
+	color: $gray-darker;
+}
+
+//Red
+.red-lighter {
+	color: $red-lighter;
+}
+
+.red-light {
+	color: $red-light;
+}
+
+.red {
+	color: $gray;
+}
+
+.red-dark {
+	color: $red-dark;
+}
+
+.red-darker {
+	color: $red-darker;
+}
+
+//Green
+.green-lighter {
+	color: $green-lighter;
+}
+
+.green-light {
+	color: $green-light;
+}
+
+.green {
+	color: $green;
+}
+
+.green-dark {
+	color: $green-dark;
+}
+
+.green-darker {
+	color: $green-darker;
+}
+
+//Blue
+.blue-lighter {
+	color: $blue-lighter;
+}
+
+.blue-light {
+	color: $blue-light;
+}
+
+.blue {
+	color: $blue;
+}
+
+.blue-dark {
+	color: $blue-dark;
+}
+
+.blue-darker {
+	color: $blue-darker;
+}
+
+/*
+	background-color
+*/
+
+//Yellow
+.bg-yellow-lighter {
+	background-color: $yellow-lighter;
+}
+
+.bg-yellow-light {
+	background-color: $yellow-light;
+}
+
+.bg-yellow {
+	background-color: $yellow;
+}
+
+.bg-yellow-dark {
+	background-color: $yellow-dark;
+}
+
+.bg-yellow-darker {
+	background-color: $yellow-darker;
+}
+
+//Black
+.bg-black-lighter {
+	background-color: $black-lighter;
+}
+
+.bg-black-light {
+	background-color: $black-light;
+}
+
+.bg-black {
+	background-color: $black;
+}
+
+.bg-black-dark {
+	background-color: $black-dark;
+}
+
+.bg-black-darker {
+	background-color: $black-darker;
+}
+
+//Gray
+.bg-gray-lighter {
+	background-color: $gray-lighter;
+}
+
+.bg-gray-light {
+	background-color: $gray-light;
+}
+
+.bg-gray {
+	background-color: $gray;
+}
+
+.bg-gray-dark {
+	background-color: $gray-dark;
+}
+
+.bg-gray-darker {
+	background-color: $gray-darker;
+}
+
+//Red
+.bg-red-lighter {
+	background-color: $red-lighter;
+}
+
+.bg-red-light {
+	background-color: $red-light;
+}
+
+.bg-red {
+	background-color: $red;
+}
+
+.bg-red-dark {
+	background-color: $red-dark;
+}
+
+.bg-red-darker {
+	background-color: $red-darker;
+}
+
+//Green
+.bg-green-lighter {
+	background-color: $green-lighter;
+}
+
+.bg-green-light {
+	background-color: $green-light;
+}
+
+.bg-green {
+	background-color: $green;
+}
+
+.bg-green-dark {
+	background-color: $green-dark;
+}
+
+.bg-green-darker {
+	background-color: $green-darker;
+}
+
+//Blue
+.bg-blue-lighter {
+	background-color: $blue-lighter;
+}
+
+.bg-blue-light {
+	background-color: $blue-light;
+}
+
+.bg-blue {
+	background-color: $blue;
+}
+
+.bg-blue-dark {
+	background-color: $blue-dark;
+}
+
+.bg-blue-darker {
+	background-color: $blue-darker;
+}
+
+.bg-block {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.bg-gray-darker {
+  background-color: $gray-darker !important;
+}
+.bg-white {
+  background-color: $white !important;
+}
+.bg-gray {
+  background-color: #e1e1e1 !important
+}

@@ -14,6 +14,8 @@ import thunk from 'redux-thunk';
 import api from './middleware/api';
 import reducers from './reducers';
 import App from './containers/app';
+import theme from './style/themes/app';
+import { MuiThemeProvider } from 'material-ui/styles';
 
 
 const middlewares = [thunk, api];
@@ -33,7 +35,9 @@ const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
-        <App />
+        <MuiThemeProvider theme={theme}>
+          <App />
+        </MuiThemeProvider>
       </Provider>
     </AppContainer>,
     document.getElementById('root')
