@@ -27,7 +27,7 @@ const PrivateRoute = ({ component: Component, userCtx, signOut, path, exact }) =
 class App extends React.Component {
 
   componentWillMount() {
-    //this.props.loadSession();
+    this.props.loadSession();
   }
 
   render() {
