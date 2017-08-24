@@ -28,8 +28,13 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: ['babel-loader'],
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          query: {
+            presets:[ 'es2015', 'react', 'stage-2' ]
+          }
+        }]
       },
       {
         test: /\.scss$/,
@@ -70,6 +75,19 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /CNAME$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name]',
+              outputPath: '',
+              publicPath: ''
+            }
+          }
+        ]
       }
     ]
   },
@@ -77,7 +95,8 @@ module.exports = {
     extractTextWebpackPlugin,
     new Webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './index.html',
+      filename: !isProduction ? 'index.html': '200.html'
     }),
     new HtmlWebpackPlugin({
       template: './404.html',
