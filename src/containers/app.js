@@ -20,7 +20,7 @@ import Lesson from './lesson';
 const PrivateRoute = ({ component: Component, auth, path, exact }) => (
   <Route path={path} exact={exact} render={props => (
     <div className="app">
-      <Navbar auth={auth} linkable={true} />
+      <Navbar />
       {auth ?
         <Component auth={auth} {...props} /> :
         <Redirect to="/signin" />}
@@ -33,9 +33,6 @@ const App = props => {
   if (!isLoaded(props.auth)) {
     return (<div>Loading...</div>);
   }
-  // else if (isEmpty(props.auth)) {
-  //   return (<div className="app"><SignIn error={null} /></div>);
-  // }
 
   return (
     <Router>
@@ -44,7 +41,7 @@ const App = props => {
         <PrivateRoute path="/courses/:courseid" component={Course} auth={props.auth} />
         <Route path="/signin" render={() => (
           <div className="app">
-            {props.auth ?
+            {!isEmpty(props.auth) ?
               <Redirect to="/" /> :
               <SignIn error={null} />}
           </div>

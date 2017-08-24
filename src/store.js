@@ -27,7 +27,7 @@ const createStoreWithFirebase = compose(
 
 if (process.env.NODE_ENV !== 'production') {
   const { logger } = require('redux-logger');
-  //middlewares.push(logger);
+  middlewares.push(logger);
 }
 
 

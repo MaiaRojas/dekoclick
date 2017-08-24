@@ -1,99 +1,24 @@
 'use strict';
 
 import React from 'react';
+import { firebaseConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Button from 'material-ui/Button';
 
 
-const Burger = (props) => {
-
-  return (
-    <span className="burger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
-  );
-};
-
-
-const UserMenu = (props) => {
-
-  const userCtx = props.userCtx || {};
-
-  if (!userCtx.name) {
-    return null;
-  }
-
-  const imgStyle = {
-    borderRadius: '100%'
-  };
-
-  const gravatar = 'https://www.gravatar.com/avatar/' + userCtx.md5 + '?s=28';
-
-  return (
-    <div className="menu">
-      <a>
-        <img src={gravatar} alt="{userCtx.name}" style={imgStyle} />
-      </a>
-      <ul>
-        <li><a href="#">Mi perfil</a></li>
-        <li><a href="#">Mi cuenta</a></li>
-        <li><a onClick={props.signOut}>Salir</a></li>
-      </ul>
-    </div>
-  );
-};
-
-
-const Navbar = (props) => {
-
-  const style = {
-    nav: {
-      display: 'flex',
-      flexDirection: 'row',
-      padding: '14px 0px',
-      minHeight: '65px',
-      left: {
-        flex: 1,
-        textAlign: 'left',
-        paddingLeft: '20px'
-      },
-      center: {
-        flex: 1,
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        logo: {
-          width: '190px'
-        }
-      },
-      right: {
-        flex: 1,
-        textAlign: 'right',
-        paddingRight: '20px'
-      }
-    }
-  };
-
-  return (
-    <div className="nav" style={style.nav}>
-      <div className="left" style={style.nav.left}>
-      </div>
-      <div className="center" style={style.nav.center}>
-        {props.linkable ?
-          <Link to="/">
-            <img alt="Laboratoria, código que transforma" style={style.nav.center.logo} src="img/logo.svg"/>
-          </Link> :
-          <img alt="Laboratoria, código que transforma" style={style.nav.center.logo} src="img/logo.svg"/>
-        }
-      </div>
-      <div className="right" style={style.nav.right}>
-        <UserMenu userCtx={props.userCtx} signOut={props.signOut} />
-      </div>
-    </div>
-  );
-};
-
-
-export default Navbar;
+export default firebaseConnect()(props => {
+  return (<AppBar>
+    <Toolbar>
+      <Link to="/">
+        <img
+          alt="Laboratoria, código que transforma"
+          style={{width: '190px'}}
+          src="img/logo.svg"
+        />
+      </Link>
+      <Button color="contrast" onClick={() => props.firebase.logout()}>Logout</Button>
+    </Toolbar>
+  </AppBar>);
+});

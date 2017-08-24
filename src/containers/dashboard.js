@@ -40,7 +40,6 @@ class Dashboard extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
-  userCtx: state.session.userCtx,
   groups: state.groups,
   courses: state.courses
 });

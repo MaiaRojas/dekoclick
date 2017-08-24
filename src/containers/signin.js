@@ -66,7 +66,6 @@ class SignIn extends React.Component {
         email: email,
         password: password
       });
-      //this.props.signIn(email, password);
     }
 
     return false;
