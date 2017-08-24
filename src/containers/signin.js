@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import { firebaseConnect } from 'react-redux-firebase';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
@@ -60,7 +61,12 @@ class SignIn extends React.Component {
     this.checkErrors();
 
     if (email && internals.validateEmail(email) && password) {
-      this.props.signIn(email, password);
+      console.log(this.props);
+      this.props.firebase.login({
+        email: email,
+        password: password
+      });
+      //this.props.signIn(email, password);
     }
 
     return false;
@@ -105,4 +111,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default firebaseConnect()(SignIn);

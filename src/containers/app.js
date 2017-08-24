@@ -1,10 +1,13 @@
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
 
-import { resetErrorMessage, loadSession, signIn, signOut } from '../actions';
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firebaseConnect, isLoaded, isEmpty, pathToJS } from 'react-redux-firebase';
+import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
+//import { resetErrorMessage } from '../actions';
+
 
 import Navbar from '../components/navbar';
 import SignIn from './signin';
@@ -13,57 +16,57 @@ import Course from './course';
 import Group from './group';
 import Lesson from './lesson';
 
-const PrivateRoute = ({ component: Component, userCtx, signOut, path, exact }) => (
+
+const PrivateRoute = ({ component: Component, auth, path, exact }) => (
   <Route path={path} exact={exact} render={props => (
     <div className="app">
-      <Navbar userCtx={userCtx} signOut={signOut} linkable={true} />
-      {userCtx && userCtx.name ?
-        <Component userCtx={userCtx} {...props} /> :
+      <Navbar auth={auth} linkable={true} />
+      {auth ?
+        <Component auth={auth} {...props} /> :
         <Redirect to="/signin" />}
     </div>
   )}/>
 );
 
-class App extends React.Component {
 
-  componentWillMount() {
-    this.props.loadSession();
+const App = props => {
+  if (!isLoaded(props.auth)) {
+    return (<div>Loading...</div>);
   }
+  // else if (isEmpty(props.auth)) {
+  //   return (<div className="app"><SignIn error={null} /></div>);
+  // }
 
-  render() {
-    const { userCtx, error } = this.props.session;
-
-    return (
-      <Router>
-        <Switch>
-          <PrivateRoute exact path="/" component={Dashboard} userCtx={userCtx} signOut={this.props.signOut} />
-          <PrivateRoute path="/courses/:courseid" component={Course} userCtx={userCtx} />
-          <Route path="/signin" render={() => (
-            <div className="app">
-              {userCtx && userCtx.name ?
-                <Redirect to="/" /> :
-                <SignIn signIn={this.props.signIn} error={error} />}
-            </div>
-          )} />
-        </Switch>
-      </Router>
-    );
-  }
-}
+  return (
+    <Router>
+      <Switch>
+        <PrivateRoute exact path="/" component={Dashboard} auth={props.auth} />
+        <PrivateRoute path="/courses/:courseid" component={Course} auth={props.auth} />
+        <Route path="/signin" render={() => (
+          <div className="app">
+            {props.auth ?
+              <Redirect to="/" /> :
+              <SignIn error={null} />}
+          </div>
+        )} />
+      </Switch>
+    </Router>
+  );
+};
 
 
-const mapStateToProps = (state, ownProps) => ({
-  app: state.app,
-  session: state.session
+const mapStateToProps = ({ firebase }) => ({
+  authError: pathToJS(firebase, 'authError'),
+  auth: pathToJS(firebase, 'auth'),
 });
 
 
 const mapDispatchToProps = {
-  resetErrorMessage,
-  loadSession,
-  signIn,
-  signOut
+  //resetErrorMessage
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default compose(
+  firebaseConnect(),
+  connect(mapStateToProps, mapDispatchToProps)
+)(App);

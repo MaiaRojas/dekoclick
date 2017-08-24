@@ -7,43 +7,6 @@ export const resetErrorMessage = () => ({
 });
 
 
-export const loadSession = () => ({
-  type: 'API_REQUEST',
-  payload: {
-    id: 'LOAD_SESSION',
-    path: '/_session',
-    method: 'GET'
-  }
-});
-
-
-export const signIn = (email, password)  => (dispatch, getState) => {
-
-  if (getState().session.isSignedIn) {
-    return null;
-  }
-
-  dispatch({
-    type: 'API_REQUEST',
-    payload: {
-      id: 'SIGNIN',
-      path: '/_session',
-      method: 'POST',
-      payload: { email, password }
-    }
-  });
-};
-
-export const signOut = () => ({
-  type: 'API_REQUEST',
-  payload: {
-    id: 'SIGNOUT',
-    path: '/_session',
-    method: 'DELETE'
-  }
-});
-
-
 export const fetchGroups = () => ({
   type: 'API_REQUEST',
   payload: {
