@@ -6,51 +6,33 @@ import './img/favicon.png';
 import './img/logo.svg';
 import './worker.js';
 
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import api from './middleware/api';
-import reducers from './reducers';
-import App from './containers/app';
-import theme from './style/themes/app';
-import { MuiThemeProvider } from 'material-ui/styles';
-
-
-const middlewares = [thunk, api];
-
-if (process.env.NODE_ENV !== 'production') {
-  const { logger } = require('redux-logger');
-  middlewares.push(logger);
-}
-
-const store = createStore(reducers, applyMiddleware(...middlewares));
-
-
 import { AppContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
+import { MuiThemeProvider } from 'material-ui/styles';
+import store from './store';
+import theme from './style/themes/app';
+import App from './containers/app';
 
 
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <App />
-        </MuiThemeProvider>
-      </Provider>
-    </AppContainer>,
-    document.getElementById('root')
-  );
-};
+const render = Component => ReactDOM.render(
+  <AppContainer>
+    <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <Component />
+      </MuiThemeProvider>
+    </Provider>
+  </AppContainer>,
+  document.getElementById('root')
+);
+
 
 render(App);
 
 
 // Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept('./containers/app', () => {
-
-    render(App);
-  });
+  module.hot.accept('./containers/app', () => render(App));
 }
