@@ -34,6 +34,12 @@ const App = props => {
     return (<div>Loading...</div>);
   }
 
+  //const rootRef = props.firebase.database().ref();
+  //console.log(props.auth.uid);
+  //rootRef.child('cohortMembership').child(props.auth.uid).on('value', snap => {
+  //  console.log('SNAP', snap.val());
+  //});
+
   return (
     <Router>
       <Switch>

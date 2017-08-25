@@ -11,12 +11,12 @@ import reducers from './reducers';
 const middlewares = [thunk, api];
 
 const config = {
-  apiKey: "AIzaSyAYVybgr49sOofMEF08hueYrKrPb6MO1SQ",
-  authDomain: "laboratoria-lms.firebaseapp.com",
-  databaseURL: "https://laboratoria-lms.firebaseio.com",
-  projectId: "laboratoria-lms",
-  storageBucket: "laboratoria-lms.appspot.com",
-  messagingSenderId: "484650430223"
+  apiKey: "AIzaSyAXbaEbpq8NOfn0r8mIrcoHvoGRkJThwdc",
+  authDomain: "laboratoria-la.firebaseapp.com",
+  databaseURL: "https://laboratoria-la.firebaseio.com",
+  projectId: "laboratoria-la",
+  storageBucket: "laboratoria-la.appspot.com",
+  messagingSenderId: "378945761184"
 };
 
 // Add redux Firebase to compose
