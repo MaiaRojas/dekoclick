@@ -2,53 +2,48 @@
 
 
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { firebaseConnect, dataToJS, isLoaded } from 'react-redux-firebase';
 import { Redirect } from 'react-router-dom';
-import { fetchGroups, fetchCourses } from '../actions';
 import GroupsList from '../components/groups-list';
 import CoursesList from '../components/courses-list';
 
 
-class Dashboard extends React.Component {
-
-  componentWillMount() {
-
-    document.title = 'Dashboard';
-    //this.props.fetchGroups();
-    this.props.fetchCourses();
+const Dashboard = props => {
+  if (!isLoaded(props.cohortMembership)) {
+    return (<div>Loading...</div>);
   }
 
-  render() {
+  // const rootRef = props.firebase.database().ref();
+  // rootRef.child('courses').on('value', snap => {
+  //   console.log('COURSES', snap.val());
+  // });
+  //console.log(props.auth.uid);
+  //rootRef.child('cohortMembership').child(props.auth.uid).on('value', snap => {
+  //  console.log('SNAP', snap.val());
+  //});
 
-    const { courses, groups } = this.props;
+  console.log(props.cohortMembership);
+  return null;
 
-    if (!courses.hasLoaded/* || !groups.hasLoaded*/) {
-      return null;
-    }
-
-    return (
-      <div>
-        <h2>Cursos</h2>
-        <CoursesList courses={courses.courses} />
-        {/*<h2>Grupos matriculados</h2>*/}
-        {/*<GroupsList groups={groups.groups} />*/}
-      </div>
-    );
-  }
-
-}
-
-
-const mapStateToProps = (state, ownProps) => ({
-  groups: state.groups,
-  courses: state.courses
-});
-
-
-const mapDispatchToProps = {
-  fetchGroups,
-  fetchCourses
+  return (
+    <div>
+      <h2>Cursos</h2>
+      <CoursesList courses={courses.courses} />
+      {/*<h2>Grupos matriculados</h2>*/}
+      {/*<GroupsList groups={groups.groups} />*/}
+    </div>
+  );
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+const mapStateToProps = ({ firebase }) => ({
+  cohortMembership: dataToJS(firebase, 'cohortMembership')
+});
+
+
+export default compose(
+  firebaseConnect(['cohortMembership']),
+  connect(mapStateToProps, {})
+)(Dashboard);

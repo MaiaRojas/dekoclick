@@ -6,15 +6,12 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, isLoaded, isEmpty, pathToJS } from 'react-redux-firebase';
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
-//import { resetErrorMessage } from '../actions';
 
 
 import Navbar from '../components/navbar';
 import SignIn from './signin';
 import Dashboard from './dashboard';
 import Course from './course';
-import Group from './group';
-import Lesson from './lesson';
 
 
 const PrivateRoute = ({ component: Component, auth, path, exact }) => (
@@ -33,12 +30,6 @@ const App = props => {
   if (!isLoaded(props.auth)) {
     return (<div>Loading...</div>);
   }
-
-  //const rootRef = props.firebase.database().ref();
-  //console.log(props.auth.uid);
-  //rootRef.child('cohortMembership').child(props.auth.uid).on('value', snap => {
-  //  console.log('SNAP', snap.val());
-  //});
 
   return (
     <Router>
@@ -64,12 +55,7 @@ const mapStateToProps = ({ firebase }) => ({
 });
 
 
-const mapDispatchToProps = {
-  //resetErrorMessage
-};
-
-
 export default compose(
   firebaseConnect(),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, {})
 )(App);
