@@ -35,9 +35,13 @@ const App = props => {
     <Router>
       <Switch>
         <PrivateRoute exact path="/" component={Dashboard} auth={props.auth} />
-        <PrivateRoute path="/courses/:courseid" component={Course} auth={props.auth} />
+        <PrivateRoute
+          path="/cohorts/:cohortid/courses/:courseid"
+          component={Course}
+          auth={props.auth}
+        />
         <Route path="/signin" render={() => (
-          <div className="app">
+          <div>
             {!isEmpty(props.auth) ?
               <Redirect to="/" /> :
               <SignIn error={null} />}

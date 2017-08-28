@@ -2,66 +2,38 @@
 
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import CourseCard from './course-card';
 
 
-const CourseCard = (props) => {
+const CoursesList = props => {
+  if (!isLoaded(props.courses)) {
+    return (<div>Loading...</div>);
+  }
 
-  const { course, redirect } = props;
+  if (isEmpty(props.courses)) {
+    return (<div>No courses :-(</div>);
+  }
 
-  const style = {
-    card: {
-      flex: 1
-    },
-    header: {},
-    infoList: {
-      listStyle: 'none'
-    },
-    infoListItem: {
-      paddingBottom: '8px'
-    },
-    body: {}
-  };
-
-  return (
-    <div className="card" style={style.card}>
-      <div className="card-header" style={style.header}>
-        <h3 className="card-title">{course.title}</h3>
-        <ul style={style.infoList}>
-          <li style={style.infoListItem}>
-            Duración: {course.duration}
-          </li>
-          <li style={style.infoListItem}>
-            Track: <span className="chip">{course.track}</span>
-          </li>
-          {course.dependencies && <li style={style.infoListItem}>
-            Requisitos: {course.dependencies.map(dep =>
-              <span key={dep} className="chip">{dep}</span>
-            )}
-          </li>}
-        </ul>
-      </div>
-      <div className="card-body" style={style.body}>
-        <p>{course.description}</p>
-        <Link to={`/courses/${course._id}`}>
-          Ver más
-        </Link>
-      </div>
-    </div>
-  );
+  return (<div>
+    {Object.keys(props.courses).map(key =>
+      <CourseCard
+        key={key}
+        id={key}
+        cohort={props.cohort}
+        course={props.courses[key]}
+      />
+    )}
+  </div>);
 };
 
 
-const CoursesList = (props) => {
-
-  return (
-    <div className="card-grid">
-      {props.courses.map(course =>
-        <CourseCard key={course._id} course={course} />
-      )}
-    </div>
-  );
-};
-
-
-export default CoursesList;
+// list courses for a given cohort
+export default compose(
+  firebaseConnect(['cohortCourses']),
+  connect(({ firebase }, ownProps) => ({
+    courses: dataToJS(firebase, 'cohortCourses/' + ownProps.cohort)
+  }), {})
+)(CoursesList);

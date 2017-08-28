@@ -3,9 +3,10 @@
 //
 
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
-import { fetchCourses } from '../actions';
 
 
 const Lesson = (props) => {
@@ -16,7 +17,9 @@ const Lesson = (props) => {
 };
 
 
-const Unit = (props) => {
+const Unit = props => {
+  console.log(props);
+  return null;
 
   const lessons = props.unit.lessons || [];
 
@@ -33,26 +36,22 @@ const Unit = (props) => {
 };
 
 
-const Course = (props) => {
-
-  if (!props.courses.hasLoaded) {
-    props.fetchCourses();
-    return null;
+const Course = props => {
+  if (!isLoaded(props.course)) {
+    return (<div>Loading...</div>);
   }
 
-  const courseid = props.match.params.courseid;
-  const courses = props.courses.courses;
-  const course = courses.filter(course => course._id === courseid).shift();
-
-  console.log(course);
+  if (isEmpty(props.course)) {
+    return (<div>No course :-(</div>);
+  }
 
   return (
-    <div>
-      <h1>Curso: {course.title}</h1>
+    <div className="main">
+      <h1>Curso: {props.course.title}</h1>
       <h2>Syllabus</h2>
       <ul>
-      {course.syllabus.map((unit, i) =>
-        <Unit key={i} unit={unit} />
+      {Object.keys(props.course.syllabus).map((key) =>
+        <Unit key={key} id={key} unit={props.course.syllabus[key]} />
       )}
       </ul>
     </div>
@@ -60,14 +59,15 @@ const Course = (props) => {
 };
 
 
-const mapStateToProps = (state, ownProps) => ({
-  courses: state.courses
+const mapStateToProps = ({ firebase }, { match }) => ({
+  course: dataToJS(
+    firebase,
+    `cohortCourses/${match.params.cohortid}/${match.params.courseid}`
+  )
 });
 
 
-const mapDispatchToProps = {
-  fetchCourses
-};
+const mapDispatchToProps = {};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Course);

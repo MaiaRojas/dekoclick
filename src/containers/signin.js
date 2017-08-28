@@ -81,7 +81,6 @@ class SignIn extends React.Component {
         <Paper className="login-form">
           <form onSubmit={this.handleSubmit}>
             <h1>Laboratoria LMS</h1>
-            <p>Estudiante</p>
             <div className="controls">
               <TextField id="email" label="Correo Electrónico" value={this.state.email}
                          error={this.state.email_error != ''}

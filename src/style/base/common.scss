@@ -73,11 +73,13 @@ body {
 }
 
 .main {
-  height: calc(100% - 60px);
+  /*height: calc(100% - 60px);*/
+  margin-top: 60px;
+  padding: 36px;
 }
 
 .img-circle {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 //TODO: Definir si esta clase debe ser parte del styleguide

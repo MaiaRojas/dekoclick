@@ -10,10 +10,10 @@ import Button from 'material-ui/Button';
 
 export default firebaseConnect()(props => (<AppBar>
   <Toolbar>
-    <Link to="/">
+    <Link to="/" style={{ flex: 1 }}>
       <img
         alt="Laboratoria, código que transforma"
-        style={{width: '190px'}}
+        style={{ width: '130px', marginTop: '10px' }}
         src="img/logo.svg"
       />
     </Link>
