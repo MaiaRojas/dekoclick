@@ -96,13 +96,14 @@ module.exports = {
     new Webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
-      filename: !isProduction ? 'index.html': '200.html'
+      //filename: !isProduction ? 'index.html': '200.html'
+      filename: 'index.html'
     }),
-    new HtmlWebpackPlugin({
-      template: './404.html',
-      filename: '404.html',
-      chunks: []
-    })
+    // new HtmlWebpackPlugin({
+    //   template: './404.html',
+    //   filename: '404.html',
+    //   chunks: []
+    // })
   ]
 };
 
