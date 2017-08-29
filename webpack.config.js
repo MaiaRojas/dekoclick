@@ -22,7 +22,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: targetPathAbs,
-    //publicPath: '/'
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -112,7 +112,7 @@ if (!isProduction) { // Development environment
 
   module.exports.entry = [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
+    'webpack-dev-server/client?http://localhost:8081',
     'webpack/hot/only-dev-server'
   ].concat(module.exports.entry);
 
@@ -122,7 +122,8 @@ if (!isProduction) { // Development environment
     hot: true,
     contentBase: targetPathAbs,
     publicPath: '/',
-    historyApiFallback: true
+    historyApiFallback: true,
+    port: 8081
   };
 
   module.exports.plugins.unshift(new Webpack.HotModuleReplacementPlugin());

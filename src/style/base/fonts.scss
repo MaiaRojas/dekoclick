@@ -6,7 +6,7 @@
     - Montserrat
     - PF Handbook
 */
-@mixin font-face($shortName,$longName, $style, $weight, $type, $url, $format) {
+@mixin font-face($shortName, $longName, $style, $weight, $type, $url, $format) {
   @font-face {
     font-family: quote($shortName);
     font-style: $style;

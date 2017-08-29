@@ -7,33 +7,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
-
-
-const Lesson = (props) => {
-
-  return (
-    <li>{props.lesson.title}</li>
-  );
-};
-
-
-const Unit = props => {
-  console.log(props);
-  return null;
-
-  const lessons = props.unit.lessons || [];
-
-  return (
-    <li>
-      <h4>{props.unit.title}</h4>
-      <ul>
-      {lessons.map((lesson, i) =>
-        <Lesson key={i} lesson={lesson} />
-      )}
-      </ul>
-    </li>
-  );
-};
+import Typography from 'material-ui/Typography';
+import UnitCard from '../components/unit-card';
 
 
 const Course = props => {
@@ -47,13 +22,24 @@ const Course = props => {
 
   return (
     <div className="main">
-      <h1>Curso: {props.course.title}</h1>
-      <h2>Syllabus</h2>
-      <ul>
-      {Object.keys(props.course.syllabus).map((key) =>
-        <Unit key={key} id={key} unit={props.course.syllabus[key]} />
+      <Typography type="headline" component="h1">
+        {props.course.title}
+      </Typography>
+      <Typography type="title" component="h2">
+        Syllabus
+      </Typography>
+      <div>
+      {Object.keys(props.course.syllabus).sort().map((key, idx) =>
+        <UnitCard
+          key={key}
+          id={key}
+          idx={idx}
+          unit={props.course.syllabus[key]}
+          course={props.match.params.courseid}
+          cohort={props.match.params.cohortid}
+        />
       )}
-      </ul>
+      </div>
     </div>
   );
 };
@@ -67,7 +53,4 @@ const mapStateToProps = ({ firebase }, { match }) => ({
 });
 
 
-const mapDispatchToProps = {};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Course);
+export default connect(mapStateToProps, {})(Course);

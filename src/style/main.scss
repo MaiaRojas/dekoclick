@@ -1,18 +1,30 @@
 @charset "utf-8";
 
 // Base css
-@import "base/colors.scss";
-@import "base/fonts.scss";
-@import "base/flex.scss";
-@import "base/grid.scss";
-@import "base/padding-margins.scss";
-@import "base/common.scss";
+// @import "base/colors.scss";
+// @import "base/fonts.scss";
+// @import "base/flex.scss";
+// @import "base/grid.scss";
+// @import "base/padding-margins.scss";
+// @import "base/common.scss";
+//
+// @import "containers/signin.scss";
 
-@import "containers/signin.scss";
+html, body, .root, .root > div {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 .app {
   width: 100%;
   display: flex;
   min-height: 100vh;
   align-items: stretch;
+}
+
+.main {
+  margin-top: 60px;
+  padding: 36px;
 }

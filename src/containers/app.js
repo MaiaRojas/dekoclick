@@ -12,6 +12,7 @@ import Navbar from '../components/navbar';
 import SignIn from './signin';
 import Dashboard from './dashboard';
 import Course from './course';
+import Unit from './unit';
 
 
 const PrivateRoute = ({ component: Component, auth, path, exact }) => (
@@ -35,6 +36,11 @@ const App = props => {
     <Router>
       <Switch>
         <PrivateRoute exact path="/" component={Dashboard} auth={props.auth} />
+        <PrivateRoute
+          path="/cohorts/:cohortid/courses/:courseid/:unitid"
+          component={Unit}
+          auth={props.auth}
+        />
         <PrivateRoute
           path="/cohorts/:cohortid/courses/:courseid"
           component={Course}
