@@ -3,13 +3,21 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
 
+const styles = theme => ({
+  card: {
+    marginBottom: 16
+  },
+});
+
+
 const UnitCard = props => (
-  <Card>
+  <Card className={props.classes.card}>
     <CardContent>
       <Typography type="subheading" component="h3">
         Unidad {props.idx + 1}: {props.unit.title}
@@ -33,4 +41,4 @@ const UnitCard = props => (
 );
 
 
-export default UnitCard;
+export default withStyles(styles)(UnitCard);

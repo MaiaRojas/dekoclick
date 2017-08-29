@@ -14,8 +14,8 @@ export default firebaseConnect()(props => (
       <Link to="/" style={{ flex: 1 }}>
         <img
           alt="Laboratoria, código que transforma"
-          style={{ width: '130px', marginTop: '10px' }}
-          src="/img/logo.svg"
+          style={{ height: '24px', marginTop: '10px' }}
+          src="/img/icon.svg"
         />
       </Link>
       <Button color="contrast" onClick={() => props.firebase.logout()}>

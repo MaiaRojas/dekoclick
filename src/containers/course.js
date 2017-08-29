@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
-import Typography from 'material-ui/Typography';
+import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
 
 
@@ -21,13 +21,8 @@ const Course = props => {
   }
 
   return (
-    <div className="main">
-      <Typography type="headline" component="h1">
-        {props.course.title}
-      </Typography>
-      <Typography type="title" component="h2">
-        Syllabus
-      </Typography>
+    <div className="course">
+      <TopBar title={props.course.title} />
       <div>
       {Object.keys(props.course.syllabus).sort().map((key, idx) =>
         <UnitCard

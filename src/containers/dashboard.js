@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Redirect } from 'react-router-dom';
+import TopBar from '../components/top-bar';
 import CoursesList from '../components/courses-list';
 
 
@@ -19,7 +20,8 @@ const Dashboard = props => {
   }
 
   return (
-    <div className="main">
+    <div className="dashboard">
+      <TopBar title="Dashboard" />
       {Object.keys(props.cohortMembership).map(key =>
         <CoursesList key={key} cohort={key} role={props.cohortMembership[key]} />
       )}

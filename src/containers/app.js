@@ -8,22 +8,20 @@ import { firebaseConnect, isLoaded, isEmpty, pathToJS } from 'react-redux-fireba
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
 
 
-import Navbar from '../components/navbar';
+import MainNav from '../components/main-nav';
 import SignIn from './signin';
 import Dashboard from './dashboard';
 import Course from './course';
 import Unit from './unit';
 
 
-const PrivateRoute = ({ component: Component, auth, path, exact }) => (
-  <Route path={path} exact={exact} render={props => (
-    <div className="app">
-      <Navbar />
-      {auth ?
-        <Component auth={auth} {...props} /> :
-        <Redirect to="/signin" />}
+const WithMainNav = ({ component: Component, ...props }) => (
+  <div className="app">
+    <MainNav {...props} />
+    <div className="main">
+      <Component {...props} />
     </div>
-  )}/>
+  </div>
 );
 
 
@@ -32,27 +30,24 @@ const App = props => {
     return (<div>Loading...</div>);
   }
 
+  if (isEmpty(props.auth)) {
+    return (<SignIn error={null} />);
+  }
+
   return (
     <Router>
       <Switch>
-        <PrivateRoute exact path="/" component={Dashboard} auth={props.auth} />
-        <PrivateRoute
+        <Route
           path="/cohorts/:cohortid/courses/:courseid/:unitid"
-          component={Unit}
-          auth={props.auth}
+          render={props => <Unit {...props} />}
         />
-        <PrivateRoute
+        <Route
           path="/cohorts/:cohortid/courses/:courseid"
-          component={Course}
-          auth={props.auth}
+          render={props => <WithMainNav component={Course} {...props} />}
         />
-        <Route path="/signin" render={() => (
-          <div>
-            {!isEmpty(props.auth) ?
-              <Redirect to="/" /> :
-              <SignIn error={null} />}
-          </div>
-        )} />
+        <Route exact path="/" >
+          <WithMainNav component={Dashboard} {...props} />
+        </Route>
       </Switch>
     </Router>
   );

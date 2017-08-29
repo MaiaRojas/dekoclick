@@ -3,15 +3,23 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 
 
+const styles = theme => ({
+  card: {
+    marginBottom: 16
+  },
+});
+
+
 const CourseCard = props => (
-  <Card>
+  <Card className={props.classes.card}>
     <CardContent>
-      <Typography type="headline" component="h2">
+      <Typography type="subheading" component="h3">
         {props.course.title}
       </Typography>
     </CardContent>
@@ -28,4 +36,4 @@ const CourseCard = props => (
 );
 
 
-export default CourseCard;
+export default withStyles(styles)(CourseCard);
