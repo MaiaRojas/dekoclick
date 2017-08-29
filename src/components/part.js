@@ -7,8 +7,16 @@ import Chip from 'material-ui/Chip';
 
 
 const styles = theme => console.log(theme.typography) || ({
+  root: {
+    width: '100%',
+    maxWidth: '860px',
+    height: '100%',
+    background: '#fff',
+    margin: '0 auto',
+    padding: '30px',
+  },
   body: {
-    marginTop: 20,
+    marginTop: 32,
     fontFamily: theme.typography.fontFamily,
     fontSize: (theme.typography.fontSize + 2),
     fontWeightLight: theme.typography.fontWeightLight,
@@ -29,7 +37,7 @@ const Part = props => {
   console.log('Part', props);
 
   return (
-    <div>
+    <div className={props.classes.root}>
       <p className={props.classes.meta}>
         <Chip className={props.classes.metaChip} label={`Tipo: ${props.part.type}`} />
         <Chip className={props.classes.metaChip} label={`Formato: ${props.part.format}`} />

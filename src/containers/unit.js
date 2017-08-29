@@ -71,7 +71,7 @@ const Unit = props => {
   return (
     <div className="app">
       <UnitNav {...props} />
-      <div className="main">
+      <div className="main" style={{background: '#ccc', height: '100%'}}>
         <TopBar title={props.unit.parts[current].title} />
         <Part part={props.unit.parts[current]} />
       </div>
