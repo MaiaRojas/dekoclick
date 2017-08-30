@@ -11,9 +11,8 @@ import Typography from 'material-ui/Typography';
 const styles = theme => ({
   appBar: {
     boxShadow: 'none',
-    //width: 'calc(100% - 250px)',
     [theme.breakpoints.up('md')]: {
-      width: 'calc(100% - 250px)',
+      width: 'calc(100% - 320px)',
     },
   },
 });

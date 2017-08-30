@@ -40,12 +40,16 @@ const Course = props => {
 };
 
 
+const matchParamsToPath = ({ cohortid, courseid, unitid }) =>
+  `cohortCourses/${cohortid}/${courseid}`;
+
+
 const mapStateToProps = ({ firebase }, { match }) => ({
-  course: dataToJS(
-    firebase,
-    `cohortCourses/${match.params.cohortid}/${match.params.courseid}`
-  )
+  course: dataToJS(firebase, matchParamsToPath(match.params))
 });
 
 
-export default connect(mapStateToProps, {})(Course);
+export default compose(
+  firebaseConnect(({ match }) => [matchParamsToPath(match.params)]),
+  connect(mapStateToProps)
+)(Course);

@@ -9,7 +9,7 @@ import Hidden from 'material-ui/Hidden';
 
 const styles = theme => ({
   drawer: {
-    width: 250
+    width: 320
   },
 });
 

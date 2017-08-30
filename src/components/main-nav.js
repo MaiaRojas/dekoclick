@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
@@ -15,7 +16,7 @@ import LeftDrawer from './left-drawer';
 
 const styles = theme => ({
   list: {
-    width: 250
+    width: 320
   },
   logo: {
     height: 20,
@@ -43,7 +44,7 @@ const MainNav = props => (
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button onClick={() => props.history.push('/')}>
+      <ListItem button onClick={() => props.history.push('/account')}>
         <ListItemIcon>
           <AccountCircleIcon />
         </ListItemIcon>
@@ -62,6 +63,7 @@ const MainNav = props => (
 
 
 export default compose(
+  connect(),
   firebaseConnect(),
-  withStyles(styles)
+  withStyles(styles),
 )(MainNav);

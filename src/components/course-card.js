@@ -11,7 +11,7 @@ import Button from 'material-ui/Button';
 
 const styles = theme => ({
   card: {
-    marginBottom: 16
+    marginBottom: 32
   },
 });
 
