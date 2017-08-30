@@ -1,16 +1,29 @@
-# capitan-lms
+# Laboratoria LMS
 
-Capitan LMS es el producto del Core team de producto, diseñado para consumir la curricula y mostrarla de una forma amigable a las alumnas.
+**Laboratoria LMS** (_lms.laboratoria.la_) es la interfaz principal de nustro
+entorno de aprendizaje. Este repo lo maneja el _core team_ de productos de
+Laboratoria.
 
-Es una plataforma regional usada para impartir los cursos del bootcamp y educación continua.
+El objetivo principal de diseño es permitir a las alumnas consumir la curricula
+y mostrarla de una forma amigable.
 
-### Site
+Es una plataforma regional usada para impartir los cursos del bootcamp y
+educación continua.
 
-Este enlace contiene la última versión del producto [http://lms.laboratoria.la/](http://lms.laboratoria.la/)
+Este enlace contiene la última versión del producto
+[https://laboratoria-la.firebaseapp.com/](https://laboratoria-la.firebaseapp.com/)
 
-### Desarrollo
+## Desarrollo
 
-#### Core Team
+Entorno de desarrollo?
+
+### Dependencias
+
+* `node`
+* `yarn`
+* `firebase`
+
+### Core team
 
 Si eres parte del core team, sigue estos pasos:
 
@@ -18,18 +31,24 @@ Si eres parte del core team, sigue estos pasos:
 - Crea una nueva rama (`git checkout -b improve-feature`)
 - Ejecuta `yarn install` para descargar todas las dependencias
 - Para ejecutar el proyecto corre el comando (`npm start`)
-- Cuando hayas terminado crea un pull request hacia la rama master para mezclar tus cambios
+- Cuando hayas terminado crea un pull request hacia la rama master para mezclar
+  tus cambios
 
-#### Externo
+### Externo
 
-Si no eres parte del core team, pero quieres colaborar sigue los siguientes pasos:
+Si no eres parte del core team, pero quieres colaborar sigue los siguientes
+pasos:
 
 - Haz un fork del proyecto
 - Realizar tus cambios necesarios
-- Cuando hayas terminado crea un pull request hacia la rama master con tus cambios sugeridos
+- Cuando hayas terminado crea un pull request hacia la rama master con tus
+  cambios sugeridos
 
-En ambos casos recuerda que para poder ejecutar correctamente el proyecto primero tienes que tener una copia del API, puedes ver las instrucciones de como descargar ese proyecto en el siguiente enlace:
+## Despliegue
 
-[https://github.com/Laboratoria/capitan-api](https://github.com/Laboratoria/capitan-api)
+Firebase...
 
-En caso tus cambios requieran modificaciones al API puedes hacer un pull request con tus modificaciones o contactar con el core Team del API para realizar las modificaciones necesarias.
+```sh
+yarn run build
+firebase deploy --only hosting
+```
