@@ -9,7 +9,8 @@ import { withStyles } from 'material-ui/styles';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import UnitNav from '../components/unit-nav';
 import TopBar from '../components/top-bar';
-import Part from '../components/part';
+import UnitPart from '../components/unit-part';
+import UnitExercises from '../components/unit-exercises';
 
 
 const styles = theme => ({
@@ -42,12 +43,15 @@ const Unit = props => {
     return <Redirect to={`${props.match.url}/${first}`} />;
   }
 
+  const Component = (props.unit.parts[current].type === 'practice') ?
+    UnitExercises : UnitPart;
+
   return (
     <div className="app">
       <UnitNav {...propsMinusClasses} />
       <div className={classes.main}>
         <TopBar title={props.unit.parts[current].title} />
-        <Part part={props.unit.parts[current]} />
+        <Component part={props.unit.parts[current]} match={props.match} />
       </div>
     </div>
   );

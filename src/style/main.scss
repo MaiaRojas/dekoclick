@@ -10,6 +10,8 @@
 //
 // @import "containers/signin.scss";
 
+@import "../../node_modules/codemirror/lib/codemirror.css";
+
 html, body, .root, .root > div {
   width: 100%;
   min-height: 100vh;

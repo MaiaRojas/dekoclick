@@ -57,7 +57,7 @@ const App = props => {
     <Router>
       <Switch>
         <WrapRoute
-          path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?"
+          path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
           component={Unit}
           mainNav={false}
           {...props}
