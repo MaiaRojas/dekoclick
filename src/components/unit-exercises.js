@@ -29,21 +29,21 @@ const parseExercises = objs => Object.keys(objs || {}).reduce((memo, key) => {
 }, {});
 
 
-const UnitExercises = props => {
-	const exerciseid = props.match.params.exerciseid;
-	const exercises = parseExercises(props.part.exercises);
+const UnitExercises = ({ part, match }) => {
+	const exerciseid = match.params.exerciseid;
+	const exercises = parseExercises(part.exercises);
 
 	if (exerciseid) {
 		return <Exercise id={exerciseid} exercise={exercises[exerciseid]} />
 	}
 
-	return <ExercisesList exercises={exercises} match={props.match} />;
+	return <ExercisesList exercises={exercises} match={match} />;
 };
 
 
 UnitExercises.propTypes = {
-  part: PropTypes.object,
-	match: PropTypes.object
+  part: PropTypes.object.isRequired,
+	match: PropTypes.object.isRequired
 };
 
 

@@ -4,27 +4,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
+import Avatar from 'material-ui/Avatar';
 
 
-const ExerciseCard = props => {
-	const { cohortid, courseid, unitid, partid } = props.match.params;
-	return (
-		<Card>
-		  <CardContent>
-			  <Link to={`/cohorts/${cohortid}/courses/${courseid}/${unitid}/${partid}/${props.id}`}>
-				  {props.exercise.title}
-				</Link>
-			</CardContent>
-		</Card>
-	);
-};
+const matchParamsToURL = ({ cohortid, courseid, unitid, partid }, id) =>
+	`/cohorts/${cohortid}/courses/${courseid}/${unitid}/${partid}/${id}`;
+
+
+const ExerciseCard = props => (
+	<Card>
+	  <CardHeader
+		  avatar={<Avatar aria-label="Exercise">JS</Avatar>}
+			title={<Link to={matchParamsToURL(props.match.params, props.id)}>
+			  {props.exercise.title}
+			</Link>}
+			subheader="September 14, 2016"
+		/>
+	</Card>
+);
 
 
 ExerciseCard.propTypes = {
-	id: PropTypes.string,
-  match: PropTypes.object,
-	exercise: PropTypes.object,
+	id: PropTypes.string.isRequired,
+  match: PropTypes.object.isRequired,
+	exercise: PropTypes.object.isRequired,
 };
 
 

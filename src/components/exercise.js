@@ -16,17 +16,17 @@ const getBoilerplate = (files, id) =>
   (files.boilerplate && files.boilerplate[idToFilename(id)]) || '';
 
 
-const Exercise = props => (
+const Exercise = ({ id, exercise }) => console.log(exercise) || (
 	<div>
-	  <h2>{props.exercise.title}</h2>
-		<div dangerouslySetInnerHTML={{ __html: props.exercise.description }} />
+	  <h2>{exercise.title}</h2>
+		<div dangerouslySetInnerHTML={{ __html: exercise.body }} />
 		<AceEditor
-      name={props.id}
+      name={id}
       mode="javascript"
       theme="github"
       readOnly={true}
       editorProps={{}}
-      value={getBoilerplate(props.exercise.files, props.id)}
+      value={getBoilerplate(exercise.files, id)}
       onChange={() => console.log('code chaned!')}
     />
 	</div>
@@ -34,7 +34,8 @@ const Exercise = props => (
 
 
 Exercise.propTypes = {
-  exercise: PropTypes.object,
+  id: PropTypes.string.isRequired,
+  exercise: PropTypes.object.isRequired,
 };
 
 
