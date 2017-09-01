@@ -3,30 +3,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import CodeMirror from 'react-codemirror';
-import JSMode from 'codemirror/mode/javascript/javascript';
-
-
-const Editor = props => (
-  <CodeMirror
-    value={props.code}
-    onChange={props.update}
-    options={{
-      mode: 'javascript',
-      theme: 'default',
-      indentUnit: 2,
-      tabSize: 2,
-      indentWithTabs: false,
-      lineNumbers: true
-    }}
-  />
-);
-
-
-Editor.propTypes = {
-  code: PropTypes.string,
-	update: PropTypes.func,
-};
+import brace from 'brace';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
 
 
 const idToFilename = id => `${id.replace(/\d{2}\-/, '')}.js`;
@@ -40,9 +20,14 @@ const Exercise = props => (
 	<div>
 	  <h2>{props.exercise.title}</h2>
 		<div dangerouslySetInnerHTML={{ __html: props.exercise.description }} />
-		<Editor
-      code={getBoilerplate(props.exercise.files, props.id)}
-      update={() => console.log('code chaned!')}
+		<AceEditor
+      name={props.id}
+      mode="javascript"
+      theme="github"
+      readOnly={true}
+      editorProps={{}}
+      value={getBoilerplate(props.exercise.files, props.id)}
+      onChange={() => console.log('code chaned!')}
     />
 	</div>
 );

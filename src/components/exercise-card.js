@@ -2,6 +2,7 @@
 
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 
@@ -17,6 +18,13 @@ const ExerciseCard = props => {
 			</CardContent>
 		</Card>
 	);
+};
+
+
+ExerciseCard.propTypes = {
+	id: PropTypes.string,
+  match: PropTypes.object,
+	exercise: PropTypes.object,
 };
 
 

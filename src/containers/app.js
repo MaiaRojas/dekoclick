@@ -4,10 +4,16 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, isLoaded, isEmpty, pathToJS } from 'react-redux-firebase';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import {
+  firebaseConnect,
+  isLoaded,
+  isEmpty,
+  pathToJS
+} from 'react-redux-firebase';
 
 
+import ScrollToTop from '../components/scroll-to-top';
 import MainNav from '../components/main-nav';
 import SignIn from './signin';
 import Dashboard from './dashboard';
@@ -55,21 +61,23 @@ const App = props => {
 
   return (
     <Router>
-      <Switch>
-        <WrapRoute
-          path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
-          component={Unit}
-          mainNav={false}
-          {...props}
-        />
-        <WrapRoute
-          path="/cohorts/:cohortid/courses/:courseid"
-          component={Course}
-          {...props}
-        />
-        <WrapRoute path="/account" component={Account} {...props} />
-        <WrapRoute exact path="/" component={Dashboard} {...props} />
-      </Switch>
+      <ScrollToTop>
+        <Switch>
+          <WrapRoute
+            path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
+            component={Unit}
+            mainNav={false}
+            {...props}
+          />
+          <WrapRoute
+            path="/cohorts/:cohortid/courses/:courseid"
+            component={Course}
+            {...props}
+          />
+          <WrapRoute path="/account" component={Account} {...props} />
+          <WrapRoute exact path="/" component={Dashboard} {...props} />
+        </Switch>
+      </ScrollToTop>
     </Router>
   );
 };
