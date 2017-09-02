@@ -4,6 +4,7 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
+import Content from './content';
 
 
 const styles = theme => ({
@@ -15,17 +16,10 @@ const styles = theme => ({
     margin: '0 auto',
     padding: '30px',
   },
-  body: {
-    marginTop: 32,
-    fontFamily: theme.typography.fontFamily,
-    fontSize: (theme.typography.fontSize + 2),
-    fontWeightLight: theme.typography.fontWeightLight,
-    fontWeightMedium: theme.typography.fontWeightMedium,
-    fontWeightRegular: theme.typography.fontWeightRegular,
-  },
   meta: {
     display: 'flex',
     alignItems: 'left',
+    marginBottom: 32,
   },
   metaChip: {
     marginRight: 4
@@ -49,10 +43,7 @@ const UnitPart = props => (
         label={`Duración: ${props.part.duration}`}
       />
     </div>
-    <div
-      className={props.classes.body}
-      dangerouslySetInnerHTML={{ __html: props.part.body }}
-    ></div>
+    {props.part.body && <Content html={props.part.body} />}
   </div>
 );
 

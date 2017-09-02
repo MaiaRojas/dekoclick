@@ -14,8 +14,20 @@ const unitUI = (state = { current: null }, action) => {
 };
 
 
+const exerciseUI = (state = { current: 0, code: null }, action) => {
+  if (action.type === 'EXERCISE_TAB_SELECT') {
+    return { current: action.payload, code: state.code };
+  }
+  else if (action.type === 'EXERCISE_CODE_UPDATE') {
+    return { current: state.current, code: action.payload };
+  }
+  return state;
+};
+
+
 export default combineReducers({
   firebase,
   router,
   unitUI,
+  exerciseUI,
 });

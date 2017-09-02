@@ -17,6 +17,11 @@ html, body, .root, .root > div {
   padding: 0;
 }
 
+code {
+  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace;
+  font-size: 13px;
+}
+
 .app {
   width: 100%;
   display: flex;
@@ -29,4 +34,8 @@ html, body, .root, .root > div {
   padding: 36px;
   width: 100%;
   min-height: 100vh;
+}
+
+.ace_editor {
+  margin-top: 10px;
 }

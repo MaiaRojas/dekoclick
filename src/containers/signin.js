@@ -100,7 +100,7 @@ class SignIn extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <img className={classes.logo} src="img/logo.svg" alt="Laboratoria LMS"/>
+          <img className={classes.logo} src="/img/logo.svg" alt="Laboratoria LMS"/>
           <form onSubmit={this.handleSubmit}>
             <div className="controls">
               <TextField

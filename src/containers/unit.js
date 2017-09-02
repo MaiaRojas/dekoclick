@@ -15,7 +15,7 @@ import UnitExercises from '../components/unit-exercises';
 
 const styles = theme => ({
   main: {
-    background: '#ccc',
+    background: '#fff',
     height: '100%',
     marginTop: '60px',
     padding: '36px',
