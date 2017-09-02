@@ -9,43 +9,10 @@ self.importScripts(
 
 mocha.setup({
   ui: 'bdd',
-  reporter: MyReporter,
+  reporter: function UnReporter(runner) {
+    Mocha.reporters.Base.call(this, runner);
+  },
 });
-
-
-function MyReporter(runner) {
-  Mocha.reporters.Base.call(this, runner);
-
-  // runner.on('start', console.log.bind(null, 'start'));
-  // runner.on('end', console.log.bind(null, 'end'));
-  // runner.on('suite', console.log.bind(null, 'suite'));
-  // runner.on('suite end', console.log.bind(null, 'suite end'));
-  // runner.on('test', console.log.bind(null, 'test'));
-  // runner.on('test end', console.log.bind(null, 'test end'));
-  // runner.on('hook', console.log.bind(null, 'hook'));
-  // runner.on('hook end', console.log.bind(null, 'hook end'));
-  // runner.on('pass', console.log.bind(null, 'pass'));
-  // runner.on('fail', console.log.bind(null, 'fail'));
-  // runner.on('pending', console.log.bind(null, 'pending'));
-
-  var passes = 0;
-  var failures = 0;
-
-  runner.on('pass', function(test){
-    passes++;
-    console.log('pass: %s', test.fullTitle());
-  });
-
-  runner.on('fail', function(test, err){
-    failures++;
-    console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
-  });
-
-  runner.on('end', function(){
-    console.log('end: %d/%d', passes, passes + failures);
-    process.exit(failures);
-  });
-}
 
 
 const wrapSubmission = str => (new Function([
@@ -71,22 +38,38 @@ const loadTests = (tests, Submission) => Object.keys(tests).forEach(key => {
 });
 
 
+const testToJSON = test => ({
+  title: test.title,
+  fullTitle: test.fullTitle(),
+  async: test.async,
+  duration: test.duration,
+  pending: test.pending,
+  speed: test.speed,
+  state: test.state,
+  sync: test.sync,
+  timedOut: test.timedOut,
+});
+
+
+const suiteToJSON = suite => ({
+  title: suite.title,
+  fullTitle: suite.fullTitle(),
+  delayed: suite.delayed,
+  pending: suite.pending,
+  root: suite.root,
+  suites: suite.suites.map(suiteToJSON),
+  tests: suite.tests.map(testToJSON),
+});
+
+
 onmessage = e => {
-  const Submission = wrapSubmission(e.data.code);
+  loadTests(e.data.tests, wrapSubmission(e.data.code));
 
-  loadTests(e.data.tests, Submission);
-
-  const runResults = mocha.run(failures => {
-    //console.log('run failures', failures);
-  });
-
-  runResults.on('suite', (suite) => {
-    console.log('DAA SUITEE', suite);
-  })
+  const runResults = mocha.run();
 
   runResults.on('end', () => {
-    console.log(`${runResults.failures} out of ${runResults.total} failures.`);
-    // postMessage({ results });
+    const { failures, stats, total, suite } = runResults;
+    self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
     //close();
   });
 };

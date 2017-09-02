@@ -57,16 +57,11 @@ const runTests = props => e => {
   const worker = new Worker('/worker.js');
 
   worker.onmessage = (e) => {
-    console.log(e.data);
-    //this.props.updateProblemResults(e.data.results);
+    props.dispatch({ type: 'EXERCISE_CODE_TEST', payload: e.data });
     worker.terminate();
   };
 
-  worker.postMessage({
-    code,
-    tests,
-    //problem,
-  });
+  worker.postMessage({ code, tests });
 };
 
 
@@ -76,17 +71,17 @@ const Exercise = props => (
       {props.exercise.title}
     </Typography>
     <AppBar position="static">
-      <Tabs value={props.current} onChange={onTabsChange(props)}>
+      <Tabs value={props.currentTab} onChange={onTabsChange(props)}>
         <Tab label="Enunciado" />
         <Tab label="Código" />
       </Tabs>
     </AppBar>
-    {props.current === 0 &&
+    {props.currentTab === 0 &&
       <TabContainer>
         <Content html={props.exercise.body} />
       </TabContainer>
     }
-    {props.current === 1 &&
+    {props.currentTab === 1 &&
       <TabContainer style={{ padding: 20 }}>
         <AceEditor
           style={{ width: '100%', marginBottom: 30 }}
@@ -109,6 +104,7 @@ const Exercise = props => (
         <Button raised className={props.classes.button}>
           Resetear
         </Button>
+        <pre>{JSON.stringify(props.testResults, null, 2)}</pre>
       </TabContainer>
     }
 	</div>
@@ -124,8 +120,9 @@ Exercise.propTypes = {
 
 
 const mapStateToProps = ({ exerciseUI }) => ({
-  current: exerciseUI.current,
+  currentTab: exerciseUI.currentTab,
   code: exerciseUI.code,
+  testResults: exerciseUI.testResults,
 });
 
 
