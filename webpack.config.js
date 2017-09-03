@@ -6,6 +6,7 @@ const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const extractTextWebpackPlugin = new ExtractTextWebpackPlugin({
   filename: 'main.css'
@@ -94,16 +95,15 @@ module.exports = {
   plugins: [
     extractTextWebpackPlugin,
     new Webpack.NamedModulesPlugin(),
+    new FaviconsWebpackPlugin({
+      logo: './img/favicon.png',
+      background: '#f7b617',
+      title: 'Laboratoria LMS',
+    }),
     new HtmlWebpackPlugin({
       template: './index.html',
-      //filename: !isProduction ? 'index.html': '200.html'
       filename: 'index.html'
     }),
-    // new HtmlWebpackPlugin({
-    //   template: './404.html',
-    //   filename: '404.html',
-    //   chunks: []
-    // })
   ]
 };
 

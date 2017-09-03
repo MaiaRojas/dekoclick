@@ -2,7 +2,7 @@
 
 
 import './style/main.scss';
-import './img/favicon.png';
+//import './img/favicon.png';
 import './img/icon.svg';
 import './img/logo.svg';
 import './worker.js';
