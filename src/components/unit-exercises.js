@@ -29,15 +29,15 @@ const parseExercises = objs => Object.keys(objs || {}).reduce((memo, key) => {
 }, {});
 
 
-const UnitExercises = ({ part, match }) => {
-	const exerciseid = match.params.exerciseid;
+const UnitExercises = ({ part, match, auth }) => {
+	const id = match.params.exerciseid;
 	const exercises = parseExercises(part.exercises);
 
-	if (exerciseid) {
-		return <Exercise id={exerciseid} exercise={exercises[exerciseid]} />
+	if (!id) {
+		return <ExercisesList exercises={exercises} match={match} />;
 	}
 
-	return <ExercisesList exercises={exercises} match={match} />;
+	return <Exercise id={id} exercise={exercises[id]} match={match} auth={auth} />;
 };
 
 

@@ -44,7 +44,7 @@ const testToJSON = test => ({
   async: test.async,
   duration: test.duration,
   pending: test.pending,
-  speed: test.speed,
+  speed: test.speed || null,
   state: test.state,
   sync: test.sync,
   timedOut: test.timedOut,

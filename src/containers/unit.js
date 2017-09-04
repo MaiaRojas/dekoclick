@@ -51,7 +51,7 @@ const Unit = props => {
       <UnitNav {...propsMinusClasses} />
       <div className={classes.main}>
         <TopBar title={props.unit.parts[current].title} />
-        <Component part={props.unit.parts[current]} match={props.match} />
+        <Component part={props.unit.parts[current]} match={props.match} auth={props.auth} />
       </div>
     </div>
   );
