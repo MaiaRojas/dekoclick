@@ -30,7 +30,7 @@ const styles = theme => ({
 const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
-      <ListItem button>
+      <ListItem>
         <img
           alt="Laboratoria, código que transforma"
           className={props.classes.logo}

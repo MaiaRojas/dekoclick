@@ -13,6 +13,8 @@ const styles = theme => ({
 		fontWeightLight: theme.typography.fontWeightLight,
 		fontWeightMedium: theme.typography.fontWeightMedium,
 		fontWeightRegular: theme.typography.fontWeightRegular,
+    maxWidth: '760px',
+    margin: '0 auto',
 	},
 });
 

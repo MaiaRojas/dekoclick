@@ -36,7 +36,10 @@ const Test = props => (
 	  {props.test.state === 'failed' &&
 		   <Avatar className={props.classes.redAvatar}><ErrorIcon /></Avatar>
 		}
-	  <ListItemText primary={props.test.title} />
+	  <ListItemText
+		  primary={props.test.title}
+			secondary={props.test.err ? props.test.err : 'ok'}
+		/>
 	</ListItem>
 );
 
@@ -58,14 +61,16 @@ const Suite = props => (
 );
 
 
+const summaryLine = stats => (stats.failures ?
+	`${stats.failures} de ${stats.tests} tests fallaron ` :
+	`${stats.passes} tests pasaron ;-) `) +
+	`(${stats.duration}ms)`;
+
+
 const Summary = ({ stats }) => (
-	<div>
-	  <Typography type="body1">
-		  {stats.failures && `${stats.failures} de ${stats.tests} tests fallaron `}
-			{stats.failures === 0 && `${stats.passes} tests pasaron ;-) `}
-	    ({stats.duration}ms)
-		</Typography>
-	</div>
+	<ListItem>
+	  <ListItemText primary={summaryLine(stats)} />
+	</ListItem>
 );
 
 
@@ -73,8 +78,8 @@ const ExerciseTestResults = props => (
 	<div>
 		<List className={props.classes.list}>
 		  <Suite suite={props.testResults.suite} classes={props.classes} />
+			<Summary stats={props.testResults.stats} />
 		</List>
-		<Summary stats={props.testResults.stats} />
 	</div>
 );
 

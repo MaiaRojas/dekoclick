@@ -7,7 +7,7 @@ import ExercisesList from './exercises-list';
 import Exercise from './exercise';
 
 
-const decodeFilenameKeys = obj => Object.keys(obj).reduce((memo, key) => {
+const decodeFilenameKeys = obj => Object.keys(obj || {}).reduce((memo, key) => {
 	const decodedKey = Buffer.from(key, 'base64').toString('ascii');
 
 	if (typeof obj[key] === 'string') {

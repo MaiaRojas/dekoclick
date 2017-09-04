@@ -15,11 +15,13 @@ import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import RefreshIcon from 'material-ui-icons/Refresh';
+import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
 
-const idToFilename = id => `${id.replace(/\d{2}\-/, '')}.js`;
+const idToFilename = id => `${id.replace(/^\d{2}\-/, '')}.js`;
 
 
 const getBoilerplate = (files, id) =>
@@ -49,12 +51,9 @@ const onTabsChange = props => (e, val) =>
   props.dispatch({ type: 'EXERCISE_TAB_SELECT', payload: val });
 
 
-const updateCode = props => text => {
-  props.firebase.database()
-    .ref(`${matchParamsToPath(props.auth.uid, props.match.params)}/code`)
-    .set(text);
-  //props.dispatch({ type: 'EXERCISE_CODE_UPDATE', payload: text });
-}
+const updateCode = props => text => props.firebase.database()
+  .ref(`${matchParamsToPath(props.auth.uid, props.match.params)}/code`)
+  .set(text);
 
 
 const runTests = props => e => {
@@ -66,11 +65,20 @@ const runTests = props => e => {
     props.firebase.database()
       .ref(matchParamsToPath(props.auth.uid, props.match.params))
       .set({ code, testResults: e.data });
-    //props.dispatch({ type: 'EXERCISE_CODE_TEST', payload: e.data });
     worker.terminate();
   };
 
   worker.postMessage({ code, tests });
+};
+
+
+const reset = props => e => {
+  props.firebase.database()
+    .ref(matchParamsToPath(props.auth.uid, props.match.params))
+    .set({
+      code: getBoilerplate(props.exercise.files, props.id),
+      testResults: null,
+    });
 };
 
 
@@ -87,8 +95,14 @@ const Exercise = props => {
       <Typography type="display1" gutterBottom component="h2" className={props.classes.title}>
         {props.exercise.title}
       </Typography>
-      <AppBar position="static">
-        <Tabs value={props.currentTab} onChange={onTabsChange(props)}>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={props.currentTab}
+          onChange={onTabsChange(props)}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
           <Tab label="Enunciado" />
           <Tab label="Código" />
         </Tabs>
@@ -109,24 +123,22 @@ const Exercise = props => {
             value={code}
             onChange={updateCode(props)}
           />
-          <Button raised className={props.classes.button}>
-            Ejecutar código
-          </Button>
           <Button raised className={props.classes.button} onClick={runTests(props)}>
+            <PlayArrowIcon />
             Ejecutar tests
           </Button>
-          <Button raised className={props.classes.button}>
-            Salvar
-          </Button>
-          <Button raised className={props.classes.button}>
+          <Button raised className={props.classes.button} onClick={reset(props)}>
+            <RefreshIcon />
             Resetear
           </Button>
-          <ExerciseTestResults testResults={submission.testResults} />
+          {submission.testResults &&
+            <ExerciseTestResults testResults={submission.testResults} />
+          }
         </TabContainer>
       }
   	</div>
   );
-}
+};
 
 
 Exercise.propTypes = {

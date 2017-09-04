@@ -25,7 +25,6 @@ const wrapSubmission = str => (new Function([
 
 const wrapTests = str => (new Function('requires', [
   'var require = name => requires[name];',
-  'var expect = chai.expect;',
   str + ';;'
 ].join('\n')));
 
@@ -33,7 +32,7 @@ const wrapTests = str => (new Function('requires', [
 const loadTests = (tests, Submission) => Object.keys(tests).forEach(key => {
   wrapTests(tests[key])({
     chai,
-    '../solution/discount': Submission
+    [`../solution/${key.replace(/\.spec\.js$/, '')}`]: Submission
   });
 });
 
@@ -48,6 +47,7 @@ const testToJSON = test => ({
   state: test.state,
   sync: test.sync,
   timedOut: test.timedOut,
+  err: (test.err || {}).message || null,
 });
 
 
@@ -69,7 +69,11 @@ onmessage = e => {
 
   runResults.on('end', () => {
     const { failures, stats, total, suite } = runResults;
-    self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
-    //close();
+    try {
+      self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
+    }
+    catch (err) {
+      console.log(err);
+    }
   });
 };
