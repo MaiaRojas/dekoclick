@@ -11,8 +11,7 @@ import {
   isEmpty,
   pathToJS
 } from 'react-redux-firebase';
-
-
+import { CircularProgress } from 'material-ui/Progress';
 import ScrollToTop from '../components/scroll-to-top';
 import MainNav from '../components/main-nav';
 import SignIn from './signin';
@@ -52,7 +51,7 @@ const WrapRoute = ({
 
 const App = props => {
   if (!isLoaded(props.auth)) {
-    return (<div>Loading...</div>);
+    return (<CircularProgress />);
   }
 
   if (isEmpty(props.auth)) {

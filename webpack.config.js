@@ -95,11 +95,6 @@ module.exports = {
   plugins: [
     extractTextWebpackPlugin,
     new Webpack.NamedModulesPlugin(),
-    new FaviconsWebpackPlugin({
-      logo: './img/favicon.png',
-      background: '#f7b617',
-      title: 'Laboratoria LMS',
-    }),
     new HtmlWebpackPlugin({
       template: './index.html',
       filename: 'index.html'
@@ -131,6 +126,13 @@ if (!isProduction) { // Development environment
 }
 else { // Production environment
 
-  module.exports.plugins.push(new CleanWebpackPlugin([targetPathRel]));
+  module.exports.plugins = [
+    new CleanWebpackPlugin([targetPathRel]),
+    new FaviconsWebpackPlugin({
+      logo: './img/favicon.png',
+      background: '#f7b617',
+      title: 'Laboratoria LMS',
+    }),
+  ].concat(module.exports.plugins);
 
 }

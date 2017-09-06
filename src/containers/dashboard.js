@@ -6,18 +6,24 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Redirect } from 'react-router-dom';
+import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import CoursesList from '../components/courses-list';
 
 
 const Dashboard = props => {
   if (!isLoaded(props.cohortMembership)) {
-    return (<div>Loading...</div>);
+    return (<CircularProgress />);
   }
 
   if (isEmpty(props.cohortMembership)) {
     return (<div>No cohorts :-(</div>);
   }
+
+  const isInstructor = Object.keys(props.cohortMembership)
+    .filter(key => props.cohortMembership[key] === 'instructor').length > 0;
+
+  //console.log(isInstructor, props.cohortMembership);
 
   return (
     <div className="dashboard">

@@ -7,13 +7,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
 
 
 const Course = props => {
   if (!isLoaded(props.course)) {
-    return (<div>Loading...</div>);
+    return (<CircularProgress />);
   }
 
   if (isEmpty(props.course)) {

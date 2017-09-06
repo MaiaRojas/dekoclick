@@ -5,12 +5,13 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { CircularProgress } from 'material-ui/Progress';
 import CourseCard from './course-card';
 
 
 const CoursesList = props => {
   if (!isLoaded(props.courses)) {
-    return (<div>Loading...</div>);
+    return (<CircularProgress />);
   }
 
   if (isEmpty(props.courses)) {

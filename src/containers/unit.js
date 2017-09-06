@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { CircularProgress } from 'material-ui/Progress';
 import UnitNav from '../components/unit-nav';
 import TopBar from '../components/top-bar';
 import UnitPart from '../components/unit-part';
@@ -28,7 +29,7 @@ const styles = {
 
 const Unit = props => {
   if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
-    return (<div>Loading...</div>);
+    return (<CircularProgress />);
   }
 
   if (isEmpty(props.unit)) {
