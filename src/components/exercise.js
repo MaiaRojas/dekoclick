@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
@@ -39,7 +39,7 @@ TabContainer.propTypes = {
 
 const styles = theme => ({
   title: {
-    marginBottom: 30
+    marginBottom: 30,
   },
   button: {
     margin: theme.spacing.unit,
@@ -51,20 +51,24 @@ const onTabsChange = props => (e, val) =>
   props.dispatch({ type: 'EXERCISE_TAB_SELECT', payload: val });
 
 
+const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid }) =>
+  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
+
+
 const updateCode = props => text => props.firebase.database()
   .ref(`${matchParamsToPath(props.auth.uid, props.match.params)}/code`)
   .set(text);
 
 
 const runTests = props => e => {
-  const code = (props.submission || {}).code || getBoilerplate(props.exercise.files, props.id);
+  const code = (props.progress || {}).code || getBoilerplate(props.exercise.files, props.id);
   const tests = props.exercise.files.test;
   const worker = new Worker('/worker.js');
 
   worker.onmessage = (e) => {
     props.firebase.database()
       .ref(matchParamsToPath(props.auth.uid, props.match.params))
-      .set({ code, testResults: e.data });
+      .set({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
     worker.terminate();
   };
 
@@ -83,12 +87,8 @@ const reset = props => e => {
 
 
 const Exercise = props => {
-  if (!isLoaded(props.submission)) {
-    return (<div>Loading...</div>);
-  }
-
-  const submission = !isEmpty(props.submission) ? props.submission : {};
-  const code = submission.code || getBoilerplate(props.exercise.files, props.id);
+  const progress = props.progress || {};
+  const code = progress.code || getBoilerplate(props.exercise.files, props.id);
 
   return (
   	<div>
@@ -131,8 +131,8 @@ const Exercise = props => {
             <RefreshIcon />
             Resetear
           </Button>
-          {submission.testResults &&
-            <ExerciseTestResults testResults={submission.testResults} />
+          {progress.testResults &&
+            <ExerciseTestResults testResults={progress.testResults} />
           }
         </TabContainer>
       }
@@ -144,6 +144,7 @@ const Exercise = props => {
 Exercise.propTypes = {
   id: PropTypes.string.isRequired,
   exercise: PropTypes.object.isRequired,
+  progress: PropTypes.object,
   match: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -151,18 +152,13 @@ Exercise.propTypes = {
 };
 
 
-const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid }) =>
-  `cohortExercises/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
-
-
-const mapStateToProps = ({ firebase, exerciseUI }, { auth, match }) => ({
+const mapStateToProps = ({ exerciseUI }) => ({
   currentTab: exerciseUI.currentTab,
-  submission: dataToJS(firebase, matchParamsToPath(auth.uid, match.params)),
 });
 
 
 export default compose(
-  firebaseConnect(({ auth, match }) => [matchParamsToPath(auth.uid, match.params)]),
+  firebaseConnect(),
   connect(mapStateToProps),
   withStyles(styles),
 )(Exercise);
