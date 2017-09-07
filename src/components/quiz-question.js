@@ -47,7 +47,7 @@ const QuizQuestion = props => (
         <QuizQuestionMulti {...props} labelClassName={labelClassName(props)} /> :
         <QuizQuestionSingle {...props} labelClassName={labelClassName(props)} />
       }
-      <FormHelperText>Some important helper text</FormHelperText>
+      {/*<FormHelperText>Some important helper text</FormHelperText>*/}
     </FormControl>
   </Paper>
 );
