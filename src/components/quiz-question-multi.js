@@ -46,7 +46,7 @@ const QuizQuestionMulti = props => (
 QuizQuestionMulti.propTypes = {
   idx: PropTypes.number.isRequired,
   question: PropTypes.object.isRequired,
-  progress: PropTypes.array,
+  //progress: PropTypes.array,
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
   labelClassName: PropTypes.func.isRequired,

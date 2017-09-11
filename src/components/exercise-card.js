@@ -12,6 +12,19 @@ const matchParamsToURL = ({ cohortid, courseid, unitid, partid }, id) =>
 	`/cohorts/${cohortid}/courses/${courseid}/${unitid}/${partid}/${id}`;
 
 
+const progressToString = progress => {
+  if (!progress || !progress.testResults) {
+    return 'Pendiente';
+  }
+  else if (progress.testResults.failures === 0) {
+    return 'Completado';
+  }
+  else if (progress.testResults.failures > 0) {
+    return 'Incompleto';
+  }
+};
+
+
 const ExerciseCard = props => (
 	<Card>
 	  <CardHeader
@@ -19,7 +32,7 @@ const ExerciseCard = props => (
 			title={<Link to={matchParamsToURL(props.match.params, props.id)}>
 			  {props.exercise.title}
 			</Link>}
-			subheader="September 14, 2016"
+			subheader={progressToString(props.progress)}
 		/>
 	</Card>
 );

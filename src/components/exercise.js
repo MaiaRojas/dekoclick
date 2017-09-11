@@ -21,7 +21,10 @@ import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
 
-const idToFilename = id => `${id.replace(/^\d{2}\-/, '')}.js`;
+const camelCased = str => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
+
+
+const idToFilename = id => `${camelCased(id.replace(/^\d{2}\-/, ''))}.js`;
 
 
 const getBoilerplate = (files, id) =>

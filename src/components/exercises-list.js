@@ -9,7 +9,12 @@ import ExerciseCard from './exercise-card';
 const ExercisesList = props => (
 	<div>
 	  {Object.keys(props.exercises).sort().map(key =>
-			<ExerciseCard key={key} id={key} exercise={props.exercises[key]} match={props.match} />
+			<ExerciseCard
+        key={key}
+        id={key}
+        exercise={props.exercises[key]}
+        progress={props.progress[key]}
+        match={props.match} />
 		)}
 	</div>
 );

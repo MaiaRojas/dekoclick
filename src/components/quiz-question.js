@@ -56,7 +56,7 @@ const QuizQuestion = props => (
 QuizQuestion.propTypes = {
   idx: PropTypes.number.isRequired,
   question: PropTypes.object.isRequired,
-  progress: PropTypes.array,
+  //progress: PropTypes.array,
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
