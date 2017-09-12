@@ -1,27 +1,40 @@
 # Laboratoria LMS
 
-**Laboratoria LMS** (_lms.laboratoria.la_) es la interfaz principal de nustro
+**Laboratoria LMS** ([lms.laboratoria.la](https://lms.laboratoria.la/)) es la interfaz principal de nustro
 entorno de aprendizaje. Este repo lo maneja el _core team_ de productos de
 Laboratoria.
 
-El objetivo principal de diseño es permitir a las alumnas consumir la curricula
-y mostrarla de una forma amigable.
-
-Es una plataforma regional usada para impartir los cursos del bootcamp y
-educación continua.
-
-Este enlace contiene la última versión del producto
-[https://laboratoria-la.firebaseapp.com/](https://laboratoria-la.firebaseapp.com/)
-
-## Desarrollo
-
-Entorno de desarrollo?
+## Entorno de desarrollo
 
 ### Dependencias
 
 * `node`
 * `yarn`
 * `firebase`
+
+### Backend de desarrollo
+
+1. Crea un proyecto nuevo en [Firebase](https://firebase.google.com/)
+2. En sección "Authentication" del proyecto de Firebase habilita "Correo
+   electrónico/contraseña" como proveedor de acceso.
+3. En terminal, añade proyecto con `firebase use --add`
+4. Selecciona proyecto _default_ (producción): `firebase use default`
+5. Exporta usuarios: `firebase auth:export auth.json`
+6. Exporta base de datos: `firebase database:get / > db.json`
+7. Selecciona proyecto _dev_ (desarrollo): `firebase use dev`
+8. Importa usuarios:
+   ```
+   firebase auth:import \
+     --hash-algo=SCRYPT \
+     --hash-key='rZC0qVE/tDNGuU4eBWlCZLQcoKXZmH7qwf+0MS3DUueBOjrNUQAq98icUXEPk/VqzEG6lvhVGESjTjXZ2PLr2A==' \
+     --salt-separator='Bw==' \
+     --rounds=8 \
+     --mem-cost=14 \
+     auth.json
+  ```
+9. Importa base de datos: `firebase database:set / db.json`
+
+## Entorno de staging / QA
 
 ### Core team
 
