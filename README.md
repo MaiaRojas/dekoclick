@@ -1,5 +1,7 @@
 # Laboratoria LMS
 
+[![Build Status](https://travis-ci.com/Laboratoria/lms.laboratoria.la.svg?token=4uyuoxi9qhvAfjzUTB6y&branch=master)](https://travis-ci.com/Laboratoria/lms.laboratoria.la)
+
 **Laboratoria LMS** ([lms.laboratoria.la](https://lms.laboratoria.la/)) es la interfaz principal de nustro
 entorno de aprendizaje. Este repo lo maneja el _core team_ de productos de
 Laboratoria.
