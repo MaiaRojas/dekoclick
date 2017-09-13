@@ -23,7 +23,7 @@ const CoursesList = (props) => {
         id={key}
         cohort={props.cohort}
         course={props.courses[key]}
-      />)
+      />),
     )}
   </div>);
 };

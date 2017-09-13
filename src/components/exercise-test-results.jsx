@@ -40,6 +40,19 @@ const Test = props => (
 );
 
 
+Test.propTypes = {
+  test: PropTypes.shape({
+    state: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    err: PropTypes.string,
+  }).isRequired,
+  classes: PropTypes.shape({
+    greenAvatar: PropTypes.string.isRequired,
+    redAvatar: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+
 const Suite = props => (
   <div>
     {props.suite.title &&
@@ -47,14 +60,27 @@ const Suite = props => (
         <ListItemText primary={props.suite.title} />
       </ListItem>
     }
-    {props.suite.suites && props.suite.suites.map((suite, idx) =>
-      <Suite key={idx} suite={suite} classes={props.classes} />
+    {props.suite.suites && props.suite.suites.map(suite =>
+      <Suite key={suite.title} suite={suite} classes={props.classes} />,
     )}
-    {props.suite.tests && props.suite.tests.map((test, idx) =>
-      <Test key={idx} test={test} classes={props.classes} />
+    {props.suite.tests && props.suite.tests.map(test =>
+      <Test key={test.title} test={test} classes={props.classes} />,
     )}
   </div>
 );
+
+
+Suite.propTypes = {
+  suite: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    suites: PropTypes.array,
+    tests: PropTypes.array,
+  }).isRequired,
+  classes: PropTypes.shape({
+    greenAvatar: PropTypes.string.isRequired,
+    redAvatar: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 
 const failureSummaryLine = stats =>
@@ -75,6 +101,16 @@ const Summary = ({ stats }) => (
 );
 
 
+Summary.propTypes = {
+  stats: PropTypes.shape({
+    tests: PropTypes.number,
+    failures: PropTypes.number,
+    passes: PropTypes.number,
+    duration: PropTypes.number,
+  }).isRequired,
+};
+
+
 const ExerciseTestResults = props => (
   <div>
     <List className={props.classes.list}>
@@ -86,7 +122,9 @@ const ExerciseTestResults = props => (
 
 
 ExerciseTestResults.propTypes = {
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    list: PropTypes.string.isRequired,
+  }).isRequired,
   testResults: PropTypes.shape({
     suite: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({}).isRequired,

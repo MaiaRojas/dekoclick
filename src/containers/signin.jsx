@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
@@ -11,23 +12,24 @@ const internals = {};
 
 
 internals.apiErrorMessages = {
-  401: 'Tu correo o contraseña son incorrectos'
+  401: 'Tu correo o contraseña son incorrectos',
 };
 
 
+// eslint-disable-next-line no-useless-escape
 internals.emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 
 internals.validateEmail = email => internals.emailPattern.test(email);
 
 
-const styles = theme => ({
+const styles = {
   root: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#f0f0f0',
   },
   paper: {
     margin: 32,
@@ -39,13 +41,12 @@ const styles = theme => ({
     width: '100%',
     maxWidth: 200,
     display: 'block',
-    margin: '0 auto'
+    margin: '0 auto',
   },
-});
+};
 
 
 class SignIn extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -61,18 +62,14 @@ class SignIn extends React.Component {
   checkErrors() {
     if (this.state.email === '') {
       this.setState({ email_error: 'Debes ingresar al menos un correo' });
-    }
-    else {
-      if (!internals.validateEmail(this.state.email)) {
-        this.setState({ email_error: 'Debes ingresar un correo válido' });
-      }
-      else {
-        this.setState({ email_error: '' });
-      }
+    } else if (!internals.validateEmail(this.state.email)) {
+      this.setState({ email_error: 'Debes ingresar un correo válido' });
+    } else {
+      this.setState({ email_error: '' });
     }
 
     this.setState({
-      password_error: this.state.password === '' ? 'Debes ingresar una contraseña válida' : ''
+      password_error: this.state.password === '' ? 'Debes ingresar una contraseña válida' : '',
     });
   }
 
@@ -83,10 +80,7 @@ class SignIn extends React.Component {
     this.checkErrors();
 
     if (email && internals.validateEmail(email) && password) {
-      this.props.firebase.login({
-        email: email,
-        password: password
-      });
+      this.props.firebase.login({ email, password });
     }
 
     return false;
@@ -97,14 +91,14 @@ class SignIn extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <img className={classes.logo} src="/img/logo.svg" alt="Laboratoria LMS"/>
+          <img className={classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
           <form onSubmit={this.handleSubmit}>
             <div className="controls">
               <TextField
                 id="email"
                 label="Correo Electrónico"
                 value={this.state.email}
-                error={this.state.email_error != ''}
+                error={this.state.email_error !== ''}
                 helperText={this.state.email_error}
                 onChange={event => this.setState({ email: event.target.value })}
                 onBlur={this.checkErrors}
@@ -116,7 +110,7 @@ class SignIn extends React.Component {
                 label="Contraseña"
                 value={this.state.password}
                 type="password"
-                error={this.state.password_error != ''}
+                error={this.state.password_error !== ''}
                 helperText={this.state.password_error}
                 onChange={event => this.setState({ password: event.target.value })}
                 onBlur={this.checkErrors}
@@ -137,7 +131,20 @@ class SignIn extends React.Component {
 }
 
 
+SignIn.propTypes = {
+  firebase: PropTypes.shape({
+    login: PropTypes.func.isRequired,
+  }).isRequired,
+  classes: PropTypes.shape({}).isRequired,
+  error: PropTypes.shape({
+    response: PropTypes.shape({
+      status: PropTypes.string,
+    }),
+  }).isRequired,
+};
+
+
 export default compose(
   firebaseConnect(),
-  withStyles(styles)
+  withStyles(styles),
 )(SignIn);

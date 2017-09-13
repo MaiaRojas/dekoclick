@@ -1,7 +1,10 @@
 //
 // Este script es el web worker que usan los ejercicios para correr los tests.
 //
+
 /* global self, mocha, Mocha, chai */
+/* eslint no-new-func: "off" */
+
 
 self.importScripts(
   'https://cdnjs.cloudflare.com/ajax/libs/mocha/3.5.0/mocha.min.js',
@@ -17,18 +20,18 @@ mocha.setup({
 });
 
 
-const wrapSubmission = str => (new Function([
-  'var module = { exports: {} };',
-  str + ';;',
-  'var args = Array.prototype.slice.call(arguments, 0);',
-  'return module.exports.apply(null, args);',
-].join('\n')));
+const wrapSubmission = str => (new Function(
+  `var module = { exports: {} };
+  ${str};;
+  var args = Array.prototype.slice.call(arguments, 0);
+  return module.exports.apply(null, args);`,
+));
 
 
-const wrapTests = str => (new Function('requires', [
-  'var require = name => requires[name];',
-  str + ';;',
-].join('\n')));
+const wrapTests = str => (new Function(
+  'requires',
+  `var require = name => requires[name];${str};;`,
+));
 
 
 const loadTests = (tests, Submission) =>

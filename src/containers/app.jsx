@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {
   firebaseConnect,
   isLoaded,
   isEmpty,
-  pathToJS
+  pathToJS,
 } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import ScrollToTop from '../components/scroll-to-top';
@@ -28,25 +29,44 @@ const WithMainNav = ({ component: Component, ...props }) => (
 );
 
 
+WithMainNav.propTypes = {
+  component: PropTypes.func.isRequired,
+};
+
+
 const WrapRoute = ({
   path,
   exact,
   component: Component,
-  mainNav=true,
+  mainNav = true,
   ...props
 }) => (
   <Route
     exact={!!exact}
     path={path}
-    render={routeProps =>
+    render={routeProps => (
       mainNav ?
         <WithMainNav component={Component} {...props} {...routeProps} /> :
-        <Component {...props} {...routeProps} />}
+        <Component {...props} {...routeProps} />
+    )}
   />
 );
 
 
-const App = props => {
+WrapRoute.propTypes = {
+  path: PropTypes.string.isRequired,
+  exact: PropTypes.bool,
+  component: PropTypes.func.isRequired,
+  mainNav: PropTypes.bool.isRequired,
+};
+
+
+WrapRoute.defaultProps = {
+  exact: false,
+};
+
+
+const App = (props) => {
   if (!isLoaded(props.auth)) {
     return (<CircularProgress />);
   }
@@ -79,6 +99,16 @@ const App = props => {
 };
 
 
+App.propTypes = {
+  auth: PropTypes.shape({}),
+};
+
+
+App.defaultProps = {
+  auth: undefined,
+};
+
+
 const mapStateToProps = ({ firebase }) => ({
   authError: pathToJS(firebase, 'authError'),
   auth: pathToJS(firebase, 'auth'),
@@ -87,5 +117,5 @@ const mapStateToProps = ({ firebase }) => ({
 
 export default compose(
   firebaseConnect(),
-  connect(mapStateToProps)
+  connect(mapStateToProps),
 )(App);

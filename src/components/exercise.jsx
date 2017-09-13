@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
-import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
@@ -47,16 +46,16 @@ const styles = theme => ({
 });
 
 
-const onTabsChange = props => (e, val) =>
-  props.dispatch({ type: 'EXERCISE_TAB_SELECT', payload: val });
+const onTabsChange = dispatch => (e, val) =>
+  dispatch({ type: 'EXERCISE_TAB_SELECT', payload: val });
 
 
 const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
 
 
-const updateCode = props => text => props.firebase.database()
-  .ref(`${matchParamsToPath(props.auth.uid, props.match.params)}/code`)
+const updateCode = (firebase, auth, match) => text => firebase.database()
+  .ref(`${matchParamsToPath(auth.uid, match.params)}/code`)
   .set(text);
 
 
@@ -98,7 +97,7 @@ const Exercise = (props) => {
       <AppBar position="static" color="default">
         <Tabs
           value={props.currentTab}
-          onChange={onTabsChange(props)}
+          onChange={onTabsChange(props.dispatch)}
           indicatorColor="primary"
           textColor="primary"
           centered
@@ -121,7 +120,7 @@ const Exercise = (props) => {
             theme="github"
             editorProps={{}}
             value={code}
-            onChange={updateCode(props)}
+            onChange={updateCode(props.firebase, props.auth, props.match)}
           />
           <Button raised className={props.classes.button} onClick={runTests(props)}>
             <PlayArrowIcon />
@@ -164,6 +163,9 @@ Exercise.propTypes = {
   }).isRequired,
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    database: PropTypes.func.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   classes: PropTypes.shape({

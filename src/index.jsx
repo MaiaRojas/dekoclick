@@ -1,3 +1,8 @@
+// Añadimos excepciones de linter ya que queremos mantener los imports de
+// archivos que va a interceptar webpack al principio.
+/* eslint import/extensions: "off", import/first: "off" */
+
+
 import './style/main.scss';
 import './img/icon.svg';
 import './img/logo.svg';
@@ -11,7 +16,7 @@ import { Provider } from 'react-redux';
 import { MuiThemeProvider } from 'material-ui/styles';
 import store from './store';
 import theme from './style/themes/app';
-import App from './containers/app.jsx';
+import App from './containers/app';
 
 
 const render = (Component) => {

@@ -68,11 +68,11 @@ const Unit = (props) => {
 
 
 Unit.propTypes = {
+  current: PropTypes.string,
   unit: PropTypes.shape({
     parts: PropTypes.shape({}),
   }),
   progress: PropTypes.shape({}),
-  current: PropTypes.string,
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
     params: PropTypes.shape({
@@ -87,6 +87,13 @@ Unit.propTypes = {
   classes: PropTypes.shape({
     main: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+Unit.defaultProps = {
+  current: null,
+  unit: undefined,
+  progress: undefined,
 };
 
 

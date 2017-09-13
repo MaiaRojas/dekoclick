@@ -6,7 +6,7 @@
     "pretest": "eslint --ext .js --ext .jsx src/",
     "test": "jest --coverage",
     "watch": "yarn test -- --watch",
-    "build": "webpack -p",
+    "build": "NODE_ENV=production webpack -p",
     "build:staging": "yarn run build -- --env.backend=laboratoria-la-staging",
     "build:production": "yarn run build -- --env.backend=laboratoria-la",
     "deploy:staging": "firebase deploy --only hosting --project laboratoria-la-staging",

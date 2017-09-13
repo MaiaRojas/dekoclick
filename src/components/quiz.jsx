@@ -37,13 +37,13 @@ const Quiz = props => (
   <div style={{ maxWidth: 760, margin: '0 auto' }}>
     {props.part.questions.map((question, idx) =>
       (<QuizQuestion
-        key={idx}
+        key={question.title}
         idx={idx}
         question={question}
         progress={(idx in props.progress) ? props.progress[idx] : ''}
         hasResults={!!props.progress.results}
         updateProgress={updateProgress(props)}
-      />)
+      />),
     )}
     {!props.progress.results &&
       (<Button raised color="primary" onClick={handleSubmit(props)}>
@@ -58,9 +58,12 @@ Quiz.propTypes = {
   part: PropTypes.shape({
     questions: PropTypes.array.isRequired,
   }).isRequired,
-  progress: PropTypes.shape({
-    results: PropTypes.shape({}),
-  }).isRequired,
+  progress: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.shape({
+      results: PropTypes.shape({}),
+    }),
+  ]).isRequired,
 };
 
 

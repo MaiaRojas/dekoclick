@@ -37,7 +37,7 @@ const UnitNav = (props) => {
             match={props.match}
             part={props.unit.parts[key]}
             history={props.history}
-          />)
+          />),
         )}
       </List>
     </LeftDrawer>

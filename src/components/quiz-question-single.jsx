@@ -20,13 +20,13 @@ const QuizQuestionSingle = props => (
   >
     {props.question.answers.map((answer, idx) =>
       (<FormControlLabel
-        key={idx}
+        key={answer}
         value={`${idx}`}
         classes={{ label: props.labelClassName(idx) }}
         control={<Radio />}
         label={parseHTML(answer)}
         disabled={props.hasResults}
-      />)
+      />),
     )}
   </RadioGroup>
 );
@@ -34,7 +34,9 @@ const QuizQuestionSingle = props => (
 
 QuizQuestionSingle.propTypes = {
   idx: PropTypes.number.isRequired,
-  question: PropTypes.object.isRequired,
+  question: PropTypes.shape({
+    answers: PropTypes.array,
+  }).isRequired,
   progress: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,

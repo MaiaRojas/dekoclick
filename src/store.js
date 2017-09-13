@@ -21,6 +21,7 @@ const createStoreWithFirebase = compose(
 
 
 if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line global-require
   const { logger } = require('redux-logger');
   middlewares.push(logger);
 }

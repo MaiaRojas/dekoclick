@@ -58,13 +58,18 @@ QuizQuestion.propTypes = {
   progress: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,
-  ]).isRequired,
+  ]),
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     passes: PropTypes.string.isRequired,
     failures: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+QuizQuestion.defaultProps = {
+  progress: '',
 };
 
 
