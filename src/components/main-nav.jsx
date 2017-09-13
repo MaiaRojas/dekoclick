@@ -1,7 +1,5 @@
-'use strict';
-
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -14,17 +12,17 @@ import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
 
 
-const styles = theme => ({
+const styles = {
   list: {
-    width: 320
+    width: 320,
   },
   logo: {
     height: 20,
     display: 'block',
     margin: 'auto',
-    padding: 10
-  }
-});
+    padding: 10,
+  },
+};
 
 
 const MainNav = props => (
@@ -60,6 +58,20 @@ const MainNav = props => (
     </List>
   </LeftDrawer>
 );
+
+
+MainNav.propTypes = {
+  classes: PropTypes.shape({
+    list: PropTypes.string.isRequired,
+    logo: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    logout: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 
 export default compose(

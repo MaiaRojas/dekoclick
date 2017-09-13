@@ -1,6 +1,3 @@
-'use strict';
-
-
 import React from 'react';
 import { render, shallow } from 'enzyme';
 import sinon from 'sinon';

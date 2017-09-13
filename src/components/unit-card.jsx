@@ -1,7 +1,5 @@
-'use strict';
-
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
@@ -9,11 +7,11 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
 
-const styles = theme => ({
+const styles = {
   card: {
-    marginBottom: 32
+    marginBottom: 32,
   },
-});
+};
 
 
 const UnitCard = props => (
@@ -39,6 +37,21 @@ const UnitCard = props => (
     </CardActions>
   </Card>
 );
+
+
+UnitCard.propTypes = {
+  idx: PropTypes.number.isRequired,
+  unit: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
+  cohort: PropTypes.string.isRequired,
+  course: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  classes: PropTypes.shape({
+    card: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 
 export default withStyles(styles)(UnitCard);

@@ -1,11 +1,8 @@
-'use strict';
-
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
-import { FormControl, FormLabel, FormHelperText } from 'material-ui/Form';
+import { FormControl, FormLabel } from 'material-ui/Form';
 import red from 'material-ui/colors/red';
 import green from 'material-ui/colors/green';
 import QuizQuestionSingle from './quiz-question-single';
@@ -25,16 +22,15 @@ const styles = {
 };
 
 
-const labelClassName = props => idx => {
+const labelClassName = props => (idx) => {
   if (!props.hasResults) {
     return {};
-  }
-  else if (props.question.solution.indexOf(idx) > -1) {
+  } else if (props.question.solution.indexOf(idx) > -1) {
     return props.classes.passes;
-  }
-  else if (props.progress.indexOf(idx) > -1) {
+  } else if (props.progress.indexOf(idx) > -1) {
     return props.classes.failures;
   }
+  return '';
 };
 
 
@@ -47,7 +43,6 @@ const QuizQuestion = props => (
         <QuizQuestionMulti {...props} labelClassName={labelClassName(props)} /> :
         <QuizQuestionSingle {...props} labelClassName={labelClassName(props)} />
       }
-      {/*<FormHelperText>Some important helper text</FormHelperText>*/}
     </FormControl>
   </Paper>
 );
@@ -55,11 +50,21 @@ const QuizQuestion = props => (
 
 QuizQuestion.propTypes = {
   idx: PropTypes.number.isRequired,
-  question: PropTypes.object.isRequired,
-  //progress: PropTypes.array,
+  question: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    solution: PropTypes.array.isRequired,
+  }).isRequired,
+  progress: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]).isRequired,
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    passes: PropTypes.string.isRequired,
+    failures: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

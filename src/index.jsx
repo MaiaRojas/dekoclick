@@ -1,6 +1,3 @@
-'use strict';
-
-
 import './style/main.scss';
 import './img/icon.svg';
 import './img/logo.svg';
@@ -14,19 +11,21 @@ import { Provider } from 'react-redux';
 import { MuiThemeProvider } from 'material-ui/styles';
 import store from './store';
 import theme from './style/themes/app';
-import App from './containers/app';
+import App from './containers/app.jsx';
 
 
-const render = Component => ReactDOM.render(
-  <AppContainer>
-    <Provider store={store}>
-      <MuiThemeProvider theme={theme}>
-        <Component />
-      </MuiThemeProvider>
-    </Provider>
-  </AppContainer>,
-  document.getElementById('root')
-);
+const render = (Component) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <MuiThemeProvider theme={theme}>
+          <Component />
+        </MuiThemeProvider>
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root'),
+  );
+};
 
 
 render(App);

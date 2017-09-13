@@ -1,14 +1,10 @@
-'use strict';
-
-
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
 import thunk from 'redux-thunk';
-import api from './middleware/api';
 import reducers from './reducers';
 
 
-const middlewares = [thunk, api];
+const middlewares = [thunk];
 
 
 // Add redux Firebase to compose

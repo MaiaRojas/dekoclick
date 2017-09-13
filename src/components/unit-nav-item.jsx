@@ -1,7 +1,5 @@
-'use strict';
-
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ListItem, ListItemText } from 'material-ui/List';
 
 
@@ -18,6 +16,17 @@ const UnitNavItem = props => (
     <ListItemText primary={`${props.order}. ${props.part.title}`} />
   </ListItem>
 );
+
+
+UnitNavItem.propTypes = {
+  part: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  order: PropTypes.number.isRequired,
+};
 
 
 export default UnitNavItem;

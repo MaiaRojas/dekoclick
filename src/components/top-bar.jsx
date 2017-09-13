@@ -1,6 +1,3 @@
-'use strict';
-
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -31,8 +28,10 @@ const TopBar = props => (
 
 
 TopBar.propTypes = {
-	title: PropTypes.string.isRequired,
-	classes: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  classes: PropTypes.shape({
+    appBar: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

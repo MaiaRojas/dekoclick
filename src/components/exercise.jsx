@@ -1,6 +1,3 @@
-'use strict';
-
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -24,7 +21,7 @@ import ExerciseTestResults from './exercise-test-results';
 const camelCased = str => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
 
 
-const idToFilename = id => `${camelCased(id.replace(/^\d{2}\-/, ''))}.js`;
+const idToFilename = id => `${camelCased(id.replace(/^\d{2}-/, ''))}.js`;
 
 
 const getBoilerplate = (files, id) =>
@@ -63,7 +60,7 @@ const updateCode = props => text => props.firebase.database()
   .set(text);
 
 
-const runTests = props => e => {
+const runTests = props => () => {
   const code = (props.progress || {}).code || getBoilerplate(props.exercise.files, props.id);
   const tests = props.exercise.files.test;
   const worker = new Worker('/worker.js');
@@ -79,7 +76,7 @@ const runTests = props => e => {
 };
 
 
-const reset = props => e => {
+const reset = props => () => {
   props.firebase.database()
     .ref(matchParamsToPath(props.auth.uid, props.match.params))
     .set({
@@ -89,12 +86,12 @@ const reset = props => e => {
 };
 
 
-const Exercise = props => {
+const Exercise = (props) => {
   const progress = props.progress || {};
   const code = progress.code || getBoilerplate(props.exercise.files, props.id);
 
   return (
-  	<div>
+    <div>
       <Typography type="display1" gutterBottom component="h2" className={props.classes.title}>
         {props.exercise.title}
       </Typography>
@@ -139,19 +136,45 @@ const Exercise = props => {
           }
         </TabContainer>
       }
-  	</div>
+    </div>
   );
 };
 
 
 Exercise.propTypes = {
   id: PropTypes.string.isRequired,
-  exercise: PropTypes.object.isRequired,
-  progress: PropTypes.object,
-  match: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
+  exercise: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    files: PropTypes.shape({}).isRequired,
+  }).isRequired,
+  progress: PropTypes.shape({
+    code: PropTypes.string,
+    testResults: PropTypes.shape({}),
+  }),
+  currentTab: PropTypes.number.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
+      partid: PropTypes.string.isRequired,
+      exerciseid: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    button: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+
+Exercise.defaultProps = {
+  progress: {},
 };
 
 

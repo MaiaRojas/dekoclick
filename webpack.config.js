@@ -20,11 +20,14 @@ const targetPathAbs = Path.resolve(__dirname, targetPathRel);
 module.exports = env => {
   const config = {
     context: Path.resolve(__dirname, 'src'),
-    entry: ['./index.js'],
+    entry: ['./index.jsx'],
     output: {
       filename: 'bundle.js',
       path: targetPathAbs,
       publicPath: '/'
+    },
+    resolve: {
+      extensions: ['.js', '.jsx'],
     },
     module: {
       rules: [

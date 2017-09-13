@@ -1,7 +1,5 @@
-'use strict';
-
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -23,11 +21,11 @@ const styles = {
     padding: '36px',
     width: '100%',
     minHeight: '100vh',
-  }
+  },
 };
 
 
-const Unit = props => {
+const Unit = (props) => {
   if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
     return (<CircularProgress />);
   }
@@ -48,8 +46,7 @@ const Unit = props => {
   let Component = UnitPart;
   if (props.unit.parts[current].type === 'practice') {
     Component = UnitExercises;
-  }
-  else if (props.unit.parts[current].type === 'quiz') {
+  } else if (props.unit.parts[current].type === 'quiz') {
     Component = Quiz;
   }
 
@@ -60,13 +57,36 @@ const Unit = props => {
         <TopBar title={props.unit.parts[current].title} />
         <Component
           part={props.unit.parts[current]}
-          progress={(props.progress|| {})[current] || {}}
+          progress={(props.progress || {})[current] || {}}
           match={props.match}
           auth={props.auth}
         />
       </div>
     </div>
   );
+};
+
+
+Unit.propTypes = {
+  unit: PropTypes.shape({
+    parts: PropTypes.shape({}),
+  }),
+  progress: PropTypes.shape({}),
+  current: PropTypes.string,
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+  }).isRequired,
+  classes: PropTypes.shape({
+    main: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 
