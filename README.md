@@ -4,64 +4,97 @@
 entorno de aprendizaje. Este repo lo maneja el _core team_ de productos de
 Laboratoria.
 
-## Entorno de desarrollo
+* URL de producción: https://lms.laboratoria.la/
+* URL de staging/QA: https://laboratoria-la-staging.firebaseapp.com/
 
-### Dependencias
+## Dependencias
 
-* `node`
+* `node` v8.x
 * `yarn`
-* `firebase`
+* `firebase` (`npm i -g firebase-tools`)
 
-### Backend de desarrollo
+## Instalación local
 
-1. Crea un proyecto nuevo en [Firebase](https://firebase.google.com/)
-2. En sección "Authentication" del proyecto de Firebase habilita "Correo
-   electrónico/contraseña" como proveedor de acceso.
-3. En terminal, añade proyecto con `firebase use --add`
-4. Selecciona proyecto _default_ (producción): `firebase use default`
-5. Exporta usuarios: `firebase auth:export auth.json`
-6. Exporta base de datos: `firebase database:get / > db.json`
-7. Selecciona proyecto _dev_ (desarrollo): `firebase use dev`
-8. Importa usuarios:
-   ```
-   firebase auth:import \
-     --hash-algo=SCRYPT \
-     --hash-key='rZC0qVE/tDNGuU4eBWlCZLQcoKXZmH7qwf+0MS3DUueBOjrNUQAq98icUXEPk/VqzEG6lvhVGESjTjXZ2PLr2A==' \
-     --salt-separator='Bw==' \
-     --rounds=8 \
-     --mem-cost=14 \
-     auth.json
-  ```
-9. Importa base de datos: `firebase database:set / db.json`
+```sh
+# clona repo desde tu fork
+git clone git@github.com:<github-username>/lms.laboratoria.la.git
+# entra en directorio de tu copia local del repo
+cd lms.laboratoria.la
+# instala las dependencias de Node.js declaradas en `package.json`
+yarn install
+```
 
-## Entorno de staging / QA
+## Arrancando la aplicación localmente
 
-### Core team
+```sh
+# arrancar usando backend de producción
+yarn start:production
 
-Si eres parte del core team, sigue estos pasos:
+# arrancar usando backend de staging
+yarn start:staging
 
-- Clona el proyecto
-- Crea una nueva rama (`git checkout -b improve-feature`)
-- Ejecuta `yarn install` para descargar todas las dependencias
-- Para ejecutar el proyecto corre el comando (`npm start`)
-- Cuando hayas terminado crea un pull request hacia la rama master para mezclar
-  tus cambios
+# arrancar usando backend de desarrollo
+export FIREBASE_PROJECT=laboratoria-la-dev-lupo
+export FIREBASE_API_KEY=xxxxx
+export FIREBASE_MESSAGING_SENDER_ID=123456
+yarn start
+```
 
-### Externo
+## Build
 
-Si no eres parte del core team, pero quieres colaborar sigue los siguientes
-pasos:
+```sh
+# arrancar usando backend de producción
+yarn build:production
 
-- Haz un fork del proyecto
-- Realizar tus cambios necesarios
-- Cuando hayas terminado crea un pull request hacia la rama master con tus
-  cambios sugeridos
+# arrancar usando backend de staging
+yarn build:staging
+
+# ejecutar build usando backend de desarrollo
+export FIREBASE_PROJECT=laboratoria-la-dev-lupo
+export FIREBASE_API_KEY=xxxxx
+export FIREBASE_MESSAGING_SENDER_ID=123456
+yarn run build
+```
+
+## Backend de desarrollo
+
+Si necesitas tu propio backend de desarrollo, crea un proyecto nuevo en
+[Firebase](https://firebase.google.com/) y en la sección "Authentication" del
+proyecto (en la interfaz web de Firebase) habilita "Correo
+electrónico/contraseña" como proveedor de acceso.
+
+```sh
+# Exporta usuarios
+firebase --project laboratoria-la auth:export auth.json
+# Exporta base de datos
+firebase --project laboratoria-la database:get / > db.json
+# Importa usuarios
+firebase --project laboratoria-la-dev-lupo auth:import \
+  --hash-algo=SCRYPT \
+  --hash-key='rZC0qVE/tDNGuU4eBWlCZLQcoKXZmH7qwf+0MS3DUueBOjrNUQAq98icUXEPk/VqzEG6lvhVGESjTjXZ2PLr2A==' \
+  --salt-separator='Bw==' \
+  --rounds=8 \
+  --mem-cost=14 \
+  auth.json
+# Importa base de datos
+firebase --project laboratoria-la-dev-lupo database:set / db.json
+```
 
 ## Despliegue
 
-Firebase...
-
 ```sh
+# desplegar usando backend de producción
+yarn run build:production
+yarn run deploy:production
+
+# desplegar usando backend de staging
+yarn run build:staging
+yarn run deploy:staging
+
+# desplegar usando backend de desarrollo
+export FIREBASE_PROJECT=laboratoria-la-dev-lupo
+export FIREBASE_API_KEY=xxxxx
+export FIREBASE_MESSAGING_SENDER_ID=123456
 yarn run build
-firebase deploy --only hosting
+firebase deploy --only hosting --project "${FIREBASE_PROJECT}"
 ```

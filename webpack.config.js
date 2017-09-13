@@ -17,122 +17,147 @@ const targetPathRel = 'dist';
 const targetPathAbs = Path.resolve(__dirname, targetPathRel);
 
 
-module.exports = {
-  context: Path.resolve(__dirname, 'src'),
-  entry: ['./index.js'],
-  output: {
-    filename: 'bundle.js',
-    path: targetPathAbs,
-    publicPath: '/'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader',
-          query: {
-            presets:[ 'es2015', 'react', 'stage-2' ]
-          }
-        }]
-      },
-      {
-        test: /\.scss$/,
-        use: extractTextWebpackPlugin.extract({
-          use: ['css-loader', 'sass-loader']
-        })
-      },
-      {
-        test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader'
-      },
-      {
-        test: /\.html$/,
-        use: ['html-loader']
-      },
-      {
-        test: /\.(svg|png|jpg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'img/',
-              publicPath: 'img/'
+module.exports = env => {
+  const config = {
+    context: Path.resolve(__dirname, 'src'),
+    entry: ['./index.js'],
+    output: {
+      filename: 'bundle.js',
+      path: targetPathAbs,
+      publicPath: '/'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: [{
+            loader: 'babel-loader',
+            query: {
+              presets:[ 'es2015', 'react', 'stage-2' ]
             }
-          }
-        ]
-      },
-      {
-        test: /worker\.js$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: '',
-              publicPath: ''
+          }]
+        },
+        {
+          test: /\.scss$/,
+          use: extractTextWebpackPlugin.extract({
+            use: ['css-loader', 'sass-loader']
+          })
+        },
+        {
+          test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader: 'url-loader'
+        },
+        {
+          test: /\.html$/,
+          use: ['html-loader']
+        },
+        {
+          test: /\.(svg|png|jpg)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: 'img/',
+                publicPath: 'img/'
+              }
             }
-          }
-        ]
-      },
-      {
-        test: /CNAME$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name]',
-              outputPath: '',
-              publicPath: ''
+          ]
+        },
+        {
+          test: /worker\.js$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: '',
+                publicPath: ''
+              }
             }
-          }
-        ]
-      }
+          ]
+        },
+      ]
+    },
+    plugins: [
+      extractTextWebpackPlugin,
+      new Webpack.NamedModulesPlugin(),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'index.html'
+      }),
     ]
-  },
-  plugins: [
-    extractTextWebpackPlugin,
-    new Webpack.NamedModulesPlugin(),
-    new HtmlWebpackPlugin({
-      template: './index.html',
-      filename: 'index.html'
-    }),
-  ]
-};
-
-
-if (!isProduction) { // Development environment
-
-  module.exports.entry = [
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8081',
-    'webpack/hot/only-dev-server'
-  ].concat(module.exports.entry);
-
-  module.exports.devtool = 'inline-source-map';
-
-  module.exports.devServer = {
-    hot: true,
-    contentBase: targetPathAbs,
-    publicPath: '/',
-    historyApiFallback: true,
-    port: 8081
   };
 
-  module.exports.plugins.unshift(new Webpack.HotModuleReplacementPlugin());
 
-}
-else { // Production environment
+  if (env && env.backend === 'laboratoria-la') { // backend de producción
+    config.plugins.push(new Webpack.DefinePlugin({
+      'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
+      'process.env.FIREBASE_API_KEY': `"AIzaSyAXbaEbpq8NOfn0r8mIrcoHvoGRkJThwdc"`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"378945761184"`,
+    }));
+  }
+  else if (env && env.backend === 'laboratoria-la-staging') { // backend de staging
+    config.plugins.push(new Webpack.DefinePlugin({
+      'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
+      'process.env.FIREBASE_API_KEY': `"AIzaSyDp7fjc0jeFH3qWmrTEbLhDIuzkwXJRWFA"`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"190986695844"`,
+    }));
+  }
+  else {
+    [
+      'FIREBASE_PROJECT',
+      'FIREBASE_API_KEY',
+      'FIREBASE_MESSAGING_SENDER_ID'
+    ].forEach(item => {
+      if (!process.env.hasOwnProperty(item)) {
+        throw new Error(`Variable de entorno ${item} no definida`);
+      }
+    });
+    config.plugins.push(new Webpack.DefinePlugin({
+      'process.env.FIREBASE_PROJECT': `"${process.env.FIREBASE_PROJECT}"`,
+      'process.env.FIREBASE_API_KEY': `"${process.env.FIREBASE_API_KEY}"`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"${process.env.FIREBASE_MESSAGING_SENDER_ID}"`,
+    }));
+  }
 
-  module.exports.plugins = [
-    new CleanWebpackPlugin([targetPathRel]),
-    new FaviconsWebpackPlugin({
-      logo: './img/favicon.png',
-      background: '#f7b617',
-      title: 'Laboratoria LMS',
-    }),
-  ].concat(module.exports.plugins);
+  console.log(`Backend: ${(env || {}).backend || process.env.FIREBASE_PROJECT}`);
 
-}
+
+  if (isProduction) { // Dist files
+
+    config.plugins = [
+      new CleanWebpackPlugin([targetPathRel]),
+      new FaviconsWebpackPlugin({
+        logo: './img/favicon.png',
+        background: '#f7b617',
+        title: 'Laboratoria LMS',
+      }),
+    ].concat(config.plugins);
+
+  }
+  else { // Hot loader
+
+    config.entry = [
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:8081',
+      'webpack/hot/only-dev-server'
+    ].concat(config.entry);
+
+    config.devtool = 'inline-source-map';
+
+    config.devServer = {
+      hot: true,
+      contentBase: targetPathAbs,
+      publicPath: '/',
+      historyApiFallback: true,
+      port: 8081
+    };
+
+    config.plugins.unshift(new Webpack.HotModuleReplacementPlugin());
+
+  };
+
+  return config;
+};
