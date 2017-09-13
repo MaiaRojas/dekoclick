@@ -2,4 +2,5 @@
 *.swp
 *.log
 .firebaserc
+coverage/
 node_modules/
