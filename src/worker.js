@@ -2,7 +2,7 @@
 // Este script es el web worker que usan los ejercicios para correr los tests.
 //
 
-/* global self, mocha, Mocha, chai */
+/* global self, mocha, Mocha, chai, sinon */
 /* eslint no-new-func: "off" */
 
 
@@ -28,7 +28,6 @@ const wrapSubmission = str => (new Function(
   return exports;
   `,
 ));
-
 
 
 const wrapTests = str => (new Function(

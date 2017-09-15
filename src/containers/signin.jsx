@@ -45,17 +45,24 @@ const styles = {
     display: 'block',
     margin: '0 auto',
   },
-  error: {
-    color: red[500],
+  authError: {
     marginTop: 20,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  authErrorIcon: {
+    color: red[500],
+    position: 'absolute',
+  },
+  authErrorMessage: {
+    marginLeft: 30,
+    color: red[500],
+  },
 };
 
 
-const checkErrors = props => () => {
+const isValid = props => () => {
   let valid = true;
 
   if (props.email === '') {
@@ -82,22 +89,19 @@ const checkErrors = props => () => {
 };
 
 
-const handleSubmit = props => (e) => {
-  e.preventDefault();
-
-  if (checkErrors(props)()) {
-    props.firebase.login({ email: props.email, password: props.password });
-  }
-
-  return false;
-};
-
-
-const SignIn = props => console.log('SignIn', props) || (
+const SignIn = props => (
   <div className={props.classes.root}>
     <Paper className={props.classes.paper}>
       <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
-      <form onSubmit={handleSubmit(props)}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (isValid(props)()) {
+            props.firebase.login({ email: props.email, password: props.password });
+          }
+          return false;
+        }}
+      >
         <div className="controls">
           <TextField
             id="email"
@@ -106,7 +110,7 @@ const SignIn = props => console.log('SignIn', props) || (
             error={props.emailError !== ''}
             helperText={props.emailError}
             onChange={e => props.dispatch({ type: 'UPDATE_EMAIL', payload: e.target.value })}
-            onBlur={checkErrors(props)}
+            onBlur={isValid(props)}
             fullWidth
             margin="normal"
           />
@@ -118,7 +122,7 @@ const SignIn = props => console.log('SignIn', props) || (
             error={props.passwordError !== ''}
             helperText={props.passwordError}
             onChange={e => props.dispatch({ type: 'UPDATE_PASS', payload: e.target.value })}
-            onBlur={checkErrors(props)}
+            onBlur={isValid(props)}
             fullWidth
             autoComplete="current-password"
             margin="normal"
@@ -126,9 +130,9 @@ const SignIn = props => console.log('SignIn', props) || (
         </div>
         <Button type="submit" raised color="primary">Ingresar</Button>
         {props.authError && props.authError.code &&
-          <div className={props.classes.error}>
-            <ErrorIcon style={{ position: 'absolute' }} />
-            <Typography style={{ marginLeft: 30, color: red[500] }}>
+          <div className={props.classes.authError}>
+            <ErrorIcon className={props.classes.authErrorIcon} />
+            <Typography className={props.classes.authErrorMessage}>
               {apiErrorMessages[props.authError.code] || props.authError.message}
             </Typography>
           </div>
@@ -144,10 +148,27 @@ SignIn.propTypes = {
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
+  email: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  emailError: PropTypes.string.isRequired,
+  passwordError: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
     login: PropTypes.func.isRequired,
   }).isRequired,
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    paper: PropTypes.string.isRequired,
+    logo: PropTypes.string.isRequired,
+    authError: PropTypes.string.isRequired,
+    authErrorIcon: PropTypes.string.isRequired,
+    authErrorMessage: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+
+SignIn.defaultProps = {
+  authError: undefined,
 };
 
 

@@ -102,11 +102,16 @@ const App = (props) => {
 
 App.propTypes = {
   auth: PropTypes.shape({}),
+  authError: PropTypes.shape({
+    code: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
+  }),
 };
 
 
 App.defaultProps = {
   auth: undefined,
+  authError: undefined,
 };
 
 
