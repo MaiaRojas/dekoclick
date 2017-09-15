@@ -21,21 +21,10 @@ mocha.setup({
 });
 
 
-// const wrapSubmission = str => (new Function(
-//   `var module = { exports: {} };
-//   var exports = module.exports;
-//   ${str};;
-//   var args = Array.prototype.slice.call(arguments, 0);
-//   return module.exports.apply(null, args);`,
-// ));
-
-
 const wrapSubmission = str => (new Function(
   `var module = { exports: {} };
   var exports = module.exports;
   ${str};;
-  //var args = Array.prototype.slice.call(arguments, 0);
-  //return module.exports.apply(null, args);
   return exports;
   `,
 ));
