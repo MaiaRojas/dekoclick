@@ -2,6 +2,8 @@
   "name": "lms.laboratoria.la",
   "version": "0.0.1",
   "main": "dist/index.html",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
     "pretest": "eslint --ext .js --ext .jsx src/",
     "test": "jest --coverage",
@@ -20,7 +22,6 @@
     "Lupo Montero <lupo@laboratoria.la> (https://github.com/lupomontero)",
     "Giancarlo Corzo <gian@laboratoria.la> (https://github.com/giancorzo)"
   ],
-  "license": "Apache-2.0",
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-jest": "^20.0.3",
