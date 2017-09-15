@@ -73,7 +73,7 @@ const App = (props) => {
   }
 
   if (isEmpty(props.auth)) {
-    return (<SignIn error={null} />);
+    return (<SignIn error={null} authError={props.authError} />);
   }
 
   return (
