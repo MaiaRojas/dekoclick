@@ -1,6 +1,6 @@
 {
   "name": "capitan-www",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "public/index.html",
   "scripts": {
     "pretest": "eslint --ext .js --ext .jsx src/",
