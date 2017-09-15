@@ -42,9 +42,9 @@ module.exports = env => {
           }]
         },
         {
-          test: /\.scss$/,
+          test: /\.css$/,
           use: extractTextWebpackPlugin.extract({
-            use: ['css-loader', 'sass-loader']
+            use: ['css-loader']
           })
         },
         {

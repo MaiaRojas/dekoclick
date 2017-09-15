@@ -3,7 +3,7 @@
 /* eslint import/extensions: "off", import/first: "off" */
 
 
-import './style/main.scss';
+import './style/main.css';
 import './img/icon.svg';
 import './img/logo.svg';
 import './worker.js';
@@ -15,7 +15,7 @@ import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from 'material-ui/styles';
 import store from './store';
-import theme from './style/themes/app';
+import theme from './style/theme';
 import App from './containers/app';
 
 

@@ -14,7 +14,8 @@ import red from 'material-ui/colors/red';
 
 const apiErrorMessages = {
   'auth/wrong-password': 'Tu correo o contraseña son incorrectos.',
-  'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.',
+  'auth/user-not-found': 'No hay ninguna cuenta asociada a este correo.',
+  'auth/too-many-requests': 'Se han bloqueado todas las consultas desde este dispositivo debido a actividad inusual. Prueba otra vez más tarde.',
 };
 
 
