@@ -33,7 +33,7 @@ const Dashboard = (props) => {
 
 
 Dashboard.propTypes = {
-  cohortMembership: PropTypes.shape({}).isRequired,
+  cohortMembership: PropTypes.shape({}),
 };
 
 

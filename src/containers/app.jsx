@@ -38,7 +38,7 @@ const WrapRoute = ({
   path,
   exact,
   component: Component,
-  mainNav = true,
+  mainNav,
   ...props
 }) => (
   <Route
@@ -63,6 +63,7 @@ WrapRoute.propTypes = {
 
 WrapRoute.defaultProps = {
   exact: false,
+  mainNav: true,
 };
 
 

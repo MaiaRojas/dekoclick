@@ -9,6 +9,7 @@
 self.importScripts(
   'https://cdnjs.cloudflare.com/ajax/libs/mocha/3.5.0/mocha.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/sinon.js/3.2.1/sinon.min.js',
 );
 
 
@@ -20,12 +21,25 @@ mocha.setup({
 });
 
 
+// const wrapSubmission = str => (new Function(
+//   `var module = { exports: {} };
+//   var exports = module.exports;
+//   ${str};;
+//   var args = Array.prototype.slice.call(arguments, 0);
+//   return module.exports.apply(null, args);`,
+// ));
+
+
 const wrapSubmission = str => (new Function(
   `var module = { exports: {} };
+  var exports = module.exports;
   ${str};;
-  var args = Array.prototype.slice.call(arguments, 0);
-  return module.exports.apply(null, args);`,
+  //var args = Array.prototype.slice.call(arguments, 0);
+  //return module.exports.apply(null, args);
+  return exports;
+  `,
 ));
+
 
 
 const wrapTests = str => (new Function(
@@ -37,6 +51,7 @@ const wrapTests = str => (new Function(
 const loadTests = (tests, Submission) =>
   Object.keys(tests).forEach(key => wrapTests(tests[key])({
     chai,
+    sinon,
     [`../solution/${key.replace(/\.spec\.js$/, '')}`]: Submission,
   }));
 
@@ -67,7 +82,7 @@ const suiteToJSON = suite => ({
 
 
 self.onmessage = (e) => {
-  loadTests(e.data.tests, wrapSubmission(e.data.code));
+  loadTests(e.data.tests, wrapSubmission(e.data.code)());
 
   const runResults = mocha.run();
 

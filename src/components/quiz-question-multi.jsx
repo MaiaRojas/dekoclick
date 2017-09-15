@@ -24,6 +24,13 @@ const createCheckboxChangeHandler = (
   );
 
 
+const parseHTML = (str) => {
+  const el = document.createElement('div');
+  el.innerHTML = str;
+  return el.textContent;
+};
+
+
 const QuizQuestionMulti = props => (
   <FormGroup>
     {props.question.answers.map((answer, idx) =>
@@ -43,7 +50,7 @@ const QuizQuestionMulti = props => (
             value={`${idx}`}
           />
         }
-        label={answer}
+        label={parseHTML(answer)}
         disabled={props.hasResults}
       />),
     )}

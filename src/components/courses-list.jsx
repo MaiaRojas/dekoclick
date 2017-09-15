@@ -30,8 +30,13 @@ const CoursesList = (props) => {
 
 
 CoursesList.propTypes = {
-  courses: PropTypes.shape({}).isRequired,
+  courses: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,
+};
+
+
+CoursesList.defaultProps = {
+  courses: undefined,
 };
 
 

@@ -7,7 +7,7 @@ import Radio, { RadioGroup } from 'material-ui/Radio';
 const parseHTML = (str) => {
   const el = document.createElement('div');
   el.innerHTML = str;
-  return el.innerHTML;
+  return el.textContent;
 };
 
 

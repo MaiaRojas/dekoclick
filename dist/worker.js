@@ -1,9 +1,15 @@
-'use strict';
+//
+// Este script es el web worker que usan los ejercicios para correr los tests.
+//
+
+/* global self, mocha, Mocha, chai */
+/* eslint no-new-func: "off" */
 
 
 self.importScripts(
   'https://cdnjs.cloudflare.com/ajax/libs/mocha/3.5.0/mocha.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js'
+  'https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/sinon.js/3.2.1/sinon.min.js',
 );
 
 
@@ -15,26 +21,39 @@ mocha.setup({
 });
 
 
-const wrapSubmission = str => (new Function([
-  'var module = { exports: {} };',
-  str + ';;',
-  'var args = Array.prototype.slice.call(arguments, 0);',
-  'return module.exports.apply(null, args);'
-].join('\n')));
+// const wrapSubmission = str => (new Function(
+//   `var module = { exports: {} };
+//   var exports = module.exports;
+//   ${str};;
+//   var args = Array.prototype.slice.call(arguments, 0);
+//   return module.exports.apply(null, args);`,
+// ));
 
 
-const wrapTests = str => (new Function('requires', [
-  'var require = name => requires[name];',
-  str + ';;'
-].join('\n')));
+const wrapSubmission = str => (new Function(
+  `var module = { exports: {} };
+  var exports = module.exports;
+  ${str};;
+  //var args = Array.prototype.slice.call(arguments, 0);
+  //return module.exports.apply(null, args);
+  return exports;
+  `,
+));
 
 
-const loadTests = (tests, Submission) => Object.keys(tests).forEach(key => {
-  wrapTests(tests[key])({
+
+const wrapTests = str => (new Function(
+  'requires',
+  `var require = name => requires[name];${str};;`,
+));
+
+
+const loadTests = (tests, Submission) =>
+  Object.keys(tests).forEach(key => wrapTests(tests[key])({
     chai,
-    [`../solution/${key.replace(/\.spec\.js$/, '')}`]: Submission
-  });
-});
+    sinon,
+    [`../solution/${key.replace(/\.spec\.js$/, '')}`]: Submission,
+  }));
 
 
 const testToJSON = test => ({
@@ -62,8 +81,8 @@ const suiteToJSON = suite => ({
 });
 
 
-onmessage = e => {
-  loadTests(e.data.tests, wrapSubmission(e.data.code));
+self.onmessage = (e) => {
+  loadTests(e.data.tests, wrapSubmission(e.data.code)());
 
   const runResults = mocha.run();
 
@@ -71,9 +90,8 @@ onmessage = e => {
     const { failures, stats, total, suite } = runResults;
     try {
       self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
-    }
-    catch (err) {
-      console.log(err);
+    } catch (err) {
+      // console.log(err);
     }
   });
 };
