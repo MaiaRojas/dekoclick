@@ -1,15 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { firebaseConnect } from 'react-redux-firebase';
+import { withStyles } from 'material-ui/styles';
+import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
 import QuizQuestion from './quiz-question';
+import QuizResults from './quiz-results';
 
 
-const arrayEqual = (a, b) => a.sort().join(',') === b.sort().join(',');
+const styles = {
+  root: {
+    maxWidth: 760,
+    margin: '0 auto',
+  },
+};
+
+
+const arrayEqual = (a, b) => {
+  b = (b && b.sort) ? b : Object.keys(b || {}).reduce((memo, key) => {
+    if (/^\d+$/.test(key)) {
+      memo[parseInt(key, 10)] = b[key];
+    }
+    return memo;
+  }, []);
+  return a.sort().join(',') === b.sort().join(',');
+};
 
 
 const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
+
+
+const start = props => () =>
+  props.firebase.database()
+    .ref(matchParamsToPath(props.auth.uid, props.match.params))
+    .update({ startedAt: (new Date()).toJSON() });
 
 
 const updateProgress = props => (questionid, val) =>
@@ -33,25 +57,48 @@ const handleSubmit = props => () => {
 };
 
 
-const Quiz = props => (
-  <div style={{ maxWidth: 760, margin: '0 auto' }}>
-    {props.part.questions.map((question, idx) =>
-      (<QuizQuestion
-        key={question.title}
-        idx={idx}
-        question={question}
-        progress={(idx in props.progress) ? props.progress[idx] : ''}
-        hasResults={!!props.progress.results}
-        updateProgress={updateProgress(props)}
-      />),
-    )}
-    {!props.progress.results &&
-      (<Button raised color="primary" onClick={handleSubmit(props)}>
-        Enviar
-      </Button>)
+const Quiz = props => {
+  const { part, progress, classes } = props;
+
+  if (!progress.results && !progress.startedAt) {
+    return (
+      <div>
+        <Button raised color="primary" onClick={start(props)}>
+          start quiz
+        </Button>
+      </div>
+    );
+  }
+
+  if (!progress.results && progress.startedAt) {
+    const startedAt = new Date(progress.startedAt);
+    if (startedAt < (Date.now() - (part.duration * 60 * 1000))) {
+      setTimeout(() => handleSubmit(props)(), 10);
+      return (<CircularProgress />);
     }
-  </div>
-);
+  }
+
+  return (
+    <div className={classes.root}>
+      {progress.results && <QuizResults results={progress.results} />}
+      {part.questions.map((question, idx) =>
+        (<QuizQuestion
+          key={question.title}
+          idx={idx}
+          question={question}
+          progress={(idx in progress) ? progress[idx] : ''}
+          hasResults={!!progress.results}
+          updateProgress={updateProgress(props)}
+        />),
+      )}
+      {!progress.results &&
+        (<Button raised color="primary" onClick={handleSubmit(props)}>
+          Enviar
+        </Button>)
+      }
+    </div>
+  );
+}
 
 
 Quiz.propTypes = {
@@ -62,9 +109,15 @@ Quiz.propTypes = {
     PropTypes.array,
     PropTypes.shape({
       results: PropTypes.shape({}),
+      startedAt: PropTypes.string,
+      submittedAt: PropTypes.string,
     }),
   ]).isRequired,
+  firebase: PropTypes.shape({
+    database: PropTypes.func.isRequired,
+  }).isRequired,
+  classes: PropTypes.shape({}).isRequired,
 };
 
 
-export default firebaseConnect()(Quiz);
+export default withStyles(styles)(Quiz);

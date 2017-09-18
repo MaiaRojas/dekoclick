@@ -24,7 +24,7 @@ const styles = {
 
 const labelClassName = props => (idx) => {
   if (!props.hasResults) {
-    return {};
+    return '';
   } else if (props.question.solution.indexOf(idx) > -1) {
     return props.classes.passes;
   } else if (props.progress.indexOf(idx) > -1) {

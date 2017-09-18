@@ -14,7 +14,7 @@ const styles = {
 
 const LeftDrawer = props => (
   <Hidden smDown>
-    <Drawer className={props.classes.drawer} open docked>
+    <Drawer className={props.classes.drawer} open type="permanent">
       {props.children}
     </Drawer>
   </Hidden>

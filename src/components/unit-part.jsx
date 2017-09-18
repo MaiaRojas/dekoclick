@@ -36,10 +36,6 @@ const UnitPart = props => (
         className={props.classes.metaChip}
         label={`Formato: ${props.part.format}`}
       />
-      <Chip
-        className={props.classes.metaChip}
-        label={`Duración: ${props.part.duration}`}
-      />
     </div>
     {props.part.body && <Content html={props.part.body} />}
   </div>
@@ -50,7 +46,7 @@ UnitPart.propTypes = {
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
     format: PropTypes.string.isRequired,
-    duration: PropTypes.string.isRequired,
+    duration: PropTypes.number.isRequired,
     body: PropTypes.string.isRequired,
   }).isRequired,
   classes: PropTypes.shape({

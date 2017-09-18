@@ -13,15 +13,21 @@ const styles = theme => ({
       width: 'calc(100% - 320px)',
     },
   },
+  flex: {
+    flex: 1,
+  },
 });
 
 
 const TopBar = props => (
   <AppBar className={props.classes.appBar}>
     <Toolbar>
-      <Typography type="title">
+      <Typography type="title" className={props.classes.flex}>
         {props.title}
       </Typography>
+      <div>
+        {props.children}
+      </div>
     </Toolbar>
   </AppBar>
 );

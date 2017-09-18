@@ -8,6 +8,7 @@ import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-fireba
 import { CircularProgress } from 'material-ui/Progress';
 import UnitNav from '../components/unit-nav';
 import TopBar from '../components/top-bar';
+import UnitDuration from '../components/unit-duration';
 import UnitPart from '../components/unit-part';
 import UnitExercises from '../components/unit-exercises';
 import Quiz from '../components/quiz';
@@ -36,17 +37,19 @@ const Unit = (props) => {
 
   const { classes, ...propsMinusClasses } = props;
   const { partid } = props.match.params;
-  const current = partid || props.current;
   const first = Object.keys(props.unit.parts).sort()[0];
 
-  if (!current) {
+  if (!partid) {
     return <Redirect to={`${props.match.url}/${first}`} />;
   }
 
+  const part = props.unit.parts[partid];
+  const progress =(props.progress || {})[partid] || {};
+
   let Component = UnitPart;
-  if (props.unit.parts[current].type === 'practice') {
+  if (part.type === 'practice') {
     Component = UnitExercises;
-  } else if (props.unit.parts[current].type === 'quiz') {
+  } else if (part.type === 'quiz') {
     Component = Quiz;
   }
 
@@ -54,12 +57,15 @@ const Unit = (props) => {
     <div className="app">
       <UnitNav {...propsMinusClasses} />
       <div className={classes.main}>
-        <TopBar title={props.unit.parts[current].title} />
+        <TopBar title={part.title}>
+          <UnitDuration part={part} progress={progress} />
+        </TopBar>
         <Component
-          part={props.unit.parts[current]}
-          progress={(props.progress || {})[current] || {}}
+          part={part}
+          progress={progress}
           match={props.match}
           auth={props.auth}
+          firebase={props.firebase}
         />
       </div>
     </div>
@@ -68,7 +74,6 @@ const Unit = (props) => {
 
 
 Unit.propTypes = {
-  current: PropTypes.string,
   unit: PropTypes.shape({
     parts: PropTypes.shape({}),
   }),
@@ -91,7 +96,6 @@ Unit.propTypes = {
 
 
 Unit.defaultProps = {
-  current: null,
   unit: undefined,
   progress: undefined,
 };
@@ -106,7 +110,6 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
 
 
 const mapStateToProps = ({ firebase, unitUI }, { auth, match }) => ({
-  current: unitUI.current,
   unit: dataToJS(firebase, matchParamsToUnitPath(match.params)),
   progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
 });
