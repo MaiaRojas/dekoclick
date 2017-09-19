@@ -2,8 +2,10 @@
 
 exports[`<TopBar /> should have classes prop injected and title prop on instance 1`] = `
 Object {
+  "children": undefined,
   "classes": Object {
     "appBar": "TopBar-appBar-1",
+    "flex": "TopBar-flex-2",
   },
   "title": "foo",
 }

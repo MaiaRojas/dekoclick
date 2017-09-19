@@ -32,9 +32,9 @@ const QuizResults = ({ results, classes }) => {
   const percent = Math.floor((results.passes / results.total) * 100);
 
   let colorClass = classes.red;
-  if (percent > 80) {
+  if (percent > 79) {
     colorClass = classes.green;
-  } else if (percent > 70) {
+  } else if (percent > 69) {
     colorClass = classes.yellow;
   }
 

@@ -45,6 +45,15 @@ describe('<Quiz />', () => {
         }}
         progress={{}}
         firebase={{ database: () => {} }}
+        auth={{}}
+        match={{
+          params: {
+            cohortid: 'foo',
+            courseid: 'test',
+            unitid: '01-bar',
+            partid: '05-quiz',
+          }
+        }}
       />
     );
     console.log(component.html());

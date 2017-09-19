@@ -16,13 +16,14 @@ const styles = {
 
 
 const arrayEqual = (a, b) => {
-  b = (b && b.sort) ? b : Object.keys(b || {}).reduce((memo, key) => {
+  const bArray = (b && b.sort) ? b : Object.keys(b || {}).reduce((memo, key) => {
     if (/^\d+$/.test(key)) {
-      memo[parseInt(key, 10)] = b[key];
+      // memo[parseInt(key, 10)] = b[key];
+      return Object.assign({}, memo, { [parseInt(key, 10)]: b[key] });
     }
     return memo;
   }, []);
-  return a.sort().join(',') === b.sort().join(',');
+  return a.sort().join(',') === bArray.sort().join(',');
 };
 
 
@@ -30,40 +31,40 @@ const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
 
 
-const start = props => () =>
-  props.firebase.database()
-    .ref(matchParamsToPath(props.auth.uid, props.match.params))
+const start = (firebase, auth, match) => () =>
+  firebase.database()
+    .ref(matchParamsToPath(auth.uid, match.params))
     .update({ startedAt: (new Date()).toJSON() });
 
 
-const updateProgress = props => (questionid, val) =>
-  props.firebase.database()
-    .ref(matchParamsToPath(props.auth.uid, props.match.params))
+const updateProgress = (firebase, auth, match) => (questionid, val) =>
+  firebase.database()
+    .ref(matchParamsToPath(auth.uid, match.params))
     .update({ [`${questionid}`]: val });
 
 
-const handleSubmit = props => () => {
-  const results = props.part.questions.reduce((memo, question, idx) => {
+const handleSubmit = ({ part, progress, firebase, auth, match }) => () => {
+  const results = part.questions.reduce((memo, question, idx) => {
     const total = memo.total + 1;
-    if (arrayEqual(question.solution, props.progress[idx])) {
+    if (arrayEqual(question.solution, progress[idx])) {
       return Object.assign(memo, { passes: memo.passes + 1, total });
     }
     return Object.assign(memo, { failures: memo.failures + 1, total });
   }, { passes: 0, failures: 0, total: 0 });
 
-  props.firebase.database()
-    .ref(matchParamsToPath(props.auth.uid, props.match.params))
+  firebase.database()
+    .ref(matchParamsToPath(auth.uid, match.params))
     .update({ results, submittedAt: (new Date()).toJSON() });
 };
 
 
-const Quiz = props => {
-  const { part, progress, classes } = props;
+const Quiz = (props) => {
+  const { part, progress, classes, firebase, auth, match } = props;
 
   if (!progress.results && !progress.startedAt) {
     return (
       <div>
-        <Button raised color="primary" onClick={start(props)}>
+        <Button raised color="primary" onClick={start(firebase, auth, match)}>
           start quiz
         </Button>
       </div>
@@ -88,7 +89,7 @@ const Quiz = props => {
           question={question}
           progress={(idx in progress) ? progress[idx] : ''}
           hasResults={!!progress.results}
-          updateProgress={updateProgress(props)}
+          updateProgress={updateProgress(firebase, auth, match)}
         />),
       )}
       {!progress.results &&
@@ -98,7 +99,7 @@ const Quiz = props => {
       }
     </div>
   );
-}
+};
 
 
 Quiz.propTypes = {
@@ -115,6 +116,15 @@ Quiz.propTypes = {
   ]).isRequired,
   firebase: PropTypes.shape({
     database: PropTypes.func.isRequired,
+  }).isRequired,
+  auth: PropTypes.shape({}).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   classes: PropTypes.shape({}).isRequired,
 };

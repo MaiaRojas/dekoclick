@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "pretest": "eslint --ext .js --ext .jsx src/",
-    "test": "jest --coverage",
+    "test": "jest --coverage --verbose",
     "watch": "yarn test -- --watch",
     "build": "NODE_ENV=production webpack -p",
     "build:staging": "yarn run build -- --env.backend=laboratoria-la-staging",
@@ -52,6 +52,7 @@
     "react": "^15.6.1",
     "react-ace": "^5.2.0",
     "react-dom": "^15.6.1",
+    "react-ga": "^2.2.0",
     "react-hot-loader": "next",
     "react-redux": "^5.0.6",
     "react-redux-firebase": "^1.5.0",

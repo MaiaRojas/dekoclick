@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -74,8 +71,4 @@ MainNav.propTypes = {
 };
 
 
-export default compose(
-  connect(),
-  firebaseConnect(),
-  withStyles(styles),
-)(MainNav);
+export default withStyles(styles)(MainNav);

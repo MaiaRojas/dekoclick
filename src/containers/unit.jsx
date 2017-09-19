@@ -44,7 +44,7 @@ const Unit = (props) => {
   }
 
   const part = props.unit.parts[partid];
-  const progress =(props.progress || {})[partid] || {};
+  const progress = (props.progress || {})[partid] || {};
 
   let Component = UnitPart;
   if (part.type === 'practice') {
@@ -92,6 +92,7 @@ Unit.propTypes = {
   classes: PropTypes.shape({
     main: PropTypes.string.isRequired,
   }).isRequired,
+  firebase: PropTypes.shape({}).isRequired,
 };
 
 
@@ -109,7 +110,7 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
 
 
-const mapStateToProps = ({ firebase, unitUI }, { auth, match }) => ({
+const mapStateToProps = ({ firebase }, { auth, match }) => ({
   unit: dataToJS(firebase, matchParamsToUnitPath(match.params)),
   progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
 });

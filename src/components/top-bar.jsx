@@ -35,9 +35,16 @@ const TopBar = props => (
 
 TopBar.propTypes = {
   title: PropTypes.string.isRequired,
+  children: PropTypes.shape({}),
   classes: PropTypes.shape({
     appBar: PropTypes.string.isRequired,
+    flex: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+TopBar.defaultProps = {
+  children: undefined,
 };
 
 

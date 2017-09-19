@@ -1,15 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
+
+
+// eslint-disable-next-line no-confusing-arrow
+const pad = num => num < 10 ? `0${num}` : `${num}`;
 
 
 class UnitDuration extends React.Component {
   constructor(props) {
     super(props);
     this.state = { elapsed: 0 };
+  }
+
+  componentDidMount() {
+    this.initTimer();
+  }
+
+  componentWillUnmount() {
+    this.clearTimer();
   }
 
   expiredQuiz() {
@@ -24,19 +35,15 @@ class UnitDuration extends React.Component {
       !!this.props.progress.startedAt;
   }
 
-  pad(num) {
-    return (num < 10) ? `0${num}` : `${num}`;
-  }
-
   elapsedToRemainingString() {
     let secondsLeft = (this.props.part.duration * 60) - this.state.elapsed;
-    let minutesLeft = Math.floor(secondsLeft / 60);
+    const minutesLeft = Math.floor(secondsLeft / 60);
 
     if (minutesLeft >= 1) {
-      secondsLeft = secondsLeft % 60;
+      secondsLeft %= 60;
     }
 
-    return `${this.pad(minutesLeft)}:${this.pad(secondsLeft)}`;
+    return `${pad(minutesLeft)}:${pad(secondsLeft)}`;
   }
 
   initTimer() {
@@ -62,14 +69,6 @@ class UnitDuration extends React.Component {
       clearInterval(this.interval);
       this.interval = null;
     }
-  }
-
-  componentDidMount() {
-    this.initTimer();
-  }
-
-  componentWillUnmount() {
-    this.clearTimer();
   }
 
   render() {
@@ -98,8 +97,14 @@ class UnitDuration extends React.Component {
 
 
 UnitDuration.propTypes = {
-  part: PropTypes.shape({}).isRequired,
-  progress: PropTypes.shape({}).isRequired,
+  part: PropTypes.shape({
+    duration: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
+  progress: PropTypes.shape({
+    startedAt: PropTypes.string,
+    results: PropTypes.shape({}),
+  }).isRequired,
 };
 
 
