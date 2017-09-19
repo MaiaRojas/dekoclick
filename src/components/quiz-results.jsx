@@ -12,6 +12,12 @@ const styles = {
   root: {
     marginBottom: 30,
     padding: 20,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  body: {
+    marginRight: 15,
   },
   green: {
     backgroundColor: green[500],
@@ -40,6 +46,9 @@ const QuizResults = ({ results, classes }) => {
 
   return (
     <Paper className={`${classes.root} ${colorClass}`}>
+      <Typography type="body1" className={`${classes.body} ${colorClass}`}>
+        Ya respondiste este cuestionario y acertaste el
+      </Typography>
       <Typography type="display1" className={colorClass}>
         {`${percent}%`}
       </Typography>
