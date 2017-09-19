@@ -7,15 +7,15 @@
   "scripts": {
     "pretest": "eslint --ext .js --ext .jsx src/",
     "test": "jest --coverage --verbose",
-    "watch": "yarn test -- --watch",
+    "watch": "yarn test --watch",
     "build": "NODE_ENV=production webpack -p",
-    "build:staging": "yarn run build -- --env.backend=laboratoria-la-staging",
-    "build:production": "yarn run build -- --env.backend=laboratoria-la",
+    "build:staging": "yarn run build --env.backend=laboratoria-la-staging",
+    "build:production": "yarn run build --env.backend=laboratoria-la",
     "deploy:staging": "firebase deploy --only hosting --project laboratoria-la-staging",
     "deploy:production": "firebase deploy --only hosting --project laboratoria-la",
     "start": "webpack-dev-server",
-    "start:staging": "yarn start -- --env.backend=laboratoria-la-staging",
-    "start:production": "yarn start -- --env.backend=laboratoria-la"
+    "start:staging": "yarn start --env.backend=laboratoria-la-staging",
+    "start:production": "yarn start --env.backend=laboratoria-la"
   },
   "author": "Laboratoria <sumate@laboratoria.la> (http://laboratoria.la/)",
   "contributors": [
