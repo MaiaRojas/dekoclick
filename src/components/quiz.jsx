@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
+import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
@@ -11,6 +12,12 @@ const styles = {
   root: {
     maxWidth: 760,
     margin: '0 auto',
+  },
+  p: {
+    marginBottom: 10,
+  },
+  startButton: {
+    marginTop: 10,
   },
 };
 
@@ -63,9 +70,22 @@ const Quiz = (props) => {
 
   if (!progress.results && !progress.startedAt) {
     return (
-      <div>
-        <Button raised color="primary" onClick={start(firebase, auth, match)}>
-          start quiz
+      <div className={classes.root}>
+        <Typography className={classes.p}>
+          Puedes responder el cuestionario una sola vez y tendrás
+          {part.duration} minutos para hacerlo. Pasados ese tiempo, el
+          cuestionario se bloquea y no podrás seguir respondiendo.
+        </Typography>
+        <Typography className={classes.p}>
+          ¿Estás segura(o) de que quieres responder ahora?
+        </Typography>
+        <Button
+          raised
+          color="primary"
+          className={classes.startButton}
+          onClick={start(firebase, auth, match)}
+        >
+          Sí, responder ahora
         </Button>
       </div>
     );
