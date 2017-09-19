@@ -8,18 +8,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import ErrorIcon from 'material-ui-icons/Error';
-import DoneIcon from 'material-ui-icons/Done';
-import red from 'material-ui/colors/red';
-import green from 'material-ui/colors/green';
-
-
-const apiErrorMessages = {
-  'auth/wrong-password': 'Tu correo o contraseña son incorrectos.',
-  'auth/user-not-found': 'No hay ninguna cuenta asociada a este correo.',
-  'auth/too-many-requests': 'Se han bloqueado todas las consultas desde este dispositivo debido a actividad inusual. Prueba otra vez más tarde.',
-  'auth/network-request-failed': 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.',
-};
+import SignInResults from '../components/signin-results';
 
 
 // eslint-disable-next-line no-useless-escape
@@ -48,27 +37,6 @@ const styles = {
   },
   submitBtn: {
     margin: '10px 0 20px',
-  },
-  results: {
-    marginBottom: 15,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  error: {
-    color: red[500],
-  },
-  success: {
-    color: green[500],
-  },
-  errorIcon: {
-    position: 'absolute',
-  },
-  successIcon: {
-    position: 'absolute',
-  },
-  resultsMessage: {
-    marginLeft: 30,
   },
 };
 
@@ -111,41 +79,6 @@ const isValid = ({ email, password, dispatch }) => () =>
   isValidEmail(email, dispatch) && isValidPassword(password, dispatch);
 
 
-const SignInResults = ({ authError, forgot, forgotResult, classes }) => {
-  let error = null;
-
-  if (!forgot && authError && authError.code) {
-    error = authError;
-  } else if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
-    error = forgotResult.error;
-  }
-
-  if (!error && (!forgot || !forgotResult || !forgotResult.success)) {
-    return null;
-  }
-
-  let statusClassName = classes.success;
-  let Icon = DoneIcon;
-  let iconClassName = classes.successIcon;
-  let message = 'Te hemos enviado un correo con un link para restaurar tu contraseña.';
-
-  if (error) {
-    statusClassName = classes.error;
-    Icon = ErrorIcon;
-    iconClassName = classes.errorIcon;
-    message = apiErrorMessages[error.code] || error.message || error;
-  }
-
-  return (
-    <div className={`${classes.results} ${statusClassName}`}>
-      <Icon className={iconClassName} />
-      <Typography className={classes.resultsMessage}>
-        {message}
-      </Typography>
-    </div>
-  );
-};
-
 const SignIn = props => (
   <div className={props.classes.root}>
     <Paper className={props.classes.paper}>
@@ -157,8 +90,7 @@ const SignIn = props => (
             props.firebase.auth().sendPasswordResetEmail(props.email)
               .then(() => props.dispatch({ type: 'UPDATE_FORGOT_RESULT', payload: { success: true } }))
               .catch(error => props.dispatch({ type: 'UPDATE_FORGOT_RESULT', payload: { error } }));
-          }
-          else if (!props.forgot && isValid(props)()) {
+          } else if (!props.forgot && isValid(props)()) {
             props.firebase.login({ email: props.email, password: props.password });
           }
           return false;
@@ -200,11 +132,15 @@ const SignIn = props => (
         >
           {props.forgot ? 'Restaurar contraseña' : 'Ingresar'}
         </Button>
-        <SignInResults {...props} />
+        <SignInResults
+          authError={props.authError}
+          forgot={props.forgot}
+          forgotResult={props.forgotResult}
+        />
       </form>
       <Typography>
         <a
-          href="#"
+          href="/"
           onClick={(e) => {
             e.preventDefault();
             props.dispatch({ type: 'TOGGLE_FORGOT' });
@@ -224,6 +160,7 @@ SignIn.propTypes = {
   password: PropTypes.string.isRequired,
   emailError: PropTypes.string.isRequired,
   passwordError: PropTypes.string.isRequired,
+  forgot: PropTypes.bool.isRequired,
   forgotResult: PropTypes.shape({}),
   authError: PropTypes.shape({
     code: PropTypes.string.isRequired,
@@ -232,14 +169,13 @@ SignIn.propTypes = {
   dispatch: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
     login: PropTypes.func.isRequired,
+    auth: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
-    results: PropTypes.string.isRequired,
-    errorIcon: PropTypes.string.isRequired,
-    resultsMessage: PropTypes.string.isRequired,
+    submitBtn: PropTypes.string.isRequired,
   }).isRequired,
 };
 
