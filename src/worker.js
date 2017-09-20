@@ -25,7 +25,7 @@ const wrapSubmission = str => (new Function(
   `var module = { exports: {} };
   var exports = module.exports;
   ${str};;
-  return exports;
+  return module.exports;
   `,
 ));
 
@@ -79,7 +79,7 @@ self.onmessage = (e) => {
     try {
       self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   });
 };
