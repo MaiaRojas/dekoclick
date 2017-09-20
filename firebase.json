@@ -11,6 +11,10 @@
     ],
     "rewrites": [
       {
+        "source": "/fns/cohorts/*/progress",
+        "function": "cohortProgress"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
