@@ -2,7 +2,7 @@
 // Este script es el web worker que usan los ejercicios para correr los tests.
 //
 
-/* global self, mocha, Mocha, chai */
+/* global self, mocha, Mocha, chai, sinon */
 /* eslint no-new-func: "off" */
 
 
@@ -21,25 +21,13 @@ mocha.setup({
 });
 
 
-// const wrapSubmission = str => (new Function(
-//   `var module = { exports: {} };
-//   var exports = module.exports;
-//   ${str};;
-//   var args = Array.prototype.slice.call(arguments, 0);
-//   return module.exports.apply(null, args);`,
-// ));
-
-
 const wrapSubmission = str => (new Function(
   `var module = { exports: {} };
   var exports = module.exports;
   ${str};;
-  //var args = Array.prototype.slice.call(arguments, 0);
-  //return module.exports.apply(null, args);
-  return exports;
+  return module.exports;
   `,
 ));
-
 
 
 const wrapTests = str => (new Function(
@@ -88,10 +76,6 @@ self.onmessage = (e) => {
 
   runResults.on('end', () => {
     const { failures, stats, total, suite } = runResults;
-    try {
-      self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
-    } catch (err) {
-      // console.log(err);
-    }
+    self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
   });
 };
