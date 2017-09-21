@@ -13,6 +13,9 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import RefreshIcon from 'material-ui-icons/Refresh';
 import PlayArrowIcon from 'material-ui-icons/PlayArrow';
+import ErrorIcon from 'material-ui-icons/Error';
+import red from 'material-ui/colors/red';
+import { LinearProgress } from 'material-ui/Progress';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
@@ -43,6 +46,13 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  linearProgress: {
+    marginTop: 20,
+  },
+  error: {
+    marginTop: 20,
+    color: red[500],
+  },
 });
 
 
@@ -63,15 +73,23 @@ const runTests = props => () => {
   const code = (props.progress || {}).code || getBoilerplate(props.exercise.files, props.id);
   const tests = props.exercise.files.test;
   const worker = new Worker('/worker.js');
+  const ref = props.firebase.database()
+    .ref(matchParamsToPath(props.auth.uid, props.match.params));
+
+  worker.onerror = (event) => {
+    ref.set({ code, error: event.message, updatedAt: (new Date()).toJSON() });
+    worker.terminate();
+    props.dispatch({ type: 'EXERCISE_RUN_TESTS_END' });
+  };
 
   worker.onmessage = (e) => {
-    props.firebase.database()
-      .ref(matchParamsToPath(props.auth.uid, props.match.params))
-      .set({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
+    ref.set({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
     worker.terminate();
+    props.dispatch({ type: 'EXERCISE_RUN_TESTS_END' });
   };
 
   worker.postMessage({ code, tests });
+  props.dispatch({ type: 'EXERCISE_RUN_TESTS_START' });
 };
 
 
@@ -130,7 +148,15 @@ const Exercise = (props) => {
             <RefreshIcon />
             Resetear
           </Button>
-          {progress.testResults &&
+          {props.testsRunning &&
+            <LinearProgress className={props.classes.linearProgress} />
+          }
+          {!props.testsRunning && progress.error &&
+            <Typography className={props.classes.error}>
+              <ErrorIcon /> {progress.error}
+            </Typography>
+          }
+          {!props.testsRunning && progress.testResults &&
             <ExerciseTestResults testResults={progress.testResults} />
           }
         </TabContainer>
@@ -152,6 +178,7 @@ Exercise.propTypes = {
     testResults: PropTypes.shape({}),
   }),
   currentTab: PropTypes.number.isRequired,
+  testsRunning: PropTypes.bool.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       cohortid: PropTypes.string.isRequired,
@@ -171,6 +198,7 @@ Exercise.propTypes = {
   classes: PropTypes.shape({
     title: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
+    linearProgress: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -182,6 +210,7 @@ Exercise.defaultProps = {
 
 const mapStateToProps = ({ exerciseUI }) => ({
   currentTab: exerciseUI.currentTab,
+  testsRunning: exerciseUI.testsRunning,
 });
 
 
