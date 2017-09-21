@@ -76,10 +76,6 @@ self.onmessage = (e) => {
 
   runResults.on('end', () => {
     const { failures, stats, total, suite } = runResults;
-    try {
-      self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
-    } catch (err) {
-      console.log(err);
-    }
+    self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
   });
 };

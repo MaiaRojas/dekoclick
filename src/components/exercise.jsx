@@ -199,6 +199,7 @@ Exercise.propTypes = {
     title: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
     linearProgress: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
   }).isRequired,
 };
 
