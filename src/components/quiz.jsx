@@ -72,8 +72,8 @@ const Quiz = (props) => {
     return (
       <div className={classes.root}>
         <Typography className={classes.p}>
-          Puedes responder el cuestionario una sola vez y tendrás
-          {part.duration} minutos para hacerlo. Pasados ese tiempo, el
+          Puedes responder el cuestionario una sola vez y
+          tendrás {part.duration} minutos para hacerlo. Pasados ese tiempo, el
           cuestionario se bloquea y no podrás seguir respondiendo.
         </Typography>
         <Typography className={classes.p}>
