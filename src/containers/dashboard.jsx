@@ -48,6 +48,8 @@ const mapStateToProps = ({ firebase }, ownProps) => ({
 
 
 export default compose(
-  firebaseConnect(['cohortMembership']),
+  firebaseConnect(props => ([
+    `cohortMembership/${props.auth.uid}`
+  ])),
   connect(mapStateToProps, {}),
 )(Dashboard);

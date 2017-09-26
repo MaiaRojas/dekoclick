@@ -42,7 +42,9 @@ CoursesList.defaultProps = {
 
 // list courses for a given cohort
 export default compose(
-  firebaseConnect(['cohortCourses']),
+  firebaseConnect(props => ([
+    `cohortCourses/${props.cohort}`
+  ])),
   connect(({ firebase }, ownProps) => ({
     courses: dataToJS(firebase, `cohortCourses/${ownProps.cohort}`),
   }), {}),
