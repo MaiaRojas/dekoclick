@@ -37,7 +37,7 @@ const parseBody = str => highlightCode(str);
 
 const Content = props => (
   <div
-    className={props.classes.body}
+    className={`content ${props.classes.body}`}
     dangerouslySetInnerHTML={{ __html: parseBody(props.html) }}
   />
 );
