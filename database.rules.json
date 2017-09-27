@@ -1,6 +1,41 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "campuses": {
+      ".read": true,
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "cohortCourses": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "cohortProgress": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".validate": true
+    },
+    "cohortUsers": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "cohorts": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "userCohorts": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth.uid == $uid",
+        ".validate": true
+      }
+    }
   }
 }

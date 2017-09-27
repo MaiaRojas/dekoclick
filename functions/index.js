@@ -1,8 +1,12 @@
+'use strict';
+
+
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const updateCohortUsers = require('./lib/updateCohortUsers');
+
 
 admin.initializeApp(functions.config().firebase);
 
-const handleCohortProgress = require('./cohort-progress')(admin);
 
-exports.cohortProgress = functions.https.onRequest(handleCohortProgress);
+exports.updateCohortUsers = updateCohortUsers(functions, admin);
