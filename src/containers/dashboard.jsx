@@ -9,23 +9,19 @@ import CoursesList from '../components/courses-list';
 
 
 const Dashboard = (props) => {
-  if (!isLoaded(props.cohortMembership)) {
+  if (!isLoaded(props.userCohorts)) {
     return (<CircularProgress />);
   }
 
-  if (isEmpty(props.cohortMembership)) {
+  if (isEmpty(props.userCohorts)) {
     return (<div>No cohorts :-(</div>);
   }
-
-  // const isInstructor = Object.keys(props.cohortMembership)
-  //   .filter(key => props.cohortMembership[key] === 'instructor').length > 0;
-  // console.log(isInstructor, props.cohortMembership);
 
   return (
     <div className="dashboard">
       <TopBar title="Dashboard" />
-      {Object.keys(props.cohortMembership).map(key =>
-        <CoursesList key={key} cohort={key} role={props.cohortMembership[key]} />,
+      {Object.keys(props.userCohorts).map(key =>
+        <CoursesList key={key} cohort={key} role={props.userCohorts[key]} />,
       )}
     </div>
   );
@@ -33,23 +29,23 @@ const Dashboard = (props) => {
 
 
 Dashboard.propTypes = {
-  cohortMembership: PropTypes.shape({}),
+  userCohorts: PropTypes.shape({}),
 };
 
 
 Dashboard.defaultProps = {
-  cohortMembership: undefined,
+  userCohorts: undefined,
 };
 
 
 const mapStateToProps = ({ firebase }, ownProps) => ({
-  cohortMembership: dataToJS(firebase, `cohortMembership/${ownProps.auth.uid}`),
+  userCohorts: dataToJS(firebase, `userCohorts/${ownProps.auth.uid}`),
 });
 
 
 export default compose(
   firebaseConnect(props => ([
-    `cohortMembership/${props.auth.uid}`
+    `userCohorts/${props.auth.uid}`
   ])),
   connect(mapStateToProps, {}),
 )(Dashboard);
