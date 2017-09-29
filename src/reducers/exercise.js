@@ -37,7 +37,7 @@ export default (state = {
   if (action.type === UPDATE_CODE) {
     return {
       ...state,
-      code: { ...state.code, [action.payload.key]: action.payload.code }
+      code: { ...state.code, [action.payload.key]: action.payload.code },
     };
   }
   if (action.type === RUN_TESTS_START) {

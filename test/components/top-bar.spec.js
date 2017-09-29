@@ -16,9 +16,8 @@ describe('<TopBar />', () => {
 
   it('should render to a <header> containing an <h2> with the title', () => {
     const component = render(<TopBar title="Blah blah blah" />);
-    const $header = component.children().first();
-    expect($header.get(0).tagName).toBe('header');
-    expect($header.hasClass('mui-fixed')).toBe(true);
+    expect(component.get(0).tagName).toBe('header');
+    expect(component.hasClass('mui-fixed')).toBe(true);
     expect(component.find('h2').text()).toBe('Blah blah blah');
   });
 

@@ -64,7 +64,8 @@ const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid
 const runTests = props => () => {
   const { auth, match, progress, exercise, id } = props;
   const progressPath = matchParamsToPath(auth.uid, match.params);
-  const code = props.code[progressPath] || (progress || {}).code || getBoilerplate(exercise.files, id);
+  const boilerplate = getBoilerplate(exercise.files, id);
+  const code = props.code[progressPath] || (progress || {}).code || boilerplate;
   const tests = exercise.files.test;
   const worker = new Worker('/worker.js');
   const ref = props.firebase.database().ref(progressPath);
@@ -98,7 +99,8 @@ const Exercise = (props) => {
   const progress = props.progress || {};
   const { exercise, auth, match, classes } = props;
   const progressPath = matchParamsToPath(auth.uid, match.params);
-  const code = props.code[progressPath] || progress.code || getBoilerplate(exercise.files, props.id);
+  const boilerplate = getBoilerplate(exercise.files, props.id);
+  const code = props.code[progressPath] || progress.code || boilerplate;
 
   return (
     <div>
@@ -171,6 +173,7 @@ Exercise.propTypes = {
     testResults: PropTypes.shape({}),
   }),
   currentTab: PropTypes.number.isRequired,
+  code: PropTypes.shape({}).isRequired,
   testsRunning: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
   updateCode: PropTypes.func.isRequired,
@@ -190,6 +193,7 @@ Exercise.propTypes = {
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   firebase: PropTypes.shape({
     database: PropTypes.func.isRequired,
   }).isRequired,

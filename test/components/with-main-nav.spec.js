@@ -35,17 +35,19 @@ describe('<WithMainNav />', () => {
       />
     );
 
-    expect(component.nodes.length).toBe(1);
-    expect(component.nodes[0].type).toBe('div');
-    expect(component.nodes[0].props.className).toBe('app');
+    const nodes = component.getElements();
+    expect(nodes.length).toBe(1);
+    expect(nodes[0].type).toBe('div');
+    expect(nodes[0].props.className).toBe('app');
 
-    expect(component.children().nodes.length).toBe(2);
-    expect(component.children().nodes[0].type.Naked.name).toBe('MainNav');
-    expect(component.children().nodes[0].type.displayName).toBe('withStyles(MainNav)');
-    expect(component.children().nodes[1].type).toBe('div');
-    expect(component.children().nodes[1].props.className).toBe('main');
-    expect(component.children().nodes[1].props.children.type).toBe(Component);
-    expect(component.children().nodes[1].props.children.type.name).toBe('Component');
+    const childNodes = component.children().getElements();
+    expect(childNodes.length).toBe(2);
+    expect(childNodes[0].type.Naked.name).toBe('MainNav');
+    expect(childNodes[0].type.displayName).toBe('withStyles(MainNav)');
+    expect(childNodes[1].type).toBe('div');
+    expect(childNodes[1].props.className).toBe('main');
+    expect(childNodes[1].props.children.type).toBe(Component);
+    expect(childNodes[1].props.children.type.name).toBe('Component');
   });
 
 });

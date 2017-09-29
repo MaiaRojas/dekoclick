@@ -7,9 +7,9 @@
 
 
 self.importScripts(
-  'https://cdnjs.cloudflare.com/ajax/libs/mocha/3.5.0/mocha.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/mocha/3.5.3/mocha.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/sinon.js/3.2.1/sinon.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/sinon.js/4.0.0/sinon.min.js',
 );
 
 

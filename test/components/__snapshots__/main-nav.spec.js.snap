@@ -2,24 +2,24 @@
 
 exports[`<MainNav /> should print warnings when missing history and firebase props 1`] = `
 "Warning: Failed prop type: The prop \`history\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
-    in MainNav (created by withStyles(MainNav))
+    in MainNav
     in withStyles(MainNav)"
 `;
 
 exports[`<MainNav /> should print warnings when missing history and firebase props 2`] = `
 "Warning: Failed prop type: The prop \`firebase\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
-    in MainNav (created by withStyles(MainNav))
+    in MainNav
     in withStyles(MainNav)"
 `;
 
 exports[`<MainNav /> should print warnings when missing history.push and firebase.logout props 1`] = `
 "Warning: Failed prop type: The prop \`history.push\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
-    in MainNav (created by withStyles(MainNav))
+    in MainNav
     in withStyles(MainNav)"
 `;
 
 exports[`<MainNav /> should print warnings when missing history.push and firebase.logout props 2`] = `
 "Warning: Failed prop type: The prop \`firebase.logout\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
-    in MainNav (created by withStyles(MainNav))
+    in MainNav
     in withStyles(MainNav)"
 `;
