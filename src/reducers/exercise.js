@@ -1,5 +1,6 @@
 // Action types
 const TAB_SELECT = 'lms.laboratoria.la/exercise/TAB_SELECT';
+const UPDATE_CODE = 'lms.laboratoria.la/exercise/UPDATE_CODE';
 const RUN_TESTS_START = 'lms.laboratoria.la/exercise/RUN_TESTS_START';
 const RUN_TESTS_END = 'lms.laboratoria.la/exercise/RUN_TESTS_END';
 
@@ -8,6 +9,11 @@ const RUN_TESTS_END = 'lms.laboratoria.la/exercise/RUN_TESTS_END';
 export const selectTab = id => ({
   type: TAB_SELECT,
   payload: id,
+});
+
+export const updateCode = (key, code) => ({
+  type: UPDATE_CODE,
+  payload: { key, code },
 });
 
 export const runTestsStart = () => ({
@@ -22,10 +28,17 @@ export const runTestsEnd = () => ({
 // Reducer
 export default (state = {
   currentTab: 0,
+  code: {},
   testsRunning: false,
 }, action) => {
   if (action.type === TAB_SELECT) {
     return { ...state, currentTab: action.payload };
+  }
+  if (action.type === UPDATE_CODE) {
+    return {
+      ...state,
+      code: { ...state.code, [action.payload.key]: action.payload.code }
+    };
   }
   if (action.type === RUN_TESTS_START) {
     return { ...state, testsRunning: true };

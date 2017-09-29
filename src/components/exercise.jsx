@@ -16,7 +16,7 @@ import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import { LinearProgress } from 'material-ui/Progress';
-import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
+import { selectTab, updateCode, runTestsStart, runTestsEnd } from '../reducers/exercise';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
@@ -61,17 +61,13 @@ const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
 
 
-const updateCode = (firebase, auth, match) => text => firebase.database()
-  .ref(`${matchParamsToPath(auth.uid, match.params)}/code`)
-  .set(text);
-
-
 const runTests = props => () => {
-  const code = (props.progress || {}).code || getBoilerplate(props.exercise.files, props.id);
-  const tests = props.exercise.files.test;
+  const { auth, match, progress, exercise, id } = props;
+  const progressPath = matchParamsToPath(auth.uid, match.params);
+  const code = props.code[progressPath] || (progress || {}).code || getBoilerplate(exercise.files, id);
+  const tests = exercise.files.test;
   const worker = new Worker('/worker.js');
-  const ref = props.firebase.database()
-    .ref(matchParamsToPath(props.auth.uid, props.match.params));
+  const ref = props.firebase.database().ref(progressPath);
 
   worker.onerror = (event) => {
     ref.set({ code, error: event.message, updatedAt: (new Date()).toJSON() });
@@ -91,23 +87,23 @@ const runTests = props => () => {
 
 
 const reset = props => () => {
-  props.firebase.database()
-    .ref(matchParamsToPath(props.auth.uid, props.match.params))
-    .set({
-      code: getBoilerplate(props.exercise.files, props.id),
-      testResults: null,
-    });
+  const code = getBoilerplate(props.exercise.files, props.id);
+  const progressPath = matchParamsToPath(props.auth.uid, props.match.params);
+  props.updateCode(progressPath, code);
+  props.firebase.database().ref(progressPath).set({ code, testResults: null });
 };
 
 
 const Exercise = (props) => {
   const progress = props.progress || {};
-  const code = progress.code || getBoilerplate(props.exercise.files, props.id);
+  const { exercise, auth, match, classes } = props;
+  const progressPath = matchParamsToPath(auth.uid, match.params);
+  const code = props.code[progressPath] || progress.code || getBoilerplate(exercise.files, props.id);
 
   return (
     <div>
-      <Typography type="display1" gutterBottom component="h2" className={props.classes.title}>
-        {props.exercise.title}
+      <Typography type="display1" gutterBottom component="h2" className={classes.title}>
+        {exercise.title}
       </Typography>
       <AppBar position="static" color="default">
         <Tabs
@@ -123,7 +119,7 @@ const Exercise = (props) => {
       </AppBar>
       {props.currentTab === 0 &&
         <TabContainer>
-          <Content html={props.exercise.body} />
+          <Content html={exercise.body} />
         </TabContainer>
       }
       {props.currentTab === 1 &&
@@ -135,21 +131,21 @@ const Exercise = (props) => {
             theme="github"
             editorProps={{}}
             value={code}
-            onChange={updateCode(props.firebase, props.auth, props.match)}
+            onChange={text => props.updateCode(progressPath, text)}
           />
-          <Button raised className={props.classes.button} onClick={runTests(props)}>
+          <Button raised className={classes.button} onClick={runTests(props)}>
             <PlayArrowIcon />
             Ejecutar tests
           </Button>
-          <Button raised className={props.classes.button} onClick={reset(props)}>
+          <Button raised className={classes.button} onClick={reset(props)}>
             <RefreshIcon />
             Resetear
           </Button>
           {props.testsRunning &&
-            <LinearProgress className={props.classes.linearProgress} />
+            <LinearProgress className={classes.linearProgress} />
           }
           {!props.testsRunning && progress.error &&
-            <Typography className={props.classes.error}>
+            <Typography className={classes.error}>
               <ErrorIcon /> {progress.error}
             </Typography>
           }
@@ -177,6 +173,7 @@ Exercise.propTypes = {
   currentTab: PropTypes.number.isRequired,
   testsRunning: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
+  updateCode: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   runTestsStart: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
@@ -212,11 +209,13 @@ Exercise.defaultProps = {
 
 const mapStateToProps = ({ exercise }) => ({
   currentTab: exercise.currentTab,
+  code: exercise.code,
   testsRunning: exercise.testsRunning,
 });
 
 const mapDispatchToProps = {
   selectTab,
+  updateCode,
   runTestsStart,
   runTestsEnd,
 };
