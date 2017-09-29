@@ -16,6 +16,7 @@ import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import { LinearProgress } from 'material-ui/Progress';
+import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
@@ -56,10 +57,6 @@ const styles = theme => ({
 });
 
 
-const onTabsChange = dispatch => (e, val) =>
-  dispatch({ type: 'EXERCISE_TAB_SELECT', payload: val });
-
-
 const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
 
@@ -79,17 +76,17 @@ const runTests = props => () => {
   worker.onerror = (event) => {
     ref.set({ code, error: event.message, updatedAt: (new Date()).toJSON() });
     worker.terminate();
-    props.dispatch({ type: 'EXERCISE_RUN_TESTS_END' });
+    props.runTestsEnd();
   };
 
   worker.onmessage = (e) => {
     ref.set({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
     worker.terminate();
-    props.dispatch({ type: 'EXERCISE_RUN_TESTS_END' });
+    props.runTestsEnd();
   };
 
   worker.postMessage({ code, tests });
-  props.dispatch({ type: 'EXERCISE_RUN_TESTS_START' });
+  props.runTestsStart();
 };
 
 
@@ -115,7 +112,7 @@ const Exercise = (props) => {
       <AppBar position="static" color="default">
         <Tabs
           value={props.currentTab}
-          onChange={onTabsChange(props.dispatch)}
+          onChange={(e, val) => props.selectTab(val)}
           indicatorColor="primary"
           textColor="primary"
           centered
@@ -179,6 +176,11 @@ Exercise.propTypes = {
   }),
   currentTab: PropTypes.number.isRequired,
   testsRunning: PropTypes.bool.isRequired,
+  selectTab: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  runTestsStart: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  runTestsEnd: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       cohortid: PropTypes.string.isRequired,
@@ -194,7 +196,6 @@ Exercise.propTypes = {
   firebase: PropTypes.shape({
     database: PropTypes.func.isRequired,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     title: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
@@ -209,14 +210,20 @@ Exercise.defaultProps = {
 };
 
 
-const mapStateToProps = ({ exerciseUI }) => ({
-  currentTab: exerciseUI.currentTab,
-  testsRunning: exerciseUI.testsRunning,
+const mapStateToProps = ({ exercise }) => ({
+  currentTab: exercise.currentTab,
+  testsRunning: exercise.testsRunning,
 });
+
+const mapDispatchToProps = {
+  selectTab,
+  runTestsStart,
+  runTestsEnd,
+};
 
 
 export default compose(
   firebaseConnect(),
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(Exercise);

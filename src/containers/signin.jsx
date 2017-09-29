@@ -8,6 +8,15 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import {
+  updateEmail,
+  updatePass,
+  updateEmailError,
+  updatePassError,
+  toggleForgot,
+  updateForgotResult,
+  updateForgotRequested,
+} from '../reducers/signin';
 import SignInResults from '../components/signin-results';
 
 
@@ -41,42 +50,40 @@ const styles = {
 };
 
 
-const isValidEmail = (email, dispatch) => {
+const isValidEmail = (email, error) => {
   let valid = true;
 
   if (email === '') {
-    dispatch({ type: 'UPDATE_EMAIL_ERROR', payload: 'Debes ingresar un correo' });
+    error('Debes ingresar un correo');
     valid = false;
   } else if (!emailPattern.test(email)) {
-    dispatch({ type: 'UPDATE_EMAIL_ERROR', payload: 'Debes ingresar un correo válido' });
+    error('Debes ingresar un correo válido');
     valid = false;
   } else {
-    dispatch({ type: 'UPDATE_EMAIL_ERROR', payload: '' });
+    error('');
   }
 
   return valid;
 };
 
 
-const isValidPassword = (password, dispatch) => {
+const isValidPassword = (password, error) => {
   let valid = true;
 
   if (password === '') {
-    dispatch({
-      type: 'UPDATE_PASS_ERROR',
-      payload: 'Debes ingresar una contraseña válida',
-    });
+    error('Debes ingresar una contraseña válida');
     valid = false;
   } else {
-    dispatch({ type: 'UPDATE_PASS_ERROR', payload: '' });
+    error('');
   }
 
   return valid;
 };
 
 
-const isValid = ({ email, password, dispatch }) => () =>
-  isValidEmail(email, dispatch) && isValidPassword(password, dispatch);
+const isValid = ({ email, password, ...props }) => () =>
+  isValidEmail(email, props.updateEmailError) &&
+    isValidPassword(password, props.updatePassError);
 
 
 const SignIn = props => (
@@ -86,10 +93,11 @@ const SignIn = props => (
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (props.forgot && isValidEmail(props.email, props.dispatch)) {
+          if (props.forgot && isValidEmail(props.email, props.updateEmailError)) {
+            props.updateForgotRequested();
             props.firebase.auth().sendPasswordResetEmail(props.email)
-              .then(() => props.dispatch({ type: 'UPDATE_FORGOT_RESULT', payload: { success: true } }))
-              .catch(error => props.dispatch({ type: 'UPDATE_FORGOT_RESULT', payload: { error } }));
+              .then(() => props.updateForgotResult({ success: true }))
+              .catch(error => props.updateForgotResult({ error }));
           } else if (!props.forgot && isValid(props)()) {
             props.firebase.login({ email: props.email, password: props.password });
           }
@@ -103,7 +111,7 @@ const SignIn = props => (
             value={props.email}
             error={props.emailError !== ''}
             helperText={props.emailError}
-            onChange={e => props.dispatch({ type: 'UPDATE_EMAIL', payload: e.target.value })}
+            onChange={e => props.updateEmail(e.target.value)}
             onBlur={isValid(props)}
             fullWidth
             margin="normal"
@@ -116,7 +124,7 @@ const SignIn = props => (
               type="password"
               error={props.passwordError !== ''}
               helperText={props.passwordError}
-              onChange={e => props.dispatch({ type: 'UPDATE_PASS', payload: e.target.value })}
+              onChange={e => props.updatePass(e.target.value)}
               onBlur={isValid(props)}
               fullWidth
               autoComplete="current-password"
@@ -128,6 +136,7 @@ const SignIn = props => (
           type="submit"
           raised
           color="primary"
+          disabled={props.forgot && props.forgotRequested}
           className={props.classes.submitBtn}
         >
           {props.forgot ? 'Restaurar contraseña' : 'Ingresar'}
@@ -143,7 +152,7 @@ const SignIn = props => (
           href="/"
           onClick={(e) => {
             e.preventDefault();
-            props.dispatch({ type: 'TOGGLE_FORGOT' });
+            props.toggleForgot();
             return false;
           }}
         >
@@ -161,12 +170,20 @@ SignIn.propTypes = {
   emailError: PropTypes.string.isRequired,
   passwordError: PropTypes.string.isRequired,
   forgot: PropTypes.bool.isRequired,
+  forgotRequested: PropTypes.bool,
   forgotResult: PropTypes.shape({}),
+  updateEmail: PropTypes.func.isRequired,
+  updatePass: PropTypes.func.isRequired,
+  updateEmailError: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  updatePassError: PropTypes.func.isRequired,
+  toggleForgot: PropTypes.func.isRequired,
+  updateForgotRequested: PropTypes.func.isRequired,
+  updateForgotResult: PropTypes.func.isRequired,
   authError: PropTypes.shape({
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
-  dispatch: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
     login: PropTypes.func.isRequired,
     auth: PropTypes.func.isRequired,
@@ -182,22 +199,35 @@ SignIn.propTypes = {
 
 SignIn.defaultProps = {
   authError: undefined,
+  forgotRequested: false,
   forgotResult: undefined,
 };
 
 
-const mapStateToProps = ({ signinUI }) => ({
-  email: signinUI.email,
-  password: signinUI.password,
-  emailError: signinUI.emailError,
-  passwordError: signinUI.passwordError,
-  forgot: signinUI.forgot,
-  forgotResult: signinUI.forgotResult,
+const mapStateToProps = ({ signin }) => ({
+  email: signin.email,
+  password: signin.password,
+  emailError: signin.emailError,
+  passwordError: signin.passwordError,
+  forgot: signin.forgot,
+  forgotRequested: signin.forgotRequested,
+  forgotResult: signin.forgotResult,
 });
 
 
+const mapDispatchToProps = {
+  updateEmail,
+  updatePass,
+  updateEmailError,
+  updatePassError,
+  toggleForgot,
+  updateForgotRequested,
+  updateForgotResult,
+};
+
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   firebaseConnect(),
   withStyles(styles),
 )(SignIn);
