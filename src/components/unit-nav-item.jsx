@@ -24,18 +24,20 @@ const styles = {
 };
 
 
-const partTypeToIcon = type => {
+const partTypeToIcon = (type) => {
   if (type === 'quiz') {
     return <PollIcon />;
-  } else if (type === 'seminario') {
-    return <SchoolIcon />;
-  } else if (type === 'practice') {
-    return <CodeIcon />;
-  } else if (type === 'taller') {
-    return <BuildIcon />;
-  } else {
-    return <SubjectIcon />;
   }
+  if (type === 'seminario') {
+    return <SchoolIcon />;
+  }
+  if (type === 'practice') {
+    return <CodeIcon />;
+  }
+  if (type === 'taller') {
+    return <BuildIcon />;
+  }
+  return <SubjectIcon />;
 };
 
 
@@ -43,21 +45,17 @@ const progressToIcon = (part, progress) => {
   if (part.type === 'quiz') {
     if (progress && progress.results) {
       return <DoneIcon />;
-    } else {
-      return null;
     }
+    return null;
   } else if (part.type === 'practice') {
     const stats = Object.keys(part.exercises).reduce((memo, key) => {
       if (progress && progress[key] && progress[key].testResults) {
         if (progress[key].testResults.failures) {
-          memo.incomplete += 1;
-        } else {
-          memo.complete += 1;
+          return { ...memo, incomplete: memo.incomplete + 1 };
         }
-      } else {
-        memo.pending += 1;
+        return { ...memo, complete: memo.complete + 1 };
       }
-      return memo;
+      return { ...memo, pending: memo.pending + 1 };
     }, { pending: 0, incomplete: 0, complete: 0 });
     if (!stats.pending && !stats.incomplete) {
       return <DoneIcon />;
@@ -81,7 +79,7 @@ const UnitNavItem = props => (
     </ListItemIcon>
     <ListItemText primary={`${props.order}. ${props.part.title}`} />
     <ListItemSecondaryAction>
-      <IconButton disabled={true}>
+      <IconButton disabled>
         {progressToIcon(props.part, props.progress)}
       </IconButton>
     </ListItemSecondaryAction>
@@ -90,13 +88,29 @@ const UnitNavItem = props => (
 
 
 UnitNavItem.propTypes = {
+  partid: PropTypes.string.isRequired,
   part: PropTypes.shape({
     title: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
+  progress: PropTypes.shape({}),
+  classes: PropTypes.shape({
+    active: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
   order: PropTypes.number.isRequired,
+};
+
+
+UnitNavItem.defaultProps = {
+  progress: undefined,
 };
 
 

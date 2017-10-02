@@ -40,21 +40,21 @@ const styles = {
 
 const nameToInitials = (name = '') => name.split(' ').reduce((memo, item) => {
   if (memo.length < 3) {
-    return memo += item[0].toUpperCase();
+    return memo + item[0].toUpperCase();
   }
   return memo;
 }, '');
 
 
-const getName = ({ profile, auth }) =>
+const getName = (auth, profile) =>
   (profile || {}).name || auth.displayName;
 
 
-const getEmail = ({ profile, auth }) =>
+const getEmail = (auth, profile) =>
   (profile || {}).email || auth.email;
 
 
-const MainNav = props => console.log('MainNav', props.match.path) || (
+const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
       <ListItem>
@@ -67,12 +67,12 @@ const MainNav = props => console.log('MainNav', props.match.path) || (
       <Divider />
       <ListItem className={props.classes.profileBadge}>
         <Avatar>
-          {nameToInitials(getName(props))}
+          {nameToInitials(getName(props.auth, props.profile))}
         </Avatar>
         <ListItemText
           classes={{ text: props.classes.profileBadgeText }}
-          primary={getName(props)}
-          secondary={getEmail(props)}
+          primary={getName(props.auth, props.profile)}
+          secondary={getEmail(props.auth, props.profile)}
         />
       </ListItem>
       <Divider />
@@ -122,6 +122,13 @@ MainNav.propTypes = {
   classes: PropTypes.shape({
     list: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
+    profileBadge: PropTypes.string.isRequired,
+    profileBadgeText: PropTypes.string.isRequired,
+    active: PropTypes.string.isRequired,
+    bottom: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    path: PropTypes.string.isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,

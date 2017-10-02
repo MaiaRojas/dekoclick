@@ -51,6 +51,7 @@ UnitNav.propTypes = {
     title: PropTypes.string.isRequired,
     parts: PropTypes.shape({}).isRequired,
   }).isRequired,
+  progress: PropTypes.shape({}),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -62,6 +63,11 @@ UnitNav.propTypes = {
   classes: PropTypes.shape({
     list: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+UnitNav.defaultProps = {
+  progress: null,
 };
 
 

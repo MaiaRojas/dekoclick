@@ -6,18 +6,32 @@ import MainNav from '../../src/components/main-nav';
 
 describe('<MainNav />', () => {
 
-  it('should print warnings when missing history and firebase props', () => {
+  it('should throw when missing props.auth and warn for missing props', () => {
     const stub = sinon.stub(console, 'error');
-    const component = render(<MainNav />);
-		expect(stub.getCalls().length).toBe(2);
+    expect(() => render(<MainNav />)).toThrow();
+    expect(stub.getCalls().length).toBe(4);
     expect(stub.getCall(0).args[0]).toMatchSnapshot();
     expect(stub.getCall(1).args[0]).toMatchSnapshot();
+    expect(stub.getCall(2).args[0]).toMatchSnapshot();
+    expect(stub.getCall(3).args[0]).toMatchSnapshot();
     stub.restore();
-	});
+  });
+
+  it('should throw when missing props.match', () => {
+    expect(() => render(
+      <MainNav auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }} />
+    )).toThrow();
+  });
 
   it('should print warnings when missing history.push and firebase.logout props', () => {
     const stub = sinon.stub(console, 'error');
-    const component = render(<MainNav history={{}} firebase={{}} />);
+    const component = render(
+      <MainNav
+        auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }}
+        match={{ path: '/' }}
+        history={{}}
+        firebase={{}} />
+    );
 		expect(stub.getCalls().length).toBe(2);
     expect(stub.getCall(0).args[0]).toMatchSnapshot();
     expect(stub.getCall(1).args[0]).toMatchSnapshot();
@@ -27,6 +41,8 @@ describe('<MainNav />', () => {
   it('should render a <LeftDrawer> with a <List>', () => {
     const component = shallow(
       <MainNav
+        auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }}
+        match={{ path: '/' }}
         history={{ push: () => {} }}
         firebase={{ logout: () => {} }}
       />
@@ -42,14 +58,18 @@ describe('<MainNav />', () => {
   it('should render a <List> with array of <ListItem>s or <Divider>s', () => {
     const component = shallow(
       <MainNav
+        auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }}
+        match={{ path: '/' }}
         history={{ push: () => {} }}
         firebase={{ logout: () => {} }}
       />
     ).dive();
 
     const el = component.getElement();
-    expect(el.props.children.props.children.length).toBe(6);
-    el.props.children.props.children.forEach(child => {
+    expect(el.props.children.props.children.length).toBe(7);
+    const lastChild = el.props.children.props.children[el.props.children.props.children.length - 1];
+    expect(lastChild.type).toBe('div');
+    el.props.children.props.children.slice(0, -1).forEach(child => {
       expect(['ListItem', 'Divider'].indexOf(child.type.Naked.name) > -1).toBe(true);
       expect(['withStyles(ListItem)', 'withStyles(Divider)'].indexOf(child.type.displayName) > -1).toBe(true);
     });

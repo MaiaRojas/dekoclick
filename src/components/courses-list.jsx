@@ -17,10 +17,8 @@ const CoursesList = (props) => {
     return (<div>No courses :-(</div>);
   }
 
-  console.log(props);
-
   return (<div>
-    <Typography type="headline" gutterBottom={true} style={{marginBottom: 20}}>
+    <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
       {props.cohort}
     </Typography>
     {Object.keys(props.courses).map(key =>

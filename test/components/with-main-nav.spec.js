@@ -17,7 +17,13 @@ describe('<WithMainNav />', () => {
   it('should print warnings when missing history and firebase props', () => {
     const stub = sinon.stub(console, 'error');
     const Component = props => (<div className="my-component">hello world</div>);
-    const component = render(<WithMainNav component={Component} />);
+    const component = render(
+      <WithMainNav
+        component={Component}
+        auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }}
+        match={{ path: '/' }}
+      />
+    );
 		expect(stub.getCalls().length).toBe(2);
     expect(stub.getCall(0).args[0]).toMatchSnapshot();
     expect(stub.getCall(1).args[0]).toMatchSnapshot();
