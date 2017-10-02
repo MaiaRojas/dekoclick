@@ -34,8 +34,9 @@ const UnitNav = (props) => {
             key={key}
             partid={key}
             order={idx}
-            match={props.match}
             part={props.unit.parts[key]}
+            progress={(props.progress || {})[key]}
+            match={props.match}
             history={props.history}
           />),
         )}

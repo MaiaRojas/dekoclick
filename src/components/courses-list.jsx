@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
+import Typography from 'material-ui/Typography';
 import CourseCard from './course-card';
 
 
@@ -16,7 +17,12 @@ const CoursesList = (props) => {
     return (<div>No courses :-(</div>);
   }
 
+  console.log(props);
+
   return (<div>
+    <Typography type="headline" gutterBottom={true} style={{marginBottom: 20}}>
+      {props.cohort}
+    </Typography>
     {Object.keys(props.courses).map(key =>
       (<CourseCard
         key={key}

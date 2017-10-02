@@ -14,13 +14,13 @@ import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
 import SignIn from './signin';
 import Dashboard from './dashboard';
-import Account from './account';
+import Settings from './settings';
 import Course from './course';
 import Unit from './unit';
 
 
 const App = (props) => {
-  if (!isLoaded(props.auth)) {
+  if (!isLoaded(props.auth) || !isLoaded(props.profile)) {
     return (<CircularProgress />);
   }
 
@@ -43,7 +43,7 @@ const App = (props) => {
             component={Course}
             {...props}
           />
-          <WrappedRoute path="/account" component={Account} {...props} />
+          <WrappedRoute path="/settings" component={Settings} {...props} />
           <WrappedRoute exact path="/" component={Dashboard} {...props} />
         </Switch>
       </ScrollToTop>
@@ -58,18 +58,21 @@ App.propTypes = {
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
+  profile: PropTypes.shape({}),
 };
 
 
 App.defaultProps = {
   auth: undefined,
   authError: undefined,
+  profile: {},
 };
 
 
 const mapStateToProps = ({ firebase }) => ({
   authError: pathToJS(firebase, 'authError'),
   auth: pathToJS(firebase, 'auth'),
+  profile: pathToJS(firebase, 'profile'),
 });
 
 
