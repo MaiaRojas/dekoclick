@@ -47,7 +47,7 @@ const Unit = (props) => {
   const progress = (props.progress || {})[partid] || {};
 
   let Component = UnitPart;
-  if (part.type === 'practice') {
+  if (part.type === 'practice' && part.exercises) {
     Component = UnitExercises;
   } else if (part.type === 'quiz') {
     Component = Quiz;

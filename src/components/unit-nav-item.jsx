@@ -47,7 +47,7 @@ const progressToIcon = (part, progress) => {
       return <DoneIcon />;
     }
     return null;
-  } else if (part.type === 'practice') {
+  } else if (part.type === 'practice' && part.exercises) {
     const stats = Object.keys(part.exercises).reduce((memo, key) => {
       if (progress && progress[key] && progress[key].testResults) {
         if (progress[key].testResults.failures) {

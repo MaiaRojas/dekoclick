@@ -5,16 +5,28 @@ import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
+import FolderIcon from 'material-ui-icons/FolderOpen';
 
 
 const styles = {
   card: {
     marginBottom: 32,
   },
+  cardActions: {
+    justifyContent: 'space-between',
+  },
+  count: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  countText: {
+    display: 'inline-block',
+    marginLeft: 6,
+  },
 };
 
 
-const UnitCard = props => (
+const UnitCard = props => console.log('UnitCard', props) || (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="subheading" component="h3">
@@ -26,13 +38,21 @@ const UnitCard = props => (
         dangerouslySetInnerHTML={{ __html: props.unit.description }}
       />
     </CardContent>
-    <CardActions>
+    <CardActions className={props.classes.cardActions}>
+      <div className={props.classes.count}>
+        <FolderIcon />
+        <Typography className={props.classes.countText}>
+          {Object.keys(props.unit.parts).length} partes
+        </Typography>
+      </div>
       <Button
         dense
+        raised
+        color="primary"
         to={`/cohorts/${props.cohort}/courses/${props.course}/${props.id}`}
         component={Link}
       >
-        Empezar
+        {props.progress ? 'Continuar' : 'Empezar'}
       </Button>
     </CardActions>
   </Card>

@@ -5,11 +5,23 @@ import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import FolderIcon from 'material-ui-icons/FolderOpen';
 
 
 const styles = {
   card: {
     marginBottom: 32,
+  },
+  cardActions: {
+    justifyContent: 'space-between',
+  },
+  count: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  countText: {
+    display: 'inline-block',
+    marginLeft: 6,
   },
 };
 
@@ -21,9 +33,17 @@ const CourseCard = props => (
         {props.course.title}
       </Typography>
     </CardContent>
-    <CardActions>
+    <CardActions className={props.classes.cardActions}>
+      <div className={props.classes.count}>
+        <FolderIcon />
+        <Typography className={props.classes.countText}>
+          {Object.keys(props.course.syllabus).length} unidades
+        </Typography>
+      </div>
       <Button
+        raised
         dense
+        color="primary"
         to={`/cohorts/${props.cohort}/courses/${props.id}`}
         component={Link}
       >

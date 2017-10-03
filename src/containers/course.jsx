@@ -9,7 +9,7 @@ import UnitCard from '../components/unit-card';
 
 
 const Course = (props) => {
-  if (!isLoaded(props.course)) {
+  if (!isLoaded(props.course) || !isLoaded(props.progress)) {
     return (<CircularProgress />);
   }
 
@@ -27,6 +27,7 @@ const Course = (props) => {
             id={key}
             idx={idx}
             unit={props.course.syllabus[key]}
+            progress={(props.progress || {})[key]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
           />),
@@ -42,6 +43,7 @@ Course.propTypes = {
     title: PropTypes.string.isRequired,
     syllabus: PropTypes.shape({}).isRequired,
   }),
+  progress: PropTypes.shape({}),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseid: PropTypes.string.isRequired,
@@ -53,19 +55,28 @@ Course.propTypes = {
 
 Course.defaultProps = {
   course: undefined,
+  progress: undefined,
 };
 
 
-const matchParamsToPath = ({ cohortid, courseid }) =>
+const matchParamsToCoursePath = ({ cohortid, courseid }) =>
   `cohortCourses/${cohortid}/${courseid}`;
 
 
-const mapStateToProps = ({ firebase }, { match }) => ({
-  course: dataToJS(firebase, matchParamsToPath(match.params)),
+const matchParamsToProgressPath = (uid, { cohortid, courseid }) =>
+  `cohortProgress/${cohortid}/${uid}/${courseid}`;
+
+
+const mapStateToProps = ({ firebase }, { auth, match }) => ({
+  course: dataToJS(firebase, matchParamsToCoursePath(match.params)),
+  progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
 });
 
 
 export default compose(
-  firebaseConnect(({ match }) => [matchParamsToPath(match.params)]),
+  firebaseConnect(({ auth, match }) => [
+    matchParamsToCoursePath(match.params),
+    matchParamsToProgressPath(auth.uid, match.params),
+  ]),
   connect(mapStateToProps),
 )(Course);
