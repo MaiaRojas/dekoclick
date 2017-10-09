@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import CourseCard from './course-card';
 
 
-const CoursesList = (props) => {
+const CoursesList = (props) =>  {
   if (!isLoaded(props.courses)) {
     return (<CircularProgress />);
   }
@@ -16,6 +16,8 @@ const CoursesList = (props) => {
   if (isEmpty(props.courses)) {
     return (<div>No courses :-(</div>);
   }
+
+  console.log('CoursesList', props.coursesStats)
 
   return (<div>
     <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
@@ -27,6 +29,7 @@ const CoursesList = (props) => {
         id={key}
         cohort={props.cohort}
         course={props.courses[key]}
+        courseStats={props.coursesStats[key]}
       />),
     )}
   </div>);
@@ -49,7 +52,8 @@ export default compose(
   firebaseConnect(props => ([
     `cohortCourses/${props.cohort}`,
   ])),
-  connect(({ firebase }, ownProps) => ({
+  connect(({ firebase, coursesStats }, ownProps) => ({
     courses: dataToJS(firebase, `cohortCourses/${ownProps.cohort}`),
+    coursesStats,
   }), {}),
 )(CoursesList);

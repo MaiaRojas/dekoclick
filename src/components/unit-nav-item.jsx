@@ -42,7 +42,11 @@ const partTypeToIcon = (type) => {
 
 
 const progressToIcon = (part, progress) => {
-  if (part.type === 'quiz') {
+  if (part.type === 'lectura') {
+    if (progress && progress.seenAt) {
+      // FIXME: ...
+    }
+  } else if (part.type === 'quiz') {
     if (progress && progress.results) {
       return <DoneIcon />;
     }

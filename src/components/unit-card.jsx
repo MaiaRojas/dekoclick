@@ -6,6 +6,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import FolderIcon from 'material-ui-icons/FolderOpen';
+import ScheduleIcon from 'material-ui-icons/Schedule';
 
 
 const styles = {
@@ -26,7 +27,7 @@ const styles = {
 };
 
 
-const UnitCard = props => console.log('UnitCard', props) || (
+const UnitCard = props => console.log(props) || (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="subheading" component="h3">
@@ -42,9 +43,15 @@ const UnitCard = props => console.log('UnitCard', props) || (
       <div className={props.classes.count}>
         <FolderIcon />
         <Typography className={props.classes.countText}>
-          {Object.keys(props.unit.parts).length} partes
+          {Object.keys(props.unit.parts || {}).length} partes
         </Typography>
       </div>
+      {props.stats && <div className={props.classes.count}>
+        <ScheduleIcon />
+        <Typography className={props.classes.countText}>
+          Duración estimada: {props.stats}
+        </Typography>
+      </div>}
       <Button
         dense
         raised

@@ -4,6 +4,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
+import Avatar from 'material-ui/Avatar';
+import Chip from 'material-ui/Chip';
+import ScheduleIcon from 'material-ui-icons/Schedule';
 import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
 
@@ -17,9 +20,16 @@ const Course = (props) => {
     return (<div>No course :-(</div>);
   }
 
+  console.log(props.stats);
+
   return (
     <div className="course">
-      <TopBar title={props.course.title} />
+      <TopBar title={props.course.title}>
+        <Chip
+          avatar={<Avatar><ScheduleIcon /></Avatar>}
+          label={props.stats.duration}
+        />
+      </TopBar>
       <div>
         {Object.keys(props.course.syllabus).sort().map((key, idx) =>
           (<UnitCard
@@ -28,6 +38,7 @@ const Course = (props) => {
             idx={idx}
             unit={props.course.syllabus[key]}
             progress={(props.progress || {})[key]}
+            stats={props.stats.units[key]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
           />),
@@ -67,9 +78,10 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}`;
 
 
-const mapStateToProps = ({ firebase }, { auth, match }) => ({
+const mapStateToProps = ({ firebase, coursesStats }, { auth, match }) => ({
   course: dataToJS(firebase, matchParamsToCoursePath(match.params)),
   progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
+  stats: coursesStats[match.params.courseid],
 });
 
 

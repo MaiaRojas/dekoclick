@@ -6,6 +6,7 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import FolderIcon from 'material-ui-icons/FolderOpen';
+import ScheduleIcon from 'material-ui-icons/Schedule';
 
 
 const styles = {
@@ -26,7 +27,7 @@ const styles = {
 };
 
 
-const CourseCard = props => (
+const CourseCard = props => console.log('CourseCard', props) || (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="subheading" component="h3">
@@ -38,6 +39,12 @@ const CourseCard = props => (
         <FolderIcon />
         <Typography className={props.classes.countText}>
           {Object.keys(props.course.syllabus).length} unidades
+        </Typography>
+      </div>
+      <div className={props.classes.count}>
+        <ScheduleIcon />
+        <Typography className={props.classes.countText}>
+          Duración estimada: {props.courseStats.duration}
         </Typography>
       </div>
       <Button
