@@ -20,7 +20,7 @@ const Course = (props) => {
     return (<div>No course :-(</div>);
   }
 
-  console.log(props.stats);
+  // console.log(props.stats);
 
   return (
     <div className="course">

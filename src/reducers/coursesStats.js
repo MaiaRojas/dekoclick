@@ -1,3 +1,22 @@
+const isFloat = n => Number(n) === n && n % 1 !== 0;
+
+
+const minutesToHuman = minutes => {
+  if (minutes > 60) {
+    let hours = minutes / 60;
+    if (isFloat(hours)) {
+      hours = hours.toFixed(1);
+      const hourParts = `${hours}`.split('.');
+      if (parseInt(hourParts[1], 10) === 0) {
+        hours = hourParts[0];
+      }
+    }
+    return `${hours}h`;
+  }
+  return `${minutes}min`;
+};
+
+
 const unitStats = unit => Object.keys(unit.parts || {}).reduce(
   (memo, partName) => {
     if (unit.parts[partName] && unit.parts[partName].duration) {
@@ -7,18 +26,14 @@ const unitStats = unit => Object.keys(unit.parts || {}).reduce(
   }, 0);
 
 
-const courseStats = course => Object.keys(course.syllabus).reduce(
+const courseStats = course => Object.keys(course.syllabus || {}).reduce(
   (memo, unitName, idx) => {
     memo.units[unitName] = unitStats(course.syllabus[unitName]);
     memo.duration += memo.units[unitName];
     if (idx === Object.keys(course.syllabus).length - 1) {
-      memo.duration = `${(memo.duration / 60).toFixed(1)}h`;
+      memo.duration = minutesToHuman(memo.duration);
       Object.keys(memo.units).forEach(unitName => {
-        if (memo.units[unitName] > 60) {
-          memo.units[unitName] = `${(memo.units[unitName] / 60).toFixed(1)}h`;
-        } else {
-          memo.units[unitName] =`${memo.units[unitName]}min`;
-        }
+        memo.units[unitName] = minutesToHuman(memo.units[unitName]);
       });
     }
     return memo;

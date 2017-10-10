@@ -17,8 +17,6 @@ const CoursesList = (props) =>  {
     return (<div>No courses :-(</div>);
   }
 
-  console.log('CoursesList', props.coursesStats)
-
   return (<div>
     <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
       {props.cohort}

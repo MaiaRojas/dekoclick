@@ -27,7 +27,7 @@ const styles = {
 };
 
 
-const UnitCard = props => console.log(props) || (
+const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="subheading" component="h3">
