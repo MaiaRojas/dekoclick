@@ -3,7 +3,6 @@ import { routerReducer as router } from 'react-router-redux';
 import { firebaseStateReducer as firebase } from 'react-redux-firebase';
 import signin from './signin';
 import exercise from './exercise';
-import coursesStats from './coursesStats';
 
 
 export default combineReducers({
@@ -11,5 +10,4 @@ export default combineReducers({
   router,
   signin,
   exercise,
-  coursesStats,
 });

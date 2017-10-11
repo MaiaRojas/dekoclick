@@ -27,6 +27,11 @@ const styles = {
 };
 
 
+const partCount = ({ stats, parts }) => {
+  return (stats && stats.partCount) ? stats.partCount : Object.keys(parts).length;
+};
+
+
 const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
@@ -43,15 +48,17 @@ const UnitCard = props => (
       <div className={props.classes.count}>
         <FolderIcon />
         <Typography className={props.classes.countText}>
-          {Object.keys(props.unit.parts || {}).length} partes
+          {partCount(props.unit)} partes
         </Typography>
       </div>
-      {props.stats && <div className={props.classes.count}>
-        <ScheduleIcon />
-        <Typography className={props.classes.countText}>
-          Duración estimada: {props.stats}
-        </Typography>
-      </div>}
+      {props.unit.stats && props.unit.stats.durationString &&
+        <div className={props.classes.count}>
+          <ScheduleIcon />
+          <Typography className={props.classes.countText}>
+            Duración estimada: {props.unit.stats.durationString}
+          </Typography>
+        </div>
+      }
       <Button
         dense
         raised
@@ -74,7 +81,6 @@ UnitCard.propTypes = {
     parts: PropTypes.shape({}).isRequired,
   }).isRequired,
   progress: PropTypes.shape({}),
-  stats: PropTypes.shape({}).isRequired,
   cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,

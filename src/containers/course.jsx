@@ -20,15 +20,15 @@ const Course = (props) => {
     return (<div>No course :-(</div>);
   }
 
-  // console.log(props.stats);
-
   return (
     <div className="course">
       <TopBar title={props.course.title}>
-        <Chip
-          avatar={<Avatar><ScheduleIcon /></Avatar>}
-          label={props.stats.duration}
-        />
+        {props.course.stats && props.course.stats.durationString &&
+          <Chip
+            avatar={<Avatar><ScheduleIcon /></Avatar>}
+            label={props.course.stats.durationString}
+          />
+        }
       </TopBar>
       <div>
         {Object.keys(props.course.syllabus).sort().map((key, idx) =>
@@ -38,7 +38,6 @@ const Course = (props) => {
             idx={idx}
             unit={props.course.syllabus[key]}
             progress={(props.progress || {})[key]}
-            stats={props.stats.units[key]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
           />),
@@ -55,10 +54,6 @@ Course.propTypes = {
     syllabus: PropTypes.shape({}).isRequired,
   }),
   progress: PropTypes.shape({}),
-  stats: PropTypes.shape({
-    duration: PropTypes.number.isRequired,
-    units: PropTypes.shape({}).isRequired,
-  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseid: PropTypes.string.isRequired,
@@ -71,7 +66,6 @@ Course.propTypes = {
 Course.defaultProps = {
   course: undefined,
   progress: undefined,
-  stats: undefined,
 };
 
 
@@ -83,10 +77,9 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}`;
 
 
-const mapStateToProps = ({ firebase, coursesStats }, { auth, match }) => ({
+const mapStateToProps = ({ firebase }, { auth, match }) => ({
   course: dataToJS(firebase, matchParamsToCoursePath(match.params)),
   progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
-  stats: coursesStats[match.params.courseid],
 });
 
 

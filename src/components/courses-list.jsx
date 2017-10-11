@@ -27,7 +27,6 @@ const CoursesList = (props) => {
         id={key}
         cohort={props.cohort}
         course={props.courses[key]}
-        courseStats={props.coursesStats[key]}
       />),
     )}
   </div>);
@@ -36,14 +35,12 @@ const CoursesList = (props) => {
 
 CoursesList.propTypes = {
   courses: PropTypes.shape({}),
-  coursesStats: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,
 };
 
 
 CoursesList.defaultProps = {
   courses: undefined,
-  coursesStats: undefined,
 };
 
 
@@ -52,8 +49,7 @@ export default compose(
   firebaseConnect(props => ([
     `cohortCourses/${props.cohort}`,
   ])),
-  connect(({ firebase, coursesStats }, ownProps) => ({
+  connect(({ firebase }, ownProps) => ({
     courses: dataToJS(firebase, `cohortCourses/${ownProps.cohort}`),
-    coursesStats,
   }), {}),
 )(CoursesList);

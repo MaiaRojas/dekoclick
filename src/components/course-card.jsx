@@ -27,6 +27,11 @@ const styles = {
 };
 
 
+const unitCount = ({ stats, syllabus }) => {
+  return (stats && stats.unitCount) ? stats.unitCount : Object.keys(syllabus).length;
+};
+
+
 const CourseCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
@@ -38,15 +43,17 @@ const CourseCard = props => (
       <div className={props.classes.count}>
         <FolderIcon />
         <Typography className={props.classes.countText}>
-          {Object.keys(props.course.syllabus).length} unidades
+          {unitCount(props.course)} unidades
         </Typography>
       </div>
-      <div className={props.classes.count}>
-        <ScheduleIcon />
-        <Typography className={props.classes.countText}>
-          Duración estimada: {props.courseStats.duration}
-        </Typography>
-      </div>
+      {props.course.stats && props.course.stats.durationString &&
+        <div className={props.classes.count}>
+          <ScheduleIcon />
+          <Typography className={props.classes.countText}>
+            Duración estimada: {props.course.stats.durationString}
+          </Typography>
+        </div>
+      }
       <Button
         raised
         dense
@@ -65,9 +72,7 @@ CourseCard.propTypes = {
   course: PropTypes.shape({
     title: PropTypes.string.isRequired,
     syllabus: PropTypes.shape({}).isRequired,
-  }).isRequired,
-  courseStats: PropTypes.shape({
-    duration: PropTypes.number.isRequired,
+    stats: PropTypes.shape({}),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
