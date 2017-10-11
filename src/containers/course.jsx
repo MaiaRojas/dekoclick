@@ -55,6 +55,10 @@ Course.propTypes = {
     syllabus: PropTypes.shape({}).isRequired,
   }),
   progress: PropTypes.shape({}),
+  stats: PropTypes.shape({
+    duration: PropTypes.number.isRequired,
+    units: PropTypes.shape({}).isRequired,
+  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseid: PropTypes.string.isRequired,
@@ -67,6 +71,7 @@ Course.propTypes = {
 Course.defaultProps = {
   course: undefined,
   progress: undefined,
+  stats: undefined,
 };
 
 

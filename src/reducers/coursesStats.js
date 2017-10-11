@@ -1,7 +1,7 @@
 const isFloat = n => Number(n) === n && n % 1 !== 0;
 
 
-const minutesToHuman = minutes => {
+const minutesToHuman = (minutes) => {
   if (minutes > 60) {
     let hours = minutes / 60;
     if (isFloat(hours)) {
@@ -17,7 +17,7 @@ const minutesToHuman = minutes => {
 };
 
 
-const unitStats = unit => Object.keys(unit.parts || {}).reduce(
+const getUnitStats = unit => Object.keys(unit.parts || {}).reduce(
   (memo, partName) => {
     if (unit.parts[partName] && unit.parts[partName].duration) {
       return memo + unit.parts[partName].duration;
@@ -28,14 +28,23 @@ const unitStats = unit => Object.keys(unit.parts || {}).reduce(
 
 const courseStats = course => Object.keys(course.syllabus || {}).reduce(
   (memo, unitName, idx) => {
-    memo.units[unitName] = unitStats(course.syllabus[unitName]);
-    memo.duration += memo.units[unitName];
+    const unitStats = getUnitStats(course.syllabus[unitName]);
+    const stats = {
+      duration: memo.duration + unitStats,
+      units: {
+        ...memo.units,
+        [unitName]: unitStats,
+      },
+    };
+
+    // If last element convert durations to human
     if (idx === Object.keys(course.syllabus).length - 1) {
-      memo.duration = minutesToHuman(memo.duration);
-      Object.keys(memo.units).forEach(unitName => {
-        memo.units[unitName] = minutesToHuman(memo.units[unitName]);
+      stats.duration = minutesToHuman(stats.duration);
+      Object.keys(stats.units).forEach((key) => {
+        stats.units[key] = minutesToHuman(stats.units[key]);
       });
     }
+
     return memo;
   }, {
     duration: 0,
@@ -59,7 +68,7 @@ export default (state = {}, action) => {
   if (cohort && !course) {
     return Object.keys(action.data).reduce(
       (memo, key) => ({ ...memo, [key]: courseStats(action.data[key]) }),
-      { ...state }
+      { ...state },
     );
   }
 

@@ -64,11 +64,18 @@ const CourseCard = props => (
 CourseCard.propTypes = {
   course: PropTypes.shape({
     title: PropTypes.string.isRequired,
+    syllabus: PropTypes.shape({}).isRequired,
+  }).isRequired,
+  courseStats: PropTypes.shape({
+    duration: PropTypes.number.isRequired,
   }).isRequired,
   cohort: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
+    cardActions: PropTypes.string.isRequired,
+    count: PropTypes.string.isRequired,
+    countText: PropTypes.string.isRequired,
   }).isRequired,
 };
 

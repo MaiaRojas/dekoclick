@@ -71,13 +71,24 @@ UnitCard.propTypes = {
   unit: PropTypes.shape({
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    parts: PropTypes.shape({}).isRequired,
   }).isRequired,
+  progress: PropTypes.shape({}),
+  stats: PropTypes.shape({}).isRequired,
   cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
+    cardActions: PropTypes.string.isRequired,
+    count: PropTypes.string.isRequired,
+    countText: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+UnitCard.defaultProps = {
+  progress: undefined,
 };
 
 

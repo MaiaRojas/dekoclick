@@ -47,7 +47,7 @@ const nameToInitials = (name = '') => name.split(' ').reduce((memo, item) => {
 
 
 const getName = (auth, profile) =>
-  (profile || {}).name || auth.displayName;
+  (profile || {}).name || auth.displayName || '';
 
 
 const getEmail = (auth, profile) =>

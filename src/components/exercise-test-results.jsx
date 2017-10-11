@@ -60,11 +60,11 @@ const Suite = props => (
         <ListItemText primary={props.suite.title} />
       </ListItem>
     }
-    {props.suite.suites && props.suite.suites.map(suite =>
-      <Suite key={suite.title} suite={suite} classes={props.classes} />,
-    )}
     {props.suite.tests && props.suite.tests.map(test =>
       <Test key={test.title} test={test} classes={props.classes} />,
+    )}
+    {props.suite.suites && props.suite.suites.map(suite =>
+      <Suite key={suite.title} suite={suite} classes={props.classes} />,
     )}
   </div>
 );

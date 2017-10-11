@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import CourseCard from './course-card';
 
 
-const CoursesList = (props) =>  {
+const CoursesList = (props) => {
   if (!isLoaded(props.courses)) {
     return (<CircularProgress />);
   }
@@ -36,12 +36,14 @@ const CoursesList = (props) =>  {
 
 CoursesList.propTypes = {
   courses: PropTypes.shape({}),
+  coursesStats: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,
 };
 
 
 CoursesList.defaultProps = {
   courses: undefined,
+  coursesStats: undefined,
 };
 
 

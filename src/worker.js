@@ -32,15 +32,20 @@ const wrapSubmission = str => (new Function(
 
 const wrapTests = str => (new Function(
   'requires',
-  `var require = name => requires[name];${str};;`,
+  `var require = (name) => {
+     if (typeof requires[name] === 'function') {
+       return requires[name]();
+     }
+   };
+   ${str};;`,
 ));
 
 
-const loadTests = (tests, Submission) =>
+const loadTests = (tests, wrappedSubmission) =>
   Object.keys(tests).forEach(key => wrapTests(tests[key])({
-    chai,
-    sinon,
-    [`../solution/${key.replace(/\.spec\.js$/, '')}`]: Submission,
+    chai: () => chai,
+    sinon: () => sinon,
+    [`../solution/${key.replace(/\.spec\.js$/, '')}`]: wrappedSubmission,
   }));
 
 
@@ -70,7 +75,7 @@ const suiteToJSON = suite => ({
 
 
 self.onmessage = (e) => {
-  loadTests(e.data.tests, wrapSubmission(e.data.code)());
+  loadTests(e.data.tests, wrapSubmission(e.data.code));
 
   const runResults = mocha.run();
 
