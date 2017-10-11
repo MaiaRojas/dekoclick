@@ -52,6 +52,9 @@ Course.propTypes = {
   course: PropTypes.shape({
     title: PropTypes.string.isRequired,
     syllabus: PropTypes.shape({}).isRequired,
+    stats: PropTypes.shape({
+      durationString: PropTypes.string.isRequired,
+    }),
   }),
   progress: PropTypes.shape({}),
   match: PropTypes.shape({

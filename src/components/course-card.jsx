@@ -27,9 +27,8 @@ const styles = {
 };
 
 
-const unitCount = ({ stats, syllabus }) => {
-  return (stats && stats.unitCount) ? stats.unitCount : Object.keys(syllabus).length;
-};
+const unitCount = ({ stats, syllabus }) =>
+  (stats && stats.unitCount) || Object.keys(syllabus).length;
 
 
 const CourseCard = props => (
@@ -72,7 +71,9 @@ CourseCard.propTypes = {
   course: PropTypes.shape({
     title: PropTypes.string.isRequired,
     syllabus: PropTypes.shape({}).isRequired,
-    stats: PropTypes.shape({}),
+    stats: PropTypes.shape({
+      durationString: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,

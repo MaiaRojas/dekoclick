@@ -27,9 +27,8 @@ const styles = {
 };
 
 
-const partCount = ({ stats, parts }) => {
-  return (stats && stats.partCount) ? stats.partCount : Object.keys(parts).length;
-};
+const partCount = ({ stats, parts }) =>
+  (stats && stats.partCount) || Object.keys(parts).length;
 
 
 const UnitCard = props => (
@@ -79,6 +78,9 @@ UnitCard.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     parts: PropTypes.shape({}).isRequired,
+    stats: PropTypes.shape({
+      durationString: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   progress: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,

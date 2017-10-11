@@ -39,7 +39,7 @@ const styles = {
 
 
 const nameToInitials = (name = '') => name.split(' ').reduce((memo, item) => {
-  if (memo.length < 3) {
+  if (item[0] && memo.length < 3) {
     return memo + item[0].toUpperCase();
   }
   return memo;
