@@ -12,6 +12,7 @@ import UnitDuration from '../components/unit-duration';
 import UnitPart from '../components/unit-part';
 import UnitExercises from '../components/unit-exercises';
 import Quiz from '../components/quiz';
+import { withTracker } from '../components/unit-part-tracker';
 
 
 const styles = {
@@ -26,6 +27,14 @@ const styles = {
 };
 
 
+const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
+  `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;
+
+
+const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
+  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
+
+
 const Unit = (props) => {
   if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
     return (<CircularProgress />);
@@ -37,7 +46,9 @@ const Unit = (props) => {
 
   const { classes, ...propsMinusClasses } = props;
   const { partid } = props.match.params;
-  const first = Object.keys(props.unit.parts).sort()[0];
+  const partKeys = Object.keys(props.unit.parts).sort();
+  const first = partKeys[0];
+  const last = partKeys[partKeys.length - 1];
 
   if (!partid) {
     return <Redirect to={`${props.match.url}/${first}`} />;
@@ -45,6 +56,12 @@ const Unit = (props) => {
 
   const part = props.unit.parts[partid];
   const progress = (props.progress || {})[partid] || {};
+  const selfAssessment = (props.progress || {}).selfAssessment;
+  const hasGuidedParts = partKeys.reduce(
+    (memo, key) =>
+      memo || ['guiado', 'guided'].indexOf(props.unit.parts[key].format) > -1,
+    false,
+  );
 
   let Component = UnitPart;
   if (part.type === 'practice' && part.exercises) {
@@ -53,6 +70,8 @@ const Unit = (props) => {
     Component = Quiz;
   }
 
+  const TrackedComponent = withTracker()(Component);
+
   return (
     <div className="app">
       <UnitNav {...propsMinusClasses} />
@@ -60,12 +79,14 @@ const Unit = (props) => {
         <TopBar title={part.title}>
           <UnitDuration part={part} progress={progress} />
         </TopBar>
-        <Component
+        <TrackedComponent
           part={part}
           progress={progress}
           match={props.match}
           auth={props.auth}
           firebase={props.firebase}
+          showSelfAssessment={hasGuidedParts && partid === last}
+          selfAssessment={selfAssessment}
         />
       </div>
     </div>
@@ -100,14 +121,6 @@ Unit.defaultProps = {
   unit: undefined,
   progress: undefined,
 };
-
-
-const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
-  `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;
-
-
-const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
-  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
 
 
 const mapStateToProps = ({ firebase }, { auth, match }) => ({

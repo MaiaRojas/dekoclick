@@ -47,7 +47,7 @@ UnitPart.propTypes = {
     type: PropTypes.string.isRequired,
     format: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
-    body: PropTypes.string.isRequired,
+    body: PropTypes.string,
   }).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,

@@ -5,12 +5,24 @@ html, body, .root, .root > div {
   padding: 0;
 }
 
+blockquote {
+  background-color: #f0f0f0;
+  padding: 2px 4px 2px 24px;
+  border-left: 4px solid #ffc107;
+  margin: 16px 0;
+}
+
 code {
   font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace;
   font-size: 13px;
   color: #880000;
   background-color: #f0f0f0;
   padding: 2px 4px;
+}
+
+pre > code {
+  display: block;
+  padding: 0.5em;
 }
 
 .app {
