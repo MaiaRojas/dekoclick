@@ -80,7 +80,7 @@ UnitCard.propTypes = {
     parts: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
-    }).isRequired,
+    }),
   }).isRequired,
   progress: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,

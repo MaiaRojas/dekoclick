@@ -19,20 +19,23 @@ const styles = theme => ({
 });
 
 
-const highlightCode = (str) => {
-  const el = document.createElement('div');
-  el.innerHTML = str;
+const highlightCode = (el) => {
   const nodeList = el.querySelectorAll('pre code');
   if (nodeList.length) {
     nodeList.forEach(node => hljs.highlightBlock(Object.assign(node, {
       className: node.className.replace(/^lang-/, ''),
     })));
   }
-  return el.innerHTML;
+  return el;
 };
 
 
-const parseBody = str => highlightCode(str);
+const parseBody = (str) => {
+  const el = document.createElement('div');
+  el.innerHTML = str;
+  highlightCode(el);
+  return el.innerHTML;
+};
 
 
 const Content = props => (

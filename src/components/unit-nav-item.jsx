@@ -10,6 +10,7 @@ import CodeIcon from 'material-ui-icons/Code';
 import BuildIcon from 'material-ui-icons/Build';
 import DoneIcon from 'material-ui-icons/Done';
 import WarningIcon from 'material-ui-icons/Warning';
+import TimerIcon from 'material-ui-icons/Timer';
 
 
 const propsToRoutePath = ({ partid, match }) =>
@@ -20,6 +21,9 @@ const propsToRoutePath = ({ partid, match }) =>
 const styles = {
   active: {
     backgroundColor: '#ffc107',
+  },
+  unread: {
+    fontWeight: 'bold',
   },
 };
 
@@ -43,12 +47,14 @@ const partTypeToIcon = (type) => {
 
 const progressToIcon = (part, progress) => {
   if (part.type === 'lectura') {
-    if (progress && progress.seenAt) {
-      // FIXME: ...
+    if (progress && progress.readAt) {
+      return <DoneIcon />;
     }
   } else if (part.type === 'quiz') {
     if (progress && progress.results) {
       return <DoneIcon />;
+    } else if (progress) {
+      return <TimerIcon />;
     }
     return null;
   } else if (part.type === 'practice' && part.exercises) {
@@ -81,7 +87,10 @@ const UnitNavItem = props => (
     <ListItemIcon>
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
-    <ListItemText primary={`${props.order}. ${props.part.title}`} />
+    <ListItemText
+      classes={{ text: (props.progress || {}).openedAt ? '' : props.classes.unread }}
+      primary={`${props.order}. ${props.part.title}`}
+    />
     <ListItemSecondaryAction>
       <IconButton disabled>
         {progressToIcon(props.part, props.progress)}
@@ -100,6 +109,7 @@ UnitNavItem.propTypes = {
   progress: PropTypes.shape({}),
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
+    unread: PropTypes.string.isRequired,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
