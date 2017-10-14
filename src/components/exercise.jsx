@@ -16,7 +16,7 @@ import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import { LinearProgress } from 'material-ui/Progress';
-import { selectTab, updateCode, runTestsStart, runTestsEnd } from '../reducers/exercise';
+import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 
@@ -57,15 +57,26 @@ const styles = theme => ({
 });
 
 
-const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid, exerciseid }) =>
-  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
+const matchParamsToPath = (uid, {
+  cohortid,
+  courseid,
+  unitid,
+  partid,
+  exerciseid,
+}) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
 
 
-const runTests = props => () => {
-  const { auth, match, progress, exercise, id } = props;
+const runTests = (editorText, props) => {
+  const {
+    auth,
+    match,
+    progress,
+    exercise,
+    id,
+  } = props;
   const progressPath = matchParamsToPath(auth.uid, match.params);
   const boilerplate = getBoilerplate(exercise.files, id);
-  const code = props.code[progressPath] || (progress || {}).code || boilerplate;
+  const code = editorText || (progress || {}).code || boilerplate;
   const tests = exercise.files.test;
   const worker = new Worker('/worker.js');
   const ref = props.firebase.database().ref(progressPath);
@@ -90,17 +101,20 @@ const runTests = props => () => {
 const reset = props => () => {
   const code = getBoilerplate(props.exercise.files, props.id);
   const progressPath = matchParamsToPath(props.auth.uid, props.match.params);
-  props.updateCode(progressPath, code);
-  props.firebase.database().ref(progressPath).set({ code, testResults: null });
+  props.firebase.database()
+    .ref(progressPath)
+    .set({ code, testResults: null });
 };
 
 
 const Exercise = (props) => {
+  const {
+    exercise,
+    classes,
+  } = props;
   const progress = props.progress || {};
-  const { exercise, auth, match, classes } = props;
-  const progressPath = matchParamsToPath(auth.uid, match.params);
-  const boilerplate = getBoilerplate(exercise.files, props.id);
-  const code = props.code[progressPath] || progress.code || boilerplate;
+  const code = progress.code || getBoilerplate(exercise.files, props.id);
+  let editorText = '';
 
   return (
     <div>
@@ -131,11 +145,15 @@ const Exercise = (props) => {
             name={props.id}
             mode="javascript"
             theme="github"
-            editorProps={{}}
+            editorProps={{
+              $blockScrolling: true,
+            }}
             value={code}
-            onChange={text => props.updateCode(progressPath, text)}
+            onChange={(text) => {
+              editorText = text;
+            }}
           />
-          <Button raised className={classes.button} onClick={runTests(props)}>
+          <Button raised className={classes.button} onClick={() => runTests(editorText, props)}>
             <PlayArrowIcon />
             Ejecutar tests
           </Button>
@@ -173,14 +191,13 @@ Exercise.propTypes = {
     testResults: PropTypes.shape({}),
   }),
   currentTab: PropTypes.number.isRequired,
-  code: PropTypes.shape({}).isRequired,
   testsRunning: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
-  updateCode: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   runTestsStart: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   runTestsEnd: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   match: PropTypes.shape({
     params: PropTypes.shape({
       cohortid: PropTypes.string.isRequired,
@@ -190,6 +207,7 @@ Exercise.propTypes = {
       exerciseid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
@@ -213,13 +231,11 @@ Exercise.defaultProps = {
 
 const mapStateToProps = ({ exercise }) => ({
   currentTab: exercise.currentTab,
-  code: exercise.code,
   testsRunning: exercise.testsRunning,
 });
 
 const mapDispatchToProps = {
   selectTab,
-  updateCode,
   runTestsStart,
   runTestsEnd,
 };
