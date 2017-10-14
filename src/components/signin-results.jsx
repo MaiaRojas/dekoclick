@@ -52,7 +52,7 @@ const SignInResults = ({
   if (!forgot && authError && authError.code) {
     error = authError;
   } else if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
-    let { error } = forgotResult;
+    error = forgotResult.error;
   }
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {
