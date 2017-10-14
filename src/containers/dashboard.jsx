@@ -21,8 +21,7 @@ const Dashboard = (props) => {
     <div className="dashboard">
       <TopBar title="Dashboard" />
       {Object.keys(props.userCohorts).map(key =>
-        <CoursesList key={key} cohort={key} role={props.userCohorts[key]} />,
-      )}
+        <CoursesList key={key} cohort={key} role={props.userCohorts[key]} />)}
     </div>
   );
 };

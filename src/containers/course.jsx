@@ -40,8 +40,8 @@ const Course = (props) => {
             progress={(props.progress || {})[key]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
-          />),
-        )}
+          />))
+        }
       </div>
     </div>
   );

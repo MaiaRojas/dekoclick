@@ -38,8 +38,8 @@ const UnitNav = (props) => {
             progress={(props.progress || {})[key]}
             match={props.match}
             history={props.history}
-          />),
-        )}
+          />))
+        }
       </List>
     </LeftDrawer>
   );

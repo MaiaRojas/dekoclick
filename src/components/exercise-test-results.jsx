@@ -61,11 +61,9 @@ const Suite = props => (
       </ListItem>
     }
     {props.suite.tests && props.suite.tests.map(test =>
-      <Test key={test.title} test={test} classes={props.classes} />,
-    )}
+      <Test key={test.title} test={test} classes={props.classes} />)}
     {props.suite.suites && props.suite.suites.map(suite =>
-      <Suite key={suite.title} suite={suite} classes={props.classes} />,
-    )}
+      <Suite key={suite.title} suite={suite} classes={props.classes} />)}
   </div>
 );
 

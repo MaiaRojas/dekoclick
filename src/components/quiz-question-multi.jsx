@@ -52,8 +52,8 @@ const QuizQuestionMulti = props => (
         }
         label={parseHTML(answer)}
         disabled={props.hasResults}
-      />),
-    )}
+      />))
+    }
   </FormGroup>
 );
 

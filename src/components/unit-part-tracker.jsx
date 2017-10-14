@@ -98,9 +98,9 @@ class UnitPartTracker extends React.Component {
   }
 
   handleScroll() {
-    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
     const body = document.body;
     const html = document.documentElement;
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : html.offsetHeight;
     const docHeight = Math.max(
       body.scrollHeight,
       body.offsetHeight,
@@ -182,9 +182,12 @@ class UnitPartTracker extends React.Component {
 
 
 UnitPartTracker.propTypes = {
-  component: PropTypes.shape({}).isRequired,
-  showSelfAssessment: PropTypes.shape({}).isRequired,
-  selfAssessment: PropTypes.shape({}).isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.func.isRequired,
+    PropTypes.shape({}).isRequired,
+  ]).isRequired,
+  showSelfAssessment: PropTypes.bool.isRequired,
+  selfAssessment: PropTypes.shape({}),
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
   }).isRequired,
@@ -203,6 +206,11 @@ UnitPartTracker.propTypes = {
     database: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({}).isRequired,
+};
+
+
+UnitPartTracker.defaultProps = {
+  selfAssessment: undefined,
 };
 
 

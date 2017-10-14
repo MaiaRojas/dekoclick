@@ -12,8 +12,7 @@ const ExercisesList = props => (
         exercise={props.exercises[key]}
         progress={props.progress[key]}
         match={props.match}
-      />),
-    )}
+      />))}
   </div>
 );
 

@@ -26,8 +26,8 @@ const QuizQuestionSingle = props => (
         control={<Radio />}
         label={parseHTML(answer)}
         disabled={props.hasResults}
-      />),
-    )}
+      />))
+    }
   </RadioGroup>
 );
 

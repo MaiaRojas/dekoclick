@@ -41,13 +41,18 @@ const styles = {
 };
 
 
-const SignInResults = ({ authError, forgot, forgotResult, classes }) => {
+const SignInResults = ({
+  authError,
+  forgot,
+  forgotResult,
+  classes,
+}) => {
   let error = null;
 
   if (!forgot && authError && authError.code) {
     error = authError;
   } else if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
-    error = forgotResult.error;
+    let { error } = forgotResult;
   }
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {

@@ -23,7 +23,12 @@ const parseExercises = objs =>
   }), {});
 
 
-const UnitExercises = ({ part, progress, match, auth }) => {
+const UnitExercises = ({
+  part,
+  progress,
+  match,
+  auth,
+}) => {
   const id = match.params.exerciseid;
   const exercises = parseExercises(part.exercises);
 

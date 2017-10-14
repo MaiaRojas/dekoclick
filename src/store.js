@@ -7,16 +7,14 @@ const middlewares = [];
 
 
 // Add redux Firebase to compose
-const createStoreWithFirebase = compose(
-  reactReduxFirebase({
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: `${process.env.FIREBASE_PROJECT}.firebaseapp.com`,
-    databaseURL: `https://${process.env.FIREBASE_PROJECT}.firebaseio.com`,
-    projectId: process.env.FIREBASE_PROJECT,
-    storageBucket: `${process.env.FIREBASE_PROJECT}.appspot.com`,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  }, { userProfile: 'users' }),
-)(createStore);
+const createStoreWithFirebase = compose(reactReduxFirebase({
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: `${process.env.FIREBASE_PROJECT}.firebaseapp.com`,
+  databaseURL: `https://${process.env.FIREBASE_PROJECT}.firebaseio.com`,
+  projectId: process.env.FIREBASE_PROJECT,
+  storageBucket: `${process.env.FIREBASE_PROJECT}.appspot.com`,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+}, { userProfile: 'users' }))(createStore);
 
 
 if (process.env.NODE_ENV !== 'production') {

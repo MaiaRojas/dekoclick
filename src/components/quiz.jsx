@@ -34,8 +34,12 @@ const arrayEqual = (a, b) => {
 };
 
 
-const matchParamsToPath = (uid, { cohortid, courseid, unitid, partid }) =>
-  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
+const matchParamsToPath = (uid, {
+  cohortid,
+  courseid,
+  unitid,
+  partid,
+}) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
 
 
 const start = (firebase, auth, match) => () =>
@@ -50,7 +54,13 @@ const updateProgress = (firebase, auth, match) => (questionid, val) =>
     .update({ [`${questionid}`]: val });
 
 
-const handleSubmit = ({ part, progress, firebase, auth, match }) => () => {
+const handleSubmit = ({
+  part,
+  progress,
+  firebase,
+  auth,
+  match,
+}) => () => {
   const results = part.questions.reduce((memo, question, idx) => {
     const total = memo.total + 1;
     if (arrayEqual(question.solution, progress[idx])) {
@@ -66,7 +76,14 @@ const handleSubmit = ({ part, progress, firebase, auth, match }) => () => {
 
 
 const Quiz = (props) => {
-  const { part, progress, classes, firebase, auth, match } = props;
+  const {
+    part,
+    progress,
+    classes,
+    firebase,
+    auth,
+    match,
+  } = props;
 
   if (!progress.results && !progress.startedAt) {
     return (
@@ -110,13 +127,13 @@ const Quiz = (props) => {
           progress={(idx in progress) ? progress[idx] : ''}
           hasResults={!!progress.results}
           updateProgress={updateProgress(firebase, auth, match)}
-        />),
-      )}
-      {!progress.results &&
-        (<Button raised color="primary" onClick={handleSubmit(props)}>
-          Enviar
-        </Button>)
+        />))
       }
+      {!progress.results && (
+        <Button raised color="primary" onClick={handleSubmit(props)}>
+          Enviar
+        </Button>
+      )}
     </div>
   );
 };

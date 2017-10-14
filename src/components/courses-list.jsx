@@ -17,19 +17,20 @@ const CoursesList = (props) => {
     return (<div>No courses :-(</div>);
   }
 
-  return (<div>
-    <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
-      {props.cohort}
-    </Typography>
-    {Object.keys(props.courses).map(key =>
-      (<CourseCard
-        key={key}
-        id={key}
-        cohort={props.cohort}
-        course={props.courses[key]}
-      />),
-    )}
-  </div>);
+  return (
+    <div>
+      <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
+        {props.cohort}
+      </Typography>
+      {Object.keys(props.courses).map(key =>
+        (<CourseCard
+          key={key}
+          id={key}
+          cohort={props.cohort}
+          course={props.courses[key]}
+        />))}
+    </div>
+  );
 };
 
 

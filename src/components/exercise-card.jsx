@@ -5,8 +5,12 @@ import Card, { CardHeader } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 
 
-const matchParamsToURL = ({ cohortid, courseid, unitid, partid }, id) =>
-  `/cohorts/${cohortid}/courses/${courseid}/${unitid}/${partid}/${id}`;
+const matchParamsToURL = ({
+  cohortid,
+  courseid,
+  unitid,
+  partid,
+}, id) => `/cohorts/${cohortid}/courses/${courseid}/${unitid}/${partid}/${id}`;
 
 
 const progressToString = (progress) => {
@@ -25,9 +29,11 @@ const ExerciseCard = props => (
   <Card>
     <CardHeader
       avatar={<Avatar aria-label="Exercise">JS</Avatar>}
-      title={<Link to={matchParamsToURL(props.match.params, props.id)}>
-        {props.exercise.title}
-      </Link>}
+      title={
+        <Link to={matchParamsToURL(props.match.params, props.id)}>
+          {props.exercise.title}
+        </Link>
+      }
       subheader={progressToString(props.progress)}
     />
   </Card>
