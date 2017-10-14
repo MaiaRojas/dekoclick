@@ -8,7 +8,7 @@ module.exports = (functions, admin) =>
     const val = event.data.val();
     const prev = event.data.previous.val();
     const keys = Object.keys(val);
-    const prevKeys = Object.keys(prev);
+    const prevKeys = Object.keys(prev || {});
     const deletedKeys = prevKeys.filter(prevKey => (keys.indexOf(prevKey) === -1));
 
     const cohortUsers = keys.reduce((memo, cohort) => {
