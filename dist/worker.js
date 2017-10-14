@@ -21,13 +21,12 @@ mocha.setup({
 });
 
 
-const wrapSubmission = str => (new Function(
-  `var module = { exports: {} };
+const wrapSubmission = str => (new Function(`
+  var module = { exports: {} };
   var exports = module.exports;
   ${str};;
   return module.exports;
-  `,
-));
+`));
 
 
 const wrapTests = str => (new Function(
@@ -80,7 +79,11 @@ self.onmessage = (e) => {
   const runResults = mocha.run();
 
   runResults.on('end', () => {
-    const { failures, stats, total, suite } = runResults;
-    self.postMessage({ failures, stats, total, suite: suiteToJSON(suite) });
+    self.postMessage({
+      failures: runResults.failures,
+      stats: runResults.stats,
+      total: runResults.total,
+      suite: suiteToJSON(runResults.suite),
+    });
   });
 };
