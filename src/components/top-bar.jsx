@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui-icons/Menu';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import { displayDrawer } from '../reducers/top-bar';
 
 
 const styles = theme => ({
@@ -11,6 +16,11 @@ const styles = theme => ({
     boxShadow: 'none',
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 320px)',
+    },
+  },
+  menuIcon: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
     },
   },
   flex: {
@@ -22,6 +32,14 @@ const styles = theme => ({
 const TopBar = props => (
   <AppBar className={props.classes.appBar}>
     <Toolbar>
+      <IconButton
+        className={props.classes.menuIcon}
+        color="contrast"
+        aria-label="open drawer"
+        onClick={() => props.displayDrawer()}
+      >
+        <MenuIcon />
+      </IconButton>
       <Typography type="title" className={props.classes.flex}>
         {props.title}
       </Typography>
@@ -36,8 +54,10 @@ const TopBar = props => (
 TopBar.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.shape({}),
+  displayDrawer: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string.isRequired,
+    menuIcon: PropTypes.string.isRequired,
     flex: PropTypes.string.isRequired,
   }).isRequired,
 };
@@ -47,5 +67,15 @@ TopBar.defaultProps = {
   children: undefined,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
-export default withStyles(styles)(TopBar);
+const mapDispatchToProps = {
+  displayDrawer,
+};
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
+)(TopBar);
