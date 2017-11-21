@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import WithMainNav from '../../src/components/with-main-nav';
 
@@ -14,20 +14,16 @@ describe('<WithMainNav />', () => {
     stub.restore();
 	});
 
-  it('should print warnings when missing history and firebase props', () => {
-    const stub = sinon.stub(console, 'error');
+  it('should spread props to Component', () => {
     const Component = props => (<div className="my-component">hello world</div>);
-    const component = render(
-      <WithMainNav
-        component={Component}
-        auth={{ displayName: 'Ada Lovelace', email: 'ada@gmail.com' }}
-        match={{ path: '/' }}
-      />
+    const auth = { displayName: 'Ada Lovelace', email: 'ada@gmail.com' };
+    const match = { path: '/' };
+    const component = shallow(
+      <WithMainNav component={Component} auth={auth} match={match} />
     );
-		expect(stub.getCalls().length).toBe(2);
-    expect(stub.getCall(0).args[0]).toMatchSnapshot();
-    expect(stub.getCall(1).args[0]).toMatchSnapshot();
-    stub.restore();
+    const childNodes = component.children().getElements();
+    expect(childNodes[0].props.auth).toEqual(auth);
+    expect(childNodes[0].props.match).toEqual(match);
 	});
 
   it('should wrap component in container along with MainNav', () => {

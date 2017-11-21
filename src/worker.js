@@ -4,6 +4,7 @@
 
 /* global self, mocha, Mocha, chai, sinon */
 /* eslint no-new-func: "off" */
+/* eslint no-restricted-globals: "off" */
 
 
 self.importScripts(

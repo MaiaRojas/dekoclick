@@ -7,7 +7,7 @@ module.exports = (functions, admin) =>
     const uid = event.data.key;
     const val = event.data.val();
     const prev = event.data.previous.val();
-    const keys = Object.keys(val);
+    const keys = Object.keys(val || {});
     const prevKeys = Object.keys(prev || {});
     const deletedKeys = prevKeys.filter(prevKey => (keys.indexOf(prevKey) === -1));
 
@@ -17,7 +17,7 @@ module.exports = (functions, admin) =>
       return memo;
     }, {});
 
-    const promises = Object.keys(cohortUsers).map(cohort =>
+    const promises = Object.keys(cohortUsers || {}).map(cohort =>
       db.ref(`cohortUsers/${cohort}`).update(cohortUsers[cohort])
     );
 

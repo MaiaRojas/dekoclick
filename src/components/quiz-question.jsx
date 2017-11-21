@@ -11,6 +11,10 @@ import Content from './content';
 
 
 const styles = {
+  paper: {
+    padding: 20,
+    marginBottom: 30,
+  },
   passes: {
     color: green[500],
     fontWeight: 'bold',
@@ -35,7 +39,7 @@ const labelClassName = props => (idx) => {
 
 
 const QuizQuestion = props => (
-  <Paper style={{ padding: 20, marginBottom: 30 }}>
+  <Paper style={props.classes.paper}>
     <FormControl component="fieldset" required>
       <FormLabel component="legend">{props.question.title}</FormLabel>
       <Content html={props.question.description} />
@@ -62,6 +66,7 @@ QuizQuestion.propTypes = {
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
   classes: PropTypes.shape({
+    paper: PropTypes.string.isRequired,
     passes: PropTypes.string.isRequired,
     failures: PropTypes.string.isRequired,
   }).isRequired,

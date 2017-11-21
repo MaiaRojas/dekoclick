@@ -41,19 +41,24 @@ const styles = {
 };
 
 
+const getError = (authError, forgot, forgotResult) => {
+  if (!forgot && authError && authError.code) {
+    return authError;
+  }
+  if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
+    return forgotResult.error;
+  }
+  return null;
+};
+
+
 const SignInResults = ({
   authError,
   forgot,
   forgotResult,
   classes,
 }) => {
-  let error = null;
-
-  if (!forgot && authError && authError.code) {
-    error = authError;
-  } else if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
-    error = forgotResult.error;
-  }
+  const error = getError(authError, forgot, forgotResult);
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {
     return null;

@@ -56,7 +56,7 @@ const Unit = (props) => {
 
   const part = props.unit.parts[partid];
   const progress = (props.progress || {})[partid] || {};
-  const selfAssessment = (props.progress || {}).selfAssessment;
+  const { selfAssessment } = props.progress || {};
   const hasGuidedParts = partKeys.reduce(
     (memo, key) =>
       memo || ['guiado', 'guided'].indexOf(props.unit.parts[key].format) > -1,

@@ -5,6 +5,8 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import DashboardIcon from 'material-ui-icons/Dashboard';
+import LocalLibraryIcon from 'material-ui-icons/LocalLibrary';
+import GroupIcon from 'material-ui-icons/Group';
 import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
@@ -35,6 +37,9 @@ const styles = {
     bottom: 0,
     width: '100%',
   },
+  signoutBtn: {
+    backgroundColor: '#f0f0f0',
+  },
 };
 
 
@@ -52,6 +57,24 @@ const getName = (auth, profile) =>
 
 const getEmail = (auth, profile) =>
   (profile || {}).email || auth.email;
+
+
+const isActive = ({ match, classes }, container) => {
+  switch (container) {
+    case 'dashboard':
+      return match.path === '/' ? classes.active : '';
+    case 'courses':
+      return match.path === '/courses' || /^\/cohorts\/[^/]+\/courses/.test(match.path) ?
+        classes.active : '';
+    case 'cohorts':
+      return match.path === '/cohorts' || /^\/cohorts\/[^/]+$/.test(match.path) ?
+        classes.active : '';
+    case 'settings':
+      return match.path === '/settings' ? classes.active : '';
+    default:
+      return '';
+  }
+};
 
 
 const MainNav = props => (
@@ -77,9 +100,10 @@ const MainNav = props => (
       </ListItem>
       <Divider />
       <ListItem
+        style={{ display: 'none' }}
         button
         onClick={() => props.history.push('/')}
-        className={props.match.path === '/' ? props.classes.active : ''}
+        className={isActive(props, 'dashboard')}
       >
         <ListItemIcon>
           <DashboardIcon />
@@ -88,8 +112,30 @@ const MainNav = props => (
       </ListItem>
       <ListItem
         button
+        onClick={() => props.history.push('/courses')}
+        className={isActive(props, 'courses')}
+      >
+        <ListItemIcon>
+          <LocalLibraryIcon />
+        </ListItemIcon>
+        <ListItemText primary="Mis cursos" />
+      </ListItem>
+      {props.profile && props.profile.roles && props.profile.roles.admin &&
+        <ListItem
+          button
+          onClick={() => props.history.push('/cohorts')}
+          className={isActive(props, 'cohorts')}
+        >
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText primary="Cohorts" />
+        </ListItem>
+      }
+      <ListItem
+        button
         onClick={() => props.history.push('/settings')}
-        className={props.match.path === '/settings' ? props.classes.active : ''}
+        className={isActive(props, 'settings')}
       >
         <ListItemIcon>
           <SettingsIcon />
@@ -98,7 +144,11 @@ const MainNav = props => (
       </ListItem>
       <div className={props.classes.bottom}>
         <Divider />
-        <ListItem button onClick={() => props.firebase.logout()}>
+        <ListItem
+          button
+          className={props.classes.signoutBtn}
+          onClick={() => props.firebase.logout()}
+        >
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
@@ -112,12 +162,15 @@ const MainNav = props => (
 
 MainNav.propTypes = {
   auth: PropTypes.shape({
-    displayName: PropTypes.string.isRequired,
+    displayName: PropTypes.string,
     email: PropTypes.string.isRequired,
   }).isRequired,
   profile: PropTypes.shape({
     name: PropTypes.string,
     github: PropTypes.string,
+    roles: PropTypes.shape({
+      admin: PropTypes.bool,
+    }),
   }),
   classes: PropTypes.shape({
     list: PropTypes.string.isRequired,
@@ -126,7 +179,9 @@ MainNav.propTypes = {
     profileBadgeText: PropTypes.string.isRequired,
     active: PropTypes.string.isRequired,
     bottom: PropTypes.string.isRequired,
+    signoutBtn: PropTypes.string.isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   match: PropTypes.shape({
     path: PropTypes.string.isRequired,
   }).isRequired,

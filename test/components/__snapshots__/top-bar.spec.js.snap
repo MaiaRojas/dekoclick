@@ -14,5 +14,7 @@ Object {
 exports[`<TopBar /> should print warning in console.error when missing title 1`] = `
 "Warning: Failed prop type: The prop \`title\` is marked as required in \`TopBar\`, but its value is \`undefined\`.
     in TopBar
-    in withStyles(TopBar)"
+    in withStyles(TopBar)
+    in Connect(withStyles(TopBar))
+    in Provider"
 `;

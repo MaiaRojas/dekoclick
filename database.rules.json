@@ -7,7 +7,7 @@
     },
     "cohortCourses": {
       ".read": "auth != null",
-      ".write": "auth != null && auth.token.isAdmin == true",
+      ".write": "auth != null && (auth.token.isAdmin == true || root.child('users/' + auth.uid + '/roles/admin').exists())",
       ".validate": true
     },
     "cohortProgress": {
@@ -22,19 +22,34 @@
     },
     "cohorts": {
       ".read": "auth != null",
+      ".write": "auth != null && (auth.token.isAdmin == true || root.child('users/' + auth.uid + '/roles/admin').exists())",
+      ".validate": true
+    },
+    "courses": {
+      ".read": true,
+      ".write": "auth != null && auth.token.isAdmin == true",
+      ".validate": true
+    },
+    "coursesIndex": {
+      ".read": true,
       ".write": "auth != null && auth.token.isAdmin == true",
       ".validate": true
     },
     "userCohorts": {
       ".read": "auth != null",
-      ".write": "auth != null && auth.token.isAdmin == true",
+      ".write": "auth != null && (auth.token.isAdmin == true || root.child('users/' + auth.uid + '/roles/admin').exists())",
       ".validate": true
     },
     "users": {
       "$uid": {
         ".read": "auth != null",
-        ".write": "auth.uid == $uid",
-        ".validate": true
+        ".write": "auth != null && ((auth.uid == $uid && !newData.hasChildren(['roles'])) || (auth.token.isAdmin == true || root.child('users/' + auth.uid + '/roles/admin').exists()))",
+        ".validate": true,
+        "roles": {
+          ".read": "auth != null",
+          ".write": "auth != null && (auth.token.isAdmin == true || root.child('users/' + auth.uid + '/roles/admin').exists())",
+          ".validate": true,
+        }
       }
     }
   }

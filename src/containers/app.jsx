@@ -14,6 +14,9 @@ import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
 import SignIn from './signin';
 import Dashboard from './dashboard';
+import Courses from './courses';
+import Cohorts from './cohorts';
+import Cohort from './cohort';
 import Settings from './settings';
 import Course from './course';
 import Unit from './unit';
@@ -43,6 +46,9 @@ const App = (props) => {
             component={Course}
             {...props}
           />
+          <WrappedRoute path="/cohorts/:cohortid" component={Cohort} {...props} />
+          <WrappedRoute path="/cohorts" component={Cohorts} {...props} />
+          <WrappedRoute path="/courses" component={Courses} {...props} />
           <WrappedRoute path="/settings" component={Settings} {...props} />
           <WrappedRoute exact path="/" component={Dashboard} {...props} />
         </Switch>

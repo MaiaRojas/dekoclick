@@ -34,7 +34,7 @@ const partCount = ({ stats, parts }) =>
 const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
-      <Typography type="subheading" component="h3">
+      <Typography type="title">
         Unidad {props.idx + 1}: {props.unit.title}
       </Typography>
       <Typography

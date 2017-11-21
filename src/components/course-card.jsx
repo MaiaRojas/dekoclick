@@ -34,7 +34,7 @@ const unitCount = ({ stats, syllabus }) =>
 const CourseCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
-      <Typography type="subheading" component="h3">
+      <Typography type="title">
         {props.course.title}
       </Typography>
     </CardContent>

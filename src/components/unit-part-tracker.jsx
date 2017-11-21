@@ -98,7 +98,7 @@ class UnitPartTracker extends React.Component {
   }
 
   handleScroll() {
-    const body = document.body;
+    const { body } = document;
     const html = document.documentElement;
     const windowHeight = 'innerHeight' in window ? window.innerHeight : html.offsetHeight;
     const docHeight = Math.max(

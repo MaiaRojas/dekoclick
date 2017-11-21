@@ -18,10 +18,7 @@ import {
   updateForgotRequested,
 } from '../reducers/signin';
 import SignInResults from '../components/signin-results';
-
-
-// eslint-disable-next-line no-useless-escape
-const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import isEmail from '../util/isEmail';
 
 
 const styles = {
@@ -56,7 +53,7 @@ const isValidEmail = (email, error) => {
   if (email === '') {
     error('Debes ingresar un correo');
     valid = false;
-  } else if (!emailPattern.test(email)) {
+  } else if (!isEmail(email)) {
     error('Debes ingresar un correo válido');
     valid = false;
   } else {

@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
 import reducers from './reducers';
+import apiMiddleware from './middleware';
 
 
-const middlewares = [];
+const middlewares = [apiMiddleware];
 
 
 // Add redux Firebase to compose
@@ -17,11 +18,11 @@ const createStoreWithFirebase = compose(reactReduxFirebase({
 }, { userProfile: 'users' }))(createStore);
 
 
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line global-require
   // const { logger } = require('redux-logger');
   // middlewares.push(logger);
-}
+// }
 
 
 export default createStoreWithFirebase(reducers, applyMiddleware(...middlewares));

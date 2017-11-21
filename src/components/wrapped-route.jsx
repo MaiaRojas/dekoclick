@@ -37,7 +37,7 @@ WrappedRoute.propTypes = {
   path: PropTypes.string.isRequired,
   exact: PropTypes.bool,
   component: PropTypes.func.isRequired,
-  mainNav: PropTypes.bool.isRequired,
+  mainNav: PropTypes.bool,
 };
 
 

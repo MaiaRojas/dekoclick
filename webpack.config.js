@@ -36,7 +36,7 @@ module.exports = env => {
           exclude: /node_modules/,
           use: [{
             loader: 'babel-loader',
-            query: {
+            options: {
               presets:[ 'es2015', 'react', 'stage-2' ]
             }
           }]
