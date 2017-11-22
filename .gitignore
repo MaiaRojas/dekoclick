@@ -3,4 +3,5 @@
 *.log
 .firebaserc
 coverage/
+data/
 node_modules/
