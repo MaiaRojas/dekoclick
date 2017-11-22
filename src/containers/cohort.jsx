@@ -26,7 +26,7 @@ import TopBar from '../components/top-bar';
 import CohortUser from '../components/cohort-user';
 import CohortUserAddDialog from '../components/cohort-user-add-dialog';
 import CohortCourseAddDialog from '../components/cohort-course-add-dialog';
-import { selectTab } from '../reducers/cohort';
+import { selectCohortUsersTab } from '../reducers/cohort';
 import { toggleCohortUserAddDialog } from '../reducers/cohort-user-add-dialog';
 import { toggleCohortCourseAddDialog } from '../reducers/cohort-course-add-dialog';
 
@@ -63,6 +63,11 @@ const EmptyList = props => (
     <span style={{ marginLeft: 8 }}>{props.message}</span>
   </Typography>
 );
+
+
+EmptyList.propTypes = {
+  message: PropTypes.string.isRequired,
+};
 
 
 const TabContainer = props => (
@@ -219,7 +224,11 @@ const Cohort = ({
           </Button>
         </div>
         {!courseKeys.length ?
-          (<EmptyList message="Todavía no se han añadido cursos a este cohort. Puedes añadir cursos usando el botón '+' a la derecha." />)
+          (
+            <EmptyList message="Todavía no se han añadido cursos a este cohort.
+              Puedes añadir cursos usando el botón '+' a la derecha."
+            />
+          )
           :
           (
             <div className={classes.courseListWrapper}>
@@ -256,7 +265,12 @@ const Cohort = ({
       </div>
 
       {!Object.keys(users || {}).length ?
-        (<EmptyList message="Todavía no se han añadido usuarios a este curso. Para añadir alumnxs, instructorxs o admins usa el botón '+' a la derecha." />)
+        (
+          <EmptyList message="Todavía no se han añadido usuarios a este curso.
+            Para añadir alumnxs, instructorxs o admins usa el botón '+' a la
+            derecha."
+          />
+        )
         :
         (
           <div>
@@ -267,9 +281,15 @@ const Cohort = ({
                 <Tab label={`Admins (${admins.length})`} />
               </Tabs>
             </AppBar>
-            {currentTab === 0 && <TabContainer cohortid={cohortid} users={students} classes={classes} />}
-            {currentTab === 1 && <TabContainer cohortid={cohortid} users={instructors} classes={classes} />}
-            {currentTab === 2 && <TabContainer cohortid={cohortid} users={admins} classes={classes} />}
+            {currentTab === 0 && (
+              <TabContainer cohortid={cohortid} users={students} classes={classes} />
+            )}
+            {currentTab === 1 && (
+              <TabContainer cohortid={cohortid} users={instructors} classes={classes} />
+            )}
+            {currentTab === 2 && (
+              <TabContainer cohortid={cohortid} users={admins} classes={classes} />
+            )}
           </div>
         )
       }
@@ -291,6 +311,7 @@ Cohort.propTypes = {
   campuses: PropTypes.shape({}),
   users: PropTypes.shape({}),
   courses: PropTypes.shape({}),
+  currentTab: PropTypes.number.isRequired,
   userAddDialogOpen: PropTypes.bool.isRequired,
   courseAddDialogOpen: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
@@ -334,7 +355,7 @@ const mapStateToProps = ({
 
 
 const mapDispatchToProps = {
-  selectTab: selectTab,
+  selectTab: selectCohortUsersTab,
   toggleUserAddDialog: toggleCohortUserAddDialog,
   toggleCourseAddDialog: toggleCohortCourseAddDialog,
 };

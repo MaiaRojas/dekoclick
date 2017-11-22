@@ -3,7 +3,7 @@ const TAB_SELECT = 'lms.laboratoria.la/cohort/TAB_SELECT';
 
 
 // Action Creators
-export const selectTab = id => ({
+export const selectCohortUsersTab = id => ({
   type: TAB_SELECT,
   payload: id,
 });

@@ -169,6 +169,13 @@ CohortNewDialogConfirm.propTypes = {
 };
 
 
+const parseDateString = str => new Date(
+  parseInt(str.slice(0, 4), 10),
+  parseInt(str.slice(5, 7), 10) - 1,
+  parseInt(str.slice(8, 10), 10),
+);
+
+
 const validate = (props) => {
   const {
     campus, program, track, name, start, end,
@@ -198,6 +205,16 @@ const validate = (props) => {
     errors.push({
       field: 'name',
       message: 'Name is required',
+    });
+  }
+
+  const startDate = parseDateString(start);
+  const endDate = parseDateString(end);
+
+  if (startDate >= endDate) {
+    errors.push({
+      field: 'end',
+      message: 'End date can not be earlier then start date',
     });
   }
 
