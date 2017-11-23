@@ -39,7 +39,7 @@ const labelClassName = props => (idx) => {
 
 
 const QuizQuestion = props => (
-  <Paper style={props.classes.paper}>
+  <Paper className={props.classes.paper}>
     <FormControl component="fieldset" required>
       <FormLabel component="legend">{props.question.title}</FormLabel>
       <Content html={props.question.description} />
