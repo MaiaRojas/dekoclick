@@ -31,8 +31,8 @@ const Course = (props) => {
         }
       </TopBar>
       <div>
-        {Object.keys(props.course.syllabus).sort().map((key, idx) =>
-          (<UnitCard
+        {Object.keys(props.course.syllabus).sort().map((key, idx) => (
+          <UnitCard
             key={key}
             id={key}
             idx={idx}
@@ -40,8 +40,8 @@ const Course = (props) => {
             progress={(props.progress || {})[key]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
-          />))
-        }
+          />
+        ))}
       </div>
     </div>
   );

@@ -20,30 +20,35 @@ const goBack = ({ history, match }) => () => {
 };
 
 
-const UnitNav = (props) => {
-  const unitNumber = props.match.params.unitid.split('-')[0];
-  return (
-    <LeftDrawer>
-      <List disablePadding className={props.classes.list}>
-        <ListItem button onClick={goBack(props)}>
-          <ListItemText primary={`Unidad ${unitNumber}: ${props.unit.title}`} />
-        </ListItem>
-        <Divider />
-        {Object.keys(props.unit.parts).sort().map((key, idx) =>
-          (<UnitNavItem
-            key={key}
-            partid={key}
-            order={idx}
-            part={props.unit.parts[key]}
-            progress={(props.progress || {})[key]}
-            match={props.match}
-            history={props.history}
-          />))
-        }
-      </List>
-    </LeftDrawer>
-  );
+const getUnitOrder = (props) => {
+  if (typeof props.unit.order === 'number') {
+    return props.unit.order;
+  }
+  return parseInt(props.match.params.unitid.slice(0, 2), 10);
 };
+
+
+const UnitNav = props => (
+  <LeftDrawer>
+    <List disablePadding className={props.classes.list}>
+      <ListItem button onClick={goBack(props)}>
+        <ListItemText primary={`Unidad ${getUnitOrder(props)}: ${props.unit.title}`} />
+      </ListItem>
+      <Divider />
+      {Object.keys(props.unit.parts).sort().map((key, idx) =>
+        (<UnitNavItem
+          key={key}
+          partid={key}
+          order={idx}
+          part={props.unit.parts[key]}
+          progress={(props.progress || {})[key]}
+          match={props.match}
+          history={props.history}
+        />))
+      }
+    </List>
+  </LeftDrawer>
+);
 
 
 UnitNav.propTypes = {
