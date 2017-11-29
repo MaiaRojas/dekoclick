@@ -14,7 +14,12 @@ const Courses = (props) => {
   }
 
   if (isEmpty(props.userCohorts)) {
-    return (<div>No cohorts :-(</div>);
+    return (
+      <div className="courses">
+      <TopBar title="Cursos" />
+      No hay ningún cohort asociado a tu cuenta por el momento.
+    </div>
+    );
   }
 
   return (
