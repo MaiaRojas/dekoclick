@@ -21,8 +21,8 @@ import IconButton from 'material-ui/IconButton';
 import FolderIcon from 'material-ui-icons/Folder';
 import AddIcon from 'material-ui-icons/Add';
 import DeleteIcon from 'material-ui-icons/Delete';
-import InfoOutlineIcon from 'material-ui-icons/InfoOutline';
 import TopBar from '../components/top-bar';
+import Info from '../components/info';
 import CohortUser from '../components/cohort-user';
 import CohortUserAddDialog from '../components/cohort-user-add-dialog';
 import CohortCourseAddDialog from '../components/cohort-course-add-dialog';
@@ -55,19 +55,6 @@ const styles = theme => ({
     background: theme.palette.background.paper,
   },
 });
-
-
-const EmptyList = props => (
-  <Typography style={{ display: 'flex', alignItems: 'center' }}>
-    <InfoOutlineIcon />
-    <span style={{ marginLeft: 8 }}>{props.message}</span>
-  </Typography>
-);
-
-
-EmptyList.propTypes = {
-  message: PropTypes.string.isRequired,
-};
 
 
 const TabContainer = props => (
@@ -225,7 +212,7 @@ const Cohort = ({
         </div>
         {!courseKeys.length ?
           (
-            <EmptyList message="Todavía no se han añadido cursos a este cohort.
+            <Info message="Todavía no se han añadido cursos a este cohort.
               Puedes añadir cursos usando el botón '+' a la derecha."
             />
           )
@@ -266,7 +253,7 @@ const Cohort = ({
 
       {!Object.keys(users || {}).length ?
         (
-          <EmptyList message="Todavía no se han añadido usuarios a este curso.
+          <Info message="Todavía no se han añadido usuarios a este curso.
             Para añadir alumnxs, instructorxs o admins usa el botón '+' a la
             derecha."
           />
