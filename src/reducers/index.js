@@ -8,6 +8,7 @@ import cohort from './cohort';
 import cohortNewDialog from './cohort-new-dialog';
 import cohortUserAddDialog from './cohort-user-add-dialog';
 import cohortCourseAddDialog from './cohort-course-add-dialog';
+import quizConfirmationDialog from './quiz-confirmation-dialog';
 
 
 export default combineReducers({
@@ -20,4 +21,5 @@ export default combineReducers({
   cohortNewDialog,
   cohortUserAddDialog,
   cohortCourseAddDialog,
+  quizConfirmationDialog,
 });
