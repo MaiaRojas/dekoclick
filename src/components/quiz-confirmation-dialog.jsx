@@ -17,25 +17,24 @@ const styles = () => ({
   },
 });
 
-const QuizConfirmationDialog = ({ classes, ...props}) => (
+const QuizConfirmationDialog = ({ classes, ...props }) => (
   <Dialog
-    ignoreBackdropClick
-    ignoreEscapeKeyUp
+    onRequestClose={props.toggleQuizConfirmationDialog}
     open={props.quizConfirmationDialogOpen}
     classes={{ paper: classes.dialog }}
   >
-    <DialogTitle>Quiz: Piénsalo bien...</DialogTitle>
+    <DialogTitle>Piénsalo bien...</DialogTitle>
     <DialogContent>
       <Typography>
         ¿Estás totalmente segura de que quieres comenzar a responder ESTE quiz?
       </Typography>
     </DialogContent>
     <DialogActions>
-      <Button color="primary" onClick={props.toggleQuizConfirmationDialog}>
-        Sí
+      <Button onClick={props.toggleQuizConfirmationDialog}>
+        Cancelar
       </Button>
-      <Button color="primary" onClick={props.startQuizAndCloseConfirmationDialog}>
-        No
+      <Button raised color="primary" onClick={props.startQuizAndCloseConfirmationDialog}>
+        Sí, comenzar ahora
       </Button>
     </DialogActions>
   </Dialog>
@@ -45,6 +44,7 @@ QuizConfirmationDialog.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   quizConfirmationDialogOpen: PropTypes.bool.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,
+  startQuizAndCloseConfirmationDialog: PropTypes.func.isRequired,
 };
 
 

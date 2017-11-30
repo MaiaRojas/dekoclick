@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, shallow } from 'enzyme';
 import sinon from 'sinon';
+import { Provider } from 'react-redux';
+import store from '../../src/store';
 import Quiz from '../../src/components/quiz';
 
 
@@ -29,32 +31,34 @@ describe('<Quiz />', () => {
 
   it.only('should...', () => {
     const component = render(
-      <Quiz
-        part={{
-          questions: [
-            {
-              title: 'Foo',
-              description: 'Blah blah blaf',
-              answers: [
-                'an answer',
-                'another possible answer'
-              ],
-              solution: [1],
+      <Provider store={store}>
+        <Quiz
+          part={{
+            questions: [
+              {
+                title: 'Foo',
+                description: 'Blah blah blaf',
+                answers: [
+                  'an answer',
+                  'another possible answer'
+                ],
+                solution: [1],
+              }
+            ]
+          }}
+          progress={{}}
+          firebase={{ database: () => {} }}
+          auth={{}}
+          match={{
+            params: {
+              cohortid: 'foo',
+              courseid: 'test',
+              unitid: '01-bar',
+              partid: '05-quiz',
             }
-          ]
-        }}
-        progress={{}}
-        firebase={{ database: () => {} }}
-        auth={{}}
-        match={{
-          params: {
-            cohortid: 'foo',
-            courseid: 'test',
-            unitid: '01-bar',
-            partid: '05-quiz',
-          }
-        }}
-      />
+          }}
+        />
+      </Provider>
     );
     console.log(component.html());
   });

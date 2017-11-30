@@ -1,7 +1,7 @@
 // Action types
 const TOGGLE = 'lms.laboratoria.la/quizConfirmationDialog/TOGGLE';
-const START_QUIZ = 'lms.laboratoria.la/quizConfirmationDialog/START_QUIZ';
-const SET_STARTED_QUIZ = 'lms.laboratoria.la/quizConfirmationDialog/SET_STARTED_QUIZ';
+const START = 'lms.laboratoria.la/quizConfirmationDialog/START';
+const RESET = 'lms.laboratoria.la/quizConfirmationDialog/RESET';
 
 
 // Action Creators
@@ -10,18 +10,17 @@ export const toggleQuizConfirmationDialog = () => ({
 });
 
 export const startQuizAndCloseConfirmationDialog = () => ({
-  type: START_QUIZ,
+  type: START,
 });
 
-export const setStartedQuiz = () => ({
-  type: SET_STARTED_QUIZ,
+export const resetQuizConfirmationDialog = () => ({
+  type: RESET,
 });
 
 
 const initialState = {
   open: false,
-  startQuiz: false,
-  hasStarted: false,
+  start: false,
 };
 
 
@@ -30,10 +29,10 @@ export default (state = { ...initialState }, action = {}) => {
   switch (action.type) {
     case TOGGLE:
       return { ...state, open: !state.open };
-    case START_QUIZ:
-      return { ...initialState, startQuiz: true };
-    case SET_STARTED_QUIZ:
-      return { ...initialState, hasStarted: false };
+    case START:
+      return { ...initialState, start: true };
+    case RESET:
+      return { ...initialState };
     default:
       return state;
   }
