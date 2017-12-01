@@ -10,8 +10,8 @@ import QuizConfirmationDialog from './quiz-confirmation-dialog';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
 import {
-  setStartedQuiz,
   toggleQuizConfirmationDialog,
+  resetQuizConfirmationDialog,
 } from '../reducers/quiz-confirmation-dialog';
 
 
@@ -48,10 +48,12 @@ const matchParamsToPath = (uid, {
   partid,
 }) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
 
+
 const start = (firebase, auth, match) =>
   firebase.database()
     .ref(matchParamsToPath(auth.uid, match.params))
     .update({ startedAt: (new Date()).toJSON() });
+
 
 const updateProgress = (firebase, auth, match) => (questionid, val) =>
   firebase.database()
@@ -78,7 +80,7 @@ const handleSubmit = ({
     .ref(matchParamsToPath(auth.uid, match.params))
     .update({ results, submittedAt: (new Date()).toJSON() });
 };
-// onClick={start(firebase, auth, match)}
+
 
 const Quiz = (props) => {
   const {
@@ -88,12 +90,13 @@ const Quiz = (props) => {
     firebase,
     auth,
     match,
-    hasStarted,
     startQuiz,
   } = props;
 
-  if (startQuiz && !hasStarted) {
-    start(firebase, auth, match) && props.setStartedQuiz();
+  if (!progress.startedAt && startQuiz) {
+    start(firebase, auth, match);
+    props.resetQuizConfirmationDialog();
+    return null;
   }
 
   if (!progress.results && !progress.startedAt) {
@@ -177,20 +180,20 @@ Quiz.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({}).isRequired,
   startQuiz: PropTypes.bool.isRequired,
-  hasStarted: PropTypes.bool.isRequired,
+  resetQuizConfirmationDialog: PropTypes.func.isRequired,
+  toggleQuizConfirmationDialog: PropTypes.func.isRequired,
 };
 
 
 const mapStateToProps = ({ quizConfirmationDialog }) => ({
   quizConfirmationDialogOpen: quizConfirmationDialog.open,
-  startQuiz: quizConfirmationDialog.startQuiz,
-  hasStarted: quizConfirmationDialog.hasStarted,
+  startQuiz: quizConfirmationDialog.start,
 });
 
 
 const mapDispatchToProps = {
   toggleQuizConfirmationDialog,
-  setStartedQuiz,
+  resetQuizConfirmationDialog,
 };
 
 export default compose(

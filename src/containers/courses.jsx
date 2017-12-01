@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
+import Info from '../components/info';
 import CoursesList from '../components/courses-list';
 
 
@@ -14,7 +15,16 @@ const Courses = (props) => {
   }
 
   if (isEmpty(props.userCohorts)) {
-    return (<div>No cohorts :-(</div>);
+    return (
+      <div className="courses">
+        <TopBar title="Cursos" />
+        <Info
+          message="Hmmm... parece que todavía no hay ningún curso asociado a
+            tu cuenta. Si crees que esto es un error, contacta a tu instructor o
+            training manager para verificar tu cuenta."
+        />
+      </div>
+    );
   }
 
   return (
