@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import QuizConfirmationDialog from './quiz-confirmation-dialog';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
+import {
+  toggleQuizConfirmationDialog,
+  resetQuizConfirmationDialog,
+} from '../reducers/quiz-confirmation-dialog';
 
 
 const styles = {
@@ -42,7 +49,7 @@ const matchParamsToPath = (uid, {
 }) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
 
 
-const start = (firebase, auth, match) => () =>
+const start = (firebase, auth, match) =>
   firebase.database()
     .ref(matchParamsToPath(auth.uid, match.params))
     .update({ startedAt: (new Date()).toJSON() });
@@ -83,7 +90,14 @@ const Quiz = (props) => {
     firebase,
     auth,
     match,
+    startQuiz,
   } = props;
+
+  if (!progress.startedAt && startQuiz) {
+    start(firebase, auth, match);
+    props.resetQuizConfirmationDialog();
+    return null;
+  }
 
   if (!progress.results && !progress.startedAt) {
     return (
@@ -100,10 +114,11 @@ const Quiz = (props) => {
           raised
           color="primary"
           className={classes.startButton}
-          onClick={start(firebase, auth, match)}
+          onClick={props.toggleQuizConfirmationDialog}
         >
           Sí, responder ahora
         </Button>
+        <QuizConfirmationDialog />
       </div>
     );
   }
@@ -164,7 +179,24 @@ Quiz.propTypes = {
     }).isRequired,
   }).isRequired,
   classes: PropTypes.shape({}).isRequired,
+  startQuiz: PropTypes.bool.isRequired,
+  resetQuizConfirmationDialog: PropTypes.func.isRequired,
+  toggleQuizConfirmationDialog: PropTypes.func.isRequired,
 };
 
 
-export default withStyles(styles)(Quiz);
+const mapStateToProps = ({ quizConfirmationDialog }) => ({
+  quizConfirmationDialogOpen: quizConfirmationDialog.open,
+  startQuiz: quizConfirmationDialog.start,
+});
+
+
+const mapDispatchToProps = {
+  toggleQuizConfirmationDialog,
+  resetQuizConfirmationDialog,
+};
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
+)(Quiz);
