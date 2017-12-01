@@ -6,7 +6,7 @@ import WarningIcon from 'material-ui-icons/Warning';
 import ErrorIcon from 'material-ui-icons/Error';
 
 
-const Icon = props => {
+const Icon = (props) => {
   switch (props.type) {
     case 'warn':
       return <WarningIcon />;
@@ -15,6 +15,16 @@ const Icon = props => {
     default:
       return <InfoOutlineIcon />;
   }
+};
+
+
+Icon.propTypes = {
+  type: PropTypes.oneOf(['info', 'warn', 'error']),
+};
+
+
+Icon.defaultProps = {
+  type: 'info',
 };
 
 
@@ -29,6 +39,11 @@ const Alert = props => (
 Alert.propTypes = {
   message: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['info', 'warn', 'error']),
+};
+
+
+Alert.defaultProps = {
+  type: 'info',
 };
 
 
