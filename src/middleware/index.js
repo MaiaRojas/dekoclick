@@ -16,11 +16,13 @@ const apiMiddleware = store => next => (action) => {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', () => {
-      const { status } = xhr;
-      if (status === 200) {
+      if (xhr.status === 200) {
         store.dispatch({ type: action.payload.next[1], payload: xhr.response });
       } else {
-        store.dispatch({ type: action.payload.next[2], payload: { status } });
+        store.dispatch({
+          type: action.payload.next[2],
+          payload: xhr.response,
+        });
       }
     });
 
