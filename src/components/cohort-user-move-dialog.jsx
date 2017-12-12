@@ -46,7 +46,7 @@ const CohortUserMoveDialog = (props) => {
           }
           {!props.moveError &&
             <DialogContentText>
-              Estás segura de que quieres mover a {props.user.name}
+              Estás segura de que quieres mover a {props.user.name}&nbsp;
               ({props.user.email}) al cohort <code>{props.targetCohort.id}</code>?
             </DialogContentText>
           }
