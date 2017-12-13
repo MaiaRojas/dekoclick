@@ -40,3 +40,13 @@ render(App);
 if (module.hot) {
   module.hot.accept('./containers/app', () => render(App));
 }
+
+
+// TODO: This is a really horrible hack due to a bug in react-redux-firebase
+// 1.5.x. This will need to be removed once react-redux-firebase 2.0 is
+// released and we upgrade and refactor our code...
+window.addEventListener('error', (err) => {
+  if (err && err.message === 'Uncaught Error: invalid keyPath') {
+    window.location.reload();
+  }
+});
