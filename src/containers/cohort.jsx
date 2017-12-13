@@ -25,6 +25,7 @@ import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CohortUser from '../components/cohort-user';
 import CohortUserAddDialog from '../components/cohort-user-add-dialog';
+import CohortUserMoveDialog from '../components/cohort-user-move-dialog';
 import CohortCourseAddDialog from '../components/cohort-course-add-dialog';
 import { selectCohortUsersTab } from '../reducers/cohort';
 import { toggleCohortUserAddDialog } from '../reducers/cohort-user-add-dialog';
@@ -290,6 +291,8 @@ const Cohort = ({
       {userAddDialogOpen && (
         <CohortUserAddDialog cohortid={cohortid} firebase={firebase} />
       )}
+
+      <CohortUserMoveDialog cohortid={cohortid} />
     </div>
   );
 };
