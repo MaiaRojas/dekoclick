@@ -118,7 +118,7 @@ const Quiz = (props) => {
         >
           Sí, responder ahora
         </Button>
-        <QuizConfirmationDialog />
+        <QuizConfirmationDialog part={part} />
       </div>
     );
   }

@@ -29,10 +29,11 @@ const QuizConfirmationDialog = ({ classes, ...props }) => (
     <DialogContent>
       <Alert
         type="warn"
-        message="¿Estás totalmente segura de que quieres comenzar a responder
-          ESTE quiz? Si comienzas ahora, tendrás 10 minutos para completar el
+        message={`¿Estás totalmente segura de que quieres comenzar a responder
+          ESTE quiz? Si comienzas ahora, tendrás ${props.part.durationString}
+          para completar el
           cuestionario. Pasado ese tiempo, el cuestionario se bloquea y no
-          podrás seguir respondiendo."
+          podrás seguir respondiendo.`}
       />
     </DialogContent>
     <DialogActions>
@@ -48,6 +49,7 @@ const QuizConfirmationDialog = ({ classes, ...props }) => (
 
 
 QuizConfirmationDialog.propTypes = {
+  part: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({}).isRequired,
   quizConfirmationDialogOpen: PropTypes.bool.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,
