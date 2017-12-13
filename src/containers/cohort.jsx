@@ -15,7 +15,7 @@ import AddIcon from 'material-ui-icons/Add';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CohortCourse from '../components/cohort-course';
-import CohortUser from '../components/cohort-user';
+import CohortUsers from '../components/cohort-users';
 import CohortUserAddDialog from '../components/cohort-user-add-dialog';
 import CohortUserMoveDialog from '../components/cohort-user-move-dialog';
 import CohortCourseAddDialog from '../components/cohort-course-add-dialog';
@@ -50,30 +50,6 @@ const styles = theme => ({
 });
 
 
-const TabContainer = props => (
-  <div style={{ padding: 8 * 3, backgroundColor: '#f0f0f0' }}>
-    <Grid container className={props.classes.grid}>
-      {false && props.users.map(cohortUser => (
-        <CohortUser
-          key={cohortUser.key}
-          uid={cohortUser.key}
-          role={cohortUser.value}
-          cohortid={props.cohortid}
-        />
-      ))}
-    </Grid>
-  </div>
-);
-
-TabContainer.propTypes = {
-  cohortid: PropTypes.string.isRequired,
-  users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  classes: PropTypes.shape({
-    grid: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-
 const usersByRole = users => Object.keys(users || {})
   .reduce(
     (memo, item) => ({
@@ -95,7 +71,7 @@ const usersByRole = users => Object.keys(users || {})
 
 
 const Cohort = ({
-  cohorts,
+  cohort,
   campuses,
   courses,
   users,
@@ -110,13 +86,13 @@ const Cohort = ({
   history,
   firebase,
 }) => {
-  if (!isLoaded(cohorts) || !isLoaded(campuses) || !isLoaded(courses) ||
+  if (!isLoaded(cohort) || !isLoaded(campuses) || !isLoaded(courses) ||
     !isLoaded(users)) {
     return (<CircularProgress />);
   }
 
-  if (isEmpty(cohorts)) {
-    return (<div>No cohorts :-(</div>);
+  if (isEmpty(cohort)) {
+    return (<div>No cohort :-(</div>);
   }
 
   const { cohortid } = match.params;
@@ -137,7 +113,7 @@ const Cohort = ({
   } = usersByRole(users);
 
   return (
-    <div className={`cohorts ${classes.root}`}>
+    <div className={`cohort ${classes.root}`}>
       <TopBar title={`Cohort: ${cohortid}`} />
       <Grid item xs={12} md={12} className={classes.grid}>
         <div className={classes.heading}>
@@ -215,13 +191,13 @@ const Cohort = ({
               </Tabs>
             </AppBar>
             {currentTab === 0 && (
-              <TabContainer cohortid={cohortid} users={students} classes={classes} />
+              <CohortUsers cohortid={cohortid} users={students} />
             )}
             {currentTab === 1 && (
-              <TabContainer cohortid={cohortid} users={instructors} classes={classes} />
+              <CohortUsers cohortid={cohortid} users={instructors} />
             )}
             {currentTab === 2 && (
-              <TabContainer cohortid={cohortid} users={admins} classes={classes} />
+              <CohortUsers cohortid={cohortid} users={admins} />
             )}
           </div>
         )
@@ -242,7 +218,7 @@ const Cohort = ({
 
 
 Cohort.propTypes = {
-  cohorts: PropTypes.shape({}),
+  cohort: PropTypes.shape({}),
   campuses: PropTypes.shape({}),
   users: PropTypes.shape({}),
   courses: PropTypes.shape({}),
@@ -266,7 +242,7 @@ Cohort.propTypes = {
 
 
 Cohort.defaultProps = {
-  cohorts: undefined,
+  cohort: undefined,
   campuses: undefined,
   users: undefined,
   courses: undefined,
@@ -279,8 +255,8 @@ const mapStateToProps = ({
   cohortUserAddDialog,
   cohortCourseAddDialog,
 }, { match }) => ({
-  cohorts: dataToJS(firebase, 'cohorts'),
   campuses: dataToJS(firebase, 'campuses'),
+  cohort: dataToJS(firebase, `cohorts/${match.params.cohortid}`),
   users: dataToJS(firebase, `cohortUsers/${match.params.cohortid}`),
   courses: dataToJS(firebase, `cohortCourses/${match.params.cohortid}`),
   currentTab: cohort.currentTab,
@@ -298,8 +274,8 @@ const mapDispatchToProps = {
 
 export default compose(
   firebaseConnect(({ match }) => ([
-    'cohorts',
     'campuses',
+    `cohorts/${match.params.cohortid}`,
     `cohortUsers/${match.params.cohortid}`,
     `cohortCourses/${match.params.cohortid}`,
   ])),

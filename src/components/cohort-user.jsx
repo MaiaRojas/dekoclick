@@ -1,10 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
 import Grid from 'material-ui/Grid';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
@@ -14,17 +10,11 @@ import EmailIcon from 'material-ui-icons/Email';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
-import { toggleCohortUserMoveDialog } from '../reducers/cohort-user-move-dialog';
 import gravatarUrl from '../util/gravatarUrl';
 import cohort from '../util/cohort';
 
 
 const styles = theme => ({
-  paper: {
-    // padding: 20,
-    // display: 'flex',
-    // justifyContent: 'space-between',
-  },
   heading: {
     marginBottom: theme.spacing.unit,
   },
@@ -66,39 +56,31 @@ UserAvatar.propTypes = {
 
 
 const CohortUser = (props) => {
-  if (!isLoaded(props.user)) {
-    return (<CircularProgress />);
-  }
-
-  if (isEmpty(props.user)) {
-    return (<div>No user :-(</div>);
-  }
-
   // Averigua si es un cohort de common core del bootcamp para saber si se puede
   // "migrar" al turno de la mañana o tarde según corresponda.
-  const parsedCohortId = cohort.parse(props.cohortid);
-  const canMigrate = (parsedCohortId.program === 'bc' && ['am', 'pm'].indexOf(parsedCohortId.name) >= 0);
+  const { program, name } = cohort.parse(props.cohortid);
+  const canMigrate = (program === 'bc' && ['am', 'pm'].indexOf(name) >= 0);
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card className={props.classes.paper}>
+      <Card>
         <CardHeader
-          avatar={<UserAvatar user={props.user} />}
-          title={props.user.name}
+          avatar={<UserAvatar user={props.profile} />}
+          title={props.profile.name}
           subheader={`Role: ${props.role}`}
         />
         <CardContent>
           <Typography className={props.classes.emailContainer}>
             <EmailIcon />
-            <a href={`mailto:${props.user.email}`} className={props.classes.truncate}>
-              {props.user.email}
+            <a href={`mailto:${props.profile.email}`} className={props.classes.truncate}>
+              {props.profile.email}
             </a>
           </Typography>
-          {props.user.github &&
+          {props.profile.github &&
             <Typography>
               Github:&nbsp;
-              <a href={`https://github.com/${props.user.github}`} target="_blank">
-                {props.user.github}
+              <a href={`https://github.com/${props.profile.github}`} target="_blank">
+                {props.profile.github}
               </a>
             </Typography>}
         </CardContent>
@@ -106,7 +88,7 @@ const CohortUser = (props) => {
           {canMigrate && props.role === 'student' && (
             <IconButton
               onClick={() =>
-                props.toggleCohortUserMoveDialog({ uid: props.uid, user: props.user })
+                props.toggleMoveDialog({ uid: props.uid, user: props.profile })
               }
             >
               <SwapHorizIcon />
@@ -138,40 +120,21 @@ const CohortUser = (props) => {
 CohortUser.propTypes = {
   uid: PropTypes.string.isRequired,
   cohortid: PropTypes.string.isRequired,
-  user: PropTypes.shape({
+  role: PropTypes.string.isRequired,
+  profile: PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     github: PropTypes.string.isRequired,
-  }),
-  role: PropTypes.string.isRequired,
-  toggleCohortUserMoveDialog: PropTypes.func.isRequired,
-  classes: PropTypes.shape({
-    paper: PropTypes.string.isRequired,
-    emailContainer: PropTypes.string.isRequired,
-    truncate: PropTypes.string.isRequired,
   }).isRequired,
+  toggleMoveDialog: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
     database: PropTypes.func.isRequired,
   }).isRequired,
+  classes: PropTypes.shape({
+    emailContainer: PropTypes.string.isRequired,
+    truncate: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 
-CohortUser.defaultProps = {
-  user: undefined,
-};
-
-
-const mapStateToProps = ({ firebase }, ownProps) => ({
-  user: dataToJS(firebase, `users/${ownProps.uid}`),
-});
-
-const mapDispatchToProps = {
-  toggleCohortUserMoveDialog,
-};
-
-
-export default compose(
-  firebaseConnect(props => ([`users/${props.uid}`])),
-  connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
-)(CohortUser);
+export default withStyles(styles)(CohortUser);
