@@ -26,6 +26,13 @@ const styles = {
   },
 };
 
+const selfAssessmentPart = {
+  duration: 10,
+  format: 'self-paced',
+  title: 'Autoevaluación',
+  type: 'self-assessment',
+};
+
 
 const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
   `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;
@@ -34,6 +41,22 @@ const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
 const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
 
+
+const addSelfAssessment = (data) => {
+  const unit = data;
+
+  if (unit) {
+    const partKeys = Object.keys(unit.parts).sort();
+    const lastPart = partKeys[partKeys.length - 1];
+
+    const lastNumber = parseInt(lastPart.substr(0, lastPart.indexOf('-')), 0);
+    const selfAssessment = (lastNumber < 10 ? '0' : '') + (lastNumber + 1);
+
+    unit.parts[`${selfAssessment}-self-assessment`] = selfAssessmentPart;
+  }
+
+  return unit;
+};
 
 const Unit = (props) => {
   if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
@@ -48,7 +71,6 @@ const Unit = (props) => {
   const { partid } = props.match.params;
   const partKeys = Object.keys(props.unit.parts).sort();
   const first = partKeys[0];
-  const last = partKeys[partKeys.length - 1];
 
   if (!partid) {
     return <Redirect to={`${props.match.url}/${first}`} />;
@@ -57,11 +79,6 @@ const Unit = (props) => {
   const part = props.unit.parts[partid];
   const progress = (props.progress || {})[partid] || {};
   const { selfAssessment } = props.progress || {};
-  const hasGuidedParts = partKeys.reduce(
-    (memo, key) =>
-      memo || ['guiado', 'guided'].indexOf(props.unit.parts[key].format) > -1,
-    false,
-  );
 
   let Component = UnitPart;
   if (part.type === 'practice' && part.exercises) {
@@ -85,7 +102,7 @@ const Unit = (props) => {
           match={props.match}
           auth={props.auth}
           firebase={props.firebase}
-          showSelfAssessment={hasGuidedParts && partid === last}
+          showSelfAssessment={part.type === 'self-assessment'}
           selfAssessment={selfAssessment}
         />
       </div>
@@ -124,7 +141,7 @@ Unit.defaultProps = {
 
 
 const mapStateToProps = ({ firebase }, { auth, match }) => ({
-  unit: dataToJS(firebase, matchParamsToUnitPath(match.params)),
+  unit: addSelfAssessment(dataToJS(firebase, matchParamsToUnitPath(match.params))),
   progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
 });
 

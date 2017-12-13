@@ -6,7 +6,6 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import ThumbUpIcon from 'material-ui-icons/ThumbUp';
 import ThumbDownIcon from 'material-ui-icons/ThumbDown';
-import SelfAssessment from './self-assessment';
 
 
 const styles = {
@@ -125,8 +124,6 @@ class UnitPartTracker extends React.Component {
   render() {
     const {
       component: Component,
-      showSelfAssessment,
-      selfAssessment,
       classes,
       ...rest
     } = this.props;
@@ -136,16 +133,6 @@ class UnitPartTracker extends React.Component {
     return (
       <div>
         <Component {...rest} />
-        {showSelfAssessment &&
-          <div>
-            <hr className={classes.hr} />
-            <SelfAssessment
-              unitProgressPath={this.getUnitProgressPath()}
-              selfAssessment={selfAssessment}
-              firebase={this.props.firebase}
-            />
-          </div>
-        }
         <hr className={classes.hr} />
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
           {this.isReadType() &&

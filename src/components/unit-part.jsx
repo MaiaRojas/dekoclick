@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 import Content from './content';
+import SelfAssessment from './self-assessment';
 
 
 const styles = {
@@ -24,22 +25,48 @@ const styles = {
   },
 };
 
+const getUnitProgressPath = (auth, match) => {
+  const { cohortid, courseid, unitid } = match.params;
+  return `${cohortid}/${auth.uid}/${courseid}/${unitid}`;
+};
 
-const UnitPart = props => (
-  <div className={props.classes.root}>
-    <div className={props.classes.meta}>
-      <Chip
-        className={props.classes.metaChip}
-        label={`Tipo: ${props.part.type}`}
-      />
-      <Chip
-        className={props.classes.metaChip}
-        label={`Formato: ${props.part.format}`}
-      />
+
+const UnitPart = (props) => {
+  const {
+    auth,
+    classes,
+    match,
+    part,
+    showSelfAssessment,
+    selfAssessment,
+  } = props;
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.meta}>
+        <Chip
+          className={classes.metaChip}
+          label={`Tipo: ${part.type}`}
+        />
+        <Chip
+          className={classes.metaChip}
+          label={`Formato: ${part.format}`}
+        />
+      </div>
+      {showSelfAssessment &&
+        <div>
+          <SelfAssessment
+            match={match}
+            unitProgressPath={getUnitProgressPath(auth, match)}
+            selfAssessment={selfAssessment}
+            firebase={props.firebase}
+          />
+        </div>
+      }
+      {part.body && <Content html={part.body} />}
     </div>
-    {props.part.body && <Content html={props.part.body} />}
-  </div>
-);
+  );
+};
 
 
 UnitPart.propTypes = {
@@ -54,7 +81,21 @@ UnitPart.propTypes = {
     meta: PropTypes.string.isRequired,
     metaChip: PropTypes.string.isRequired,
   }).isRequired,
+  auth: PropTypes.shape({}).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    database: PropTypes.func.isRequired,
+  }).isRequired,
+  showSelfAssessment: PropTypes.bool.isRequired,
+  selfAssessment: PropTypes.shape({}),
 };
 
+UnitPart.defaultProps = {
+  selfAssessment: undefined,
+};
 
 export default withStyles(styles)(UnitPart);
