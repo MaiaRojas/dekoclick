@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Button from 'material-ui/Button';
 import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
 import Alert from './alert';
 import {
   toggleQuizConfirmationDialog,
