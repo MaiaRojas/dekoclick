@@ -9,20 +9,12 @@ import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
-import List, {
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-} from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
+import List from 'material-ui/List';
 import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import FolderIcon from 'material-ui-icons/Folder';
 import AddIcon from 'material-ui-icons/Add';
-import DeleteIcon from 'material-ui-icons/Delete';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
+import CohortCourse from '../components/cohort-course';
 import CohortUser from '../components/cohort-user';
 import CohortUserAddDialog from '../components/cohort-user-add-dialog';
 import CohortUserMoveDialog from '../components/cohort-user-move-dialog';
@@ -61,7 +53,7 @@ const styles = theme => ({
 const TabContainer = props => (
   <div style={{ padding: 8 * 3, backgroundColor: '#f0f0f0' }}>
     <Grid container className={props.classes.grid}>
-      {props.users.map(cohortUser => (
+      {false && props.users.map(cohortUser => (
         <CohortUser
           key={cohortUser.key}
           uid={cohortUser.key}
@@ -79,55 +71,6 @@ TabContainer.propTypes = {
   classes: PropTypes.shape({
     grid: PropTypes.string.isRequired,
   }).isRequired,
-};
-
-
-const CohortCourse = ({
-  cohortid,
-  courseid,
-  course,
-  history,
-  firebase,
-}) => (
-  <ListItem
-    button
-    onClick={() => {
-      history.push(`/cohorts/${cohortid}/courses/${courseid}`);
-    }}
-  >
-    <ListItemAvatar>
-      <Avatar>
-        <FolderIcon />
-      </Avatar>
-    </ListItemAvatar>
-    <ListItemText
-      primary={course.title}
-      secondary={course.stats.durationString}
-    />
-    <ListItemSecondaryAction>
-      <IconButton
-        aria-label="Delete"
-        onClick={() =>
-          window.confirm(`Estás segura de que quieres quitar el curso "${courseid}" del cohort "${cohortid}"?`) &&
-            firebase.database()
-              .ref(`cohortCourses/${cohortid}/${courseid}`)
-              .remove()
-              .catch(console.error)
-        }
-      >
-        <DeleteIcon />
-      </IconButton>
-    </ListItemSecondaryAction>
-  </ListItem>
-);
-
-
-CohortCourse.propTypes = {
-  cohortid: PropTypes.string.isRequired,
-  courseid: PropTypes.string.isRequired,
-  course: PropTypes.shape({}).isRequired,
-  history: PropTypes.shape({}).isRequired,
-  firebase: PropTypes.shape({}).isRequired,
 };
 
 
