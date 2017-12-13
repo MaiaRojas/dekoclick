@@ -14,7 +14,9 @@ import EmailIcon from 'material-ui-icons/Email';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
+import { toggleCohortUserMoveDialog } from '../reducers/cohort-user-move-dialog';
 import gravatarUrl from '../util/gravatarUrl';
+import cohort from '../util/cohort';
 
 
 const styles = theme => ({
@@ -72,6 +74,11 @@ const CohortUser = (props) => {
     return (<div>No user :-(</div>);
   }
 
+  // Averigua si es un cohort de common core del bootcamp para saber si se puede
+  // "migrar" al turno de la mañana o tarde según corresponda.
+  const parsedCohortId = cohort.parse(props.cohortid);
+  const canMigrate = (parsedCohortId.program === 'bc' && ['am', 'pm'].indexOf(parsedCohortId.name) >= 0);
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card className={props.classes.paper}>
@@ -82,7 +89,10 @@ const CohortUser = (props) => {
         />
         <CardContent>
           <Typography className={props.classes.emailContainer}>
-            <EmailIcon /> <a href={`mailto:${props.user.email}`} className={props.classes.truncate}>{props.user.email}</a>
+            <EmailIcon />
+            <a href={`mailto:${props.user.email}`} className={props.classes.truncate}>
+              {props.user.email}
+            </a>
           </Typography>
           {props.user.github &&
             <Typography>
@@ -93,8 +103,12 @@ const CohortUser = (props) => {
             </Typography>}
         </CardContent>
         <CardActions>
-          {false && props.role === 'student' && (
-            <IconButton onClick={() => console.log('move user to different cohort')}>
+          {canMigrate && props.role === 'student' && (
+            <IconButton
+              onClick={() =>
+                props.toggleCohortUserMoveDialog({ uid: props.uid, user: props.user })
+              }
+            >
               <SwapHorizIcon />
             </IconButton>
           )}
@@ -130,6 +144,7 @@ CohortUser.propTypes = {
     github: PropTypes.string.isRequired,
   }),
   role: PropTypes.string.isRequired,
+  toggleCohortUserMoveDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     paper: PropTypes.string.isRequired,
     emailContainer: PropTypes.string.isRequired,
@@ -145,13 +160,18 @@ CohortUser.defaultProps = {
   user: undefined,
 };
 
+
 const mapStateToProps = ({ firebase }, ownProps) => ({
   user: dataToJS(firebase, `users/${ownProps.uid}`),
 });
 
+const mapDispatchToProps = {
+  toggleCohortUserMoveDialog,
+};
+
 
 export default compose(
   firebaseConnect(props => ([`users/${props.uid}`])),
-  connect(mapStateToProps, {}),
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortUser);
