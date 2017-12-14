@@ -21,7 +21,7 @@ import SignInResults from '../components/signin-results';
 import isEmail from '../util/isEmail';
 
 
-const styles = {
+const styles = theme => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
@@ -30,8 +30,8 @@ const styles = {
     backgroundColor: '#f0f0f0',
   },
   paper: {
-    margin: 32,
-    padding: '24px 32px 32px',
+    margin: theme.spacing.unit * 4,
+    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
     width: '100%',
     maxWidth: '320px',
   },
@@ -39,12 +39,12 @@ const styles = {
     width: '100%',
     maxWidth: 200,
     display: 'block',
-    margin: '0 auto 10px',
+    margin: `0 auto ${theme.spacing.unit}px`,
   },
   submitBtn: {
-    margin: '10px 0 20px',
+    margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
   },
-};
+});
 
 
 const isValidEmail = (email, error) => {

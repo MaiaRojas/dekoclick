@@ -5,6 +5,20 @@ html, body, .root, .root > div {
   padding: 0;
 }
 
+body {
+  color: #2b2b2b;
+  font-family: museo-sans, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 100;
+  font-size: 16px;
+  line-height: 145%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Montserrat, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 blockquote {
   background-color: #f0f0f0;
   padding: 2px 4px 2px 24px;
@@ -42,7 +56,7 @@ pre > code {
 .content p,
 .content ul,
 .content ol {
-  line-height: 1.4em;
+  line-height: 1.6em;
 }
 
 .content img {

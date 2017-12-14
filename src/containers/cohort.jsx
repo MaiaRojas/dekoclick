@@ -29,7 +29,7 @@ const styles = theme => ({
     width: '100%',
   },
   grid: {
-    marginBottom: 20,
+    marginBottom: theme.spacing.unit * 3,
   },
   heading: {
     display: 'flex',

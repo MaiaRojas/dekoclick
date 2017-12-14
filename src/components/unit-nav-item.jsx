@@ -22,8 +22,11 @@ const styles = {
   active: {
     backgroundColor: '#ffc107',
   },
+  read: {
+    fontWeight: 400,
+  },
   unread: {
-    fontWeight: 'bold',
+    fontWeight: 700,
   },
 };
 
@@ -88,7 +91,9 @@ const UnitNavItem = props => (
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
     <ListItemText
-      classes={{ text: (props.progress || {}).openedAt ? '' : props.classes.unread }}
+      classes={{
+        text: (props.progress || {}).openedAt ? props.classes.read : props.classes.unread,
+      }}
       primary={`${props.order}. ${props.part.title}`}
     />
     <ListItemSecondaryAction>
@@ -109,6 +114,7 @@ UnitNavItem.propTypes = {
   progress: PropTypes.shape({}),
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
+    read: PropTypes.string.isRequired,
     unread: PropTypes.string.isRequired,
   }).isRequired,
   match: PropTypes.shape({

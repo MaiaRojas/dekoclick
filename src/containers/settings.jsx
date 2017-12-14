@@ -10,16 +10,16 @@ import EditIcon from 'material-ui-icons/Edit';
 import TopBar from '../components/top-bar';
 
 
-const styles = {
+const styles = theme => ({
   paper: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: theme.spacing.unit * 3,
   },
   legend: {
-    marginBottom: 16,
+    marginBottom: theme.spacing.unit * 2,
   },
-};
+});
 
 
 const Settings = props => (

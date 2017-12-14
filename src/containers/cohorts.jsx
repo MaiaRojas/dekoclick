@@ -17,12 +17,12 @@ import CohortNewDialog from '../components/cohort-new-dialog';
 import { toggleCohortNewDialog } from '../reducers/cohort-new-dialog';
 
 
-const styles = () => ({
+const styles = theme => ({
   root: {
     width: '100%',
   },
   paper: {
-    padding: 20,
+    padding: theme.spacing.unit * 2,
     display: 'flex',
     justifyContent: 'space-between',
   },
