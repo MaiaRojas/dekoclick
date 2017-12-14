@@ -1,6 +1,6 @@
 {
   "name": "lms.laboratoria.la",
-  "version": "0.0.8-beta.1",
+  "version": "0.0.8",
   "main": "dist/index.html",
   "license": "UNLICENSED",
   "private": true,
