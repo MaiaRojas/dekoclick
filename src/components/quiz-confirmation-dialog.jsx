@@ -49,7 +49,9 @@ const QuizConfirmationDialog = ({ classes, ...props }) => (
 
 
 QuizConfirmationDialog.propTypes = {
-  part: PropTypes.shape({}).isRequired,
+  part: PropTypes.shape({
+    durationString: PropTypes.string.isRequired,
+  }).isRequired,
   classes: PropTypes.shape({}).isRequired,
   quizConfirmationDialogOpen: PropTypes.bool.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,

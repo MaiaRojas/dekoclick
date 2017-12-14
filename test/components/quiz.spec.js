@@ -34,6 +34,7 @@ describe('<Quiz />', () => {
       <Provider store={store}>
         <Quiz
           part={{
+            durationString: '10min',
             questions: [
               {
                 title: 'Foo',
