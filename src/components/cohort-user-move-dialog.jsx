@@ -34,7 +34,7 @@ const CohortUserMoveDialog = (props) => {
 
   return (
     <div className={props.classes.container}>
-      <Dialog open={props.open} onRequestClose={props.toggleCohortUserMoveDialog}>
+      <Dialog open={props.open} onClose={props.toggleCohortUserMoveDialog}>
         <DialogTitle>
           Mueve alumnx al turno <strong>{props.targetCohort.parsedId.name}</strong>
         </DialogTitle>

@@ -21,7 +21,7 @@ const LeftDrawer = props => (
       <Drawer
         className={props.classes.drawer}
         open={props.drawerOpen}
-        onRequestClose={() => props.displayDrawer()}
+        onClose={() => props.displayDrawer()}
         type="temporary"
         ModalProps={{
           keepMounted: true,

@@ -30,9 +30,9 @@ const theme = createMuiTheme({
       fontWeight: 700,
     },
     subheading: {
-      fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
-      textTransform: 'uppercase',
-      fontWeight: 700,
+      // fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
+      // textTransform: 'uppercase',
+      fontWeight: 300,
     },
     button: {
       fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',

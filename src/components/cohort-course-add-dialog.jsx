@@ -80,7 +80,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
 
   return (
     <div className={classes.container}>
-      <Dialog open={props.open} onRequestClose={props.toggleCohortCourseAddDialog}>
+      <Dialog open={props.open} onClose={props.toggleCohortCourseAddDialog}>
         <DialogTitle>Añade curso al cohort</DialogTitle>
         <DialogContent>
           {content}

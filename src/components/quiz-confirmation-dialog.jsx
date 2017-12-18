@@ -21,7 +21,7 @@ const styles = () => ({
 
 const QuizConfirmationDialog = ({ classes, ...props }) => (
   <Dialog
-    onRequestClose={props.toggleQuizConfirmationDialog}
+    onClose={props.toggleQuizConfirmationDialog}
     open={props.quizConfirmationDialogOpen}
     classes={{ paper: classes.dialog }}
   >

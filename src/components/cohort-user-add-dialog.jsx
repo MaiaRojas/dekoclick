@@ -104,7 +104,7 @@ const hasVerifiedEmail = props =>
 
 const CohortUserAddDialog = ({ classes, ...props }) => (
   <div className={classes.container}>
-    <Dialog open={props.open} onRequestClose={props.toggleCohortUserAddDialog}>
+    <Dialog open={props.open} onClose={props.toggleCohortUserAddDialog}>
       <DialogTitle>Añade usuario al cohort</DialogTitle>
       <DialogContent>
         <TextField

@@ -23,7 +23,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary[500],
   },
   read: {
-    fontWeight: 400,
+    fontWeight: 300,
   },
   unread: {
     fontWeight: 700,

@@ -233,7 +233,7 @@ const validate = (props) => {
 
 const CohortNewDialog = ({ classes, ...props }) => (
   <div className={classes.container}>
-    <Dialog open={props.open} onRequestClose={props.toggleCohortNewDialog}>
+    <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
       <DialogTitle>Nuevo cohort</DialogTitle>
       {props.cohortKey ?
         <CohortNewDialogConfirm classes={classes} {...props} /> :

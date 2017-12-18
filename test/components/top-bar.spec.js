@@ -15,7 +15,7 @@ describe('<TopBar />', () => {
         <TopBar />
       </Provider>
     );
-		expect(stub.calledOnce).toBe(true);
+		expect(stub.getCalls().length > 0).toBe(true);
     expect(stub.getCall(0).args[0]).toMatchSnapshot();
     stub.restore();
 	});
@@ -31,16 +31,17 @@ describe('<TopBar />', () => {
     expect(component.find('h2').text()).toBe('Blah blah blah');
   });
 
-  it.skip('should have classes prop injected and title prop on instance', () => {
+  it('should have classes prop injected and title prop on instance', () => {
     const component = render(
       <Provider store={store}>
         <TopBar title="foo" />
       </Provider>
     );
     expect(component).toHaveLength(1);
-    // console.log(component);
-    // expect(component.props()).toMatchSnapshot()
-    // expect(component.instance().props).toEqual({ title: 'foo' });
+    const $h2 = component[0].children[0].children[1];
+    expect(component[0].attribs.class).toMatch(/TopBar/);
+    expect($h2.children[0].type).toBe('text');
+    expect($h2.children[0].data).toBe('foo');
   });
 
 });

@@ -1,16 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<TopBar /> should have classes prop injected and title prop on instance 1`] = `
-Object {
-  "children": undefined,
-  "classes": Object {
-    "appBar": "TopBar-appBar-1",
-    "flex": "TopBar-flex-2",
-  },
-  "title": "foo",
-}
-`;
-
 exports[`<TopBar /> should print warning in console.error when missing title 1`] = `
 "Warning: Failed prop type: The prop \`title\` is marked as required in \`TopBar\`, but its value is \`undefined\`.
     in TopBar
