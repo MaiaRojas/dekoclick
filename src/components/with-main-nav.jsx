@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import MainNav from '../components/main-nav';
 
 
-const WithMainNav = ({ component: Component, ...props }) => (
-  <div className="app">
+const styles = theme => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+  },
+});
+
+
+const WithMainNav = ({ component: Component, classes, ...props }) => (
+  <div className={`app ${classes.root}`}>
     <MainNav {...props} />
     <div className="main">
       <Component {...props} />
@@ -18,4 +26,4 @@ WithMainNav.propTypes = {
 };
 
 
-export default WithMainNav;
+export default withStyles(styles)(WithMainNav);

@@ -12,9 +12,9 @@ import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
 
 
-const styles = {
+const styles = theme => ({
   list: {
-    width: 320,
+    width: theme.leftDrawerWidth,
   },
   logo: {
     height: 20,
@@ -23,14 +23,11 @@ const styles = {
     padding: 10,
   },
   profileBadge: {
-    padding: '22px 16px',
-    backgroundColor: '#ecebeb',
-  },
-  profileBadgeText: {
-    color: '#333',
+    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px`,
+    backgroundColor: theme.palette.background.default,
   },
   active: {
-    backgroundColor: '#ffc107',
+    backgroundColor: theme.palette.primary[500],
   },
   bottom: {
     position: 'absolute',
@@ -38,9 +35,9 @@ const styles = {
     width: '100%',
   },
   signoutBtn: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.palette.background.default,
   },
-};
+});
 
 
 const nameToInitials = (name = '') => name.split(' ').reduce((memo, item) => {
@@ -93,7 +90,6 @@ const MainNav = props => (
           {nameToInitials(getName(props.auth, props.profile))}
         </Avatar>
         <ListItemText
-          classes={{ text: props.classes.profileBadgeText }}
           primary={getName(props.auth, props.profile)}
           secondary={getEmail(props.auth, props.profile)}
         />
@@ -176,7 +172,6 @@ MainNav.propTypes = {
     list: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     profileBadge: PropTypes.string.isRequired,
-    profileBadgeText: PropTypes.string.isRequired,
     active: PropTypes.string.isRequired,
     bottom: PropTypes.string.isRequired,
     signoutBtn: PropTypes.string.isRequired,

@@ -15,7 +15,7 @@ const styles = theme => ({
   appBar: {
     boxShadow: 'none',
     [theme.breakpoints.up('md')]: {
-      width: 'calc(100% - 320px)',
+      width: `calc(100% - ${theme.leftDrawerWidth}px)`,
     },
   },
   menuIcon: {

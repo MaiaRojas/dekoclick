@@ -13,10 +13,7 @@ import { toggleCohortUserMoveDialog } from '../reducers/cohort-user-move-dialog'
 const styles = theme => ({
   root: {
     padding: theme.spacing.unit * 3,
-    backgroundColor: '#f0f0f0',
-  },
-  grid: {
-    marginBottom: 20,
+    backgroundColor: theme.palette.background.contentFrame,
   },
 });
 
@@ -32,7 +29,7 @@ const CohortUsers = (props) => {
 
   return (
     <div className={props.classes.root}>
-      <Grid container className={props.classes.grid}>
+      <Grid container>
         {props.users.map(cohortUser => (
           <CohortUser
             key={cohortUser.key}
@@ -60,7 +57,6 @@ CohortUsers.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
-    grid: PropTypes.string.isRequired,
   }).isRequired,
 };
 

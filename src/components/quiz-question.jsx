@@ -10,10 +10,10 @@ import QuizQuestionMulti from './quiz-question-multi';
 import Content from './content';
 
 
-const styles = {
+const styles = theme => ({
   paper: {
-    padding: 20,
-    marginBottom: 30,
+    padding: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 4,
   },
   passes: {
     color: green[500],
@@ -23,7 +23,7 @@ const styles = {
     color: red[500],
     fontWeight: 'bold',
   },
-};
+});
 
 
 const labelClassName = props => (idx) => {

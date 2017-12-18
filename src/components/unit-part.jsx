@@ -6,24 +6,25 @@ import Content from './content';
 import SelfAssessment from './self-assessment';
 
 
-const styles = {
+const styles = theme => ({
   root: {
     width: '100%',
-    maxWidth: '760px',
+    maxWidth: theme.maxContentWidth,
     height: '100%',
-    background: '#fff',
+    // background: '#fff',
     margin: '0 auto',
-    padding: '30px',
+    padding: theme.spacing.unit * 4,
   },
   meta: {
     display: 'flex',
     alignItems: 'left',
-    marginBottom: 32,
+    marginBottom: theme.spacing.unit * 4,
   },
   metaChip: {
-    marginRight: 4,
+    marginRight: theme.spacing.unit / 2,
   },
-};
+});
+
 
 const getUnitProgressPath = (auth, match) => {
   const { cohortid, courseid, unitid } = match.params;

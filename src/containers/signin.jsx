@@ -27,13 +27,13 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.palette.background.default,
   },
   paper: {
     margin: theme.spacing.unit * 4,
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
     width: '100%',
-    maxWidth: '320px',
+    maxWidth: theme.leftDrawerWidth,
   },
   logo: {
     width: '100%',

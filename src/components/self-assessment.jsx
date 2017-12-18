@@ -16,28 +16,28 @@ import SentimentNeutralIcon from 'material-ui-icons/SentimentNeutral';
 import SentimentVeryDissatisfiedIcon from 'material-ui-icons/SentimentVeryDissatisfied';
 
 
-const styles = {
+const styles = theme => ({
   root: {
-    maxWidth: 760,
+    maxWidth: theme.maxContentWidth,
     margin: '0 auto',
   },
   headline: {
-    margin: '32px 0px',
+    margin: `${theme.spacing.unit * 4}px 0px`,
     fontWeight: 'bold',
   },
   paper: {
-    padding: 20,
-    marginBottom: 30,
+    padding: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 4,
   },
   fieldset: {
     width: '100%',
-    marginBottom: 16,
+    marginBottom: theme.spacing.unit * 2,
   },
   formGroup: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 16,
+    marginTop: theme.spacing.unit * 2,
   },
   sentimentIcon: {
     width: 100,
@@ -46,7 +46,7 @@ const styles = {
   hidden: {
     display: 'none',
   },
-};
+});
 
 const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
   `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;

@@ -15,18 +15,18 @@ import {
 } from '../reducers/quiz-confirmation-dialog';
 
 
-const styles = {
+const styles = theme => ({
   root: {
-    maxWidth: 760,
+    maxWidth: theme.maxContentWidth,
     margin: '0 auto',
   },
   p: {
-    marginBottom: 10,
+    marginBottom: theme.spacing.unit * 1.5,
   },
   startButton: {
-    marginTop: 10,
+    marginTop: theme.spacing.unit,
   },
-};
+});
 
 
 const arrayEqual = (a, b) => {

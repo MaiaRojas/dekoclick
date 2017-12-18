@@ -9,9 +9,9 @@ import red from 'material-ui/colors/red';
 import green from 'material-ui/colors/green';
 
 
-const styles = {
+const styles = theme => ({
   list: {
-    marginTop: 30,
+    marginTop: theme.spacing.unit * 3,
   },
   greenAvatar: {
     color: '#fff',
@@ -21,7 +21,7 @@ const styles = {
     color: '#fff',
     backgroundColor: red[500],
   },
-};
+});
 
 
 const Test = props => (

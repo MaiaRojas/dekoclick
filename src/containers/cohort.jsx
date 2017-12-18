@@ -37,9 +37,9 @@ const styles = theme => ({
     alignItems: 'center',
   },
   headingButton: {
-    top: -16,
-    width: 48,
-    height: 48,
+    top: theme.spacing.unit * -2,
+    width: theme.spacing.unit * 6,
+    height: theme.spacing.unit * 6,
   },
   title: {
     margin: `0 0 ${theme.spacing.unit * 2}px`,

@@ -9,9 +9,9 @@ import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 
 
-const styles = {
+const styles = theme => ({
   card: {
-    marginBottom: 32,
+    marginBottom: theme.spacing.unit * 4,
   },
   cardActions: {
     justifyContent: 'space-between',
@@ -24,7 +24,7 @@ const styles = {
     display: 'inline-block',
     marginLeft: 6,
   },
-};
+});
 
 
 const partCount = ({ stats, parts }) =>

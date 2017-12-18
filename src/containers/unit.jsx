@@ -15,16 +15,18 @@ import Quiz from '../components/quiz';
 import { withTracker } from '../components/unit-part-tracker';
 
 
-const styles = {
+const styles = theme => console.log(theme) || ({
   main: {
-    background: '#fff',
+    // background: '#fff',
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
     height: '100%',
-    marginTop: '60px',
-    padding: '36px',
+    marginTop: `${theme.spacing.unit * 7}px`,
+    padding: `${theme.spacing.unit * 4}px`,
     width: '100%',
     minHeight: '100vh',
   },
-};
+});
 
 const selfAssessmentPart = {
   duration: 10,
