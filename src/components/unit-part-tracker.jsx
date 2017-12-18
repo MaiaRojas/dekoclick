@@ -8,12 +8,12 @@ import ThumbUpIcon from 'material-ui-icons/ThumbUp';
 import ThumbDownIcon from 'material-ui-icons/ThumbDown';
 
 
-const styles = {
+const styles = theme => ({
   hr: {
-    maxWidth: 760,
-    marginTop: 32,
+    maxWidth: theme.maxContentWidth,
+    marginTop: theme.spacing.unit * 4,
   },
-};
+});
 
 
 class UnitPartTracker extends React.Component {

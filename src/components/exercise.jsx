@@ -42,16 +42,16 @@ TabContainer.propTypes = {
 
 const styles = theme => ({
   title: {
-    marginBottom: 30,
+    marginBottom: theme.spacing.unit * 4,
   },
   button: {
     margin: theme.spacing.unit,
   },
   linearProgress: {
-    marginTop: 20,
+    marginTop: theme.spacing.unit * 3,
   },
   error: {
-    marginTop: 20,
+    marginTop: theme.spacing.unit * 3,
     color: red[500],
   },
 });

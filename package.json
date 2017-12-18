@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "pretest": "eslint --ext .js --ext .jsx src/",
-    "test": "jest --coverage",
+    "test": "FIREBASE_API_KEY=xxx FIREBASE_PROJECT=xxx FIREBASE_MESSAGING_SENDER_ID=xxx jest --verbose --coverage",
     "watch": "yarn test --watch",
     "build": "NODE_ENV=production webpack -p",
     "build:staging": "yarn run build --env.backend=laboratoria-la-staging",

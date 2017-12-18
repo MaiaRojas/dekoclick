@@ -8,16 +8,16 @@ import yellow from 'material-ui/colors/yellow';
 import red from 'material-ui/colors/red';
 
 
-const styles = {
+const styles = theme => ({
   root: {
-    marginBottom: 30,
-    padding: 20,
+    marginBottom: theme.spacing.unit * 4,
+    padding: theme.spacing.unit * 3,
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   body: {
-    marginRight: 15,
+    marginRight: theme.spacing.unit * 2,
   },
   green: {
     backgroundColor: green[500],
@@ -31,7 +31,7 @@ const styles = {
     backgroundColor: red[500],
     color: '#ffffff',
   },
-};
+});
 
 
 const QuizResults = ({ results, classes }) => {

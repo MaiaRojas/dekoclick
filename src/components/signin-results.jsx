@@ -16,9 +16,9 @@ const apiErrorMessages = {
 };
 
 
-const styles = {
+const styles = theme => ({
   results: {
-    marginBottom: 15,
+    marginBottom: theme.spacing.unit * 2,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -36,9 +36,9 @@ const styles = {
     position: 'absolute',
   },
   resultsMessage: {
-    marginLeft: 30,
+    marginLeft: theme.spacing.unit * 4,
   },
-};
+});
 
 
 const getError = (authError, forgot, forgotResult) => {

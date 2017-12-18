@@ -8,11 +8,11 @@ import Hidden from 'material-ui/Hidden';
 import { displayDrawer } from '../reducers/top-bar';
 
 
-const styles = {
+const styles = theme => ({
   drawer: {
-    width: 320,
+    width: theme.leftDrawerWidth,
   },
-};
+});
 
 
 const LeftDrawer = props => (

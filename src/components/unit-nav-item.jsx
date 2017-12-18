@@ -18,9 +18,9 @@ const propsToRoutePath = ({ partid, match }) =>
   `/${match.params.unitid}/${partid}`;
 
 
-const styles = {
+const styles = theme => ({
   active: {
-    backgroundColor: '#ffc107',
+    backgroundColor: theme.palette.primary[500],
   },
   read: {
     fontWeight: 400,
@@ -28,7 +28,7 @@ const styles = {
   unread: {
     fontWeight: 700,
   },
-};
+});
 
 
 const partTypeToIcon = (type) => {

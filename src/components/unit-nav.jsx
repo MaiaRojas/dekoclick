@@ -7,11 +7,11 @@ import LeftDrawer from './left-drawer';
 import UnitNavItem from './unit-nav-item';
 
 
-const styles = {
+const styles = theme => ({
   list: {
-    width: 320,
+    width: theme.leftDrawerWidth,
   },
-};
+});
 
 
 const goBack = ({ history, match }) => () => {

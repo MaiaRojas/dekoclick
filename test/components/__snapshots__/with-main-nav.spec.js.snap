@@ -4,3 +4,9 @@ exports[`<WithMainNav /> should print warning when missing component prop 1`] = 
 "Warning: Failed prop type: The prop \`component\` is marked as required in \`WithMainNav\`, but its value is \`undefined\`.
     in WithMainNav"
 `;
+
+exports[`<WithMainNav /> should spread props to Component 1`] = `
+Object {
+  "class": "my-component",
+}
+`;

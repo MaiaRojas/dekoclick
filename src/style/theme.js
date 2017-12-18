@@ -5,8 +5,10 @@ import { amber } from 'material-ui/colors';
 const theme = createMuiTheme({
   palette: {
     primary: amber,
+    // type: 'dark',
   },
   typography: {
+    htmlFontSize: 16,
     color: '#2b2b2b',
     fontFamily: 'museo-sans, "Helvetica Neue", Arial, sans-serif',
     fontWeight: 100,
@@ -20,7 +22,6 @@ const theme = createMuiTheme({
       fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
       textTransform: 'uppercase',
       fontWeight: 700,
-      // color: '#f7b617',
       color: '#999',
     },
     title: {
@@ -38,6 +39,8 @@ const theme = createMuiTheme({
       fontWeight: 700,
     },
   },
+  maxContentWidth: 760,
+  leftDrawerWidth: 320,
 });
 
 
