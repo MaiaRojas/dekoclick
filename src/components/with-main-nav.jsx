@@ -23,6 +23,9 @@ const WithMainNav = ({ component: Component, classes, ...props }) => (
 
 WithMainNav.propTypes = {
   component: PropTypes.func.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 
