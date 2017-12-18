@@ -66,7 +66,8 @@ const processCohorts = ({
         ...cohorts[cohortid],
         id: cohortid,
         campus: (campuses[cohortid.split('-')[0]] || {}).name || 'global',
-        start: parseDate(cohorts[cohortid].start),
+        start: cohorts[cohortid] && cohorts[cohortid].start ?
+          parseDate(cohorts[cohortid].start) : new Date(),
         program: programIdToName[cohortid.split('-')[3]],
         track: trackIdToName[cohortid.split('-')[4]],
         subtrack: cohortid.split('-')[5],
