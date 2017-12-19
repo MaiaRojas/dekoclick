@@ -1,10 +1,7 @@
 import { getFirebase } from 'react-redux-firebase';
 
 
-const pattern = /^laboratoria-la/;
-const projectId = process.env.FIREBASE_PROJECT || '';
-const envSuffix = pattern.test(projectId) ? projectId.replace(pattern, '') : '';
-const baseUrl = `https://laboratoria-la-api${envSuffix}.firebaseapp.com`;
+const baseUrl = `https://${process.env.FIREBASE_PROJECT}.firebaseapp.com`;
 
 
 const apiMiddleware = store => next => (action) => {

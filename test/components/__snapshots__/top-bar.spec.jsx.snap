@@ -1,9 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<TopBar /> should print warning in console.error when missing title 1`] = `
-"Warning: Failed prop type: The prop \`title\` is marked as required in \`TopBar\`, but its value is \`undefined\`.
+Array [
+  "Warning: Failed prop type: The prop \`title\` is marked as required in \`TopBar\`, but its value is \`undefined\`.
     in TopBar
     in withStyles(TopBar)
     in Connect(withStyles(TopBar))
-    in Provider"
+    in Provider",
+]
 `;

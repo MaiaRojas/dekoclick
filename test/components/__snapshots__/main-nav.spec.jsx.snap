@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MainNav /> should warn when missing nested props: history.push, firebase.logout 1`] = `
+Array [
+  "Warning: Failed prop type: The prop \`history.push\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
+
+exports[`<MainNav /> should warn when missing nested props: history.push, firebase.logout 2`] = `
+Array [
+  "Warning: Failed prop type: The prop \`firebase.logout\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
+
+exports[`<MainNav /> should warn when missing props: auth, match, history, firebase 1`] = `
+Array [
+  "Warning: Failed prop type: The prop \`auth\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
+
+exports[`<MainNav /> should warn when missing props: auth, match, history, firebase 2`] = `
+Array [
+  "Warning: Failed prop type: The prop \`auth\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
+
+exports[`<MainNav /> should warn when missing props: auth, match, history, firebase 3`] = `
+Array [
+  "Warning: Failed prop type: The prop \`auth\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
+
+exports[`<MainNav /> should warn when missing props: auth, match, history, firebase 4`] = `
+Array [
+  "Warning: Failed prop type: The prop \`auth\` is marked as required in \`MainNav\`, but its value is \`undefined\`.
+    in MainNav",
+]
+`;
