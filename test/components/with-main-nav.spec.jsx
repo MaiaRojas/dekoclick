@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow, render } from 'enzyme';
-import sinon from 'sinon';
 import { Provider } from 'react-redux';
 import store from '../../src/store';
 import WithMainNav from '../../src/components/with-main-nav';
@@ -9,12 +8,15 @@ import WithMainNav from '../../src/components/with-main-nav';
 describe('<WithMainNav />', () => {
 
   it('should print warning when missing component prop', () => {
-    const stub = sinon.stub(console, 'error');
-    const component = shallow(<WithMainNav />);
-		expect(stub.getCalls().length > 0).toBe(true);
-    expect(stub.getCall(0).args[0]).toMatchSnapshot();
-    stub.restore();
-	});
+    const spy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+    shallow(<WithMainNav />);
+
+    expect(spy.mock.calls.length > 0).toBe(true);
+    expect(spy.mock.calls[0]).toMatchSnapshot();
+
+    spy.mockReset();
+    spy.mockRestore();
+  });
 
   it('should spread props to Component', () => {
     const Component = props => (
@@ -22,7 +24,7 @@ describe('<WithMainNav />', () => {
         hello {props.auth.displayName} (path is {props.match.path})
       </div>
     );
-    const wrapper = render(
+    const wrapper = render((
       <Provider store={store}>
         <WithMainNav
           component={Component}
@@ -32,18 +34,18 @@ describe('<WithMainNav />', () => {
           firebase={{ logout: () => {} }}
         />
       </Provider>
-    );
+    ));
     const children = wrapper.children();
     expect(children.length).toEqual(2);
     expect(children[1].children[0].attribs).toMatchSnapshot();
     expect(children[1].children[0].children[0].type).toBe('text');
     expect(children[1].children[0].children[0].data).toBe('hello Ada Lovelace (path is /)');
-	});
+  });
 
   it('should wrap component in container along with MainNav', () => {
-    const Component = props => (<div className="my-component">hello world</div>);
+    const Component = () => (<div className="my-component">hello world</div>);
 
-    const wrapper = render(
+    const wrapper = render((
       <Provider store={store}>
         <WithMainNav
           component={Component}
@@ -53,7 +55,7 @@ describe('<WithMainNav />', () => {
           firebase={{ logout: () => {} }}
         />
       </Provider>
-    );
+    ));
 
     expect(wrapper.length).toBe(1);
     expect(wrapper[0].type).toBe('tag');

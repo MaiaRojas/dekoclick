@@ -7,7 +7,7 @@ entorno de aprendizaje. Este repo lo maneja el _core team_ de productos de
 Laboratoria.
 
 * URL de producción: https://lms.laboratoria.la/
-* URL de staging/QA: https://laboratoria-la-staging.firebaseapp.com/
+* URL de staging/QA: https://laboratoria-la-lms-staging.firebaseapp.com/
 
 ## Dependencias
 
@@ -55,48 +55,28 @@ yarn build:staging
 export FIREBASE_PROJECT=laboratoria-la-dev-lupo
 export FIREBASE_API_KEY=xxxxx
 export FIREBASE_MESSAGING_SENDER_ID=123456
-yarn run build
+yarn build
 ```
 
-## Backend de desarrollo
+## Backend/API de desarrollo
 
-Si necesitas tu propio backend de desarrollo, crea un proyecto nuevo en
-[Firebase](https://firebase.google.com/) y en la sección "Authentication" del
-proyecto (en la interfaz web de Firebase) habilita "Correo
-electrónico/contraseña" como proveedor de acceso.
-
-```sh
-# Exporta usuarios
-firebase --project laboratoria-la auth:export auth.json
-# Exporta base de datos
-firebase --project laboratoria-la database:get / > db.json
-# Importa usuarios
-firebase --project laboratoria-la-dev-lupo auth:import \
-  --hash-algo=SCRYPT \
-  --hash-key='rZC0qVE/tDNGuU4eBWlCZLQcoKXZmH7qwf+0MS3DUueBOjrNUQAq98icUXEPk/VqzEG6lvhVGESjTjXZ2PLr2A==' \
-  --salt-separator='Bw==' \
-  --rounds=8 \
-  --mem-cost=14 \
-  auth.json
-# Importa base de datos
-firebase --project laboratoria-la-dev-lupo database:set / db.json
-```
+...
 
 ## Despliegue
 
 ```sh
 # desplegar usando backend de producción
-yarn run build:production
-yarn run deploy:production
+yarn build:production
+yarn deploy:production
 
 # desplegar usando backend de staging
-yarn run build:staging
-yarn run deploy:staging
+yarn build:staging
+yarn deploy:staging
 
 # desplegar usando backend de desarrollo
 export FIREBASE_PROJECT=laboratoria-la-dev-lupo
 export FIREBASE_API_KEY=xxxxx
 export FIREBASE_MESSAGING_SENDER_ID=123456
-yarn run build
+yarn build
 firebase deploy --only hosting --project "${FIREBASE_PROJECT}"
 ```

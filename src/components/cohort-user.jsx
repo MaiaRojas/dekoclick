@@ -94,7 +94,7 @@ const CohortUser = (props) => {
               <SwapHorizIcon />
             </IconButton>
           )}
-          {false && props.role === 'student' && (
+          {props.role === 'student' && (
             <IconButton onClick={() => console.log('drop out!')}>
               <DirectionsWalkIcon />
             </IconButton>

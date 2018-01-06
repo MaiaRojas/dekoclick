@@ -94,12 +94,12 @@ const validate = (props, emailOnly) => {
 };
 
 
-const emailNotExists = props =>
-  props.userRecordError && props.userRecordError.status && props.userRecordError.status === 404;
+const emailNotExists = ({ userRecordError }) =>
+  userRecordError && userRecordError.statusCode === 404;
 
 
-const hasVerifiedEmail = props =>
-  (props.userRecord || (props.userRecordError && props.userRecordError.status === 404));
+const hasVerifiedEmail = ({ userRecord, userRecordError }) =>
+  (userRecord || (userRecordError && userRecordError.statusCode === 404));
 
 
 const CohortUserAddDialog = ({ classes, ...props }) => (

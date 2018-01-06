@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, shallow } from 'enzyme';
-import sinon from 'sinon';
+import { render } from 'enzyme';
 import { Provider } from 'react-redux';
 import store from '../../src/store';
 import Quiz from '../../src/components/quiz';
@@ -8,14 +7,17 @@ import Quiz from '../../src/components/quiz';
 
 describe('<Quiz />', () => {
 
-  // it.only('should print warning in console.error when missing part', () => {
-    // const stub = sinon.stub(console, 'error');
-    // const component = render(<Quiz />);
-    // console.log(component);
-		// expect(stub.calledOnce).toBe(true);
-    // expect(stub.getCall(0).args[0]).toMatchSnapshot();
-    // console.error.restore();
-	// });
+  it('should print warning when missing part, progress, firebase, auth or match', () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+    expect(() => render(<Provider store={store}><Quiz /></Provider>))
+      .toThrow(/startedAt/);
+
+    expect(spy.mock.calls.length).toBe(5);
+    expect(spy.mock.calls).toMatchSnapshot();
+
+    spy.mockReset();
+    spy.mockRestore();
+  });
 
   // cuando props.progress es un objeto vacío no hay progreso
   // cuando props.progress es un array es que ya tenemos respuestas
@@ -29,8 +31,8 @@ describe('<Quiz />', () => {
 
   it('should submit quiz...');
 
-  it.only('should...', () => {
-    const component = render(
+  it.skip('should...', () => {
+    const component = render((
       <Provider store={store}>
         <Quiz
           part={{
@@ -41,11 +43,11 @@ describe('<Quiz />', () => {
                 description: 'Blah blah blaf',
                 answers: [
                   'an answer',
-                  'another possible answer'
+                  'another possible answer',
                 ],
                 solution: [1],
-              }
-            ]
+              },
+            ],
           }}
           progress={{}}
           firebase={{ database: () => {} }}
@@ -56,11 +58,11 @@ describe('<Quiz />', () => {
               courseid: 'test',
               unitid: '01-bar',
               partid: '05-quiz',
-            }
+            },
           }}
         />
       </Provider>
-    );
+    ));
     console.log(component.html());
   });
 
