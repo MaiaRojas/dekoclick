@@ -30,15 +30,18 @@ const Courses = (props) => {
   return (
     <div className="courses">
       <TopBar title="Cursos" />
-      {Object.keys(props.userCohorts).map(key =>
-        <CoursesList key={key} cohort={key} role={props.userCohorts[key]} />)}
+      {props.userCohorts.map(cohort =>
+        <CoursesList key={cohort.id} cohort={cohort.id} role={cohort.role} />)}
     </div>
   );
 };
 
 
 Courses.propTypes = {
-  userCohorts: PropTypes.shape({}),
+  userCohorts: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+  })),
 };
 
 
@@ -47,8 +50,22 @@ Courses.defaultProps = {
 };
 
 
+const sortCohorts = (cohorts) => {
+  const keys = Object.keys(cohorts || {});
+
+  if (!keys.length) {
+    return cohorts;
+  }
+
+  return keys.sort().reverse().map(key => ({
+    id: key,
+    role: cohorts[key],
+  }));
+};
+
+
 const mapStateToProps = ({ firebase }, ownProps) => ({
-  userCohorts: dataToJS(firebase, `userCohorts/${ownProps.auth.uid}`),
+  userCohorts: sortCohorts(dataToJS(firebase, `userCohorts/${ownProps.auth.uid}`)),
 });
 
 

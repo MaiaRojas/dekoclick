@@ -22,12 +22,11 @@ const CoursesList = (props) => {
       <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
         {props.cohort}
       </Typography>
-      {Object.keys(props.courses).map(key =>
+      {props.courses.map(course =>
         (<CourseCard
-          key={key}
-          id={key}
+          key={course.id}
           cohort={props.cohort}
-          course={props.courses[key]}
+          course={course}
         />))}
     </div>
   );
@@ -35,7 +34,9 @@ const CoursesList = (props) => {
 
 
 CoursesList.propTypes = {
-  courses: PropTypes.shape({}),
+  courses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  })),
   cohort: PropTypes.string.isRequired,
 };
 
@@ -45,12 +46,36 @@ CoursesList.defaultProps = {
 };
 
 
+const sortCourses = (courses) => {
+  const keys = Object.keys(courses || {});
+
+  if (!keys.length) {
+    return courses;
+  }
+
+  return keys
+    .map(key => ({
+      id: key,
+      ...courses[key],
+    }))
+    .sort((a, b) => {
+      if (a.order > b.order) {
+        return 1;
+      }
+      if (a.order < b.order) {
+        return -1;
+      }
+      return 0;
+    });
+};
+
+
 // list courses for a given cohort
 export default compose(
   firebaseConnect(props => ([
     `cohortCourses/${props.cohort}`,
   ])),
   connect(({ firebase }, ownProps) => ({
-    courses: dataToJS(firebase, `cohortCourses/${ownProps.cohort}`),
+    courses: sortCourses(dataToJS(firebase, `cohortCourses/${ownProps.cohort}`)),
   }), {}),
 )(CoursesList);

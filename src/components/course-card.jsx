@@ -57,7 +57,7 @@ const CourseCard = props => (
         raised
         dense
         color="primary"
-        to={`/cohorts/${props.cohort}/courses/${props.id}`}
+        to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
         component={Link}
       >
         Empezar
@@ -69,6 +69,7 @@ const CourseCard = props => (
 
 CourseCard.propTypes = {
   course: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     syllabus: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({
@@ -76,7 +77,6 @@ CourseCard.propTypes = {
     }),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
