@@ -157,14 +157,15 @@ CohortNewDialogForm.propTypes = {
 
 const CohortNewDialogConfirm = props => (
   <DialogContent>
-    { Object.keys(props.cohorts).indexOf(props.cohortKey) == -1 ?
+    {Object.keys(props.cohorts).indexOf(props.cohortKey) === -1 ?
       <DialogContentText>
         Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
         Estás segura de que quieres hacer esto?
       </DialogContentText> :
       <DialogContentText>
-        Este cohort con el id <code>{props.cohortKey}</code> ya EXISTE, solo se actualizarán las fechas de inicio y fin.
-        Estás segura de que quieres hacer esto?
+        Este cohort con el id <code>{props.cohortKey}</code> ya EXISTE, solo se
+        actualizarán las fechas de inicio y fin. Estás segura de que quieres
+        hacer esto?
       </DialogContentText>
     }
   </DialogContent>
@@ -172,6 +173,7 @@ const CohortNewDialogConfirm = props => (
 
 
 CohortNewDialogConfirm.propTypes = {
+  cohorts: PropTypes.shape({}).isRequired,
   cohortKey: PropTypes.string.isRequired,
 };
 
@@ -324,9 +326,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(() => ([
-    'cohorts',
-  ])),
+  firebaseConnect(() => ['cohorts']),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortNewDialog);
