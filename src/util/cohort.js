@@ -1,6 +1,12 @@
 export default {
   parse: (str) => {
     const parts = str.split('-');
+    if (parts.length === 1) {
+      return {
+        campus: 'global',
+        name: parts[0],
+      };
+    }
     return {
       campus: parts[0],
       year: parseInt(parts[1], 10),
