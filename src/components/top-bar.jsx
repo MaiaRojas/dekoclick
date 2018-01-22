@@ -34,7 +34,6 @@ const TopBar = props => (
     <Toolbar>
       <IconButton
         className={props.classes.menuIcon}
-        color="contrast"
         aria-label="open drawer"
         onClick={() => props.displayDrawer()}
       >
