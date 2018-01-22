@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { firebaseConnect, dataToJS } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
@@ -156,10 +157,16 @@ CohortNewDialogForm.propTypes = {
 
 const CohortNewDialogConfirm = props => (
   <DialogContent>
-    <DialogContentText>
-      Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
-      Estás segura de que quieres hacer esto?
-    </DialogContentText>
+    { Object.keys(props.cohorts).indexOf(props.cohortKey) == -1 ?
+      <DialogContentText>
+        Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
+        Estás segura de que quieres hacer esto?
+      </DialogContentText> :
+      <DialogContentText>
+        Este cohort con el id <code>{props.cohortKey}</code> ya EXISTE, solo se actualizarán las fechas de inicio y fin.
+        Estás segura de que quieres hacer esto?
+      </DialogContentText>
+    }
   </DialogContent>
 );
 
@@ -288,7 +295,8 @@ CohortNewDialog.propTypes = {
 };
 
 
-const mapStateToProps = ({ cohortNewDialog }) => ({
+const mapStateToProps = ({ firebase, cohortNewDialog }) => ({
+  cohorts: dataToJS(firebase, 'cohorts'),
   open: cohortNewDialog.open,
   campus: cohortNewDialog.campus,
   program: cohortNewDialog.program,
@@ -316,6 +324,9 @@ const mapDispatchToProps = {
 
 
 export default compose(
+  firebaseConnect(() => ([
+    'cohorts',
+  ])),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortNewDialog);
