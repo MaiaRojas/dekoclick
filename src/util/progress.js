@@ -1,3 +1,18 @@
+const computePracticeProgress = (part, progress) => {
+  let totalExercises = 0;
+  let completedExercises = 0;
+
+  Object.keys(part.exercises || {}).forEach((key) => {
+    totalExercises += 1;
+    if (progress[key] && progress[key].testResults && progress[key].testResults.failures === 0) {
+      completedExercises += 1;
+    }
+  });
+
+  return completedExercises / totalExercises;
+};
+
+
 const computePartProgress = (progress, part) => {
   if (!progress) {
     return 0;
@@ -12,17 +27,7 @@ const computePartProgress = (progress, part) => {
   }
 
   if (part.type === 'practice') {
-    let totalExercises = 0;
-    let completedExercises = 0;
-
-    Object.keys(part.exercises || {}).forEach(exerciseKey => {
-      totalExercises += 1;
-      if (progress[exerciseKey] && progress[exerciseKey].testResults && progress[exerciseKey].testResults.failures === 0) {
-        completedExercises += 1;
-      }
-    });
-
-    return completedExercises / totalExercises;
+    return computePracticeProgress(part, progress);
   }
 
   return 0;

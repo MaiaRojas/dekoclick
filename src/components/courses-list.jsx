@@ -11,7 +11,7 @@ import CourseCard from './course-card';
 
 const styles = theme => ({
   headline: {
-    marginBottom: 20,
+    marginBottom: theme.spacing.unit * 2,
   },
   container: {
     display: 'flex',
@@ -21,7 +21,12 @@ const styles = theme => ({
 });
 
 
-const CoursesList = ({ cohort, courses, classes, auth }) => {
+const CoursesList = ({
+  cohort,
+  courses,
+  classes,
+  auth,
+}) => {
   if (!courses) {
     return (<CircularProgress />);
   }
@@ -36,13 +41,13 @@ const CoursesList = ({ cohort, courses, classes, auth }) => {
         {cohort}
       </Typography>
       <div className={classes.container}>
-      {courses.map(course =>
-        (<CourseCard
-          key={course.id}
-          cohort={cohort}
-          course={course}
-          auth={auth}
-        />))}
+        {courses.map(course =>
+          (<CourseCard
+            key={course.id}
+            cohort={cohort}
+            course={course}
+            auth={auth}
+          />))}
       </div>
     </div>
   );
@@ -54,6 +59,11 @@ CoursesList.propTypes = {
     id: PropTypes.string.isRequired,
   })),
   cohort: PropTypes.string.isRequired,
+  auth: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    headline: PropTypes.string.isRequired,
+    container: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

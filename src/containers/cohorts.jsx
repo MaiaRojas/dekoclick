@@ -9,9 +9,9 @@ import Typography from 'material-ui/Typography';
 import { CircularProgress } from 'material-ui/Progress';
 import IconButton from 'material-ui/IconButton';
 import Select from 'material-ui/Select';
-import Input, { InputLabel } from 'material-ui/Input';
+import { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import { FormControl } from 'material-ui/Form';
 import Tooltip from 'material-ui/Tooltip';
 import AddIcon from 'material-ui-icons/Add';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -49,12 +49,12 @@ const programIdToName = {
 };
 
 
-const trackIdToName = {
-  core: 'Common core',
-  js: 'JavaScript',
-  ux: 'UX',
-  mobile: 'Mobile',
-};
+// const trackIdToName = {
+//   core: 'Common core',
+//   js: 'JavaScript',
+//   ux: 'UX',
+//   mobile: 'Mobile',
+// };
 
 
 const parseDate = (str) => {
@@ -71,7 +71,6 @@ const processCohorts = ({
   cohorts,
   cohortUsers,
   cohortCourses,
-  campuses,
 }) =>
   cohorts
     .reduce((memo, cohort) => [
@@ -198,11 +197,17 @@ Cohorts.propTypes = {
   campuses: PropTypes.shape({}),
   cohortUsers: PropTypes.shape({}),
   cohortCourses: PropTypes.shape({}),
+  campusFilter: PropTypes.string,
+  programFilter: PropTypes.string,
   newDialogOpen: PropTypes.bool.isRequired,
   toggleCohortNewDialog: PropTypes.func.isRequired,
+  setCohortsCampusFilter: PropTypes.func.isRequired,
+  setCohortsProgramFilter: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
+    filterContainer: PropTypes.string.isRequired,
+    formControl: PropTypes.string.isRequired,
   }).isRequired,
   firebase: PropTypes.shape({}).isRequired,
 };
@@ -213,6 +218,8 @@ Cohorts.defaultProps = {
   campuses: undefined,
   cohortUsers: undefined,
   cohortCourses: undefined,
+  campusFilter: '',
+  programFilter: '',
 };
 
 

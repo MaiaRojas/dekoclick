@@ -13,13 +13,21 @@ const styles = theme => ({
 });
 
 
-const Progress = props => (
-  <div className={props.classes.root}>
-    <Tooltip title={`${props.value}%`} placement="left">
-      <LinearProgress mode="determinate" value={props.value} />
+const Progress = ({ value, classes }) => (
+  <div className={classes.root}>
+    <Tooltip title={`${value}%`} placement="left">
+      <LinearProgress mode="determinate" value={value} />
     </Tooltip>
   </div>
 );
+
+
+Progress.propTypes = {
+  value: PropTypes.number.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 
 export default withStyles(styles)(Progress);

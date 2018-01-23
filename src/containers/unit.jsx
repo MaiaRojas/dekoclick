@@ -59,7 +59,9 @@ const addSelfAssessment = (unit) => {
   const lastNumber = parseInt(lastPart.substr(0, lastPart.indexOf('-')), 0);
   const selfAssessment = (lastNumber < 10 ? '0' : '') + (lastNumber + 1);
 
-  unit.parts[`${selfAssessment}-self-assessment`] = selfAssessmentPart;
+  Object.assign(unit.parts, {
+    [`${selfAssessment}-self-assessment`]: selfAssessmentPart,
+  });
 
   return unit;
 };

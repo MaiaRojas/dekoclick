@@ -30,19 +30,21 @@ const Courses = (props) => {
   return (
     <div className="courses">
       <TopBar title="Cursos" />
-      {props.userCohorts.map(cohort =>
+      {props.userCohorts.map(cohort => (
         <CoursesList
           key={cohort.id}
           cohort={cohort.id}
           role={cohort.role}
           auth={props.auth}
-        />)}
+        />
+      ))}
     </div>
   );
 };
 
 
 Courses.propTypes = {
+  auth: PropTypes.shape({}).isRequired,
   userCohorts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,

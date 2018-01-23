@@ -54,12 +54,17 @@ const App = (props) => {
 
 
 App.propTypes = {
-  auth: PropTypes.shape({}),
+  auth: PropTypes.shape({
+    isLoaded: PropTypes.bool,
+    isEmpty: PropTypes.bool,
+  }),
   authError: PropTypes.shape({
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
-  profile: PropTypes.shape({}),
+  profile: PropTypes.shape({
+    isLoaded: PropTypes.bool,
+  }),
 };
 
 

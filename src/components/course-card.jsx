@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
@@ -43,7 +43,7 @@ const unitCount = ({ stats, syllabus }) =>
   (stats && stats.unitCount) || Object.keys(syllabus).length;
 
 
-const CourseCard = props => /*console.log('CourseCard', props.progress) ||*/ (
+const CourseCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="title">
@@ -90,12 +90,18 @@ CourseCard.propTypes = {
     }),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
+  progress: PropTypes.shape({}),
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
     count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+CourseCard.defaultProps = {
+  progress: undefined,
 };
 
 
