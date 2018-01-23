@@ -64,7 +64,7 @@ describe('<WithMainNav />', () => {
     expect(wrapper[0].children.length).toBe(2);
 
     const $muiHiddenCss = wrapper[0].children[0].children[0];
-    expect($muiHiddenCss.attribs.class).toMatch(/MuiHiddenCss-mdDown-\d+/);
+    expect($muiHiddenCss.attribs.class).toMatch(/MuiHiddenCss-smDown-\d+/);
 
     const $drawer = $muiHiddenCss.children[0];
     expect($drawer.attribs.class).toMatch(/MuiDrawer-docked-\d+/);

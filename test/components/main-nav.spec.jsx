@@ -51,9 +51,9 @@ describe('<MainNav />', () => {
 
     const el = component.getElement();
     expect(el.type.Naked.name).toBe('LeftDrawer');
-    expect(el.type.displayName).toBe('Connect(withStyles(LeftDrawer))');
+    expect(el.type.displayName).toBe('Connect(WithStyles(LeftDrawer))');
     expect(el.props.children.type.Naked.name).toBe('List');
-    expect(el.props.children.type.displayName).toBe('withStyles(List)');
+    expect(el.props.children.type.displayName).toBe('WithStyles(List)');
   });
 
   it('should render a <List> with array of <ListItem>s or <Divider>s', () => {
@@ -73,7 +73,7 @@ describe('<MainNav />', () => {
     el.props.children.props.children.slice(0, -1).forEach((child) => {
       if (child) {
         expect(['ListItem', 'Divider'].indexOf(child.type.Naked.name) > -1).toBe(true);
-        expect(['withStyles(ListItem)', 'withStyles(Divider)'].indexOf(child.type.displayName) > -1).toBe(true);
+        expect(['WithStyles(ListItem)', 'WithStyles(Divider)'].indexOf(child.type.displayName) > -1).toBe(true);
       }
     });
   });

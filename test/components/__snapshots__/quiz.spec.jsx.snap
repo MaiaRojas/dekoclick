@@ -5,36 +5,36 @@ Array [
   Array [
     "Warning: Failed prop type: The prop \`part\` is marked as required in \`Quiz\`, but its value is \`undefined\`.
     in Quiz
-    in withStyles(Quiz)
-    in Connect(withStyles(Quiz))
+    in WithStyles(Quiz)
+    in Connect(WithStyles(Quiz))
     in Provider",
   ],
   Array [
     "Warning: Failed prop type: The prop \`progress\` is marked as required in \`Quiz\`, but its value is \`undefined\`.
     in Quiz
-    in withStyles(Quiz)
-    in Connect(withStyles(Quiz))
+    in WithStyles(Quiz)
+    in Connect(WithStyles(Quiz))
     in Provider",
   ],
   Array [
     "Warning: Failed prop type: The prop \`firebase\` is marked as required in \`Quiz\`, but its value is \`undefined\`.
     in Quiz
-    in withStyles(Quiz)
-    in Connect(withStyles(Quiz))
+    in WithStyles(Quiz)
+    in Connect(WithStyles(Quiz))
     in Provider",
   ],
   Array [
     "Warning: Failed prop type: The prop \`auth\` is marked as required in \`Quiz\`, but its value is \`undefined\`.
     in Quiz
-    in withStyles(Quiz)
-    in Connect(withStyles(Quiz))
+    in WithStyles(Quiz)
+    in Connect(WithStyles(Quiz))
     in Provider",
   ],
   Array [
     "Warning: Failed prop type: The prop \`match\` is marked as required in \`Quiz\`, but its value is \`undefined\`.
     in Quiz
-    in withStyles(Quiz)
-    in Connect(withStyles(Quiz))
+    in WithStyles(Quiz)
+    in Connect(WithStyles(Quiz))
     in Provider",
   ],
 ]
