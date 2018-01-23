@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
@@ -8,6 +11,8 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
+import Progress from './progress';
+import { computeCourseProgressStats } from '../util/progress';
 
 
 const styles = theme => ({
@@ -20,6 +25,8 @@ const styles = theme => ({
   },
   cardActions: {
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    height: 72,
   },
   count: {
     display: 'flex',
@@ -36,7 +43,7 @@ const unitCount = ({ stats, syllabus }) =>
   (stats && stats.unitCount) || Object.keys(syllabus).length;
 
 
-const CourseCard = props => (
+const CourseCard = props => /*console.log('CourseCard', props.progress) ||*/ (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography type="title">
@@ -65,8 +72,9 @@ const CourseCard = props => (
         to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
         component={Link}
       >
-        Empezar
+        {props.progress ? 'Continuar' : 'Empezar'}
       </Button>
+      <Progress value={computeCourseProgressStats(props.progress, props.course).percent} />
     </CardActions>
   </Card>
 );
@@ -91,4 +99,16 @@ CourseCard.propTypes = {
 };
 
 
-export default withStyles(styles)(CourseCard);
+const propsToProgressPath = ({ cohort, auth, course }) =>
+  `cohortProgress/${cohort}/${auth.uid}/${course.id}`;
+
+
+export default compose(
+  firebaseConnect(props => ([
+    propsToProgressPath(props),
+  ])),
+  connect(({ firebase }, ownProps) => ({
+    progress: getVal(firebase, `data/${propsToProgressPath(ownProps)}`),
+  }), {}),
+  withStyles(styles),
+)(CourseCard);

@@ -31,7 +31,12 @@ const Courses = (props) => {
     <div className="courses">
       <TopBar title="Cursos" />
       {props.userCohorts.map(cohort =>
-        <CoursesList key={cohort.id} cohort={cohort.id} role={cohort.role} />)}
+        <CoursesList
+          key={cohort.id}
+          cohort={cohort.id}
+          role={cohort.role}
+          auth={props.auth}
+        />)}
     </div>
   );
 };

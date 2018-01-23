@@ -3,31 +3,45 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import CourseCard from './course-card';
 
 
-const CoursesList = (props) => {
-  if (!props.courses) {
+const styles = theme => ({
+  headline: {
+    marginBottom: 20,
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+});
+
+
+const CoursesList = ({ cohort, courses, classes, auth }) => {
+  if (!courses) {
     return (<CircularProgress />);
   }
 
-  if (!props.courses.length) {
+  if (!courses.length) {
     return (<div>No courses :-(</div>);
   }
 
   return (
     <div>
-      <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
-        {props.cohort}
+      <Typography type="headline" gutterBottom className={classes.headline}>
+        {cohort}
       </Typography>
-      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-      {props.courses.map(course =>
+      <div className={classes.container}>
+      {courses.map(course =>
         (<CourseCard
           key={course.id}
-          cohort={props.cohort}
+          cohort={cohort}
           course={course}
+          auth={auth}
         />))}
       </div>
     </div>
@@ -88,4 +102,5 @@ export default compose(
   connect(({ firebase }, ownProps) => ({
     courses: sortCourses(getVal(firebase, `data/cohortCourses/${ownProps.cohort}`)),
   }), {}),
+  withStyles(styles),
 )(CoursesList);

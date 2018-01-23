@@ -8,6 +8,8 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
+import Progress from './progress';
+import { computeUnitProgressStats } from '../util/progress';
 
 
 const styles = theme => ({
@@ -16,6 +18,8 @@ const styles = theme => ({
   },
   cardActions: {
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    height: 72,
   },
   count: {
     display: 'flex',
@@ -68,6 +72,7 @@ const UnitCard = props => (
       >
         {props.progress ? 'Continuar' : 'Empezar'}
       </Button>
+      <Progress value={computeUnitProgressStats(props.progress, props.unit).percent} />
     </CardActions>
   </Card>
 );
