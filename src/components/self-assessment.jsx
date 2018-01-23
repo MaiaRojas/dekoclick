@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS } from 'react-redux-firebase';
+import { firebaseConnect, getVal } from 'react-redux-firebase';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import { FormGroup, FormControl, FormControlLabel, FormLabel } from 'material-ui/Form';
@@ -359,7 +359,7 @@ SelfAssessment.defaultProps = {
 
 
 const mapStateToProps = ({ firebase }, { match }) => ({
-  unit: dataToJS(firebase, matchParamsToUnitPath(match.params)),
+  unit: getVal(firebase, `data/${matchParamsToUnitPath(match.params)}`),
 });
 
 

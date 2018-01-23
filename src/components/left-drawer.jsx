@@ -30,7 +30,7 @@ const LeftDrawer = props => (
         {props.children}
       </Drawer>
     </Hidden>
-    <Hidden mdDown implementation="css">
+    <Hidden smDown implementation="css">
       <Drawer
         className={props.classes.drawer}
         open

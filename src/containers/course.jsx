@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
@@ -81,8 +81,8 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid }) =>
 
 
 const mapStateToProps = ({ firebase }, { auth, match }) => ({
-  course: dataToJS(firebase, matchParamsToCoursePath(match.params)),
-  progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
+  course: getVal(firebase, `data/${matchParamsToCoursePath(match.params)}`),
+  progress: getVal(firebase, `data/${matchParamsToProgressPath(auth.uid, match.params)}`),
 });
 
 

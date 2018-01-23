@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Dialog, {
@@ -157,7 +157,7 @@ const flattenCourses = (cohortCourses, coursesIndex) =>
 
 
 const mapStateToProps = ({ firebase, cohortCourseAddDialog }, { cohortCourses }) => ({
-  coursesIndex: flattenCourses(cohortCourses, dataToJS(firebase, 'coursesIndex')),
+  coursesIndex: flattenCourses(cohortCourses, getVal(firebase, 'data/coursesIndex')),
   open: cohortCourseAddDialog.open,
   course: cohortCourseAddDialog.course,
 });

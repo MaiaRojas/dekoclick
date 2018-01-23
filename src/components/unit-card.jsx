@@ -5,6 +5,7 @@ import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
+import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 
@@ -54,7 +55,7 @@ const UnitCard = props => (
         <div className={props.classes.count}>
           <ScheduleIcon />
           <Typography className={props.classes.countText}>
-            Duración estimada: {props.unit.stats.durationString}
+            <Hidden smDown>Duración estimada: </Hidden>{props.unit.stats.durationString}
           </Typography>
         </div>
       }

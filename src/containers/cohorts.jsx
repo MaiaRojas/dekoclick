@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
@@ -230,13 +230,13 @@ const filterCohorts = (cohorts, filters) =>
 
 
 const mapStateToProps = ({ firebase, cohorts, cohortNewDialog }) => ({
-  cohorts: filterCohorts(dataToJS(firebase, 'cohorts'), {
+  cohorts: filterCohorts(getVal(firebase, 'data/cohorts'), {
     campus: cohorts.campusFilter,
     program: cohorts.programFilter,
   }),
-  campuses: dataToJS(firebase, 'campuses'),
-  cohortUsers: dataToJS(firebase, 'cohortUsers'),
-  cohortCourses: dataToJS(firebase, 'cohortCourses'),
+  campuses: getVal(firebase, 'data/campuses'),
+  cohortUsers: getVal(firebase, 'data/cohortUsers'),
+  cohortCourses: getVal(firebase, 'data/cohortCourses'),
   campusFilter: cohorts.campusFilter,
   programFilter: cohorts.programFilter,
   newDialogOpen: cohortNewDialog.open,

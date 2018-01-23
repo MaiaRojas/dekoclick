@@ -124,7 +124,7 @@ CohortUser.propTypes = {
   profile: PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    github: PropTypes.string.isRequired,
+    github: PropTypes.string,
   }).isRequired,
   toggleMoveDialog: PropTypes.func.isRequired,
   firebase: PropTypes.shape({

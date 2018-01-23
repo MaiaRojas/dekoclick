@@ -35,7 +35,7 @@ const Settings = props => (
           <Input
             id="email"
             label="Email"
-            margin="normal"
+            margin="none"
             disabled
             value={props.auth.email}
           />
@@ -53,7 +53,7 @@ const Settings = props => (
           <Input
             id="displayName"
             label="Nombre"
-            margin="normal"
+            margin="none"
             disabled
             value={props.auth.displayName || ''}
           />

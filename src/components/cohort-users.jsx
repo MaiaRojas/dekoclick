@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Grid from 'material-ui/Grid';
@@ -64,7 +64,7 @@ CohortUsers.propTypes = {
 const mapStateToProps = ({ firebase }, ownProps) => ({
   profiles: ownProps.users.reduce((memo, item) => ({
     ...memo,
-    [item.key]: dataToJS(firebase, `users/${item.key}`),
+    [item.key]: getVal(firebase, `data/users/${item.key}`),
   }), {}),
 });
 

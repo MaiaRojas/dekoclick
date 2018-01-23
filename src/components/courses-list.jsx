@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import CourseCard from './course-card';
 
 
 const CoursesList = (props) => {
-  if (!isLoaded(props.courses)) {
+  if (!props.courses) {
     return (<CircularProgress />);
   }
 
-  if (isEmpty(props.courses)) {
+  if (!props.courses.length) {
     return (<div>No courses :-(</div>);
   }
 
@@ -22,12 +22,14 @@ const CoursesList = (props) => {
       <Typography type="headline" gutterBottom style={{ marginBottom: 20 }}>
         {props.cohort}
       </Typography>
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
       {props.courses.map(course =>
         (<CourseCard
           key={course.id}
           cohort={props.cohort}
           course={course}
         />))}
+      </div>
     </div>
   );
 };
@@ -47,6 +49,14 @@ CoursesList.defaultProps = {
 
 
 const sortCourses = (courses) => {
+  if (!isLoaded(courses)) {
+    return undefined;
+  }
+
+  if (isEmpty(courses)) {
+    return [];
+  }
+
   const keys = Object.keys(courses || {});
 
   if (!keys.length) {
@@ -76,6 +86,6 @@ export default compose(
     `cohortCourses/${props.cohort}`,
   ])),
   connect(({ firebase }, ownProps) => ({
-    courses: sortCourses(dataToJS(firebase, `cohortCourses/${ownProps.cohort}`)),
+    courses: sortCourses(getVal(firebase, `data/cohortCourses/${ownProps.cohort}`)),
   }), {}),
 )(CoursesList);

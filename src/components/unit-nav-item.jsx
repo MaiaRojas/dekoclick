@@ -92,7 +92,7 @@ const UnitNavItem = props => (
     </ListItemIcon>
     <ListItemText
       classes={{
-        text: (props.progress || {}).openedAt ? props.classes.read : props.classes.unread,
+        root: (props.progress || {}).openedAt ? props.classes.read : props.classes.unread,
       }}
       primary={`${props.order}. ${props.part.title}`}
     />

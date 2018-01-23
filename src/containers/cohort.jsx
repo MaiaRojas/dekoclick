@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import AppBar from 'material-ui/AppBar';
@@ -255,10 +255,10 @@ const mapStateToProps = ({
   cohortUserAddDialog,
   cohortCourseAddDialog,
 }, { match }) => ({
-  campuses: dataToJS(firebase, 'campuses'),
-  cohort: dataToJS(firebase, `cohorts/${match.params.cohortid}`),
-  users: dataToJS(firebase, `cohortUsers/${match.params.cohortid}`),
-  courses: dataToJS(firebase, `cohortCourses/${match.params.cohortid}`),
+  campuses: getVal(firebase, 'data/campuses'),
+  cohort: getVal(firebase, `data/cohorts/${match.params.cohortid}`),
+  users: getVal(firebase, `data/cohortUsers/${match.params.cohortid}`),
+  courses: getVal(firebase, `data/cohortCourses/${match.params.cohortid}`),
   currentTab: cohort.currentTab,
   userAddDialogOpen: cohortUserAddDialog.open,
   courseAddDialogOpen: cohortCourseAddDialog.open,

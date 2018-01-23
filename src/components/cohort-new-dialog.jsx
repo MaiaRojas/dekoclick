@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS } from 'react-redux-firebase';
+import { firebaseConnect, getVal } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
@@ -298,7 +298,7 @@ CohortNewDialog.propTypes = {
 
 
 const mapStateToProps = ({ firebase, cohortNewDialog }) => ({
-  cohorts: dataToJS(firebase, 'cohorts'),
+  cohorts: getVal(firebase, 'data/cohorts'),
   open: cohortNewDialog.open,
   campus: cohortNewDialog.campus,
   program: cohortNewDialog.program,

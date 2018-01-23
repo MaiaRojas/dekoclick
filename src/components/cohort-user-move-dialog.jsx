@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Dialog, {
   DialogActions,
@@ -125,7 +125,7 @@ const mapStateToProps = ({ firebase, cohortUserMoveDialog }, { cohortid }) => {
     moving: cohortUserMoveDialog.moving,
     moveError: cohortUserMoveDialog.moveError,
     targetCohort: {
-      ...dataToJS(firebase, `cohorts/${targetCohortId}`),
+      ...getVal(firebase, `data/cohorts/${targetCohortId}`),
       id: targetCohortId,
       parsedId: cohort.parse(targetCohortId),
     },

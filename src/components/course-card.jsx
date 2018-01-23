@@ -5,13 +5,18 @@ import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 
 
 const styles = theme => ({
   card: {
+    width: '49%',
     marginBottom: theme.spacing.unit * 4,
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
   },
   cardActions: {
     justifyContent: 'space-between',
@@ -49,7 +54,7 @@ const CourseCard = props => (
         <div className={props.classes.count}>
           <ScheduleIcon />
           <Typography className={props.classes.countText}>
-            Duración estimada: {props.course.stats.durationString}
+            <Hidden smDown>Duración estimada: </Hidden>{props.course.stats.durationString}
           </Typography>
         </div>
       }

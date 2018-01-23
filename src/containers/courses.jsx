@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
@@ -10,11 +10,11 @@ import CoursesList from '../components/courses-list';
 
 
 const Courses = (props) => {
-  if (!isLoaded(props.userCohorts)) {
+  if (!props.userCohorts) {
     return (<CircularProgress />);
   }
 
-  if (isEmpty(props.userCohorts)) {
+  if (!props.userCohorts.length) {
     return (
       <div className="courses">
         <TopBar title="Cursos" />
@@ -51,10 +51,14 @@ Courses.defaultProps = {
 
 
 const sortCohorts = (cohorts) => {
+  if (!isLoaded(cohorts)) {
+    return undefined;
+  }
+
   const keys = Object.keys(cohorts || {});
 
   if (!keys.length) {
-    return cohorts;
+    return [];
   }
 
   return keys.sort().reverse().map(key => ({
@@ -64,8 +68,8 @@ const sortCohorts = (cohorts) => {
 };
 
 
-const mapStateToProps = ({ firebase }, ownProps) => ({
-  userCohorts: sortCohorts(dataToJS(firebase, `userCohorts/${ownProps.auth.uid}`)),
+const mapStateToProps = ({ firebase }, { auth }) => ({
+  userCohorts: sortCohorts(getVal(firebase, `data/userCohorts/${auth.uid}`)),
 });
 
 

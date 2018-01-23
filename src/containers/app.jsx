@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  pathToJS,
-} from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
@@ -23,11 +18,11 @@ import Unit from './unit';
 
 
 const App = (props) => {
-  if (!isLoaded(props.auth) || !isLoaded(props.profile)) {
+  if (!props.auth.isLoaded || !props.profile.isLoaded) {
     return (<CircularProgress />);
   }
 
-  if (isEmpty(props.auth)) {
+  if (props.auth.isEmpty) {
     return (<SignIn error={null} authError={props.authError} />);
   }
 
@@ -75,10 +70,10 @@ App.defaultProps = {
 };
 
 
-const mapStateToProps = ({ firebase }) => ({
-  authError: pathToJS(firebase, 'authError'),
-  auth: pathToJS(firebase, 'auth'),
-  profile: pathToJS(firebase, 'profile'),
+const mapStateToProps = ({ firebase: { authError, auth, profile } }) => ({
+  authError,
+  auth,
+  profile,
 });
 
 

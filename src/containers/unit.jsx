@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import UnitNav from '../components/unit-nav';
@@ -15,7 +15,7 @@ import Quiz from '../components/quiz';
 import { withTracker } from '../components/unit-part-tracker';
 
 
-const styles = theme => console.log(theme) || ({
+const styles = theme => ({
   main: {
     // background: '#fff',
     backgroundColor: theme.palette.background.default,
@@ -44,21 +44,26 @@ const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
   `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
 
 
-const addSelfAssessment = (data) => {
-  const unit = data;
+const addSelfAssessment = (unit) => {
+  const partKeys = Object.keys((unit || {}).parts || {}).sort();
+  const hasSelfAssessment = partKeys.reduce(
+    (memo, key) => memo || /\d{1,2}-self-assessment/.test(key),
+    false,
+  );
 
-  if (unit) {
-    const partKeys = Object.keys(unit.parts).sort();
-    const lastPart = partKeys[partKeys.length - 1];
-
-    const lastNumber = parseInt(lastPart.substr(0, lastPart.indexOf('-')), 0);
-    const selfAssessment = (lastNumber < 10 ? '0' : '') + (lastNumber + 1);
-
-    unit.parts[`${selfAssessment}-self-assessment`] = selfAssessmentPart;
+  if (!partKeys.length || hasSelfAssessment) {
+    return unit;
   }
+
+  const lastPart = partKeys[partKeys.length - 1];
+  const lastNumber = parseInt(lastPart.substr(0, lastPart.indexOf('-')), 0);
+  const selfAssessment = (lastNumber < 10 ? '0' : '') + (lastNumber + 1);
+
+  unit.parts[`${selfAssessment}-self-assessment`] = selfAssessmentPart;
 
   return unit;
 };
+
 
 const Unit = (props) => {
   if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
@@ -143,8 +148,8 @@ Unit.defaultProps = {
 
 
 const mapStateToProps = ({ firebase }, { auth, match }) => ({
-  unit: addSelfAssessment(dataToJS(firebase, matchParamsToUnitPath(match.params))),
-  progress: dataToJS(firebase, matchParamsToProgressPath(auth.uid, match.params)),
+  unit: addSelfAssessment(getVal(firebase, `data/${matchParamsToUnitPath(match.params)}`)),
+  progress: getVal(firebase, `data/${matchParamsToProgressPath(auth.uid, match.params)}`),
 });
 
 
