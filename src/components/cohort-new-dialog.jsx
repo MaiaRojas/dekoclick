@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Input, { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
-import { FormControl } from 'material-ui/Form';
+import { FormControl, FormControlLabel, FormGroup } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 import Dialog, {
   DialogActions,
@@ -16,12 +16,14 @@ import Dialog, {
   DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
+import Switch from 'material-ui/Switch';
 import {
   toggleCohortNewDialog,
   updateCohortNewDialogCampus,
   updateCohortNewDialogProgram,
   updateCohortNewDialogTrack,
   updateCohortNewDialogName,
+  updateCohortNewDialogPublicAdmission,
   updateCohortNewDialogStart,
   updateCohortNewDialogEnd,
   updateCohortNewDialogErrors,
@@ -29,6 +31,7 @@ import {
   resetCohortNewDialog,
 } from '../reducers/cohort-new-dialog';
 import hasOwnProperty from '../util/hasOwnProperty';
+import programs from '../util/programs';
 
 
 const styles = theme => ({
@@ -77,6 +80,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         onChange={e => props.updateCohortNewDialogProgram(e.target.value)}
         input={<Input id="program" />}
       >
+        <MenuItem value="pre">Selección</MenuItem>
         <MenuItem value="bc">Bootcamp</MenuItem>
         <MenuItem value="ec">Educación Continua</MenuItem>
       </Select>
@@ -97,16 +101,27 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         <MenuItem value="mobile">Mobile</MenuItem>
       </Select>
     </FormControl>
+    <FormGroup className={classes.formControl}>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={props.publicAdmission}
+            onChange={(e, checked) => props.updateCohortNewDialogPublicAdmission(checked)}
+          />
+        }
+        label="Public admission"
+      />
+    </FormGroup>
     <TextField
       id="name"
       className={classes.textField}
       value={props.name}
       onChange={e => props.updateCohortNewDialogName(e.target.value)}
       error={hasOwnProperty(props.errors, 'name')}
-      helperText="Minúsculas y sin espacios. Por ejemplo: am/pm para bootcamp o react para ec"
+      helperText="Lower case, no spaces. For example: am/pm for bootcamp or react for ec"
       margin="dense"
       autoFocus
-      label="Nombre"
+      label="Name"
       type="text"
       fullWidth
     />
@@ -117,7 +132,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       onChange={e => props.updateCohortNewDialogStart(e.target.value)}
       error={hasOwnProperty(props.errors, 'start')}
       margin="dense"
-      label="Fecha de inicio"
+      label="Start"
       type="date"
       InputLabelProps={{ shrink: true }}
     />
@@ -128,7 +143,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       onChange={e => props.updateCohortNewDialogEnd(e.target.value)}
       error={hasOwnProperty(props.errors, 'end')}
       margin="dense"
-      label="Fecha de cierre"
+      label="End"
       type="date"
       InputLabelProps={{ shrink: true }}
     />
@@ -141,6 +156,7 @@ CohortNewDialogForm.propTypes = {
   program: PropTypes.string.isRequired,
   track: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  publicAdmission: PropTypes.bool.isRequired,
   start: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,
   errors: PropTypes.shape({}).isRequired,
@@ -148,6 +164,7 @@ CohortNewDialogForm.propTypes = {
   updateCohortNewDialogProgram: PropTypes.func.isRequired,
   updateCohortNewDialogTrack: PropTypes.func.isRequired,
   updateCohortNewDialogName: PropTypes.func.isRequired,
+  updateCohortNewDialogPublicAdmission: PropTypes.func.isRequired,
   updateCohortNewDialogStart: PropTypes.func.isRequired,
   updateCohortNewDialogEnd: PropTypes.func.isRequired,
   campuses: PropTypes.shape({}).isRequired,
@@ -155,9 +172,13 @@ CohortNewDialogForm.propTypes = {
 };
 
 
+const isNewCohort = ({ cohorts, cohortKey }) =>
+  Object.keys(cohorts).indexOf(cohortKey) === -1;
+
+
 const CohortNewDialogConfirm = props => (
   <DialogContent>
-    {Object.keys(props.cohorts).indexOf(props.cohortKey) === -1 ?
+    {isNewCohort(props) ?
       <DialogContentText>
         Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
         Estás segura de que quieres hacer esto?
@@ -198,10 +219,10 @@ const validate = (props) => {
       message: `Campus should be one of ${campuses}`,
     });
   }
-  if (['bc', 'ec'].indexOf(program) === -1) {
+  if (programs.keys.indexOf(program) === -1) {
     errors.push({
       field: 'program',
-      message: `Program should be one of ${['bc', 'ec']}`,
+      message: `Program should be one of ${programs.keys}`,
     });
   }
   if (['core', 'js', 'ux', 'mobile'].indexOf(track) === -1) {
@@ -243,14 +264,14 @@ const validate = (props) => {
 const CohortNewDialog = ({ classes, ...props }) => (
   <div className={classes.container}>
     <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
-      <DialogTitle>Nuevo cohort</DialogTitle>
+      <DialogTitle>{isNewCohort(props) ? 'New cohort' : 'Update cohort'}</DialogTitle>
       {props.cohortKey ?
         <CohortNewDialogConfirm classes={classes} {...props} /> :
         <CohortNewDialogForm classes={classes} {...props} />
       }
       <DialogActions>
         <Button onClick={props.toggleCohortNewDialog} color="default">
-          Cancelar
+          Cancel
         </Button>
         <Button
           raised
@@ -274,7 +295,7 @@ const CohortNewDialog = ({ classes, ...props }) => (
               .then(props.resetCohortNewDialog, console.error);
           }}
         >
-          Crear
+          {isNewCohort(props) ? 'Create' : 'Update'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -297,13 +318,14 @@ CohortNewDialog.propTypes = {
 };
 
 
-const mapStateToProps = ({ firebase, cohortNewDialog }) => ({
-  cohorts: getVal(firebase, 'data/cohorts'),
+const mapStateToProps = ({ firestore, cohortNewDialog }) => ({
+  cohorts: firestore.data.cohorts,
   open: cohortNewDialog.open,
   campus: cohortNewDialog.campus,
   program: cohortNewDialog.program,
   track: cohortNewDialog.track,
   name: cohortNewDialog.name,
+  publicAdmission: cohortNewDialog.publicAdmission,
   start: cohortNewDialog.start,
   end: cohortNewDialog.end,
   errors: cohortNewDialog.errors,
@@ -317,6 +339,7 @@ const mapDispatchToProps = {
   updateCohortNewDialogProgram,
   updateCohortNewDialogTrack,
   updateCohortNewDialogName,
+  updateCohortNewDialogPublicAdmission,
   updateCohortNewDialogStart,
   updateCohortNewDialogEnd,
   updateCohortNewDialogErrors,
@@ -326,7 +349,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(() => ['cohorts']),
+  firestoreConnect(() => ['cohorts']),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortNewDialog);

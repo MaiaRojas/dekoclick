@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
@@ -105,16 +105,13 @@ CourseCard.defaultProps = {
 };
 
 
-const propsToProgressPath = ({ cohort, auth, course }) =>
-  `cohortProgress/${cohort}/${auth.uid}/${course.id}`;
-
-
 export default compose(
-  firebaseConnect(props => ([
-    propsToProgressPath(props),
-  ])),
-  connect(({ firebase }, ownProps) => ({
-    progress: getVal(firebase, `data/${propsToProgressPath(ownProps)}`),
-  }), {}),
+  firestoreConnect(props => [{
+    collection: `cohorts/${props.cohort}/users/${props.auth.uid}/progress`,
+    doc: props.course.id,
+  }]),
+  connect(({ firestore }, { cohort, auth, course }) => ({
+    progress: (firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`] || {})[course.id],
+  })),
   withStyles(styles),
 )(CourseCard);

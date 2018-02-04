@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CoursesList from '../components/courses-list';
 
 
-const Courses = (props) => {
-  if (!props.userCohorts) {
+const Courses = ({ cohorts, auth }) => {
+  if (!cohorts) {
     return (<CircularProgress />);
   }
 
-  if (!props.userCohorts.length) {
+  if (!cohorts.length) {
     return (
       <div className="courses">
         <TopBar title="Cursos" />
@@ -30,12 +30,12 @@ const Courses = (props) => {
   return (
     <div className="courses">
       <TopBar title="Cursos" />
-      {props.userCohorts.map(cohort => (
+      {cohorts.map(cohort => (
         <CoursesList
           key={cohort.id}
           cohort={cohort.id}
           role={cohort.role}
-          auth={props.auth}
+          auth={auth}
         />
       ))}
     </div>
@@ -45,7 +45,7 @@ const Courses = (props) => {
 
 Courses.propTypes = {
   auth: PropTypes.shape({}).isRequired,
-  userCohorts: PropTypes.arrayOf(PropTypes.shape({
+  cohorts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
   })),
@@ -53,36 +53,26 @@ Courses.propTypes = {
 
 
 Courses.defaultProps = {
-  userCohorts: undefined,
+  cohorts: undefined,
 };
 
 
-const sortCohorts = (cohorts) => {
-  if (!isLoaded(cohorts)) {
-    return undefined;
-  }
-
-  const keys = Object.keys(cohorts || {});
-
-  if (!keys.length) {
-    return [];
-  }
-
-  return keys.sort().reverse().map(key => ({
-    id: key,
-    role: cohorts[key],
-  }));
-};
-
-
-const mapStateToProps = ({ firebase }, { auth }) => ({
-  userCohorts: sortCohorts(getVal(firebase, `data/userCohorts/${auth.uid}`)),
-});
+const selectCohorts = (users, uid) =>
+  (!users || !users[uid] || !users[uid].cohorts)
+    ? undefined
+    : Object.keys(users[uid].cohorts).sort().reverse().map(key => ({
+      id: key,
+      ...users[uid].cohorts[key],
+    }));
 
 
 export default compose(
-  firebaseConnect(props => ([
-    `userCohorts/${props.auth.uid}`,
-  ])),
-  connect(mapStateToProps, {}),
+  firestoreConnect(({ auth }) => [{
+    collection: 'users',
+    doc: auth.uid,
+    subcollections: [{ collection: 'cohorts' }],
+  }]),
+  connect(({ firestore }, { auth }) => ({
+    cohorts: selectCohorts(firestore.data.users, auth.uid),
+  })),
 )(Courses);

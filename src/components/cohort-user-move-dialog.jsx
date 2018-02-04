@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Dialog, {
   DialogActions,
@@ -116,7 +116,7 @@ const getTargetCohortId = (cohortid) => {
 };
 
 
-const mapStateToProps = ({ firebase, cohortUserMoveDialog }, { cohortid }) => {
+const mapStateToProps = ({ firestore, cohortUserMoveDialog }, { cohortid }) => {
   const targetCohortId = getTargetCohortId(cohortid);
   return {
     open: cohortUserMoveDialog.open,
@@ -125,7 +125,7 @@ const mapStateToProps = ({ firebase, cohortUserMoveDialog }, { cohortid }) => {
     moving: cohortUserMoveDialog.moving,
     moveError: cohortUserMoveDialog.moveError,
     targetCohort: {
-      ...getVal(firebase, `data/cohorts/${targetCohortId}`),
+      ...((firestore.data.cohorts || {})[targetCohortId]),
       id: targetCohortId,
       parsedId: cohort.parse(targetCohortId),
     },
@@ -141,7 +141,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(props => [`cohorts/${getTargetCohortId(props.cohortid)}`]),
+  firestoreConnect(props => [`cohorts/${getTargetCohortId(props.cohortid)}`]),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortUserMoveDialog);

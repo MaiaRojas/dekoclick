@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Dialog, {
@@ -70,9 +70,9 @@ CohortCourseAddDialogSelect.propTypes = {
 const CohortCourseAddDialog = ({ classes, ...props }) => {
   let content = null;
 
-  if (!isLoaded(props.coursesIndex)) {
+  if (!props.coursesIndex) {
     content = (<CircularProgress />);
-  } else if (isEmpty(props.coursesIndex)) {
+  } else if (!props.coursesIndex.length) {
     content = (<DialogContentText>No hay más cursos disponibles</DialogContentText>);
   } else {
     content = (<CohortCourseAddDialogSelect classes={classes} {...props} />);
@@ -92,7 +92,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
           <Button
             raised
             color="primary"
-            disabled={isEmpty(props.coursesIndex)}
+            disabled={!props.coursesIndex.length}
             onClick={() => {
               const courseSummary = props.coursesIndex.find(obj => obj.id === props.course);
               const db = props.firebase.database();
@@ -156,8 +156,8 @@ const flattenCourses = (cohortCourses, coursesIndex) =>
     });
 
 
-const mapStateToProps = ({ firebase, cohortCourseAddDialog }, { cohortCourses }) => ({
-  coursesIndex: flattenCourses(cohortCourses, getVal(firebase, 'data/coursesIndex')),
+const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { cohortCourses }) => ({
+  coursesIndex: flattenCourses(cohortCourses, firestore.data.coursesIndex),
   open: cohortCourseAddDialog.open,
   course: cohortCourseAddDialog.course,
 });
@@ -171,7 +171,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(() => ['coursesIndex']),
+  firestoreConnect(() => ['coursesIndex']),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortCourseAddDialog);

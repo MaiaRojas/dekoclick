@@ -1,6 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
+import { reduxFirestore } from 'redux-firestore';
 import firebase from 'firebase';
+import 'firebase/firestore';
 import reducers from './reducers';
 import apiMiddleware from './middleware';
 
@@ -20,7 +22,11 @@ const middlewares = [apiMiddleware];
 
 // Add redux Firebase to compose
 const createStoreWithFirebase = compose(
-  reactReduxFirebase(firebase, { userProfile: 'users' }),
+  reactReduxFirebase(firebase, {
+    userProfile: 'users',
+    useFirestoreForProfile: true,
+  }),
+  reduxFirestore(firebase),
 )(createStore);
 
 

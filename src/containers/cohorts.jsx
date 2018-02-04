@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
@@ -21,6 +21,7 @@ import CohortNewDialog from '../components/cohort-new-dialog';
 import { toggleCohortNewDialog } from '../reducers/cohort-new-dialog';
 import { setCohortsCampusFilter, setCohortsProgramFilter } from '../reducers/cohorts';
 import cohortParser from '../util/cohort';
+import programs from '../util/programs';
 
 
 const styles = theme => ({
@@ -43,12 +44,6 @@ const styles = theme => ({
 });
 
 
-const programIdToName = {
-  bc: 'Bootcamp',
-  ec: 'Educación continua',
-};
-
-
 // const trackIdToName = {
 //   core: 'Common core',
 //   js: 'JavaScript',
@@ -69,8 +64,8 @@ const parseDate = (str) => {
 
 const processCohorts = ({
   cohorts,
-  cohortUsers,
-  cohortCourses,
+  // cohortUsers,
+  // cohortCourses,
 }) =>
   cohorts
     .reduce((memo, cohort) => [
@@ -78,11 +73,11 @@ const processCohorts = ({
       {
         ...cohort,
         start: cohort && cohort.start ? parseDate(cohort.start) : new Date(),
-        courses: Object.keys(cohortCourses[cohort.id] || {}),
-        users: Object.keys(cohortUsers[cohort.id] || {}).length,
-        students: Object.keys(cohortUsers[cohort.id] || {})
-          .filter(uid => cohortUsers[cohort.id][uid] === 'student')
-          .length,
+        // courses: Object.keys(cohortCourses[cohort.id] || {}),
+        // users: Object.keys(cohortUsers[cohort.id] || {}).length,
+        // students: Object.keys(cohortUsers[cohort.id] || {})
+          // .filter(uid => cohortUsers[cohort.id][uid] === 'student')
+          // .length,
       },
     ], [])
     .sort((a, b) => {
@@ -97,8 +92,7 @@ const processCohorts = ({
 
 
 const Cohorts = (props) => {
-  if (!isLoaded(props.cohorts) || !isLoaded(props.campuses) ||
-    !isLoaded(props.cohortUsers) || !isLoaded(props.cohortCourses)) {
+  if (!props.cohorts || !props.campuses) {
     return (<CircularProgress />);
   }
 
@@ -134,8 +128,8 @@ const Cohorts = (props) => {
             inputProps={{ name: 'program', id: 'program' }}
           >
             <MenuItem value=""><em>All</em></MenuItem>
-            {Object.keys(programIdToName).map(key => (
-              <MenuItem key={key} value={key}>{programIdToName[key]}</MenuItem>
+            {programs.sorted.map(program => (
+              <MenuItem key={program.id} value={program.id}>{program.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -146,13 +140,13 @@ const Cohorts = (props) => {
             <Typography type="title" gutterBottom>
               {!cohort.program && cohort.id}
               {cohort.program && cohort.track &&
-                `${programIdToName[cohort.program]}: ${cohort.track} (${cohort.name})`
+                `${(programs.getById(cohort.program) || {}).name || ''}: ${cohort.track} (${cohort.name})`
               }
             </Typography>
             <Typography>Campus: {cohort.campus}</Typography>
             <Typography>Inicio: {cohort.start.toDateString()}</Typography>
-            <Typography>Alumnas: {cohort.students}</Typography>
-            <Typography>Courses: {cohort.courses.join(', ')}</Typography>
+            <Typography>Alumnas: {/*cohort.students*/}</Typography>
+            <Typography>Courses: {/*cohort.courses.join(', ')*/}</Typography>
           </div>
           <div>
             <Tooltip placement="left" title="Gestionar cohort">
@@ -162,14 +156,14 @@ const Cohorts = (props) => {
             </Tooltip>
             <Tooltip
               placement="left"
-              title={(cohort.courses.length && cohort.users) ?
+              title={(true /*cohort.courses.length && cohort.users*/) ?
                 'Antes de borrar un cohort debes borrar sus cursos y miembros' :
                 'Borrar cohort'
               }
             >
               <div>
                 <IconButton
-                  disabled={!!cohort.courses.length || !!cohort.users}
+                  disabled={true /*!!cohort.courses.length || !!cohort.users*/}
                   onClick={() =>
                     window.confirm(`Estás segura de que quieres borrar el cohort ${cohort.id}?`) &&
                       props.firebase.database()
@@ -195,8 +189,6 @@ const Cohorts = (props) => {
 Cohorts.propTypes = {
   cohorts: PropTypes.arrayOf(PropTypes.shape({})),
   campuses: PropTypes.shape({}),
-  cohortUsers: PropTypes.shape({}),
-  cohortCourses: PropTypes.shape({}),
   campusFilter: PropTypes.string,
   programFilter: PropTypes.string,
   newDialogOpen: PropTypes.bool.isRequired,
@@ -216,8 +208,6 @@ Cohorts.propTypes = {
 Cohorts.defaultProps = {
   cohorts: undefined,
   campuses: undefined,
-  cohortUsers: undefined,
-  cohortCourses: undefined,
   campusFilter: '',
   programFilter: '',
 };
@@ -236,14 +226,12 @@ const filterCohorts = (cohorts, filters) =>
   }, []);
 
 
-const mapStateToProps = ({ firebase, cohorts, cohortNewDialog }) => ({
-  cohorts: filterCohorts(getVal(firebase, 'data/cohorts'), {
+const mapStateToProps = ({ firestore, cohorts, cohortNewDialog }) => ({
+  cohorts: filterCohorts(firestore.data.cohorts, {
     campus: cohorts.campusFilter,
     program: cohorts.programFilter,
   }),
-  campuses: getVal(firebase, 'data/campuses'),
-  cohortUsers: getVal(firebase, 'data/cohortUsers'),
-  cohortCourses: getVal(firebase, 'data/cohortCourses'),
+  campuses: firestore.data.campuses,
   campusFilter: cohorts.campusFilter,
   programFilter: cohorts.programFilter,
   newDialogOpen: cohortNewDialog.open,
@@ -258,12 +246,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(() => ([
-    'cohorts',
-    'campuses',
-    'cohortUsers',
-    'cohortCourses',
-  ])),
+  firestoreConnect(() => ['cohorts', 'campuses']),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(Cohorts);

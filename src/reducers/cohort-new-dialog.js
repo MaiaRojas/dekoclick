@@ -4,6 +4,7 @@ const UPDATE_CAMPUS = 'lms.laboratoria.la/cohortNewDialog/UPDATE_CAMPUS';
 const UPDATE_PROGRAM = 'lms.laboratoria.la/cohortNewDialog/UPDATE_PROGRAM';
 const UPDATE_TRACK = 'lms.laboratoria.la/cohortNewDialog/UPDATE_TRACK';
 const UPDATE_NAME = 'lms.laboratoria.la/cohortNewDialog/UPDATE_NAME';
+const UPDATE_PUBLIC_ADMISSION = 'lms.laboratoria.la/cohortNewDialog/UPDATE_PUBLIC_ADMISSION';
 const UPDATE_START = 'lms.laboratoria.la/cohortNewDialog/UPDATE_START';
 const UPDATE_END = 'lms.laboratoria.la/cohortNewDialog/UPDATE_END';
 const UPDATE_ERRORS = 'lms.laboratoria.la/cohortNewDialog/UPDATE_ERRORS';
@@ -34,6 +35,11 @@ export const updateCohortNewDialogTrack = track => ({
 export const updateCohortNewDialogName = name => ({
   type: UPDATE_NAME,
   payload: name,
+});
+
+export const updateCohortNewDialogPublicAdmission = bool => ({
+  type: UPDATE_PUBLIC_ADMISSION,
+  payload: bool,
 });
 
 export const updateCohortNewDialogStart = start => ({
@@ -68,6 +74,7 @@ const initialState = {
   program: '',
   track: '',
   name: '',
+  publicAdmission: false,
   start: (new Date()).toISOString().slice(0, 10),
   end: (new Date()).toISOString().slice(0, 10),
   errors: {},
@@ -88,6 +95,8 @@ export default (state = { ...initialState }, action = {}) => {
       return { ...state, track: action.payload };
     case UPDATE_NAME:
       return { ...state, name: (action.payload || '').replace(/[\W_]+/g, '-').toLowerCase() };
+    case UPDATE_PUBLIC_ADMISSION:
+      return { ...state, publicAdmission: !!action.payload };
     case UPDATE_START:
       return { ...state, start: action.payload };
     case UPDATE_END:

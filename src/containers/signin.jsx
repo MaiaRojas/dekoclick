@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -226,6 +226,6 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firebaseConnect(),
+  firestoreConnect(),
   withStyles(styles),
 )(SignIn);

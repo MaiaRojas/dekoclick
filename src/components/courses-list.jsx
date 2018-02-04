@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
@@ -73,12 +73,8 @@ CoursesList.defaultProps = {
 
 
 const sortCourses = (courses) => {
-  if (!isLoaded(courses)) {
+  if (!courses) {
     return undefined;
-  }
-
-  if (isEmpty(courses)) {
-    return [];
   }
 
   const keys = Object.keys(courses || {});
@@ -106,11 +102,9 @@ const sortCourses = (courses) => {
 
 // list courses for a given cohort
 export default compose(
-  firebaseConnect(props => ([
-    `cohortCourses/${props.cohort}`,
-  ])),
-  connect(({ firebase }, ownProps) => ({
-    courses: sortCourses(getVal(firebase, `data/cohortCourses/${ownProps.cohort}`)),
-  }), {}),
+  firestoreConnect(props => [{ collection: `cohorts/${props.cohort}/courses` }]),
+  connect(({ firestore }, { cohort }) => ({
+    courses: sortCourses(firestore.data[`cohorts/${cohort}/courses`]),
+  })),
   withStyles(styles),
 )(CoursesList);

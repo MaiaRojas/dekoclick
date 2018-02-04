@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
@@ -83,6 +83,6 @@ const mapStateToProps = ({ firebase: { authError, auth, profile } }) => ({
 
 
 export default compose(
-  firebaseConnect(),
+  firestoreConnect(),
   connect(mapStateToProps),
 )(App);

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
@@ -12,12 +12,8 @@ import UnitCard from '../components/unit-card';
 
 
 const Course = (props) => {
-  if (!isLoaded(props.course) || !isLoaded(props.progress)) {
+  if (!props.course) {
     return (<CircularProgress />);
-  }
-
-  if (isEmpty(props.course)) {
-    return (<div>No course :-(</div>);
   }
 
   return (
@@ -72,24 +68,43 @@ Course.defaultProps = {
 };
 
 
-const matchParamsToCoursePath = ({ cohortid, courseid }) =>
-  `cohortCourses/${cohortid}/${courseid}`;
+const selectCourse = (data, { cohortid, courseid }) => {
+  const key = `cohorts/${cohortid}/courses`;
+  if (!data || !data[key] || !data[key][courseid]) {
+    return undefined;
+  }
+
+  return data[key][courseid];
+};
 
 
-const matchParamsToProgressPath = (uid, { cohortid, courseid }) =>
-  `cohortProgress/${cohortid}/${uid}/${courseid}`;
+const selectProgress = (data, { cohortid, courseid }, uid) => {
+  const key = `cohorts/${cohortid}/users/${uid}/progress`;
+
+  if (!data || !data[key] || !data[key][courseid]) {
+    return undefined;
+  }
+
+  return data[key][courseid];
+};
 
 
-const mapStateToProps = ({ firebase }, { auth, match }) => ({
-  course: getVal(firebase, `data/${matchParamsToCoursePath(match.params)}`),
-  progress: getVal(firebase, `data/${matchParamsToProgressPath(auth.uid, match.params)}`),
+const mapStateToProps = ({ firestore, firebase }, { auth, match }) => ({
+  course: selectCourse(firestore.data, match.params),
+  progress: selectProgress(firestore.data, match.params, auth.uid),
 });
 
 
 export default compose(
-  firebaseConnect(({ auth, match }) => [
-    matchParamsToCoursePath(match.params),
-    matchParamsToProgressPath(auth.uid, match.params),
+  firestoreConnect(({ auth, match }) =>[
+    {
+      collection: `cohorts/${match.params.cohortid}/courses`,
+      doc: match.params.courseid,
+    },
+    {
+      collection: `cohorts/${match.params.cohortid}/users/${auth.uid}/progress`,
+      doc: match.params.courseid,
+    },
   ]),
   connect(mapStateToProps),
 )(Course);

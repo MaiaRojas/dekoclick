@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal, isLoaded } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Grid from 'material-ui/Grid';
@@ -19,7 +19,7 @@ const styles = theme => ({
 
 
 const profilesLoaded = profiles => Object.keys(profiles)
-  .reduce((memo, uid) => memo && isLoaded(profiles[uid]), true);
+  .reduce((memo, uid) => memo && profiles[uid], true);
 
 
 const CohortUsers = (props) => {
@@ -61,10 +61,10 @@ CohortUsers.propTypes = {
 };
 
 
-const mapStateToProps = ({ firebase }, ownProps) => ({
+const mapStateToProps = ({ firestore }, ownProps) => ({
   profiles: ownProps.users.reduce((memo, item) => ({
     ...memo,
-    [item.key]: getVal(firebase, `data/users/${item.key}`),
+    [item.key]: (firestore.data.users || {})[item.key],
   }), {}),
 });
 
@@ -75,7 +75,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firebaseConnect(props => props.users.map(obj => `users/${obj.key}`)),
+  firestoreConnect(props => props.users.map(obj => `users/${obj.key}`)),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortUsers);

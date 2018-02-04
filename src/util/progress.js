@@ -48,7 +48,7 @@ export const computeUnitProgressStats = (progress, unit) => {
 
   const stats = Object.keys(unit.parts || {}).reduce((memo, partKey) => {
     const part = unit.parts[partKey];
-    if (part.format !== 'self-paced') {
+    if (part.format !== 'self-paced' || part.type === 'taller' || part.type === 'workshop') {
       return memo;
     }
     if (part.type === 'practice' && (!part.exercises || !Object.keys(part.exercises).length)) {
@@ -73,7 +73,7 @@ export const computeUnitProgressStats = (progress, unit) => {
 
   return {
     ...stats,
-    percent: Math.ceil((stats.totalParts && (stats.completedParts / stats.totalParts) * 100) || 0),
+    percent: Math.ceil(((stats.completedParts / stats.totalParts) * 100) || 0),
   };
 };
 

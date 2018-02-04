@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
-import { firebaseConnect, getVal, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import TopBar from '../components/top-bar';
 import UnitNav from '../components/unit-nav';
@@ -36,14 +36,6 @@ const selfAssessmentPart = {
 };
 
 
-const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
-  `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;
-
-
-const matchParamsToProgressPath = (uid, { cohortid, courseid, unitid }) =>
-  `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}`;
-
-
 const addSelfAssessment = (unit) => {
   const partKeys = Object.keys((unit || {}).parts || {}).sort();
   const hasSelfAssessment = partKeys.reduce(
@@ -68,12 +60,8 @@ const addSelfAssessment = (unit) => {
 
 
 const Unit = (props) => {
-  if (!isLoaded(props.unit) || !isLoaded(props.progress)) {
+  if (!props.unit) {
     return (<CircularProgress />);
-  }
-
-  if (isEmpty(props.unit)) {
-    return (<div>No unit :-(</div>);
   }
 
   const { classes, ...propsMinusClasses } = props;
@@ -149,16 +137,43 @@ Unit.defaultProps = {
 };
 
 
-const mapStateToProps = ({ firebase }, { auth, match }) => ({
-  unit: addSelfAssessment(getVal(firebase, `data/${matchParamsToUnitPath(match.params)}`)),
-  progress: getVal(firebase, `data/${matchParamsToProgressPath(auth.uid, match.params)}`),
+const selectUnit = (data, { cohortid, courseid, unitid }) => {
+  const key = `cohorts/${cohortid}/courses`;
+  if (!data || !data[key] || !data[key][courseid] || !data[key][courseid].syllabus) {
+    return undefined;
+  }
+
+  return addSelfAssessment(data[key][courseid].syllabus[unitid]);
+};
+
+
+const selectProgress = (data, { cohortid, courseid, unitid }, uid) => {
+  const key = `cohorts/${cohortid}/users/${uid}/progress`;
+
+  if (!data || !data[key] || !data[key][courseid]) {
+    return undefined;
+  }
+
+  return data[key][courseid][unitid];
+};
+
+
+const mapStateToProps = ({ firestore, firebase }, { auth, match }) => ({
+  unit: selectUnit(firestore.data, match.params),
+  progress: selectProgress(firestore.data, match.params, auth.uid),
 });
 
 
 export default compose(
-  firebaseConnect(({ auth, match }) => [
-    matchParamsToUnitPath(match.params),
-    matchParamsToProgressPath(auth.uid, match.params),
+  firestoreConnect(({ auth, match }) => [
+    {
+      collection: `cohorts/${match.params.cohortid}/courses`,
+      doc: match.params.courseid,
+    },
+    {
+      collection: `cohorts/${match.params.cohortid}/users/${auth.uid}/progress`,
+      doc: match.params.courseid,
+    },
   ]),
   connect(mapStateToProps),
   withStyles(styles),

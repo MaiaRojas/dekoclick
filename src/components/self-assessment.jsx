@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, getVal } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import { FormGroup, FormControl, FormControlLabel, FormLabel } from 'material-ui/Form';
@@ -47,9 +47,6 @@ const styles = theme => ({
     display: 'none',
   },
 });
-
-const matchParamsToUnitPath = ({ cohortid, courseid, unitid }) =>
-  `cohortCourses/${cohortid}/${courseid}/syllabus/${unitid}`;
 
 
 const isReadType = part =>
@@ -358,15 +355,25 @@ SelfAssessment.defaultProps = {
 };
 
 
-const mapStateToProps = ({ firebase }, { match }) => ({
-  unit: getVal(firebase, `data/${matchParamsToUnitPath(match.params)}`),
+const mapStateToProps = (
+  { firestore: { data } },
+  { match: { params: { cohortid, courseid, unitid } } },
+) => ({
+  unit: (
+    data[`cohorts/${cohortid}/courses`]
+    && data[`cohorts/${cohortid}/courses`][courseid]
+    && data[`cohorts/${cohortid}/courses`][courseid].syllabus
+  )
+    ? data[`cohorts/${cohortid}/courses`][courseid].syllabus[unitid]
+    : undefined,
 });
 
 
 export default compose(
-  firebaseConnect(({ match }) => [
-    matchParamsToUnitPath(match.params),
-  ]),
+  firestoreConnect(({ match: { params } }) => [{
+    collection: `cohorts/${params.cohortid}/courses`,
+    doc: params.courseid,
+  }]),
   connect(mapStateToProps),
   withStyles(styles),
 )(SelfAssessment);
