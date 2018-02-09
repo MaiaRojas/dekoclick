@@ -59,12 +59,17 @@ UnitExercises.propTypes = {
   part: PropTypes.shape({
     exercises: PropTypes.shape({}).isRequired,
   }).isRequired,
-  progress: PropTypes.shape({}).isRequired,
+  progress: PropTypes.shape({}),
   match: PropTypes.shape({
     params: PropTypes.shape({
       exerciseid: PropTypes.string,
     }).isRequired,
   }).isRequired,
+};
+
+
+UnitExercises.defaultProps = {
+  progress: undefined,
 };
 
 

@@ -35,13 +35,13 @@ const partTypeToIcon = (type) => {
   if (type === 'quiz') {
     return <PollIcon />;
   }
-  if (type === 'seminario') {
+  if (type === 'seminar') {
     return <SchoolIcon />;
   }
   if (type === 'practice') {
     return <CodeIcon />;
   }
-  if (type === 'taller') {
+  if (type === 'workshop') {
     return <BuildIcon />;
   }
   return <SubjectIcon />;
@@ -49,7 +49,7 @@ const partTypeToIcon = (type) => {
 
 
 const progressToIcon = (part, progress) => {
-  if (part.type === 'lectura') {
+  if (part.type === 'read') {
     if (progress && progress.readAt) {
       return <DoneIcon />;
     }
@@ -59,7 +59,6 @@ const progressToIcon = (part, progress) => {
     } else if (progress) {
       return <TimerIcon />;
     }
-    return null;
   } else if (part.type === 'practice' && part.exercises) {
     const stats = Object.keys(part.exercises).reduce((memo, key) => {
       if (progress && progress[key] && progress[key].testResults) {
@@ -74,6 +73,10 @@ const progressToIcon = (part, progress) => {
       return <DoneIcon />;
     } else if (stats.incomplete) {
       return <WarningIcon />;
+    }
+  } else if (part.type === 'self-assessment') {
+    if (progress && progress.submittedAt) {
+      return <DoneIcon />;
     }
   }
 

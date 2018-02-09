@@ -14,36 +14,50 @@ const styles = theme => ({
 });
 
 
-const goBack = ({ history, match }) => () => {
-  const { cohortid, courseid } = match.params;
-  history.push(`/cohorts/${cohortid}/courses/${courseid}`);
-};
-
-
-const getUnitOrder = (props) => {
-  if (typeof props.unit.order === 'number') {
-    return props.unit.order;
+const getUnitOrder = (unit, match) => {
+  if (typeof unit.order === 'number') {
+    return unit.order;
   }
-  return parseInt(props.match.params.unitid.slice(0, 2), 10);
+  return parseInt(match.params.unitid.slice(0, 2), 10);
 };
 
 
-const UnitNav = props => (
+const getPartProgress = (partid, unitProgress) =>
+  (/^\d{2}-self-assessment$/.test(partid))
+    ? unitProgress.find(item => item.type === 'self-assessment')
+    : unitProgress.find(item => item.partid === partid);
+
+
+const UnitNav = ({
+  unit,
+  parts,
+  progress,
+  classes,
+  match,
+  history,
+}) => (
   <LeftDrawer>
-    <List disablePadding className={props.classes.list}>
-      <ListItem button onClick={goBack(props)}>
-        <ListItemText primary={`Unidad ${getUnitOrder(props)}: ${props.unit.title}`} />
+    <List disablePadding className={classes.list}>
+      <ListItem
+        button
+        onClick={() =>
+          history.push(`/cohorts/${match.params.cohortid}/courses/${match.params.courseid}`)
+        }
+      >
+        <ListItemText
+          primary={`Unidad ${getUnitOrder(unit, match)}: ${unit.title}`}
+        />
       </ListItem>
       <Divider />
-      {Object.keys(props.unit.parts).sort().map((key, idx) =>
+      {parts.map((part, idx) =>
         (<UnitNavItem
-          key={key}
-          partid={key}
+          key={part.id}
+          partid={part.id}
           order={idx}
-          part={props.unit.parts[key]}
-          progress={(props.progress || {})[key]}
-          match={props.match}
-          history={props.history}
+          part={part}
+          progress={getPartProgress(part.id, progress || [])}
+          match={match}
+          history={history}
         />))
       }
     </List>
@@ -54,9 +68,9 @@ const UnitNav = props => (
 UnitNav.propTypes = {
   unit: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    parts: PropTypes.shape({}).isRequired,
   }).isRequired,
-  progress: PropTypes.shape({}),
+  parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  progress: PropTypes.arrayOf(PropTypes.shape({})),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,

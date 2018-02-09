@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { withFirestore } from 'react-redux-firebase';
+import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import { FormGroup, FormControl, FormControlLabel, FormLabel } from 'material-ui/Form';
@@ -49,10 +48,6 @@ const styles = theme => ({
 });
 
 
-const isReadType = part =>
-  ['lectura', 'read'].indexOf(part.type) > -1;
-
-
 const formatDate = (submittedAt) => {
   const date = new Date(submittedAt);
   return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
@@ -78,14 +73,9 @@ class SelfAssessment extends React.Component {
     };
   }
 
-  getSelfLearningParts() {
-    return Object.keys(this.props.unit.parts)
-      .filter(key => isReadType(this.props.unit.parts[key]))
-      .sort();
-  }
-
   getSelfLearningTitle(selfLearning) {
-    return this.props.unit.parts[selfLearning].title;
+    console.log('getSelfLearningTitle', selfLearning);
+    // return this.props.parts[selfLearning].title;
   }
 
   sentimentToIcon(val) {
@@ -150,46 +140,61 @@ class SelfAssessment extends React.Component {
       },
     });
 
-    this.props.firebase.database()
-      .ref(`cohortProgress/${this.props.unitProgressPath}/selfAssessment`)
-      .update({
-        sentiment,
-        feelings,
-        improvements,
-        topics,
-        submittedAt: new Date(),
-      });
+    const firestore = this.props.firestore;
+    const uid = this.props.firestore.auth().currentUser.uid;
+    const { cohortid, courseid, unitid, partid } = this.props.match.params;
+    const progressKey = `cohorts/${cohortid}/users/${uid}/progress`;
+    const changes = {
+      [unitid]: {
+        selfAssessment: {
+          sentiment,
+          feelings,
+          improvements,
+          topics,
+          submittedAt: new Date(),
+        },
+      },
+    };
+
+    firestore.get({ collection: progressKey, doc: courseid }).then((doc) => {
+      firestore[(doc.exists) ? 'update' : 'set']({
+        collection: progressKey,
+        doc: courseid,
+      }, changes);
+    });
 
     return false;
   }
 
   render() {
-    const { classes, selfAssessment } = this.props;
-    const selfLearnings = this.getSelfLearningParts(this.props.unit);
-    const hasSelfLearnings = (selfLearnings && selfLearnings.length > 0);
+    const { classes, progress } = this.props;
+    console.log('SelfAssessment::progress', progress);
+    const selfPacedParts = this.props.parts.filter(
+      part => part.format === 'self-paced' && part.type !== 'self-assessment'
+    );//.sort();
 
-    if (selfAssessment && selfAssessment.submittedAt) {
+    if (progress && progress.submittedAt) {
       return (
         <div className={classes.root}>
           <Typography type="headline" gutterBottom className={classes.headline}>
-            Autoevaluación completada el {formatDate(selfAssessment.submittedAt)}
+            Autoevaluación completada el {formatDate(progress.submittedAt)}
           </Typography>
           <Typography type="subheading" gutterBottom>
             1. Así me siento sobre la unidad que acaba de terminar...
           </Typography>
           <Typography gutterBottom>
-            {this.sentimentToIcon(selfAssessment.sentiment)}
+            {this.sentimentToIcon(progress.sentiment)}
           </Typography>
           <Typography type="subheading" gutterBottom>
             2. ¿Por qué te sientes así?
           </Typography>
           <Typography gutterBottom>
-            {selfAssessment.feelings}
+            {progress.feelings}
           </Typography>
           <Typography type="subheading" gutterBottom>
             3. Marca todos los temas que NO te han quedado claros
           </Typography>
-          {(selfAssessment.topics || []).map((key, idx) => (
+          {(progress.topics || []).map((key, idx) => (
             <Typography key={key || idx}>
               {typeof key === 'object' ?
                   key['other-topics'] :
@@ -200,7 +205,7 @@ class SelfAssessment extends React.Component {
             4. ¿Hay algo que quieras destacar/mejorar de esta unidad?
           </Typography>
           <Typography gutterBottom>
-            {selfAssessment.improvements || '-'}
+            {progress.improvements || '-'}
           </Typography>
         </div>
       );
@@ -265,25 +270,25 @@ class SelfAssessment extends React.Component {
           </FormControl>
         </Paper>
 
-        {hasSelfLearnings &&
+        {selfPacedParts.length &&
           <Paper className={classes.paper}>
             <FormControl className={classes.fieldset} component="fieldset">
               <FormLabel component="legend">
                 3. Marca todos los temas que NO te han quedado claros
               </FormLabel>
               <FormGroup>
-                {selfLearnings.map((key, idx) => (
+                {selfPacedParts.map((selfPacedPart, idx) => (
                   <FormControlLabel
-                    key={key}
-                    id={key}
+                    key={idx}
+                    id={selfPacedPart.id}
                     idx={idx}
                     control={
                       <Checkbox
-                        value={key}
+                        value={selfPacedPart.id}
                         onChange={this.handleTopicChange}
                       />
                     }
-                    label={this.getSelfLearningTitle(key)}
+                    label={selfPacedPart.title}
                   />
                 ))}
                 <FormControlLabel
@@ -313,7 +318,7 @@ class SelfAssessment extends React.Component {
         <Paper className={classes.paper}>
           <FormControl className={classes.fieldset} component="fieldset">
             <FormLabel component="legend">
-              {hasSelfLearnings ? '4' : '3'}. ¿Hay algo que quieras destacar/mejorar de esta unidad?
+              {selfPacedParts.length ? '4' : '3'}. ¿Hay algo que quieras destacar/mejorar de esta unidad?
             </FormLabel>
             <TextField
               multiline
@@ -335,45 +340,29 @@ class SelfAssessment extends React.Component {
 
 
 SelfAssessment.propTypes = {
-  unitProgressPath: PropTypes.string.isRequired,
-  selfAssessment: PropTypes.shape({}),
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+  unit: PropTypes.shape({}),
+  parts: PropTypes.arrayOf(PropTypes.shape({})),
+  progress: PropTypes.shape({}),
+  firestore: PropTypes.shape({
+    auth: PropTypes.func.isRequired,
+    get: PropTypes.func.isRequired,
+    set: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     sentimentIcon: PropTypes.string.isRequired,
   }).isRequired,
-  unit: PropTypes.shape({
-    parts: PropTypes.shape({}),
-  }),
 };
 
 
 SelfAssessment.defaultProps = {
   unit: undefined,
-  selfAssessment: undefined,
+  parts: undefined,
+  progress: undefined,
 };
 
 
-const mapStateToProps = (
-  { firestore: { data } },
-  { match: { params: { cohortid, courseid, unitid } } },
-) => ({
-  unit: (
-    data[`cohorts/${cohortid}/courses`]
-    && data[`cohorts/${cohortid}/courses`][courseid]
-    && data[`cohorts/${cohortid}/courses`][courseid].syllabus
-  )
-    ? data[`cohorts/${cohortid}/courses`][courseid].syllabus[unitid]
-    : undefined,
-});
-
-
 export default compose(
-  firestoreConnect(({ match: { params } }) => [{
-    collection: `cohorts/${params.cohortid}/courses`,
-    doc: params.courseid,
-  }]),
-  connect(mapStateToProps),
   withStyles(styles),
+  withFirestore,
 )(SelfAssessment);

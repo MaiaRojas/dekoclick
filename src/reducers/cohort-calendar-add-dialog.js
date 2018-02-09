@@ -28,7 +28,6 @@ export const resetCohortCalendarAddDialog = () => ({
 });
 
 
-
 const validTypes = ['classroom', 'webinar', 'interview', 'milestone', 'other'];
 
 

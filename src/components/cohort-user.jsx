@@ -67,7 +67,7 @@ const CohortUser = (props) => {
         <CardHeader
           avatar={<UserAvatar user={props.profile} />}
           title={props.profile.name}
-          subheader={`Role: ${props.role}`}
+          subheader={`Role: ${props.cohortUser.role}`}
         />
         <CardContent>
           <Typography className={props.classes.emailContainer}>
@@ -85,7 +85,7 @@ const CohortUser = (props) => {
             </Typography>}
         </CardContent>
         <CardActions>
-          {canMigrate && props.role === 'student' && (
+          {canMigrate && props.cohortUser.role === 'student' && (
             <IconButton
               onClick={() =>
                 props.toggleMoveDialog({ uid: props.uid, user: props.profile })
@@ -94,7 +94,7 @@ const CohortUser = (props) => {
               <SwapHorizIcon />
             </IconButton>
           )}
-          {props.role === 'student' && (
+          {props.cohortUser.role === 'student' && (
             <IconButton onClick={() => console.log('drop out!')}>
               <DirectionsWalkIcon />
             </IconButton>
@@ -102,9 +102,10 @@ const CohortUser = (props) => {
           <IconButton
             onClick={() =>
               window.confirm('Estás segura de que quieres desasociar este usuario de este cohort?') &&
-                props.firebase.database()
-                  .ref(`userCohorts/${props.uid}/${props.cohortid}`)
-                  .remove()
+                props.firebase.firestore()
+                  .collection(`cohorts/${props.cohortid}/users`)
+                  .doc(props.uid)
+                  .delete()
                   .catch(console.error)
             }
           >
@@ -120,7 +121,9 @@ const CohortUser = (props) => {
 CohortUser.propTypes = {
   uid: PropTypes.string.isRequired,
   cohortid: PropTypes.string.isRequired,
-  role: PropTypes.string.isRequired,
+  cohortUser: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+  }).isRequired,
   profile: PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,

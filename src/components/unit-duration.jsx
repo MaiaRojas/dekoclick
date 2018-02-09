@@ -24,8 +24,7 @@ class UnitDuration extends React.Component {
   }
 
   expiredQuiz() {
-    const startedAt = new Date(this.props.progress.startedAt);
-    return startedAt < (Date.now() - (this.props.part.duration * 60 * 1000));
+    return this.props.progress.startedAt < (Date.now() - (this.props.part.duration * 60 * 1000));
   }
 
   quizInProgress() {
@@ -59,7 +58,7 @@ class UnitDuration extends React.Component {
     }
 
     this.interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - new Date(progress.startedAt)) / 1000, 10);
+      const elapsed = Math.floor((Date.now() - progress.startedAt) / 1000, 10);
       this.setState({ elapsed });
     }, 1000);
   }
@@ -102,7 +101,7 @@ UnitDuration.propTypes = {
     type: PropTypes.string.isRequired,
   }).isRequired,
   progress: PropTypes.shape({
-    startedAt: PropTypes.string,
+    startedAt: PropTypes.date,
     results: PropTypes.shape({}),
   }).isRequired,
 };

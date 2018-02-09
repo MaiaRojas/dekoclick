@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { CircularProgress } from 'material-ui/Progress';
 import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
@@ -23,7 +23,15 @@ const App = (props) => {
   }
 
   if (props.auth.isEmpty) {
-    return (<SignIn error={null} authError={props.authError} />);
+    return (
+      <Router>
+        <Route
+          path="/:action?/:cohortid?"
+          component={SignIn}
+          authError={props.authError}
+        />
+      </Router>
+    );
   }
 
   return (

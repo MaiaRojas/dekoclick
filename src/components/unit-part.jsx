@@ -34,13 +34,16 @@ const getUnitProgressPath = (auth, match) => {
 
 const UnitPart = (props) => {
   const {
+    unit,
+    parts,
+    part,
+    progress,
     auth,
     classes,
     match,
-    part,
-    showSelfAssessment,
-    selfAssessment,
   } = props;
+
+  console.log('UnitPart', props);
 
   return (
     <div className={classes.root}>
@@ -54,14 +57,9 @@ const UnitPart = (props) => {
           label={`Formato: ${part.format}`}
         />
       </div>
-      {showSelfAssessment &&
+      {part.type === 'self-assessment' &&
         <div>
-          <SelfAssessment
-            match={match}
-            unitProgressPath={getUnitProgressPath(auth, match)}
-            selfAssessment={selfAssessment}
-            firebase={props.firebase}
-          />
+          <SelfAssessment match={match} unit={unit} parts={parts} progress={progress} />
         </div>
       }
       {part.body && <Content html={part.body} />}
@@ -71,6 +69,7 @@ const UnitPart = (props) => {
 
 
 UnitPart.propTypes = {
+  unit: PropTypes.shape({}),
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
     format: PropTypes.string.isRequired,
@@ -88,15 +87,7 @@ UnitPart.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
-  }).isRequired,
-  showSelfAssessment: PropTypes.bool.isRequired,
-  selfAssessment: PropTypes.shape({}),
 };
 
-UnitPart.defaultProps = {
-  selfAssessment: undefined,
-};
 
 export default withStyles(styles)(UnitPart);

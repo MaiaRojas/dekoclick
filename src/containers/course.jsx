@@ -27,13 +27,13 @@ const Course = (props) => {
         }
       </TopBar>
       <div>
-        {Object.keys(props.course.syllabus).sort().map((key, idx) => (
+        {props.syllabus && props.syllabus.map((unit, idx) => (
           <UnitCard
-            key={key}
-            id={key}
+            key={unit.id}
+            id={unit.id}
             idx={idx}
-            unit={props.course.syllabus[key]}
-            progress={(props.progress || {})[key]}
+            unit={unit}
+            progress={(props.progress || {})[unit.id]}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
           />
@@ -47,11 +47,11 @@ const Course = (props) => {
 Course.propTypes = {
   course: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    syllabus: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
     }),
   }),
+  syllabus: PropTypes.arrayOf(PropTypes.shape({})),
   progress: PropTypes.shape({}),
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -65,6 +65,7 @@ Course.propTypes = {
 Course.defaultProps = {
   course: undefined,
   progress: undefined,
+  syllabus: undefined,
 };
 
 
@@ -89,21 +90,36 @@ const selectProgress = (data, { cohortid, courseid }, uid) => {
 };
 
 
+const selectSyllabus = (firestore, { cohortid, courseid }) => {
+  const key = `cohorts/${cohortid}/courses/${courseid}/syllabus`;
+
+  if (!firestore.ordered || !firestore.ordered[key]) {
+    return undefined;
+  }
+
+  return firestore.ordered[key];
+};
+
+
 const mapStateToProps = ({ firestore, firebase }, { auth, match }) => ({
   course: selectCourse(firestore.data, match.params),
   progress: selectProgress(firestore.data, match.params, auth.uid),
+  syllabus: selectSyllabus(firestore, match.params),
 });
 
 
 export default compose(
-  firestoreConnect(({ auth, match }) =>[
+  firestoreConnect(({ auth, match: { params: { cohortid, courseid } } }) => [
     {
-      collection: `cohorts/${match.params.cohortid}/courses`,
-      doc: match.params.courseid,
+      collection: `cohorts/${cohortid}/courses`,
+      doc: courseid,
     },
     {
-      collection: `cohorts/${match.params.cohortid}/users/${auth.uid}/progress`,
-      doc: match.params.courseid,
+      collection: `cohorts/${cohortid}/courses/${courseid}/syllabus`,
+    },
+    {
+      collection: `cohorts/${cohortid}/users/${auth.uid}/progress`,
+      doc: courseid,
     },
   ]),
   connect(mapStateToProps),

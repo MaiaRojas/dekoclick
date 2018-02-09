@@ -289,8 +289,9 @@ const CohortNewDialog = ({ classes, ...props }) => (
               return props.updateCohortNewDialogKey(cohort.key);
             }
 
-            return props.firebase.database()
-              .ref(`cohorts/${props.cohortKey}`)
+            return props.firebase.firestore()
+              .collection('cohorts')
+              .doc(props.cohortKey)
               .set(cohort.value)
               .then(props.resetCohortNewDialog, console.error);
           }}

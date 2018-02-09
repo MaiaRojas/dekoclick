@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withFirestore } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
@@ -13,6 +14,7 @@ import {
   toggleQuizConfirmationDialog,
   resetQuizConfirmationDialog,
 } from '../reducers/quiz-confirmation-dialog';
+import { updateProgress } from '../util/progress';
 
 
 const styles = theme => ({
@@ -41,30 +43,26 @@ const arrayEqual = (a, b) => {
 };
 
 
-const matchParamsToPath = (uid, {
-  cohortid,
-  courseid,
-  unitid,
-  partid,
-}) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}`;
+const updateQuizProgress = (firestore, auth, match, changes) =>
+  updateProgress(
+    firestore,
+    auth.uid,
+    match.params.cohortid,
+    match.params.courseid,
+    match.params.unitid,
+    match.params.partid,
+    changes,
+  );
 
 
-const start = (firebase, auth, match) =>
-  firebase.database()
-    .ref(matchParamsToPath(auth.uid, match.params))
-    .update({ startedAt: (new Date()).toJSON() });
-
-
-const updateProgress = (firebase, auth, match) => (questionid, val) =>
-  firebase.database()
-    .ref(matchParamsToPath(auth.uid, match.params))
-    .update({ [`${questionid}`]: val });
+const updateQuestionProgress = (firestore, auth, match) => (questionid, val) =>
+  updateQuizProgress(firestore, auth, match, { [`${questionid}`]: val });
 
 
 const handleSubmit = ({
   part,
   progress,
-  firebase,
+  firestore,
   auth,
   match,
 }) => () => {
@@ -76,25 +74,27 @@ const handleSubmit = ({
     return Object.assign(memo, { failures: memo.failures + 1, total });
   }, { passes: 0, failures: 0, total: 0 });
 
-  firebase.database()
-    .ref(matchParamsToPath(auth.uid, match.params))
-    .update({ results, submittedAt: (new Date()).toJSON() });
+  updateQuizProgress(firestore, auth, match, {
+    results,
+    submittedAt: (new Date()).toJSON(),
+  });
 };
 
 
 const Quiz = (props) => {
   const {
     part,
-    progress,
     classes,
-    firebase,
+    firestore,
     auth,
     match,
     startQuiz,
   } = props;
 
+  const progress = props.progress || {};
+
   if (!progress.startedAt && startQuiz) {
-    start(firebase, auth, match);
+    updateQuizProgress(firestore, auth, match, { startedAt: new Date() });
     props.resetQuizConfirmationDialog();
     return null;
   }
@@ -141,7 +141,7 @@ const Quiz = (props) => {
           question={question}
           progress={(idx in progress) ? progress[idx] : ''}
           hasResults={!!progress.results}
-          updateProgress={updateProgress(firebase, auth, match)}
+          updateProgress={updateQuestionProgress(firestore, auth, match)}
         />))
       }
       {!progress.results && (
@@ -158,16 +158,13 @@ Quiz.propTypes = {
   part: PropTypes.shape({
     questions: PropTypes.array.isRequired,
   }).isRequired,
-  progress: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.shape({
-      results: PropTypes.shape({}),
-      startedAt: PropTypes.string,
-      submittedAt: PropTypes.string,
-    }),
-  ]).isRequired,
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+  progress: PropTypes.shape({
+    results: PropTypes.shape({}),
+    startedAt: PropTypes.date,
+    submittedAt: PropTypes.date,
+  }),
+  firestore: PropTypes.shape({
+    update: PropTypes.func.isRequired,
   }).isRequired,
   auth: PropTypes.shape({}).isRequired,
   match: PropTypes.shape({
@@ -185,6 +182,11 @@ Quiz.propTypes = {
 };
 
 
+Quiz.defaultProps = {
+  progress: undefined,
+};
+
+
 const mapStateToProps = ({ quizConfirmationDialog }) => ({
   quizConfirmationDialogOpen: quizConfirmationDialog.open,
   startQuiz: quizConfirmationDialog.start,
@@ -199,4 +201,5 @@ const mapDispatchToProps = {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
+  withFirestore,
 )(Quiz);

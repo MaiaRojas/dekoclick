@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
@@ -9,10 +10,9 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import {
-  updateEmail,
-  updatePass,
-  updateEmailError,
-  updatePassError,
+  updateSignInField,
+  validateAndSubmitSignInForm,
+  resetSignInForm,
   toggleForgot,
   updateForgotResult,
   updateForgotRequested,
@@ -47,134 +47,267 @@ const styles = theme => ({
 });
 
 
-const isValidEmail = (email, error) => {
-  let valid = true;
-
-  if (email === '') {
-    error('Debes ingresar un correo');
-    valid = false;
-  } else if (!isEmail(email)) {
-    error('Debes ingresar un correo válido');
-    valid = false;
-  } else {
-    error('');
-  }
-
-  return valid;
-};
-
-
-const isValidPassword = (password, error) => {
-  let valid = true;
-
-  if (password === '') {
-    error('Debes ingresar una contraseña válida');
-    valid = false;
-  } else {
-    error('');
-  }
-
-  return valid;
-};
-
-
-const isValid = ({ email, password, ...props }) => () =>
-  isValidEmail(email, props.updateEmailError) &&
-    isValidPassword(password, props.updatePassError);
-
-
-const SignIn = props => (
-  <div className={props.classes.root}>
-    <Paper className={props.classes.paper}>
-      <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (props.forgot && isValidEmail(props.email, props.updateEmailError)) {
-            props.updateForgotRequested();
-            props.firebase.auth().sendPasswordResetEmail(props.email)
-              .then(() => props.updateForgotResult({ success: true }))
-              .catch(error => props.updateForgotResult({ error }));
-          } else if (!props.forgot && isValid(props)()) {
-            props.firebase.login({ email: props.email, password: props.password });
-          }
-          return false;
-        }}
-      >
-        <div className="controls">
-          <TextField
-            id="email"
-            label="Correo Electrónico"
-            autoComplete="email"
-            value={props.email}
-            error={props.emailError !== ''}
-            helperText={props.emailError}
-            onChange={e => props.updateEmail(e.target.value)}
-            onBlur={isValid(props)}
-            fullWidth
-            margin="normal"
-          />
-          {!props.forgot &&
-            <TextField
-              id="password"
-              label="Contraseña"
-              value={props.password}
-              type="password"
-              error={props.passwordError !== ''}
-              helperText={props.passwordError}
-              onChange={e => props.updatePass(e.target.value)}
-              onBlur={isValid(props)}
-              fullWidth
-              autoComplete="current-password"
-              margin="normal"
-            />
-          }
-        </div>
-        <Button
-          type="submit"
-          raised
-          color="primary"
-          disabled={props.forgot && props.forgotRequested}
-          className={props.classes.submitBtn}
-        >
-          {props.forgot ? 'Restaurar contraseña' : 'Ingresar'}
-        </Button>
-        <SignInResults
-          authError={props.authError}
-          forgot={props.forgot}
-          forgotResult={props.forgotResult}
+const SignInForm = (props) => (
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      props.validateAndSubmitSignInForm();
+      return false;
+    }}
+  >
+    <div className="controls">
+      <TextField
+        id="email"
+        label="Email"
+        autoComplete="email"
+        value={props.data.email}
+        error={!!props.errors.email}
+        helperText={props.errors && props.errors.email}
+        onChange={e => props.updateSignInField('email', e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      {!props.forgot &&
+        <TextField
+          id="password"
+          label="Password"
+          value={props.data.password}
+          type="password"
+          error={!!props.errors.password}
+          helperText={props.errors && props.errors.password}
+          onChange={e => props.updateSignInField('password', e.target.value)}
+          fullWidth
+          autoComplete="current-password"
+          margin="normal"
         />
-      </form>
-      <Typography>
-        <a
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            props.toggleForgot();
-            return false;
-          }}
-        >
-          {props.forgot ? 'Ingresar' : 'Olvidaste tu contraseña?'}
-        </a>
-      </Typography>
-    </Paper>
-  </div>
+      }
+      {props.signup &&
+        <TextField
+          id="password2"
+          label="Verify password"
+          value={props.data.password2}
+          type="password"
+          error={!!props.errors.password2}
+          helperText={props.errors && props.errors.password2}
+          onChange={e => props.updateSignInField('password2', e.target.value)}
+          fullWidth
+          autoComplete="verify-password"
+          margin="normal"
+        />
+      }
+    </div>
+    <Button
+      type="submit"
+      raised
+      color="primary"
+      disabled={props.forgot && props.forgotRequested}
+      className={props.classes.submitBtn}
+    >
+      {
+        props.forgot
+          ? 'Reset password'
+          : props.signup ? 'Create account' : 'Sign in'
+      }
+    </Button>
+    <SignInResults
+      authError={props.authError}
+      forgot={props.forgot}
+      forgotResult={props.forgotResult}
+    />
+  </form>
 );
 
 
+const SignInForgotToggle = (props) => (
+  <Typography>
+    <a
+      href="/"
+      onClick={(e) => {
+        e.preventDefault();
+        props.toggleForgot();
+        return false;
+      }}
+    >
+      {props.forgot ? 'Sign in' : 'Forgot password?'}
+    </a>
+  </Typography>
+);
+
+
+const SignInWithFacebookButton = (props) => (
+  <Button
+    raised
+    color="primary"
+    style={{ marginTop: 50 }}
+    onClick={() => {
+      const { firestore } = props;
+      const provider = new firestore.auth.FacebookAuthProvider();
+      const auth = firestore.auth();
+
+      // provider.addScope('user_birthday');
+      provider.addScope('public_profile');
+      // user_hometown
+      // user_location
+
+      // auth.languageCode = 'es_PE';
+      auth.useDeviceLanguage();
+      // console.log(firestore.auth().languageCode);
+
+      provider.setCustomParameters({
+        'display': 'popup',
+      });
+
+      auth.signInWithPopup(provider).then((result) => {
+        console.log(result);
+        postSignUp(props, result.user.uid, result.user.email);
+        // // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        // const token = result.credential.accessToken;
+      }).catch((err) => {
+        console.log(err);
+        if (err.code === 'auth/account-exists-with-different-credential') {
+          const pendingCred = err.credential;
+          const email = err.email;
+
+          auth.fetchProvidersForEmail(email).then((providers) => {
+            // If the user has several providers, the first provider in the
+            // list will be the "recommended" provider to use.
+
+            if (providers[0] === 'password') {
+              const password = prompt([
+                `Ya existe una cuenta registrada con el correo ${email}. `,
+                'Si quieres vincular tu cuenta de Facebook a tu cuenta de ',
+                'Laboratoria, confirma tu contraseña de Laboratoria:',
+              ].join(''));
+              return auth.signInWithEmailAndPassword(email, password)
+                .then(user => user.link(pendingCred))
+                .then(() => {
+                  // Facebook account successfully linked to existing user.
+                  // goToApp();
+                })
+                .catch(err => console.error(err));
+            }
+
+            // All the other cases are external providers.
+            // TODO: implement getProviderForProviderId.
+            var provider = getProviderForProviderId(providers[0]);
+            // At this point, you should let the user know that he already
+            // has an account but with a different provider, and let him
+            // validate the fact he wants to sign in with this provider.
+            // Sign in to provider. Note: browsers usually block popup
+            // triggered asynchronously, so in real scenario you should ask
+            // the user to click on a "continue" button that will trigger
+            // the signInWithPopup.
+            return auth.signInWithPopup(provider).then((result) => {
+              // Remember that the user may have signed in with an account
+              // that has a different email address than the first one. This
+              // can happen as Firebase doesn't control the provider's sign
+              // in flow and the user is free to login using whichever
+              // account he owns.
+
+              // Link to Facebook credential.
+              // As we have access to the pending credential, we can
+              // directly call the link method.
+              return result.user.link(pendingCred).then(() => {
+                // Facebook account successfully linked to existing user.
+                // goToApp();
+              });
+            });
+          });
+        }
+      });
+    }}
+  >
+    Sign in with Facebook
+  </Button>
+);
+
+
+// handle successful signup (add profile data and assign cohort)
+const postSignUp = (props, uid, email) => {
+  const db = props.firestore.firestore();
+  return db.doc(`users/${uid}`).set({ email })
+    .then(() =>
+      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' })
+    )
+    .then(() => {
+      props.resetSignInForm();
+      // TODO: for some reason props.history.push() doesn't trigger route, so
+      // forcing a page reload for the time being; ugly... I know :-S
+      // props.history.push('/');
+      window.location = '/';
+    });
+};
+
+
+const SignIn = props => {
+  const { email, password } = props.data;
+  const auth = props.firestore.auth();
+
+  if (auth.currentUser) {
+    return <Redirect to="/" />;
+  }
+
+  if (props.signup && props.cohort === undefined) {
+    return null;
+  }
+
+  // `props.isValid` significa que el formulario ha sido enviado (submitted) y
+  // los campos han pasado validación.
+  if (props.isValid) {
+    if (props.signup) {
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(data => postSignUp(props, data.uid, email))
+        .catch(err => console.log(err));
+    } else if (props.forgot) {
+      auth.sendPasswordResetEmail(email)
+        .then(() => props.updateForgotResult({ success: true }))
+        .catch(error => props.updateForgotResult({ error }));
+      setTimeout(props.updateForgotRequested, 10);
+    } else {
+      auth.signInWithEmailAndPassword(email, password)
+        .then(props.resetSignInForm);
+    }
+    return null;
+  }
+
+  return (
+    <div className={props.classes.root}>
+      <Paper className={props.classes.paper}>
+        <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
+        {props.signup && !props.cohort
+          ? (<div style={{ textAlign: 'center' }}>No cohort selected</div>)
+          : (
+              <div>
+                {props.signup && (
+                  <div style={{ textAlign: 'center' }}>{props.cohortid}</div>
+                )}
+                <SignInForm {...props} />
+                {!props.signup && <SignInForgotToggle {...props} />}
+                <SignInWithFacebookButton {...props} />
+              </div>
+            )
+        }
+      </Paper>
+    </div>
+  );
+};
+
+
 SignIn.propTypes = {
-  email: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  emailError: PropTypes.string.isRequired,
-  passwordError: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+  }).isRequired,
+  errors: PropTypes.shape({}).isRequired,
+  isValid: PropTypes.bool,
   forgot: PropTypes.bool.isRequired,
   forgotRequested: PropTypes.bool,
   forgotResult: PropTypes.shape({}),
-  updateEmail: PropTypes.func.isRequired,
-  updatePass: PropTypes.func.isRequired,
-  updateEmailError: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  updatePassError: PropTypes.func.isRequired,
+  signup: PropTypes.bool.isRequired,
+  cohortid: PropTypes.string,
+  cohort: PropTypes.shape({}),
+  updateSignInField: PropTypes.func.isRequired,
+  validateAndSubmitSignInForm: PropTypes.func.isRequired,
   toggleForgot: PropTypes.func.isRequired,
   updateForgotRequested: PropTypes.func.isRequired,
   updateForgotResult: PropTypes.func.isRequired,
@@ -182,8 +315,7 @@ SignIn.propTypes = {
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
-  firebase: PropTypes.shape({
-    login: PropTypes.func.isRequired,
+  firestore: PropTypes.shape({
     auth: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
@@ -199,25 +331,30 @@ SignIn.defaultProps = {
   authError: undefined,
   forgotRequested: false,
   forgotResult: undefined,
+  cohortid: undefined,
+  cohort: undefined,
 };
 
 
-const mapStateToProps = ({ signin }) => ({
-  email: signin.email,
-  password: signin.password,
-  emailError: signin.emailError,
-  passwordError: signin.passwordError,
+const mapStateToProps = ({ signin, firestore: { data } }, { match }) => ({
+  data: signin.data,
+  errors: signin.errors,
+  isValid: signin.isValid,
   forgot: signin.forgot,
   forgotRequested: signin.forgotRequested,
   forgotResult: signin.forgotResult,
+  signup: signin.signup,
+  cohortid: match.params.cohortid,
+  cohort: !data.cohorts
+    ? undefined
+    : data.cohorts[match.params.cohortid] || null,
 });
 
 
 const mapDispatchToProps = {
-  updateEmail,
-  updatePass,
-  updateEmailError,
-  updatePassError,
+  updateSignInField,
+  validateAndSubmitSignInForm,
+  resetSignInForm,
   toggleForgot,
   updateForgotRequested,
   updateForgotResult,
@@ -226,6 +363,10 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect(),
+  firestoreConnect((props) =>
+    props.match.params.action === 'signup'
+      ? [{ collection: 'cohorts', doc: props.match.params.cohortid }]
+      : []
+  ),
   withStyles(styles),
 )(SignIn);

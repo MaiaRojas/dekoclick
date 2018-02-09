@@ -1,32 +1,27 @@
+import isEmail from '../util/isEmail';
+
+
 // Action types
-const UPDATE_EMAIL = 'lms.laboratoria.la/signin/UPDATE_EMAIL';
-const UPDATE_PASS = 'lms.laboratoria.la/signin/UPDATE_PASS';
-const UPDATE_EMAIL_ERROR = 'lms.laboratoria.la/signin/UPDATE_EMAIL_ERROR';
-const UPDATE_PASS_ERROR = 'lms.laboratoria.la/signin/UPDATE_PASS_ERROR';
+const UPDATE_FIELD = 'lms.laboratoria.la/signin/UPDATE_FIELD';
+const VALIDATE_AND_SUBMIT = 'lms.laboratoria.la/signin/VALIDATE_AND_SUBMIT';
+const RESET = 'lms.laboratoria.la/signin/RESET';
 const TOGGLE_FORGOT = 'lms.laboratoria.la/signin/TOGGLE_FORGOT';
 const UPDATE_FORGOT_RESULT = 'lms.laboratoria.la/signin/UPDATE_FORGOT_RESULT';
 const FORGOT_REQUESTED = 'lms.laboratoria.la/signin/FORGOT_REQUESTED';
 
 
 // Action Creators
-export const updateEmail = email => ({
-  type: UPDATE_EMAIL,
-  payload: email,
+export const updateSignInField = (key, value) => ({
+  type: UPDATE_FIELD,
+  payload: { key, value },
 });
 
-export const updatePass = pass => ({
-  type: UPDATE_PASS,
-  payload: pass,
+export const validateAndSubmitSignInForm = () => ({
+  type: VALIDATE_AND_SUBMIT,
 });
 
-export const updateEmailError = err => ({
-  type: UPDATE_EMAIL_ERROR,
-  payload: err,
-});
-
-export const updatePassError = err => ({
-  type: UPDATE_PASS_ERROR,
-  payload: err,
+export const resetSignInForm = () => ({
+  type: RESET,
 });
 
 export const toggleForgot = () => ({
@@ -43,40 +38,109 @@ export const updateForgotRequested = () => ({
 });
 
 
-// Reducer
-export default (state = {
-  email: '',
-  password: '',
-  emailError: '',
-  passwordError: '',
+const validateField = (key, value, state) => {
+  switch (key) {
+    case 'email':
+      const trimmed = (value || '').trim();
+      return {
+        err: (!isEmail(trimmed)) ? 'Please enter a valid email' : null,
+        sanitized: trimmed,
+      };
+    case 'password':
+      return {
+        err: (!state.forgot && !value) ? 'Password can not be empty' : null,
+        sanitized: value,
+      };
+    case 'password2':
+      return {
+        err: (state.signup && !state.forgot && value !== state.data.password)
+          ? 'Password missmatch'
+          : null,
+        sanitized: value,
+      };
+    default:
+      return {
+        err: null,
+        sanitized: value,
+      };
+  }
+};
+
+
+const initialState = () => ({
+  data: {
+    email: '',
+    password: '',
+    password2: '',
+  },
+  errors: {},
+  isValid: undefined,
   forgot: false,
   forgotRequested: false,
   forgotResult: null,
-}, action = {}) => {
-  if (action.type === UPDATE_EMAIL) {
-    return { ...state, email: action.payload };
+  signup: window.location.pathname.split('/')[1] === 'signup',
+});
+
+
+// Reducer
+export default (state = initialState(), action = {}) => {
+  switch (action.type) {
+    case UPDATE_FIELD:
+      const { key, value } = action.payload;
+      const { err, sanitized } = validateField(key, value, state);
+      if (err) {
+        return {
+          ...state,
+          isValid: undefined,
+          data: { ...state.data, [key]: sanitized },
+          errors: { ...state.errors, [key]: err },
+        };
+      }
+      return {
+        ...state,
+        isValid: undefined,
+        data: { ...state.data, [key]: sanitized },
+        errors: !state.errors[key]
+          ? state.errors
+          : Object.keys(state.errors).reduce((memo, errorKey) => {
+            if (errorKey === key) {
+              return memo;
+            }
+            return { ...memo, [errorKey]: state.errors[errorKey] };
+          }, {})
+      };
+    case VALIDATE_AND_SUBMIT:
+      const errors = Object.keys(state.data).reduce((memo, key) => {
+        const { err } = validateField(key, state.data[key], state);
+        return (err) ? { ...memo, [key]: err } : memo;
+      }, {});
+      return {
+        ...state,
+        isValid: Object.keys(errors).length === 0,
+        errors,
+      };
+    case RESET:
+      return initialState();
+    case TOGGLE_FORGOT:
+      return {
+        ...state,
+        forgot: !state.forgot,
+        forgotResult: null,
+      };
+    case UPDATE_FORGOT_RESULT:
+      return {
+        ...state,
+        forgotResult: action.payload,
+        forgotRequested: !!action.payload.success,
+        isValid: undefined,
+      };
+    case FORGOT_REQUESTED:
+      return {
+        ...state,
+        forgotRequested: true,
+        isValid: undefined,
+      };
   }
-  if (action.type === UPDATE_PASS) {
-    return { ...state, password: action.payload };
-  }
-  if (action.type === UPDATE_EMAIL_ERROR) {
-    return { ...state, emailError: action.payload };
-  }
-  if (action.type === UPDATE_PASS_ERROR) {
-    return { ...state, passwordError: action.payload };
-  }
-  if (action.type === TOGGLE_FORGOT) {
-    return { ...state, forgot: !state.forgot, forgotResult: null };
-  }
-  if (action.type === UPDATE_FORGOT_RESULT) {
-    return {
-      ...state,
-      forgotResult: action.payload,
-      forgotRequested: !!action.payload.success,
-    };
-  }
-  if (action.type === FORGOT_REQUESTED) {
-    return { ...state, forgotRequested: true };
-  }
+
   return state;
 };

@@ -101,3 +101,107 @@ export const computeCourseProgressStats = (progress, course) => {
     percent: Math.ceil((stats.totalParts && (stats.completedParts / stats.totalParts) * 100) || 0),
   };
 };
+
+
+export const updateProgress = (
+  firestore,
+  uid,
+  cohortid,
+  courseid,
+  unitid,
+  partid,
+  exerciseid,
+  partProgressChanges,
+) => {
+  console.log('updateProgress', {
+    firestore,
+    uid,
+    cohortid,
+    courseid,
+    unitid,
+    partid,
+    exerciseid,
+    partProgressChanges,
+  });
+
+  return Promise.resolve(null);
+
+  const db = firestore.firestore();
+  const cohortRef = db.collection('cohorts').doc(cohortid);
+  const userRef = cohortRef.collection('users').doc(uid);
+  const progressRef = userRef.collection('progress').doc(courseid);
+
+
+  return db.runTransaction((transaction) => {
+    return transaction.get(progressRef).then((progressDocSnap) => {
+      const progressDoc = progressDocSnap.exists ? progressDocSnap.data() : {};
+      const unitProgress = progressDoc[unitid] || {};
+      const partProgress = unitProgress[partid] || {};
+      const exerciseProgress = partProgress[exerciseid] || {};
+
+      // if partProgressChanges is undefined we assume changes object is passed
+      // as exerciseid (ivoked with 7 args instead of 8).
+      const changes = (typeof partProgressChanges === 'undefined')
+        ? {
+          ...progressDoc,
+          [unitid]: {
+            ...unitProgress,
+            [partid]: {
+              ...partProgress,
+              ...exerciseid,
+            },
+          },
+        }
+        : {
+          ...progressDoc,
+          [unitid]: {
+            ...unitProgress,
+            [partid]: {
+              ...partProgress,
+              [exerciseid]: {
+                ...exerciseProgress,
+                ...partProgressChanges,
+              },
+            },
+          },
+        };
+
+      return transaction[progressDocSnap.exists ? 'update' : 'set'](progressRef, changes);
+    });
+  });
+
+  // firestore.get(docPath).then((progressDocSnap) => {
+  //   const progressDoc = progressDocSnap.exists ? progressDocSnap.data() : {};
+  //   const unitProgress = progressDoc[unitid] || {};
+  //   const partProgress = unitProgress[partid] || {};
+  //   const exerciseProgress = partProgress[exerciseid] || {};
+  //   // if partProgressChanges is undefined we assume changes object is passed
+  //   // as exerciseid (ivoked with 7 args instead of 8).
+  //   const changes = (typeof partProgressChanges === 'undefined')
+  //     ? {
+  //       ...progressDoc,
+  //       [unitid]: {
+  //         ...unitProgress,
+  //         [partid]: {
+  //           ...partProgress,
+  //           ...exerciseid,
+  //         },
+  //       },
+  //     }
+  //     : {
+  //       ...progressDoc,
+  //       [unitid]: {
+  //         ...unitProgress,
+  //         [partid]: {
+  //           ...partProgress,
+  //           [exerciseid]: {
+  //             ...exerciseProgress,
+  //             ...partProgressChanges,
+  //           },
+  //         },
+  //       },
+  //     };
+  //
+  //   return firestore[progressDocSnap.exists ? 'update' : 'set'](docPath, changes);
+  // });
+};

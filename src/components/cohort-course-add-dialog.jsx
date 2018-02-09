@@ -92,14 +92,19 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
           <Button
             raised
             color="primary"
-            disabled={!props.coursesIndex.length}
+            disabled={!props.coursesIndex || !props.coursesIndex.length}
             onClick={() => {
-              const courseSummary = props.coursesIndex.find(obj => obj.id === props.course);
-              const db = props.firebase.database();
-              const courseRef = db.ref(`courses/${courseSummary.track}/${props.course}`);
-              courseRef.once('value', (snap) => {
-                db.ref(`cohortCourses/${props.cohortid}/${props.course}`)
-                  .set(snap.val())
+              const { cohortid, course } = props;
+              const db = props.firebase.firestore();
+              // get course from catalog
+              db.collection('courses').doc(course).get().then((doc) => {
+                if (!doc.exists) {
+                  return new Error('Not found');
+                }
+
+                // write course in cohort
+                db.collection(`cohorts/${cohortid}/courses`).doc(course)
+                  .set(doc.data())
                   .then(props.resetCohortCourseAddDialog)
                   .catch(console.error);
               });
@@ -118,7 +123,7 @@ CohortCourseAddDialog.propTypes = {
   cohortid: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   course: PropTypes.string,
-  coursesIndex: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  coursesIndex: PropTypes.arrayOf(PropTypes.shape({})),
   toggleCohortCourseAddDialog: PropTypes.func.isRequired,
   resetCohortCourseAddDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
@@ -130,34 +135,18 @@ CohortCourseAddDialog.propTypes = {
 
 CohortCourseAddDialog.defaultProps = {
   course: '',
+  coursesIndex: undefined,
 };
 
 
-const flattenCourses = (cohortCourses, coursesIndex) =>
-  Object.keys(coursesIndex || {})
-    .reduce(
-      (results, track) => results.concat(Object.keys(coursesIndex[track])
-        .reduce(
-          (nestedResult, id) =>
-            nestedResult.concat({ ...coursesIndex[track][id], id, track }),
-          [],
-        )),
-      [],
-    )
-    .filter(item => !hasOwnProperty(cohortCourses || {}, item.id))
-    .sort((a, b) => {
-      if (a.order > b.order) {
-        return 1;
-      }
-      if (a.order < b.order) {
-        return -1;
-      }
-      return 0;
-    });
+const selectCourses = (cohortCourses, coursesIndex) =>
+  (!coursesIndex || !coursesIndex.length)
+    ? coursesIndex
+    : coursesIndex.filter(item => !hasOwnProperty(cohortCourses || {}, item.id));
 
 
 const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { cohortCourses }) => ({
-  coursesIndex: flattenCourses(cohortCourses, firestore.data.coursesIndex),
+  coursesIndex: selectCourses(cohortCourses, firestore.ordered.coursesIndex),
   open: cohortCourseAddDialog.open,
   course: cohortCourseAddDialog.course,
 });
@@ -171,7 +160,10 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firestoreConnect(() => ['coursesIndex']),
+  firestoreConnect(() => [{
+    collection: 'coursesIndex',
+    orderBy: ['order'],
+  }]),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortCourseAddDialog);

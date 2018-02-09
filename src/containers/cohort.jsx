@@ -72,7 +72,6 @@ const Cohort = ({
   match,
   classes,
   history,
-  firebase,
 }) => {
   if (!cohort) {
     return (<CircularProgress />);
@@ -105,7 +104,7 @@ const Cohort = ({
       <CohortSection title="Overview">
         <p>
           Campus: {parsedCohortId.campus.toUpperCase()}<br />
-          Program: {program.name}<br />
+          Program: {program && program.name && program.name}<br />
           Track: {parsedCohortId.track}
         </p>
       </CohortSection>
@@ -143,7 +142,6 @@ const Cohort = ({
                     courseid={courseid}
                     course={courses[courseid]}
                     history={history}
-                    firebase={firebase}
                   />
                 ))}
               </List>
@@ -201,7 +199,7 @@ const Cohort = ({
       )}
 
       {userAddDialogOpen && (
-        <CohortUserAddDialog cohortid={cohortid} firebase={firebase} />
+        <CohortUserAddDialog cohortid={cohortid} />
       )}
 
       <CohortUserMoveDialog cohortid={cohortid} />
@@ -227,7 +225,6 @@ Cohort.propTypes = {
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({}).isRequired,
-  firebase: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
   }).isRequired,

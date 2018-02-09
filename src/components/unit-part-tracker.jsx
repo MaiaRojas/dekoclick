@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { withFirestore } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import ThumbUpIcon from 'material-ui-icons/ThumbUp';
 import ThumbDownIcon from 'material-ui-icons/ThumbDown';
+import { updateProgress } from '../util/progress';
 
 
 const styles = theme => ({
@@ -54,9 +57,17 @@ class UnitPartTracker extends React.Component {
     return `${this.getUnitProgressPath()}/${this.props.match.params.partid}`;
   }
 
-  getDbRef() {
-    return this.props.firebase.database()
-      .ref(`cohortProgress/${this.getPartProgressPath()}`);
+  updateProgress(partProgressChanges) {
+    console.log('UnitPartTracker.updateProgress', this.props.progress);
+    updateProgress(
+      this.props.firestore,
+      this.props.auth.uid,
+      this.props.match.params.cohortid,
+      this.props.match.params.courseid,
+      this.props.match.params.unitid,
+      this.props.match.params.partid,
+      partProgressChanges,
+    );
   }
 
   isReadType() {
@@ -68,7 +79,7 @@ class UnitPartTracker extends React.Component {
       return;
     }
 
-    this.getDbRef().update({ openedAt: new Date() });
+    this.updateProgress({ openedAt: new Date() });
   }
 
   markRead() {
@@ -76,7 +87,7 @@ class UnitPartTracker extends React.Component {
       return;
     }
 
-    this.getDbRef().update({ readAt: new Date() });
+    this.updateProgress({ readAt: new Date() });
   }
 
   checkReadCompleted() {
@@ -114,20 +125,27 @@ class UnitPartTracker extends React.Component {
   }
 
   like() {
-    this.getDbRef().update({ like: true, likedAt: new Date() });
+    this.updateProgress({ like: true, likedAt: new Date() });
   }
 
   dislike() {
-    this.getDbRef().update({ like: false, dislikedAt: new Date() });
+    this.updateProgress({ like: false, dislikedAt: new Date() });
   }
 
   render() {
+    console.log('UnitPartTracker', this.props);
+
+    if (!this.props.progress || !this.props.progress.openedAt) {
+      return null;
+    }
+
     const {
       component: Component,
       classes,
       ...rest
     } = this.props;
-    const hasLikedOrDisliked = typeof this.props.progress.like === 'boolean';
+
+    const hasLikedOrDisliked = this.props.progress && typeof this.props.progress.like === 'boolean';
     const liked = hasLikedOrDisliked && this.props.progress.like === true;
     const disliked = hasLikedOrDisliked && this.props.progress.like === false;
     return (
@@ -139,8 +157,8 @@ class UnitPartTracker extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={!!this.props.progress.readAt}
-                  disabled={!!this.props.progress.readAt}
+                  checked={this.props.progress && !!this.props.progress.readAt}
+                  disabled={this.props.progress && !!this.props.progress.readAt}
                   onChange={e => e.target.checked && this.markRead()}
                 />
               }
@@ -173,35 +191,38 @@ UnitPartTracker.propTypes = {
     PropTypes.func.isRequired,
     PropTypes.shape({}).isRequired,
   ]).isRequired,
-  showSelfAssessment: PropTypes.bool.isRequired,
-  selfAssessment: PropTypes.shape({}),
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
   }).isRequired,
   progress: PropTypes.shape({
-    openedAt: PropTypes.string,
-    readAt: PropTypes.string,
+    openedAt: PropTypes.date,
+    readAt: PropTypes.date,
     like: PropTypes.bool,
-  }).isRequired,
+  }),
   auth: PropTypes.shape({}).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+  firestore: PropTypes.shape({
+    get: PropTypes.func.isRequired,
+    set: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({}).isRequired,
 };
 
 
 UnitPartTracker.defaultProps = {
-  selfAssessment: undefined,
+  progress: undefined,
 };
 
 
-const UnitPartTrackerWithStyles = withStyles(styles)(UnitPartTracker);
+const UnitPartTrackerWithStyles = compose(
+  withStyles(styles),
+  withFirestore,
+)(UnitPartTracker);
 
 
 export default UnitPartTrackerWithStyles;

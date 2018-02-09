@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withFirestore } from 'react-redux-firebase';
 import {
   ListItem,
   ListItemAvatar,
@@ -17,7 +18,7 @@ const CohortCourse = ({
   courseid,
   course,
   history,
-  firebase,
+  firestore,
 }) => (
   <ListItem
     button
@@ -39,10 +40,10 @@ const CohortCourse = ({
         aria-label="Delete"
         onClick={() =>
           window.confirm(`Estás segura de que quieres quitar el curso "${courseid}" del cohort "${cohortid}"?`) &&
-            firebase.database()
-              .ref(`cohortCourses/${cohortid}/${courseid}`)
-              .remove()
-              .catch(console.error)
+            firestore.delete({
+              collection: `cohorts/${cohortid}/courses`,
+              doc: courseid,
+            }).catch(console.error)
         }
       >
         <DeleteIcon />
@@ -64,10 +65,10 @@ CohortCourse.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+  firestore: PropTypes.shape({
+    delete: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 
-export default CohortCourse;
+export default withFirestore(CohortCourse);

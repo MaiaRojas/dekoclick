@@ -16,9 +16,10 @@ import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import { LinearProgress } from 'material-ui/Progress';
-import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
+import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
+import { updateProgress } from '../util/progress';
 
 
 const camelCased = str => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
@@ -57,13 +58,17 @@ const styles = theme => ({
 });
 
 
-const matchParamsToPath = (uid, {
-  cohortid,
-  courseid,
-  unitid,
-  partid,
-  exerciseid,
-}) => `cohortProgress/${cohortid}/${uid}/${courseid}/${unitid}/${partid}/${exerciseid}`;
+const updateExerciseProgress = (firestore, auth, match, changes) =>
+  updateProgress(
+    firestore,
+    auth.uid,
+    match.params.cohortid,
+    match.params.courseid,
+    match.params.unitid,
+    match.params.partid,
+    match.params.exerciseid,
+    changes,
+  );
 
 
 const runTests = (editorText, props) => {
@@ -73,22 +78,23 @@ const runTests = (editorText, props) => {
     progress,
     exercise,
     id,
+    firestore,
   } = props;
-  const progressPath = matchParamsToPath(auth.uid, match.params);
   const boilerplate = getBoilerplate(exercise.files, id);
   const code = editorText || (progress || {}).code || boilerplate;
   const tests = exercise.files.test;
   const worker = new Worker('/worker.js');
-  const ref = props.firebase.database().ref(progressPath);
+  const storeResults = changes =>
+    updateExerciseProgress(firestore, auth, match, changes);
 
   worker.onerror = (event) => {
-    ref.set({ code, error: event.message, updatedAt: (new Date()).toJSON() });
+    storeResults({ code, error: event.message, updatedAt: (new Date()).toJSON() })
     worker.terminate();
     props.runTestsEnd();
   };
 
   worker.onmessage = (e) => {
-    ref.set({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
+    storeResults({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
     worker.terminate();
     props.runTestsEnd();
   };
@@ -98,13 +104,11 @@ const runTests = (editorText, props) => {
 };
 
 
-const reset = props => () => {
-  const code = getBoilerplate(props.exercise.files, props.id);
-  const progressPath = matchParamsToPath(props.auth.uid, props.match.params);
-  props.firebase.database()
-    .ref(progressPath)
-    .set({ code, testResults: null });
-};
+const reset = ({ id, exercise, firestore, auth, match }) => () =>
+  updateExerciseProgress(firestore, auth, match, {
+    code: getBoilerplate(exercise.files, id),
+    testResults: null,
+  });
 
 
 const Exercise = (props) => {
@@ -212,8 +216,10 @@ Exercise.propTypes = {
     uid: PropTypes.string.isRequired,
   }).isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+  firestore: PropTypes.shape({
+    get: PropTypes.func.isRequired,
+    set: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     title: PropTypes.string.isRequired,

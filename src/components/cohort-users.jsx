@@ -34,7 +34,7 @@ const CohortUsers = (props) => {
           <CohortUser
             key={cohortUser.key}
             uid={cohortUser.key}
-            role={cohortUser.value}
+            cohortUser={cohortUser.value}
             profile={props.profiles[cohortUser.key]}
             cohortid={props.cohortid}
             toggleMoveDialog={props.toggleMoveDialog}

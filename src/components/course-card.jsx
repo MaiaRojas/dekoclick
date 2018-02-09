@@ -39,10 +39,6 @@ const styles = theme => ({
 });
 
 
-const unitCount = ({ stats, syllabus }) =>
-  (stats && stats.unitCount) || Object.keys(syllabus).length;
-
-
 const CourseCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
@@ -51,12 +47,14 @@ const CourseCard = props => (
       </Typography>
     </CardContent>
     <CardActions className={props.classes.cardActions}>
-      <div className={props.classes.count}>
-        <FolderIcon />
-        <Typography className={props.classes.countText}>
-          {unitCount(props.course)} unidades
-        </Typography>
-      </div>
+      {props.course.stats && props.course.stats.unitCount && (
+        <div className={props.classes.count}>
+          <FolderIcon />
+          <Typography className={props.classes.countText}>
+            {props.course.stats.unitCount} unidades
+          </Typography>
+        </div>
+      )}
       {props.course.stats && props.course.stats.durationString &&
         <div className={props.classes.count}>
           <ScheduleIcon />
@@ -84,7 +82,6 @@ CourseCard.propTypes = {
   course: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    syllabus: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
     }),

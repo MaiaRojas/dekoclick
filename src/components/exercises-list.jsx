@@ -10,7 +10,7 @@ const ExercisesList = props => (
         key={key}
         id={key}
         exercise={props.exercises[key]}
-        progress={props.progress[key]}
+        progress={(props.progress || {})[key]}
         match={props.match}
       />))}
   </div>
@@ -19,8 +19,13 @@ const ExercisesList = props => (
 
 ExercisesList.propTypes = {
   exercises: PropTypes.shape({}).isRequired,
-  progress: PropTypes.shape({}).isRequired,
+  progress: PropTypes.shape({}),
   match: PropTypes.shape({}).isRequired,
+};
+
+
+ExercisesList.defaultProps = {
+  progress: undefined,
 };
 
 

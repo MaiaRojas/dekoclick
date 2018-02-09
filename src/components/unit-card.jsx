@@ -32,10 +32,6 @@ const styles = theme => ({
 });
 
 
-const partCount = ({ stats, parts }) =>
-  (stats && stats.partCount) || Object.keys(parts).length;
-
-
 const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
@@ -49,12 +45,14 @@ const UnitCard = props => (
       />
     </CardContent>
     <CardActions className={props.classes.cardActions}>
-      <div className={props.classes.count}>
-        <FolderIcon />
-        <Typography className={props.classes.countText}>
-          {partCount(props.unit)} partes
-        </Typography>
-      </div>
+      {props.unit.stats && props.unit.stats.partCount && (
+        <div className={props.classes.count}>
+          <FolderIcon />
+          <Typography className={props.classes.countText}>
+            {props.unit.stats.partCount} partes
+          </Typography>
+        </div>
+      )}
       {props.unit.stats && props.unit.stats.durationString &&
         <div className={props.classes.count}>
           <ScheduleIcon />
@@ -83,7 +81,6 @@ UnitCard.propTypes = {
   unit: PropTypes.shape({
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    parts: PropTypes.shape({}).isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
     }),
