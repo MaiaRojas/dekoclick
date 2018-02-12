@@ -91,9 +91,10 @@ const Unit = (props) => {
         </TopBar>
         <TrackedComponent
           unit={props.unit}
+          unitProgress={props.progress}
           parts={props.parts}
           part={part}
-          progress={partProgress}
+          partProgress={partProgress}
           match={props.match}
           auth={props.auth}
         />

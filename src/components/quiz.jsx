@@ -51,24 +51,30 @@ const updateQuizProgress = (firestore, auth, match, changes) =>
     match.params.courseid,
     match.params.unitid,
     match.params.partid,
+    'quiz',
     changes,
   );
 
 
 const updateQuestionProgress = (firestore, auth, match) => (questionid, val) =>
-  updateQuizProgress(firestore, auth, match, { [`${questionid}`]: val });
+  updateQuizProgress(
+    firestore,
+    auth,
+    match,
+    { [`${questionid}`]: val },
+  );
 
 
 const handleSubmit = ({
   part,
-  progress,
+  partProgress,
   firestore,
   auth,
   match,
 }) => () => {
   const results = part.questions.reduce((memo, question, idx) => {
     const total = memo.total + 1;
-    if (arrayEqual(question.solution, progress[idx])) {
+    if (arrayEqual(question.solution, partProgress[idx])) {
       return Object.assign(memo, { passes: memo.passes + 1, total });
     }
     return Object.assign(memo, { failures: memo.failures + 1, total });
@@ -91,7 +97,7 @@ const Quiz = (props) => {
     startQuiz,
   } = props;
 
-  const progress = props.progress || {};
+  const progress = props.partProgress || {};
 
   if (!progress.startedAt && startQuiz) {
     updateQuizProgress(firestore, auth, match, { startedAt: new Date() });
@@ -158,7 +164,7 @@ Quiz.propTypes = {
   part: PropTypes.shape({
     questions: PropTypes.array.isRequired,
   }).isRequired,
-  progress: PropTypes.shape({
+  partProgress: PropTypes.shape({
     results: PropTypes.shape({}),
     startedAt: PropTypes.date,
     submittedAt: PropTypes.date,

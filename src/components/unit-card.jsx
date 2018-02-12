@@ -70,7 +70,7 @@ const UnitCard = props => (
       >
         {props.progress ? 'Continuar' : 'Empezar'}
       </Button>
-      <Progress value={computeUnitProgressStats(props.progress, props.unit).percent} />
+      <Progress value={(props.progressStats || {}).percent || 0} />
     </CardActions>
   </Card>
 );
@@ -85,7 +85,7 @@ UnitCard.propTypes = {
       durationString: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  progress: PropTypes.shape({}),
+  progressStats: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -99,7 +99,7 @@ UnitCard.propTypes = {
 
 
 UnitCard.defaultProps = {
-  progress: undefined,
+  progressStats: undefined,
 };
 
 

@@ -47,7 +47,7 @@ const CohortCourseAddDialogSelect = props => (
       onChange={e => props.updateCohortCourseAddDialogCourse(e.target.value)}
       input={<Input id="course" />}
     >
-      {props.coursesIndex.map(course => (
+      {props.courses.map(course => (
         <MenuItem key={course.id} value={course.id}>
           {course.title} ({course.id})
         </MenuItem>
@@ -59,7 +59,7 @@ const CohortCourseAddDialogSelect = props => (
 
 CohortCourseAddDialogSelect.propTypes = {
   course: PropTypes.string.isRequired,
-  coursesIndex: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  courses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   updateCohortCourseAddDialogCourse: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     formControl: PropTypes.string.isRequired,
@@ -70,9 +70,9 @@ CohortCourseAddDialogSelect.propTypes = {
 const CohortCourseAddDialog = ({ classes, ...props }) => {
   let content = null;
 
-  if (!props.coursesIndex) {
+  if (!props.courses) {
     content = (<CircularProgress />);
-  } else if (!props.coursesIndex.length) {
+  } else if (!props.courses.length) {
     content = (<DialogContentText>No hay más cursos disponibles</DialogContentText>);
   } else {
     content = (<CohortCourseAddDialogSelect classes={classes} {...props} />);
@@ -92,22 +92,41 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
           <Button
             raised
             color="primary"
-            disabled={!props.coursesIndex || !props.coursesIndex.length}
+            disabled={!props.courses || !props.courses.length}
             onClick={() => {
               const { cohortid, course } = props;
               const db = props.firebase.firestore();
-              // get course from catalog
-              db.collection('courses').doc(course).get().then((doc) => {
-                if (!doc.exists) {
-                  return new Error('Not found');
-                }
+              const courseRef = db.collection('courses').doc(course);
+              const syllabusRef = courseRef.collection('syllabus');
+              const cohortCourseRef = db.collection(`cohorts/${cohortid}/courses`).doc(course);
+              const cohortCourseSyllabusRef = cohortCourseRef.collection('syllabus');
+              const batch = db.batch();
 
-                // write course in cohort
-                db.collection(`cohorts/${cohortid}/courses`).doc(course)
-                  .set(doc.data())
-                  .then(props.resetCohortCourseAddDialog)
-                  .catch(console.error);
-              });
+              courseRef.get()
+                .then(courseSnap =>
+                  (!courseSnap.exists)
+                    ? new Error('Not found')
+                    : batch.set(cohortCourseRef, courseSnap.data())
+                )
+                .then(() =>
+                  syllabusRef.get().then((syllabusSnap) => {
+                    const partsPromises = [];
+                    syllabusSnap.forEach(docSnap => {
+                      const cohortCourseUnitRef = cohortCourseSyllabusRef.doc(docSnap.id);
+                      batch.set(cohortCourseUnitRef, docSnap.data());
+                      const partsRef = syllabusRef.doc(docSnap.id).collection('parts');
+                      partsPromises.push(partsRef.get().then(partsSnap => {
+                        partsSnap.forEach(partSnap => {
+                          batch.set(cohortCourseUnitRef.collection('parts').doc(partSnap.id), partSnap.data());
+                        });
+                      }));
+                    });
+                    return Promise.all(partsPromises);
+                  })
+                )
+                .then(() => batch.commit())
+                .then(props.resetCohortCourseAddDialog)
+                .catch(console.error);
             }}
           >
             Añadir
@@ -123,7 +142,7 @@ CohortCourseAddDialog.propTypes = {
   cohortid: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   course: PropTypes.string,
-  coursesIndex: PropTypes.arrayOf(PropTypes.shape({})),
+  courses: PropTypes.arrayOf(PropTypes.shape({})),
   toggleCohortCourseAddDialog: PropTypes.func.isRequired,
   resetCohortCourseAddDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
@@ -135,18 +154,18 @@ CohortCourseAddDialog.propTypes = {
 
 CohortCourseAddDialog.defaultProps = {
   course: '',
-  coursesIndex: undefined,
+  courses: undefined,
 };
 
 
-const selectCourses = (cohortCourses, coursesIndex) =>
-  (!coursesIndex || !coursesIndex.length)
-    ? coursesIndex
-    : coursesIndex.filter(item => !hasOwnProperty(cohortCourses || {}, item.id));
+const selectCourses = (cohortCourses, courses) =>
+  (!courses || !courses.length)
+    ? courses
+    : courses.filter(item => !hasOwnProperty(cohortCourses || {}, item.id));
 
 
-const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { cohortCourses }) => ({
-  coursesIndex: selectCourses(cohortCourses, firestore.ordered.coursesIndex),
+const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { courses }) => ({
+  courses: selectCourses(courses, firestore.ordered.courses),
   open: cohortCourseAddDialog.open,
   course: cohortCourseAddDialog.course,
 });
@@ -161,7 +180,7 @@ const mapDispatchToProps = {
 
 export default compose(
   firestoreConnect(() => [{
-    collection: 'coursesIndex',
+    collection: 'courses',
     orderBy: ['order'],
   }]),
   connect(mapStateToProps, mapDispatchToProps),

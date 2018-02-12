@@ -66,6 +66,7 @@ const updateExerciseProgress = (firestore, auth, match, changes) =>
     match.params.courseid,
     match.params.unitid,
     match.params.partid,
+    'exercise',
     match.params.exerciseid,
     changes,
   );

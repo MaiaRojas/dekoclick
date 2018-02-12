@@ -22,7 +22,7 @@ const profilesLoaded = profiles => Object.keys(profiles)
   .reduce((memo, uid) => memo && profiles[uid], true);
 
 
-const CohortUsers = (props) => {
+const CohortUsers = (props) =>  {
   if (!profilesLoaded(props.profiles || {})) {
     return <CircularProgress />;
   }
@@ -32,10 +32,10 @@ const CohortUsers = (props) => {
       <Grid container>
         {props.users.map(cohortUser => (
           <CohortUser
-            key={cohortUser.key}
-            uid={cohortUser.key}
-            cohortUser={cohortUser.value}
-            profile={props.profiles[cohortUser.key]}
+            key={cohortUser.id}
+            uid={cohortUser.id}
+            cohortUser={cohortUser}
+            profile={props.profiles[cohortUser.id]}
             cohortid={props.cohortid}
             toggleMoveDialog={props.toggleMoveDialog}
             firebase={props.firebase}
@@ -64,7 +64,7 @@ CohortUsers.propTypes = {
 const mapStateToProps = ({ firestore }, ownProps) => ({
   profiles: ownProps.users.reduce((memo, item) => ({
     ...memo,
-    [item.key]: (firestore.data.users || {})[item.key],
+    [item.id]: (firestore.data.users || {})[item.id],
   }), {}),
 });
 
@@ -75,7 +75,7 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firestoreConnect(props => props.users.map(obj => `users/${obj.key}`)),
+  firestoreConnect(props => props.users.map(obj => `users/${obj.id}`)),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortUsers);

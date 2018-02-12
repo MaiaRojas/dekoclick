@@ -66,8 +66,8 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         onChange={e => props.updateCohortNewDialogCampus(e.target.value)}
         input={<Input id="campus" />}
       >
-        {Object.keys(props.campuses).map(key =>
-          <MenuItem key={key} value={key}>{props.campuses[key].name}</MenuItem>)}
+        {props.campuses.map(campus =>
+          <MenuItem key={campus.id} value={campus.id}>{campus.name}</MenuItem>)}
       </Select>
     </FormControl>
     <FormControl
@@ -167,7 +167,7 @@ CohortNewDialogForm.propTypes = {
   updateCohortNewDialogPublicAdmission: PropTypes.func.isRequired,
   updateCohortNewDialogStart: PropTypes.func.isRequired,
   updateCohortNewDialogEnd: PropTypes.func.isRequired,
-  campuses: PropTypes.shape({}).isRequired,
+  campuses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   classes: PropTypes.shape({}).isRequired,
 };
 
@@ -211,12 +211,12 @@ const validate = (props) => {
     campus, program, track, name, start, end,
   } = props;
   const errors = [];
-  const campuses = Object.keys(props.campuses);
+  const campusesKeys = props.campuses.map(campus => campus.id);
 
-  if (campuses.indexOf(campus) === -1) {
+  if (campusesKeys.indexOf(campus) === -1) {
     errors.push({
       field: 'campus',
-      message: `Campus should be one of ${campuses}`,
+      message: `Campus should be one of ${campusesKeys}`,
     });
   }
   if (programs.keys.indexOf(program) === -1) {

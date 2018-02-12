@@ -33,7 +33,7 @@ const Course = (props) => {
             id={unit.id}
             idx={idx}
             unit={unit}
-            progress={(props.progress || {})[unit.id]}
+            progressStats={(props.progressStats || []).find(item => item.id === unit.id)}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
           />
@@ -52,7 +52,7 @@ Course.propTypes = {
     }),
   }),
   syllabus: PropTypes.arrayOf(PropTypes.shape({})),
-  progress: PropTypes.shape({}),
+  progressStats: PropTypes.arrayOf(PropTypes.shape({})),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseid: PropTypes.string.isRequired,
@@ -71,16 +71,6 @@ Course.defaultProps = {
 
 const selectCourse = (data, { cohortid, courseid }) => {
   const key = `cohorts/${cohortid}/courses`;
-  if (!data || !data[key] || !data[key][courseid]) {
-    return undefined;
-  }
-
-  return data[key][courseid];
-};
-
-
-const selectProgress = (data, { cohortid, courseid }, uid) => {
-  const key = `cohorts/${cohortid}/users/${uid}/progress`;
 
   if (!data || !data[key] || !data[key][courseid]) {
     return undefined;
@@ -101,11 +91,9 @@ const selectSyllabus = (firestore, { cohortid, courseid }) => {
 };
 
 
-const mapStateToProps = ({ firestore, firebase }, { auth, match }) => ({
-  course: selectCourse(firestore.data, match.params),
-  progress: selectProgress(firestore.data, match.params, auth.uid),
-  syllabus: selectSyllabus(firestore, match.params),
-});
+const selectProgressStats = (firestore, { cohortid, courseid }, uid) => {
+  return firestore.ordered[`cohorts/${cohortid}/users/${uid}/progress/${courseid}/syllabus`];
+};
 
 
 export default compose(
@@ -118,9 +106,12 @@ export default compose(
       collection: `cohorts/${cohortid}/courses/${courseid}/syllabus`,
     },
     {
-      collection: `cohorts/${cohortid}/users/${auth.uid}/progress`,
-      doc: courseid,
+      collection: `cohorts/${cohortid}/users/${auth.uid}/progress/${courseid}/syllabus`,
     },
   ]),
-  connect(mapStateToProps),
+  connect(({ firestore }, { auth, match }) => ({
+    course: selectCourse(firestore.data, match.params),
+    progressStats: selectProgressStats(firestore, match.params, auth.uid),
+    syllabus: selectSyllabus(firestore, match.params),
+  })),
 )(Course);

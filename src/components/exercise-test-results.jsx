@@ -60,17 +60,17 @@ const Suite = props => (
         <ListItemText primary={props.suite.title} />
       </ListItem>
     }
-    {props.suite.tests && Object.keys(props.suite.tests).map(idx => (
+    {props.suite.tests && props.suite.tests.map(test => (
       <Test
-        key={props.suite.tests[idx].title}
-        test={props.suite.tests[idx]}
+        key={test.title}
+        test={test}
         classes={props.classes}
       />
     ))}
-    {props.suite.suites && Object.keys(props.suite.suites).map(idx => (
+    {props.suite.suites && props.suite.suites.map(suite => (
       <Suite
-        key={props.suite.suites[idx].title}
-        suite={props.suite.suites[idx]}
+        key={suite.title}
+        suite={suite}
         classes={props.classes}
       />
     ))}
@@ -81,8 +81,8 @@ const Suite = props => (
 Suite.propTypes = {
   suite: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    suites: PropTypes.shape({}),
-    tests: PropTypes.shape({}),
+    suites: PropTypes.arrayOf(PropTypes.shape({})),
+    tests: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   classes: PropTypes.shape({
     greenAvatar: PropTypes.string.isRequired,

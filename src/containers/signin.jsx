@@ -16,6 +16,7 @@ import {
   toggleForgot,
   updateForgotResult,
   updateForgotRequested,
+  updateSignupError,
 } from '../reducers/signin';
 import SignInResults from '../components/signin-results';
 import isEmail from '../util/isEmail';
@@ -113,6 +114,7 @@ const SignInForm = (props) => (
       authError={props.authError}
       forgot={props.forgot}
       forgotResult={props.forgotResult}
+      signupError={props.signupError}
     />
   </form>
 );
@@ -158,12 +160,14 @@ const SignInWithFacebookButton = (props) => (
       });
 
       auth.signInWithPopup(provider).then((result) => {
-        console.log(result);
-        postSignUp(props, result.user.uid, result.user.email);
+        // console.log(result);
+        if (props.signup) {
+          postSignUp(props, result.user.uid, result.user.email);
+        }
         // // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // const token = result.credential.accessToken;
       }).catch((err) => {
-        console.log(err);
+        // console.log(err);
         if (err.code === 'auth/account-exists-with-different-credential') {
           const pendingCred = err.credential;
           const email = err.email;
@@ -217,7 +221,7 @@ const SignInWithFacebookButton = (props) => (
       });
     }}
   >
-    Sign in with Facebook
+    {props.signup ? 'Sign up with Facebook' : 'Sign in with Facebook'}
   </Button>
 );
 
@@ -240,6 +244,8 @@ const postSignUp = (props, uid, email) => {
 
 
 const SignIn = props => {
+  console.log('SignIn', props);
+
   const { email, password } = props.data;
   const auth = props.firestore.auth();
 
@@ -257,7 +263,7 @@ const SignIn = props => {
     if (props.signup) {
       auth.createUserWithEmailAndPassword(email, password)
         .then(data => postSignUp(props, data.uid, email))
-        .catch(err => console.log(err));
+        .catch(error => props.updateSignupError(error));
     } else if (props.forgot) {
       auth.sendPasswordResetEmail(email)
         .then(() => props.updateForgotResult({ success: true }))
@@ -344,6 +350,7 @@ const mapStateToProps = ({ signin, firestore: { data } }, { match }) => ({
   forgotRequested: signin.forgotRequested,
   forgotResult: signin.forgotResult,
   signup: signin.signup,
+  signupError: signin.signupError,
   cohortid: match.params.cohortid,
   cohort: !data.cohorts
     ? undefined
@@ -358,6 +365,7 @@ const mapDispatchToProps = {
   toggleForgot,
   updateForgotRequested,
   updateForgotResult,
+  updateSignupError,
 };
 
 

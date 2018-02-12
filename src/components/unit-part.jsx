@@ -26,46 +26,34 @@ const styles = theme => ({
 });
 
 
-const getUnitProgressPath = (auth, match) => {
-  const { cohortid, courseid, unitid } = match.params;
-  return `${cohortid}/${auth.uid}/${courseid}/${unitid}`;
-};
-
-
-const UnitPart = (props) => {
-  const {
-    unit,
-    parts,
-    part,
-    progress,
-    auth,
-    classes,
-    match,
-  } = props;
-
-  console.log('UnitPart', props);
-
-  return (
-    <div className={classes.root}>
-      <div className={classes.meta}>
-        <Chip
-          className={classes.metaChip}
-          label={`Tipo: ${part.type}`}
-        />
-        <Chip
-          className={classes.metaChip}
-          label={`Formato: ${part.format}`}
-        />
-      </div>
-      {part.type === 'self-assessment' &&
-        <div>
-          <SelfAssessment match={match} unit={unit} parts={parts} progress={progress} />
-        </div>
-      }
-      {part.body && <Content html={part.body} />}
+const UnitPart = ({
+  unit,
+  parts,
+  part,
+  partProgress,
+  auth,
+  classes,
+  match,
+}) => (
+  <div className={classes.root}>
+    <div className={classes.meta}>
+      <Chip
+        className={classes.metaChip}
+        label={`Tipo: ${part.type}`}
+      />
+      <Chip
+        className={classes.metaChip}
+        label={`Formato: ${part.format}`}
+      />
     </div>
-  );
-};
+    {part.type === 'self-assessment' &&
+      <div>
+        <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
+      </div>
+    }
+    {part.body && <Content html={part.body} />}
+  </div>
+);
 
 
 UnitPart.propTypes = {

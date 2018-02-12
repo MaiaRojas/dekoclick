@@ -41,12 +41,15 @@ const styles = theme => ({
 });
 
 
-const getError = (authError, forgot, forgotResult) => {
+const getError = (authError, forgot, forgotResult, signupError) => {
   if (!forgot && authError && authError.code) {
     return authError;
   }
   if (forgot && forgotResult && forgotResult.error && forgotResult.error.code) {
     return forgotResult.error;
+  }
+  if (!forgot && signupError && signupError.code) {
+    return signupError;
   }
   return null;
 };
@@ -56,9 +59,11 @@ const SignInResults = ({
   authError,
   forgot,
   forgotResult,
+  signupError,
   classes,
 }) => {
-  const error = getError(authError, forgot, forgotResult);
+  const error = getError(authError, forgot, forgotResult, signupError);
+  console.log('SignInResults::error', error);
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {
     return null;
@@ -94,6 +99,7 @@ SignInResults.propTypes = {
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
+  signupError: PropTypes.shape({}),
   classes: PropTypes.shape({
     results: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
@@ -108,6 +114,7 @@ SignInResults.propTypes = {
 SignInResults.defaultProps = {
   authError: undefined,
   forgotResult: undefined,
+  signupError: undefined,
 };
 
 

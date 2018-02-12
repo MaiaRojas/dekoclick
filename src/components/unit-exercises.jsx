@@ -24,19 +24,22 @@ const parseExercises = objs =>
 
 
 const UnitExercises = ({
+  unitProgress,
   part,
-  progress,
   match,
   auth,
 }) => {
   const id = match.params.exerciseid;
   const exercises = parseExercises(part.exercises);
+  const exercisesProgress = unitProgress.filter(
+    item => item.partid === part.id && item.type === 'exercise'
+  );
 
   if (!id) {
     return (
       <ExercisesList
         exercises={exercises}
-        progress={progress}
+        progress={exercisesProgress}
         match={match}
       />
     );
@@ -46,7 +49,7 @@ const UnitExercises = ({
     <Exercise
       id={id}
       exercise={exercises[id] || {}}
-      progress={progress[id]}
+      progress={exercisesProgress.find(item => item.exerciseid === id)}
       match={match}
       auth={auth}
     />
@@ -55,11 +58,11 @@ const UnitExercises = ({
 
 
 UnitExercises.propTypes = {
+  unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
   auth: PropTypes.shape({}).isRequired,
   part: PropTypes.shape({
     exercises: PropTypes.shape({}).isRequired,
   }).isRequired,
-  progress: PropTypes.shape({}),
   match: PropTypes.shape({
     params: PropTypes.shape({
       exerciseid: PropTypes.string,
@@ -69,7 +72,7 @@ UnitExercises.propTypes = {
 
 
 UnitExercises.defaultProps = {
-  progress: undefined,
+  unitProgress: undefined,
 };
 
 

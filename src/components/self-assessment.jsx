@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import SentimentVerySatisfiedIcon from 'material-ui-icons/SentimentVerySatisfied';
 import SentimentNeutralIcon from 'material-ui-icons/SentimentNeutral';
 import SentimentVeryDissatisfiedIcon from 'material-ui-icons/SentimentVeryDissatisfied';
+import { updateProgress } from '../util/progress';
 
 
 const styles = theme => ({
@@ -140,35 +141,28 @@ class SelfAssessment extends React.Component {
       },
     });
 
-    const firestore = this.props.firestore;
-    const uid = this.props.firestore.auth().currentUser.uid;
-    const { cohortid, courseid, unitid, partid } = this.props.match.params;
-    const progressKey = `cohorts/${cohortid}/users/${uid}/progress`;
-    const changes = {
-      [unitid]: {
-        selfAssessment: {
-          sentiment,
-          feelings,
-          improvements,
-          topics,
-          submittedAt: new Date(),
-        },
+    updateProgress(
+      this.props.firestore,
+      this.props.firestore.auth().currentUser.uid,
+      this.props.match.params.cohortid,
+      this.props.match.params.courseid,
+      this.props.match.params.unitid,
+      this.props.match.params.partid,
+      'self-assessment',
+      {
+        sentiment,
+        feelings,
+        improvements,
+        topics,
+        submittedAt: new Date(),
       },
-    };
-
-    firestore.get({ collection: progressKey, doc: courseid }).then((doc) => {
-      firestore[(doc.exists) ? 'update' : 'set']({
-        collection: progressKey,
-        doc: courseid,
-      }, changes);
-    });
+    );
 
     return false;
   }
 
   render() {
     const { classes, progress } = this.props;
-    console.log('SelfAssessment::progress', progress);
     const selfPacedParts = this.props.parts.filter(
       part => part.format === 'self-paced' && part.type !== 'self-assessment'
     );//.sort();

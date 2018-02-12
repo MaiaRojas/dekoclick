@@ -37,16 +37,13 @@ const styles = theme => ({
 });
 
 
-const usersByRole = users => Object.keys(users || {})
-  .reduce(
-    (memo, key) => ({
+const usersByRole = users =>
+  users.reduce(
+    (memo, user) => ({
       ...memo,
-      [`${users[key].role}s`]: [
-        ...memo[`${users[key].role}s`],
-        {
-          key,
-          value: users[key],
-        },
+      [`${user.role}s`]: [
+        ...memo[`${user.role}s`],
+        user,
       ],
     }),
     {
@@ -73,20 +70,11 @@ const Cohort = ({
   classes,
   history,
 }) => {
-  if (!cohort) {
+  if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
     return (<CircularProgress />);
   }
 
   const { cohortid } = match.params;
-  const courseKeys = Object.keys(courses || {}).sort((a, b) => {
-    if (courses[a].order > courses[b].order) {
-      return 1;
-    }
-    if (courses[a].order < courses[b].order) {
-      return -1;
-    }
-    return 0;
-  });
 
   const {
     students,
@@ -124,7 +112,7 @@ const Cohort = ({
         title="Cursos"
         onAdd={toggleCourseAddDialog}
       >
-        {!courseKeys.length ?
+        {!courses.length ?
           (
             <Alert
               message="Todavía no se han añadido cursos a este cohort. Puedes
@@ -135,12 +123,12 @@ const Cohort = ({
           (
             <div className={classes.courseListWrapper}>
               <List dense={false}>
-                {courseKeys.map(courseid => (
+                {courses.map(course => (
                   <CohortCourse
-                    key={courseid}
+                    key={course.id}
                     cohortid={cohortid}
-                    courseid={courseid}
-                    course={courses[courseid]}
+                    courseid={course.id}
+                    course={course}
                     history={history}
                   />
                 ))}
@@ -151,10 +139,10 @@ const Cohort = ({
       </CohortSection>
 
       <CohortSection
-        title={`Usuarixs (${Object.keys(users || {}).length})`}
+        title={`Usuarixs (${users.length})`}
         onAdd={toggleUserAddDialog}
       >
-        {!Object.keys(users || {}).length ?
+        {!users.length ?
           (
             <Alert
               message="Todavía no se han añadido usuarios a este curso. Para
@@ -195,7 +183,7 @@ const Cohort = ({
       )}
 
       {courseAddDialogOpen && (
-        <CohortCourseAddDialog cohortid={cohortid} cohortCourses={courses} />
+        <CohortCourseAddDialog cohortid={cohortid} courses={courses} />
       )}
 
       {userAddDialogOpen && (
@@ -210,8 +198,8 @@ const Cohort = ({
 
 Cohort.propTypes = {
   cohort: PropTypes.shape({}),
-  users: PropTypes.shape({}),
-  courses: PropTypes.shape({}),
+  users: PropTypes.arrayOf(PropTypes.shape({})),
+  courses: PropTypes.arrayOf(PropTypes.shape({})),
   currentTab: PropTypes.number.isRequired,
   userAddDialogOpen: PropTypes.bool.isRequired,
   courseAddDialogOpen: PropTypes.bool.isRequired,
@@ -246,8 +234,8 @@ const mapStateToProps = ({
   cohortCourseAddDialog,
 }, { match }) => ({
   cohort: (firestore.data.cohorts || {})[match.params.cohortid],
-  users: (firestore.data[`cohorts/${match.params.cohortid}/users`]),
-  courses: (firestore.data[`cohorts/${match.params.cohortid}/courses`]),
+  users: firestore.ordered[`cohorts/${match.params.cohortid}/users`],
+  courses: firestore.ordered[`cohorts/${match.params.cohortid}/courses`],
   currentTab: cohort.currentTab,
   calendarAddDialogOpen: cohortCalendarAddDialog.open,
   userAddDialogOpen: cohortUserAddDialog.open,
@@ -274,6 +262,7 @@ export default compose(
     },
     {
       collection: `cohorts/${match.params.cohortid}/courses`,
+      orderBy: ['order'],
     },
   ])),
   connect(mapStateToProps, mapDispatchToProps),

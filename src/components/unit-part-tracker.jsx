@@ -58,7 +58,6 @@ class UnitPartTracker extends React.Component {
   }
 
   updateProgress(partProgressChanges) {
-    console.log('UnitPartTracker.updateProgress', this.props.progress);
     updateProgress(
       this.props.firestore,
       this.props.auth.uid,
@@ -66,6 +65,7 @@ class UnitPartTracker extends React.Component {
       this.props.match.params.courseid,
       this.props.match.params.unitid,
       this.props.match.params.partid,
+      this.props.part.type,
       partProgressChanges,
     );
   }
@@ -75,7 +75,7 @@ class UnitPartTracker extends React.Component {
   }
 
   markOpened() {
-    if (this.props.progress && this.props.progress.openedAt) {
+    if (this.props.partProgress && this.props.partProgress.openedAt) {
       return;
     }
 
@@ -83,7 +83,7 @@ class UnitPartTracker extends React.Component {
   }
 
   markRead() {
-    if (this.props.progress && this.props.progress.readAt) {
+    if (this.props.partProgress && this.props.partProgress.readAt) {
       return;
     }
 
@@ -91,9 +91,9 @@ class UnitPartTracker extends React.Component {
   }
 
   checkReadCompleted() {
-    const { part, progress } = this.props;
+    const { part, partProgress } = this.props;
 
-    if (progress && progress.readAt) {
+    if (partProgress && partProgress.readAt) {
       return;
     }
 
@@ -133,9 +133,7 @@ class UnitPartTracker extends React.Component {
   }
 
   render() {
-    console.log('UnitPartTracker', this.props);
-
-    if (!this.props.progress || !this.props.progress.openedAt) {
+    if (!this.props.partProgress || !this.props.partProgress.openedAt) {
       return null;
     }
 
@@ -145,9 +143,9 @@ class UnitPartTracker extends React.Component {
       ...rest
     } = this.props;
 
-    const hasLikedOrDisliked = this.props.progress && typeof this.props.progress.like === 'boolean';
-    const liked = hasLikedOrDisliked && this.props.progress.like === true;
-    const disliked = hasLikedOrDisliked && this.props.progress.like === false;
+    const hasLikedOrDisliked = this.props.partProgress && typeof this.props.partProgress.like === 'boolean';
+    const liked = hasLikedOrDisliked && this.props.partProgress.like === true;
+    const disliked = hasLikedOrDisliked && this.props.partProgress.like === false;
     return (
       <div>
         <Component {...rest} />
@@ -157,8 +155,8 @@ class UnitPartTracker extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.props.progress && !!this.props.progress.readAt}
-                  disabled={this.props.progress && !!this.props.progress.readAt}
+                  checked={this.props.partProgress && !!this.props.partProgress.readAt}
+                  disabled={this.props.partProgress && !!this.props.partProgress.readAt}
                   onChange={e => e.target.checked && this.markRead()}
                 />
               }
@@ -194,7 +192,7 @@ UnitPartTracker.propTypes = {
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
   }).isRequired,
-  progress: PropTypes.shape({
+  partProgress: PropTypes.shape({
     openedAt: PropTypes.date,
     readAt: PropTypes.date,
     like: PropTypes.bool,
@@ -215,7 +213,7 @@ UnitPartTracker.propTypes = {
 
 
 UnitPartTracker.defaultProps = {
-  progress: undefined,
+  partProgress: undefined,
 };
 
 

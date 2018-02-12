@@ -9,7 +9,7 @@ const apiMiddleware = store => next => (action) => {
     return next(action);
   }
 
-  return getFirebase().auth().currentUser.getToken(true).then((token) => {
+  return getFirebase().auth().currentUser.getIdToken(false).then((token) => {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', () => {
