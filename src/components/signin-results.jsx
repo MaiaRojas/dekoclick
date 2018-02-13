@@ -41,7 +41,7 @@ const styles = theme => ({
 });
 
 
-const getError = (authError, forgot, forgotResult, signupError) => {
+const getError = (authError, forgot, forgotResult, signupError, signinError) => {
   if (!forgot && authError && authError.code) {
     return authError;
   }
@@ -50,6 +50,9 @@ const getError = (authError, forgot, forgotResult, signupError) => {
   }
   if (!forgot && signupError && signupError.code) {
     return signupError;
+  }
+  if (!forgot && signinError && signinError.code) {
+    return signinError;
   }
   return null;
 };
@@ -60,9 +63,10 @@ const SignInResults = ({
   forgot,
   forgotResult,
   signupError,
+  signinError,
   classes,
 }) => {
-  const error = getError(authError, forgot, forgotResult, signupError);
+  const error = getError(authError, forgot, forgotResult, signupError, signinError);
   console.log('SignInResults::error', error);
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {

@@ -9,6 +9,7 @@ const TOGGLE_FORGOT = 'lms.laboratoria.la/signin/TOGGLE_FORGOT';
 const UPDATE_FORGOT_RESULT = 'lms.laboratoria.la/signin/UPDATE_FORGOT_RESULT';
 const FORGOT_REQUESTED = 'lms.laboratoria.la/signin/FORGOT_REQUESTED';
 const UPDATE_SIGNUP_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNUP_ERROR';
+const UPDATE_SIGNIN_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNIN_ERROR';
 
 
 // Action Creators
@@ -38,9 +39,15 @@ export const updateForgotRequested = () => ({
   type: FORGOT_REQUESTED,
 });
 
-export const updateSignupError = (error) => ({
+export const updateSignupError = (err) => ({
   type: UPDATE_SIGNUP_ERROR,
-  payload: error,
+  payload: err,
+});
+
+
+export const updateSigninError = (err) => ({
+  type: UPDATE_SIGNIN_ERROR,
+  payload: err,
 });
 
 
@@ -86,6 +93,7 @@ const initialState = () => ({
   forgotResult: null,
   signup: window.location.pathname.split('/')[1] === 'signup',
   signupError: null,
+  signinError: null,
 });
 
 
@@ -151,6 +159,12 @@ export default (state = initialState(), action = {}) => {
       return {
         ...state,
         signupError: action.payload,
+        isValid: undefined,
+      };
+    case UPDATE_SIGNIN_ERROR:
+      return {
+        ...state,
+        signinError: action.payload,
         isValid: undefined,
       };
   }

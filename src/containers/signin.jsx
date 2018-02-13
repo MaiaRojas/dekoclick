@@ -17,6 +17,7 @@ import {
   updateForgotResult,
   updateForgotRequested,
   updateSignupError,
+  updateSigninError,
 } from '../reducers/signin';
 import SignInResults from '../components/signin-results';
 import isEmail from '../util/isEmail';
@@ -115,6 +116,7 @@ const SignInForm = (props) => (
       forgot={props.forgot}
       forgotResult={props.forgotResult}
       signupError={props.signupError}
+      signinError={props.signinError}
     />
   </form>
 );
@@ -263,7 +265,7 @@ const SignIn = props => {
     if (props.signup) {
       auth.createUserWithEmailAndPassword(email, password)
         .then(data => postSignUp(props, data.uid, email))
-        .catch(error => props.updateSignupError(error));
+        .catch(props.updateSignupError);
     } else if (props.forgot) {
       auth.sendPasswordResetEmail(email)
         .then(() => props.updateForgotResult({ success: true }))
@@ -271,7 +273,8 @@ const SignIn = props => {
       setTimeout(props.updateForgotRequested, 10);
     } else {
       auth.signInWithEmailAndPassword(email, password)
-        .then(props.resetSignInForm);
+        .then(props.resetSignInForm)
+        .catch(props.updateSigninError);
     }
     return null;
   }
@@ -351,6 +354,7 @@ const mapStateToProps = ({ signin, firestore: { data } }, { match }) => ({
   forgotResult: signin.forgotResult,
   signup: signin.signup,
   signupError: signin.signupError,
+  signinError: signin.signinError,
   cohortid: match.params.cohortid,
   cohort: !data.cohorts
     ? undefined
@@ -366,6 +370,7 @@ const mapDispatchToProps = {
   updateForgotRequested,
   updateForgotResult,
   updateSignupError,
+  updateSigninError,
 };
 
 
