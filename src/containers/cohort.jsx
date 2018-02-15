@@ -69,6 +69,8 @@ const Cohort = ({
   match,
   classes,
   history,
+  firebase,
+  auth
 }) => {
   if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
     return (<CircularProgress />);
@@ -101,11 +103,11 @@ const Cohort = ({
         title="Agenda"
         onAdd={toggleCalendarAddDialog}
       >
-        <CohortCalendar
+      <CohortCalendar
           cohortid={cohortid}
           cohort={cohort}
           toggleCalendarAddDialog={toggleCalendarAddDialog}
-        />
+      />
       </CohortSection>
 
       <CohortSection
@@ -161,7 +163,7 @@ const Cohort = ({
                 </Tabs>
               </AppBar>
               {currentTab === 0 && (
-                <CohortUsers cohortid={cohortid} users={students} />
+                <CohortUsers cohortid={cohortid} users={students} auth={auth} />
               )}
               {currentTab === 1 && (
                 <CohortUsers cohortid={cohortid} users={instructors} />

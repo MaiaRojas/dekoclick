@@ -8,7 +8,7 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import EditIcon from 'material-ui-icons/Edit';
 import TopBar from '../components/top-bar';
-
+import SettingsForm from '../components/settings-form'
 
 const styles = theme => ({
   paper: {
@@ -19,61 +19,16 @@ const styles = theme => ({
   legend: {
     marginBottom: theme.spacing.unit * 2,
   },
+
 });
 
 
 const Settings = props => (
   <div className="settings">
     <TopBar title="Settings" />
-    <div>
 
-      <Paper className={props.classes.paper}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend" className={props.classes.legend}>
-            Correo electrónico
-          </FormLabel>
-          <Input
-            id="email"
-            label="Email"
-            margin="none"
-            disabled
-            value={props.auth.email}
-          />
-        </FormControl>
-        <IconButton>
-          <EditIcon />
-        </IconButton>
-      </Paper>
-
-      <Paper className={props.classes.paper}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend" className={props.classes.legend}>
-            Nombre
-          </FormLabel>
-          <Input
-            id="displayName"
-            label="Nombre"
-            margin="none"
-            disabled
-            value={props.auth.displayName || ''}
-          />
-        </FormControl>
-        <IconButton>
-          <EditIcon />
-        </IconButton>
-      </Paper>
-
-      <Paper className={props.classes.paper}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend" className={props.classes.legend}>
-            Contraseña
-          </FormLabel>
-          <Button raised>Cambiar contraseña</Button>
-        </FormControl>
-      </Paper>
-
-    </div>
-  </div>
+         <SettingsForm {...props} uid = {props.auth.uid} showOpenDialog = {true} />
+   </div>
 );
 
 

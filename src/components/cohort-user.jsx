@@ -12,7 +12,7 @@ import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
 import gravatarUrl from '../util/gravatarUrl';
 import cohort from '../util/cohort';
-
+import CohortUserOpenModalButton from './cohort-user-open-modal-button'
 
 const styles = theme => ({
   heading: {
@@ -94,6 +94,11 @@ const CohortUser = (props) => {
               <SwapHorizIcon />
             </IconButton>
           )}
+
+          {
+              props.auth && <CohortUserOpenModalButton profile = {props.profile} firebase = {props.firebase} uid = {props.uid} auth = {props.auth}/>
+           }
+
           {props.cohortUser.role === 'student' && (
             <IconButton onClick={() => console.log('drop out!')}>
               <DirectionsWalkIcon />
