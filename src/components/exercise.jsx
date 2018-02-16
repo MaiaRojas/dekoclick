@@ -123,7 +123,7 @@ const Exercise = (props) => {
 
   return (
     <div>
-      <Typography type="display1" gutterBottom component="h2" className={classes.title}>
+      <Typography variant="display1" gutterBottom component="h2" className={classes.title}>
         {exercise.title}
       </Typography>
       <AppBar position="static" color="default">
@@ -158,11 +158,11 @@ const Exercise = (props) => {
               editorText = text;
             }}
           />
-          <Button raised className={classes.button} onClick={() => runTests(editorText, props)}>
+          <Button variant="raised" className={classes.button} onClick={() => runTests(editorText, props)}>
             <PlayArrowIcon />
             Ejecutar tests
           </Button>
-          <Button raised className={classes.button} onClick={reset(props)}>
+          <Button variant="raised" className={classes.button} onClick={reset(props)}>
             <RefreshIcon />
             Resetear
           </Button>

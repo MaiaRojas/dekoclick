@@ -39,7 +39,7 @@ const TopBar = props => (
       >
         <MenuIcon />
       </IconButton>
-      <Typography type="title" className={props.classes.flex}>
+      <Typography variant="title" className={props.classes.flex}>
         {props.title}
       </Typography>
       <div>

@@ -12,22 +12,13 @@ const styles = theme => ({
   drawer: {
     width: theme.leftDrawerWidth,
   },
-  drawerPaper: {
-    width: theme.leftDrawerWidth,
-    [theme.breakpoints.up('md')]: {
-      width: theme.leftDrawerWidth,
-      position: 'relative',
-    },
-  },
 });
 
 const LeftDrawer = props => (
   <div>
     <Hidden mdUp>
       <Drawer
-        classes={{
-          paper: props.classes.drawerPaper,
-        }}
+        classes={{ paper: props.classes.drawer }}
         open={props.drawerOpen}
         onClose={() => props.displayDrawer()}
         variant="temporary"
@@ -41,9 +32,7 @@ const LeftDrawer = props => (
     </Hidden>
     <Hidden smDown implementation="css">
       <Drawer
-        classes={{
-          paper: props.classes.drawerPaper,
-        }}
+        classes={{ paper: props.classes.drawer }}
         open
         variant="permanent"
       >

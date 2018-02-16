@@ -170,22 +170,22 @@ class SelfAssessment extends React.Component {
     if (progress && progress.submittedAt) {
       return (
         <div className={classes.root}>
-          <Typography type="headline" gutterBottom className={classes.headline}>
+          <Typography variant="headline" gutterBottom className={classes.headline}>
             Autoevaluación completada el {formatDate(progress.submittedAt)}
           </Typography>
-          <Typography type="subheading" gutterBottom>
+          <Typography variant="subheading" gutterBottom>
             1. Así me siento sobre la unidad que acaba de terminar...
           </Typography>
           <Typography gutterBottom>
             {this.sentimentToIcon(progress.sentiment)}
           </Typography>
-          <Typography type="subheading" gutterBottom>
+          <Typography variant="subheading" gutterBottom>
             2. ¿Por qué te sientes así?
           </Typography>
           <Typography gutterBottom>
             {progress.feelings}
           </Typography>
-          <Typography type="subheading" gutterBottom>
+          <Typography variant="subheading" gutterBottom>
             3. Marca todos los temas que NO te han quedado claros
           </Typography>
           {(progress.topics || []).map((key, idx) => (
@@ -195,7 +195,7 @@ class SelfAssessment extends React.Component {
                   this.getSelfLearningTitle(key)}
             </Typography>
           ))}
-          <Typography type="subheading" gutterBottom>
+          <Typography variant="subheading" gutterBottom>
             4. ¿Hay algo que quieras destacar/mejorar de esta unidad?
           </Typography>
           <Typography gutterBottom>
@@ -207,7 +207,7 @@ class SelfAssessment extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography type="headline" gutterBottom className={classes.headline}>
+        <Typography variant="headline" gutterBottom className={classes.headline}>
           Autoevaluación
         </Typography>
 
@@ -324,7 +324,7 @@ class SelfAssessment extends React.Component {
           </FormControl>
         </Paper>
 
-        <Button raised color="primary" onClick={this.submit}>
+        <Button variant="raised" color="primary" onClick={this.submit}>
           Enviar autoevaluación
         </Button>
       </div>

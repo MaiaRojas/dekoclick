@@ -274,7 +274,7 @@ const CohortNewDialog = ({ classes, ...props }) => (
           Cancel
         </Button>
         <Button
-          raised
+          variant="raised"
           color="primary"
           onClick={() => {
             const { cohort, errors } = validate(props);

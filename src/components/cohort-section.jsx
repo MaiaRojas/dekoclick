@@ -34,7 +34,7 @@ const CohortSection = ({
 }) => (
   <div>
     <div className={classes.heading} style={{ marginTop: 40 }}>
-      <Typography type="headline" gutterBottom className={classes.title}>
+      <Typography variant="headline" gutterBottom className={classes.title}>
         {title}
       </Typography>
       {onAdd && typeof onAdd === 'function' && (

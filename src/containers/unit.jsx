@@ -21,9 +21,13 @@ const styles = theme => ({
     color: theme.palette.text.primary,
     height: '100%',
     marginTop: `${theme.spacing.unit * 7}px`,
+    marginLeft: 0,
     padding: `${theme.spacing.unit * 4}px`,
     width: '100%',
     minHeight: '100vh',
+    [theme.breakpoints.up('md')]: {
+      marginLeft: theme.leftDrawerWidth,
+    },
   },
 });
 

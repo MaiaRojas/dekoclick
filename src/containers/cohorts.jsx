@@ -137,7 +137,7 @@ const Cohorts = (props) => {
       {cohorts.map(cohort => (
         <Paper key={cohort.id} className={props.classes.paper}>
           <div>
-            <Typography type="title" gutterBottom>
+            <Typography variant="title" gutterBottom>
               {!cohort.program && cohort.id}
               {cohort.program && cohort.track &&
                 `${(programs.getById(cohort.program) || {}).name || ''}: ${cohort.track} (${cohort.name})`

@@ -16,7 +16,7 @@ const styles = theme => ({
 const Progress = ({ value, classes }) => (
   <div className={classes.root}>
     <Tooltip title={`${value}%`} placement="left">
-      <LinearProgress mode="determinate" value={value} />
+      <LinearProgress variant="determinate" value={value} />
     </Tooltip>
   </div>
 );

@@ -8,13 +8,19 @@ const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
   },
+  main: {
+    marginLeft: 0,
+    [theme.breakpoints.up('md')]: {
+      marginLeft: theme.leftDrawerWidth,
+    },
+  },
 });
 
 
 const WithMainNav = ({ component: Component, classes, ...props }) => (
   <div className={`app ${classes.root}`}>
     <MainNav {...props} />
-    <div className="main">
+    <div className={`${classes.main} main`}>
       <Component {...props} />
     </div>
   </div>

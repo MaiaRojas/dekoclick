@@ -37,7 +37,7 @@ const CoursesList = ({
 
   return (
     <div>
-      <Typography type="headline" gutterBottom className={classes.headline}>
+      <Typography variant="headline" gutterBottom className={classes.headline}>
         {cohort}
       </Typography>
       <div className={classes.container}>

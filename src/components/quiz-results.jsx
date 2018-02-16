@@ -46,10 +46,10 @@ const QuizResults = ({ results, classes }) => {
 
   return (
     <Paper className={`${classes.root} ${colorClass}`}>
-      <Typography type="body1" className={`${classes.body} ${colorClass}`}>
+      <Typography variant="body1" className={`${classes.body} ${colorClass}`}>
         Ya respondiste este cuestionario y acertaste el
       </Typography>
-      <Typography type="display1" className={colorClass}>
+      <Typography variant="display1" className={colorClass}>
         {`${percent}%`}
       </Typography>
     </Paper>

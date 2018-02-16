@@ -40,7 +40,7 @@ const QuizConfirmationDialog = ({ classes, ...props }) => (
       <Button onClick={props.toggleQuizConfirmationDialog}>
         Cancelar
       </Button>
-      <Button raised color="primary" onClick={props.startQuizAndCloseConfirmationDialog}>
+      <Button variant="raised" color="primary" onClick={props.startQuizAndCloseConfirmationDialog}>
         Sí, comenzar ahora
       </Button>
     </DialogActions>

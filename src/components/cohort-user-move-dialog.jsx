@@ -58,7 +58,7 @@ const CohortUserMoveDialog = (props) => {
           {!props.moveError && (
             <Button
               color="primary"
-              raised
+              variant="raised"
               disabled={props.moving}
               onClick={() =>
                 props.moveUser(props.cohortid, props.uid, props.targetCohort.id)

@@ -35,7 +35,7 @@ const styles = theme => ({
 const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
-      <Typography type="title">
+      <Typography variant="title">
         Unidad {props.idx + 1}: {props.unit.title}
       </Typography>
       <Typography

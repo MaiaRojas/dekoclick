@@ -42,7 +42,7 @@ const styles = theme => ({
 const CourseCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
-      <Typography type="title">
+      <Typography variant="title">
         {props.course.title}
       </Typography>
     </CardContent>

@@ -117,7 +117,7 @@ const Quiz = (props) => {
           ¿Estás segura(o) de que quieres responder ahora?
         </Typography>
         <Button
-          raised
+          variant="raised"
           color="primary"
           className={classes.startButton}
           onClick={props.toggleQuizConfirmationDialog}
@@ -151,7 +151,7 @@ const Quiz = (props) => {
         />))
       }
       {!progress.results && (
-        <Button raised color="primary" onClick={handleSubmit(props)}>
+        <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
           Enviar
         </Button>
       )}
