@@ -180,7 +180,7 @@ const Cohorts = (props) => {
         </Paper>
       ))}
       {props.newDialogOpen &&
-        <CohortNewDialog campuses={props.campuses} firebase={props.firebase} />
+        <CohortNewDialog campuses={props.campuses} {...props} />
       }
     </div>
   );
