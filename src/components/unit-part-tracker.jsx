@@ -35,16 +35,16 @@ class UnitPartTracker extends React.Component {
 
   componentDidMount() {
     this.markOpened();
-    if (this.isReadType()) {
+    // if (this.isReadType()) {
       this.checkReadCompleted();
       window.addEventListener('scroll', this.handleScroll);
-    }
+    // }
   }
 
   componentWillUnmount() {
-    if (this.isReadType()) {
+    // if (this.isReadType()) {
       window.removeEventListener('scroll', this.handleScroll);
-    }
+    // }
   }
 
   getUnitProgressPath() {
@@ -70,9 +70,9 @@ class UnitPartTracker extends React.Component {
     );
   }
 
-  isReadType() {
-    return ['lectura', 'read'].indexOf(this.props.part.type) > -1;
-  }
+  // isReadType() {
+  //   return ['lectura', 'read'].indexOf(this.props.part.type) > -1;
+  // }
 
   markOpened() {
     if (this.props.partProgress && this.props.partProgress.openedAt) {
@@ -151,7 +151,7 @@ class UnitPartTracker extends React.Component {
         <Component {...rest} />
         <hr className={classes.hr} />
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-          {this.isReadType() &&
+          {/*this.isReadType()*/ true &&
             <FormControlLabel
               control={
                 <Checkbox

@@ -78,13 +78,21 @@ const progressToIcon = (part, progress) => {
     if (progress && progress.submittedAt) {
       return <DoneIcon />;
     }
+  } else if (part.type === 'seminar' && progress && progress.openedAt) {
+    return <DoneIcon />;
+  } else if (part.type === 'workshop' && progress && progress.openedAt) {
+    return <DoneIcon />;
+  } else if (part.type === 'practice' && progress && progress.openedAt) {
+    return <DoneIcon />;
+  } else if (part.type === 'other' && progress && progress.openedAt) {
+    return <DoneIcon />;
   }
 
   return null;
 };
 
 
-const UnitNavItem = props => (
+const UnitNavItem = props => console.log('UnitNavItem', props.partProgressStats) || (
   <ListItem
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
@@ -101,7 +109,10 @@ const UnitNavItem = props => (
     />
     <ListItemSecondaryAction>
       <IconButton disabled>
-        {progressToIcon(props.part, props.progress)}
+        {props.partProgressStats && props.partProgressStats.completed === 1 && (
+          <DoneIcon />
+        )}
+        {/*progressToIcon(props.part, props.progress)*/}
       </IconButton>
     </ListItemSecondaryAction>
   </ListItem>

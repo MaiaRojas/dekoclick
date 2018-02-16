@@ -16,6 +16,8 @@ const Course = (props) => {
     return (<CircularProgress />);
   }
 
+  console.log('Course', props);
+
   return (
     <div className="course">
       <TopBar title={props.course.title}>

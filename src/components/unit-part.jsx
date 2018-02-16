@@ -26,6 +26,27 @@ const styles = theme => ({
 });
 
 
+const paramsToQueryStrign = (params) =>
+  Object.keys(params).reduce(
+    (memo, key) => (params[key])
+      ? `${memo ? `${memo}&` : ''}${key}=${encodeURIComponent(params[key])}`
+      : memo,
+    ''
+  );
+
+
+const addTypeFormUrlParams = (body, auth, { params }) =>
+  body.replace(
+    /src="(https:\/\/[a-z0-9\-]+.typeform.com\/to\/[a-zA-Z0-9]+)"/,
+    `src="$1?${paramsToQueryStrign({
+      uid: auth.uid,
+      email: auth.email,
+      fname: auth.displayName,
+      ...params,
+    })}"`
+  );
+
+
 const UnitPart = ({
   unit,
   parts,
@@ -34,7 +55,7 @@ const UnitPart = ({
   auth,
   classes,
   match,
-}) => (
+}) => console.log(partProgress) || (
   <div className={classes.root}>
     <div className={classes.meta}>
       <Chip
@@ -51,7 +72,7 @@ const UnitPart = ({
         <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
       </div>
     }
-    {part.body && <Content html={part.body} />}
+    {part.body && <Content html={addTypeFormUrlParams(part.body, auth, match)} />}
   </div>
 );
 

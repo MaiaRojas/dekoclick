@@ -57,6 +57,8 @@ const addSelfAssessment = (parts) => {
 
 
 const Unit = (props) => {
+  console.log('Unit::unitProgressStats', props.unitProgressStats);
+
   if (!props.unit || !props.parts || props.progress === undefined) {
     return (<CircularProgress />);
   }
@@ -122,7 +124,6 @@ Unit.propTypes = {
   classes: PropTypes.shape({
     main: PropTypes.string.isRequired,
   }).isRequired,
-  firebase: PropTypes.shape({}).isRequired,
 };
 
 
@@ -155,10 +156,22 @@ const selectParts = (firestore, { cohortid, courseid, unitid }) => {
 };
 
 
-const mapStateToProps = ({ firestore, firebase }, { auth, match }) => ({
+const selectUnitProgress = (data, { cohortid, courseid, unitid }, uid) => {
+  const key = `cohorts/${cohortid}/users/${uid}/progress/${courseid}/syllabus`;
+
+  if (!data || !data[key]) {
+    return undefined;
+  }
+
+  return data[key][unitid];
+};
+
+
+const mapStateToProps = ({ firestore }, { auth, match }) => ({
   unit: selectUnit(firestore.data, match.params),
   parts: selectParts(firestore, match.params),
   progress: firestore.ordered.progress,
+  unitProgressStats: selectUnitProgress(firestore.data, match.params, auth.uid),
 });
 
 
@@ -180,6 +193,10 @@ export default compose(
         ['unitid', '==', unitid],
       ],
     },
+    {
+      collection: `cohorts/${cohortid}/users/${auth.uid}/progress/${courseid}/syllabus`,
+      doc: unitid,
+    }
   ]),
   connect(mapStateToProps),
   withStyles(styles),

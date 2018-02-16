@@ -145,7 +145,7 @@ const Cohorts = (props) => {
             </Typography>
             <Typography>Campus: {cohort.campus}</Typography>
             <Typography>Inicio: {cohort.start.toDateString()}</Typography>
-            <Typography>Usuarios: {cohort.usersCount}</Typography>
+            <Typography>Usuarios: {cohort.usersCount || 0}</Typography>
             <Typography>Courses: {Object.keys(cohort.coursesIndex || {}).join(', ')}</Typography>
           </div>
           <div>

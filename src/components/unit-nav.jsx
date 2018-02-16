@@ -31,6 +31,7 @@ const getPartProgress = (partid, unitProgress) =>
 const UnitNav = ({
   unit,
   parts,
+  unitProgressStats,
   progress,
   classes,
   match,
@@ -56,6 +57,7 @@ const UnitNav = ({
           order={idx}
           part={part}
           progress={getPartProgress(part.id, progress || [])}
+          partProgressStats={((unitProgressStats || {}).parts || {})[part.id]}
           match={match}
           history={history}
         />))
