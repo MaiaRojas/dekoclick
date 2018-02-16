@@ -62,8 +62,8 @@ const UnitCard = props => (
         </div>
       }
       <Button
-        dense
-        raised
+        size="small"
+        variant="raised"
         color="primary"
         to={`/cohorts/${props.cohort}/courses/${props.course}/${props.id}`}
         component={Link}

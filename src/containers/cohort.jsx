@@ -103,11 +103,11 @@ const Cohort = ({
         title="Agenda"
         onAdd={toggleCalendarAddDialog}
       >
-      <CohortCalendar
+        <CohortCalendar
           cohortid={cohortid}
           cohort={cohort}
           toggleCalendarAddDialog={toggleCalendarAddDialog}
-      />
+        />
       </CohortSection>
 
       <CohortSection

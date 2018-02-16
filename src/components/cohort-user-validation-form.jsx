@@ -21,6 +21,7 @@ import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-
 import Checkbox from 'material-ui/Checkbox';
 import LifeSkillsForm from '../components/life-skills-form';
 
+
 const styles = theme => ({
   paper: {
     display: 'flex',
@@ -30,12 +31,13 @@ const styles = theme => ({
   legend: {
     marginBottom: theme.spacing.unit * 2,
   },
-  listItem: {
-   width: '100%',
-   maxWidth: 360,
-   backgroundColor: theme.palette.background.paper,
- },
+  // listItem: {
+  //   width: '100%',
+  //   maxWidth: 360,
+  //   backgroundColor: theme.palette.background.paper,
+  // },
 });
+
 
 function TabContainer(props) {
   return (
@@ -45,115 +47,133 @@ function TabContainer(props) {
   );
 }
 
+
 class ValidationForm extends React.Component {
 	state = {
-    githubUrls :  [],
-    recomendation : '',
-    selectedTab :0,
-    githubUrls : {}
+    githubUrls: [],
+    recomendation: '',
+    selectedTab: 0,
+    githubUrls: {},
 	};
 
   handleChange = (event, selectedTab) => {
     this.setState({ ...this.state, selectedTab });
   }
 
-
-  projectsForm () {
-    return this.state.githubUrls && Object.values (this.state.githubUrls).map( (url, index) => {
-       return <GithubCard url = {url} pos = {index} key = {index} firebase = {this.props.firebase} uid = {this.props.uid} />
-    })
+  projectsForm() {
+    return this.state.githubUrls && Object.values(this.state.githubUrls).map((url, index) => {
+      return (
+        <GithubCard
+          url={url}
+          pos={index}
+          key={index}
+          firebase={this.props.firebase}
+          uid={this.props.uid}
+        />
+      );
+    });
   }
 
+  endorseForm() {
+    const { classes } = this.props;
+    const db = this.props.firebase.firestore();
+    const userDocRef = db.collection('users').doc(this.props.uid);
 
-  endorseForm () {
-
-    const {classes} = this.props;
-
-    return <div>
-        <LifeSkillsForm firebase = {this.props.firebase} uid = {this.props.uid} auth = {this.props.auth}/>
+    return (
+      <div>
+        <LifeSkillsForm
+          firebase={this.props.firebase}
+          uid={this.props.uid}
+          auth={this.props.auth}
+        />
 
         <FormControl component="fieldset" fullWidth={true}>
-           <TextField
-             id={'recomendation'}
-             label={`Escribe una recomendación para ${this.props.profile.name}`}
-             value={this.state.recomendation || ''}
-             multiline
-             rowsMax="5"
-             className={this.props.classes.textField}
-             margin="normal"
-              error={ this.state.recomendation.length  > 280  }
-              helperText={ this.state.recomendation.length  > 280? 'Error: use solo 280 caracteres' : 'Puedes usar hasta 280 caracteres.' }
-              margin="dense"
-             onChange={(e) => {
-                   let detail  = e.target.value;
-                   let who  = {
-                     from : this.props.auth.displayName,
-                     company : 'Laboratoria',
-                     companyUrl : 'www.laboratoria.la',
-                     detail : detail
-                   }
-                   this.setState ({
-                     recomendation : detail
-                   })
-                   this.props.firebase.firestore().collection('users').doc(this.props.uid).update( {[`recomendations.${this.props.auth.uid}`] : who} );
+          <TextField
+            id={'recomendation'}
+            label={`Escribe una recomendación para ${this.props.profile.name}`}
+            value={this.state.recomendation || ''}
+            multiline
+            rowsMax="5"
+            className={this.props.classes.textField}
+            margin="normal"
+            error={ this.state.recomendation.length > 280  }
+            helperText={ this.state.recomendation.length > 280 ? 'Error: use solo 280 caracteres' : 'Puedes usar hasta 280 caracteres.' }
+            margin="dense"
+            onChange={(e) => {
+              this.setState({ recomendation: e.target.value });
+              userDocRef.update({
+                [`recomendations.${this.props.auth.uid}`]: {
+                  from: this.props.auth.displayName,
+                  company: 'Laboratoria',
+                  companyUrl: 'www.laboratoria.la',
+                  detail: e.target.value,
+                },
+              });
              }}
            />
          </FormControl>
       </div>
+    );
   }
 
-  settingsForm () {
-    const props = this.props;
+  settingsForm() {
     return (
-        <div  component="div" style={{ padding: 8 * 3 }}>
-          <SettingsForm {...this.props}   />
-        </div>
-      );
+      <div component="div" style={{ padding: 8 * 3 }}>
+        <SettingsForm {...this.props} />
+      </div>
+    );
   }
-  componentWillMount () {
+
+  componentWillMount() {
     if (this.props.profile) {
       if (this.props.profile.githubUrls) {
-        this.setState ({
-          githubUrls: Object.values (this.props.profile.githubUrls)
+        this.setState({
+          githubUrls: Object.values(this.props.profile.githubUrls)
         })
       }
 
-      if (this.props.profile.recomendations &&  this.props.profile.recomendations[ this.props.auth.uid]) {
-        this.setState ({  recomendation:  this.props.profile.recomendations[ this.props.auth.uid].detail});
+      if (this.props.profile.recomendations && this.props.profile.recomendations[this.props.auth.uid]) {
+        this.setState({
+          recomendation: this.props.profile.recomendations[this.props.auth.uid].detail,
+        });
       }
     }
   }
+
 	render() {
 		const props = this.props;
+
     return (
       <div className="settings">
-            <AppBar position="static" color="default">
-              <Tabs
-                value={this.state.selectedTab}
-                onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                fullWidth
-              >
-                <Tab label="Info" />
-                <Tab label="Projects" />
-                <Tab label="Endorse" />
-              </Tabs>
-            </AppBar>
-            {this.state.selectedTab === 0 && this.settingsForm() }
-            {this.state.selectedTab === 1 && this.projectsForm() }
-            {this.state.selectedTab === 2 && this.endorseForm()}
+        <AppBar position="static" color="default">
+          <Tabs
+            value={this.state.selectedTab}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            fullWidth
+          >
+            <Tab label="Info" />
+            <Tab label="Projects" />
+            <Tab label="Endorse" />
+          </Tabs>
+        </AppBar>
+        {this.state.selectedTab === 0 && this.settingsForm()}
+        {this.state.selectedTab === 1 && this.projectsForm()}
+        {this.state.selectedTab === 2 && this.endorseForm()}
       </div>
     );
   }
 }
 
+
 const ValidationContainer = (props) => {
-	if (!props.profile.name) {
-		return <CircularProgress />;
-	}
+	// if (!props.profile.name) {
+	// 	return <CircularProgress />;
+	// }
 	return <ValidationForm {...props} />;
 };
+
 
 ValidationForm.propTypes = {
   classes: PropTypes.shape({
@@ -161,5 +181,6 @@ ValidationForm.propTypes = {
     legend: PropTypes.string.isRequired,
   }).isRequired,
 };
+
 
 export default withStyles(styles)(ValidationContainer);

@@ -14,6 +14,7 @@ import gravatarUrl from '../util/gravatarUrl';
 import cohort from '../util/cohort';
 import CohortUserOpenModalButton from './cohort-user-open-modal-button'
 
+
 const styles = theme => ({
   heading: {
     marginBottom: theme.spacing.unit,
@@ -34,9 +35,9 @@ const styles = theme => ({
 
 
 const UserAvatar = ({ user }) => {
-  const imgSrc = (user.github) ?
-    `https://github.com/${user.github}.png?size=40` :
-    gravatarUrl(user.email, { size: 40 });
+  const imgSrc = (user.github)
+    ? `https://github.com/${user.github}.png?size=40`
+    : gravatarUrl(user.email, { size: 40 });
 
   return (
     <Avatar aria-label={user.name}>
@@ -95,9 +96,14 @@ const CohortUser = (props) => {
             </IconButton>
           )}
 
-          {
-              props.auth && <CohortUserOpenModalButton profile = {props.profile} firebase = {props.firebase} uid = {props.uid} auth = {props.auth}/>
-           }
+          {props.auth && (
+            <CohortUserOpenModalButton
+              profile={props.profile}
+              firebase={props.firebase}
+              uid={props.uid}
+              auth={props.auth}
+            />
+          )}
 
           {props.cohortUser.role === 'student' && (
             <IconButton onClick={() => console.log('drop out!')}>

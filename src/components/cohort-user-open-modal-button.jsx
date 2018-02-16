@@ -19,13 +19,13 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import CohortUserValidationForm from './cohort-user-validation-form'
 import CloseIcon from 'material-ui-icons/Close';
-
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
+
 
 class CohortUserOpenModalButton extends React.Component {
 
@@ -44,28 +44,30 @@ class CohortUserOpenModalButton extends React.Component {
   render() {
     return (
       <React.Fragment>
-          <IconButton onClick={this.handleClickOpen}>   <SettingsIcon /> </IconButton>
-
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Valida la información de {this.props.profile.name}</DialogTitle>
-
-            <DialogContent>
-                <CohortUserValidationForm  {...this.props}/>
-
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cerrar
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </React.Fragment>
+        <IconButton onClick={this.handleClickOpen}>
+          <SettingsIcon />
+        </IconButton>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">
+            Valida la información de {this.props.profile.name}
+          </DialogTitle>
+          <DialogContent>
+            <CohortUserValidationForm {...this.props} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     );
   }
 }
+
 
 export default CohortUserOpenModalButton;

@@ -64,8 +64,8 @@ const CourseCard = props => (
         </div>
       }
       <Button
-        raised
-        dense
+        variant="raised"
+        size="small"
         color="primary"
         to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
         component={Link}

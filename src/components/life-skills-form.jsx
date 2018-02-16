@@ -6,6 +6,7 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import CommentIcon from 'material-ui-icons/Comment';
 
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -14,13 +15,39 @@ const styles = theme => ({
   },
 });
 
+
 class CheckboxList extends React.Component {
   state = {
     checked: [],
   };
 
-  lifeSkills = ["selfLearning", "problemSolving", "timeManagement", "askForHelp", "adaptability", "proactivity", "decisionMaking", "teamWork", "communication", "feedback", "conflictResolution"]
-  lifeSkillsIntr = ["Autoaprendizaje", "Solución de problemas", "Planificación y manejo del tiempo", "Comunica su progreso y pide ayuda a tiempo", "Adaptabilidad", "Proactividad", "Toma de decisiones", "Trabajo en equipo", "Comunicación eficaz", "Dar y recibir feedback", "Negociación/resolución de conflictos "]
+  lifeSkills = [
+    'selfLearning',
+    'problemSolving',
+    'timeManagement',
+    'askForHelp',
+    'adaptability',
+    'proactivity',
+    'decisionMaking',
+    'teamWork',
+    'communication',
+    'feedback',
+    'conflictResolution',
+  ];
+
+  lifeSkillsIntr = [
+    'Autoaprendizaje',
+    'Solución de problemas',
+    'Planificación y manejo del tiempo',
+    'Comunica su progreso y pide ayuda a tiempo',
+    'Adaptabilidad',
+    'Proactividad',
+    'Toma de decisiones',
+    'Trabajo en equipo',
+    'Comunicación eficaz',
+    'Dar y recibir feedback',
+    'Negociación/resolución de conflictos',
+  ];
 
   handleToggle = value => () => {
     const { checked } = this.state;
@@ -33,48 +60,44 @@ class CheckboxList extends React.Component {
       newChecked.splice(currentIndex, 1);
     }
 
-    this.setState({
-      checked: newChecked,
-    });
+    this.setState({ checked: newChecked });
 
-    newChecked.forEach (lifeSkill => {
-      let columnName = `lifeSkills/${lifeSkill}/${ this.props.auth.uid}`
-
-      let who  = {
-        author : this.props.auth.displayName,
-        company : 'Laboratoria',
-        companyUrl : 'www.laboratoria.la'
-      }
+    newChecked.forEach(lifeSkill => {
+      const columnName = `lifeSkills/${lifeSkill}/${ this.props.auth.uid}`;
       const fieldStructure = columnName.split('/').join('.');
-
-      this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { [`${fieldStructure}`] : who} )
-    })
-
+      this.props.firebase.firestore().collection('users').doc(this.props.uid)
+        .update({
+          [`${fieldStructure}`]: {
+            author: this.props.auth.displayName,
+            company: 'Laboratoria',
+            companyUrl: 'www.laboratoria.la',
+          },
+        })
+    });
   };
 
-  componentWillMount () {
+  componentWillMount() {
     const findLifeSkill = (authorIds, uid) => {
-      console.log ('authorids', authorIds)
-      console.log ('uid', uid)
-
-      console.log ('authorIds[uid]', authorIds[uid])
-
-      return authorIds[uid] != null
+      // console.log('authorids', authorIds);
+      // console.log('uid', uid);
+      // console.log('authorIds[uid]', authorIds[uid]);
+      return authorIds[uid] != null;
     }
 
-    this.props.firebase.firestore().collection('users').doc(this.props.uid).get().then(res => {
-      let skills = res.data().lifeSkills;
-      let newChecked = [];
-      if (skills) {
-          skills.forEach ( key => {
-            if ( findLifeSkill( skills[key],  this.props.auth.uid) )
-              newChecked.push ( key )
-          })
-          this.setState({
-            checked: newChecked,
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
+      .then(snap => {
+        let skills = snap.data().lifeSkills;
+        let newChecked = [];
+        if (skills) {
+          Object.keys(skills).forEach(key => {
+          // skills.forEach(key => {
+            if (findLifeSkill(skills[key], this.props.auth.uid)) {
+              newChecked.push(key);
+            }
           });
-      }
-    });
+          this.setState({ checked: newChecked });
+        }
+      });
   }
 
   render() {
@@ -82,7 +105,7 @@ class CheckboxList extends React.Component {
     return (
       <div className={classes.root}>
         <List>
-          { this.lifeSkills.map( (value, index) => (
+          {this.lifeSkills.map((value, index) => (
             <ListItem
               key={value}
               dense
@@ -95,8 +118,7 @@ class CheckboxList extends React.Component {
                 tabIndex={-1}
                 disableRipple
               />
-            <ListItemText primary={ `${ this.lifeSkillsIntr [index]}`} />
-
+              <ListItemText primary={ `${ this.lifeSkillsIntr [index]}`} />
             </ListItem>
           ))}
         </List>
@@ -105,8 +127,10 @@ class CheckboxList extends React.Component {
   }
 }
 
+
 CheckboxList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
 
 export default withStyles(styles)(CheckboxList);

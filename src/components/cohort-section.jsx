@@ -39,7 +39,7 @@ const CohortSection = ({
       </Typography>
       {onAdd && typeof onAdd === 'function' && (
         <Button
-          fab
+          variant="fab"
           color="default"
           aria-label="add user"
           className={classes.headingButton}

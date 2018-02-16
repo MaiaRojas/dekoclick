@@ -201,7 +201,7 @@ const CohortCalendarAddDialog = ({
             Cancel
           </Button>
           <Button
-            raised
+            variant="raised"
             color="primary"
             onClick={validateAndSubmitCohortCalendarAddDialogForm}
           >

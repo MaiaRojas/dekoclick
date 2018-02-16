@@ -40,37 +40,37 @@ const styles = theme => ({
   },
 });
 
-const FormControlWrapper = (props) => {
-    const content = <FormControl component="fieldset" fullWidth={true}>
-        <TextField
-          id={props.inputId}
-          label={props.inputLabel}
-          value={props.inputValue || ''}
-          multiline = {props.multiline}
-          rowsMax="5"
-          className={props.classes.textField}
-          margin="normal"
-          error={ props.error? true : false }
-          helperText={props.helperText}
-          margin="dense"
-          disabled = {props.disabled}
-          onChange={(e) => {
-            if (props.updateValueOnProfile)
-              props.updateValueOnProfile(e.target.id, e.target.value);
-          }}
-        />
-      </FormControl>
 
-    if (props.usePaperContainer) {
-      return <Paper className={props.classes.paper}>
-        {content}
-      </Paper>
-    }else {
-      return <div>
-		    {content}
-      </div>
-    }
+const FormControlWrapper = (props) => {
+  const content = (
+    <FormControl component="fieldset" fullWidth={true}>
+      <TextField
+        id={props.inputId}
+        label={props.inputLabel}
+        value={props.inputValue || ''}
+        multiline = {props.multiline}
+        rowsMax="5"
+        className={props.classes.textField}
+        margin="normal"
+        error={ props.error? true : false }
+        helperText={props.helperText}
+        margin="dense"
+        disabled = {props.disabled}
+        onChange={(e) => {
+          if (props.updateValueOnProfile) {
+            props.updateValueOnProfile(e.target.id, e.target.value);
+          }
+        }}
+      />
+    </FormControl>
+  );
+
+  if (props.usePaperContainer) {
+    return (<Paper className={props.classes.paper}>{content}</Paper>);
+  } else {
+    return (<div>{content}</div>);
   }
+}
 
 class SettingsForm extends React.Component{
   state = {
@@ -107,17 +107,27 @@ class SettingsForm extends React.Component{
   };
 
   createGithubCards () {
-    return Object.values (this.state.githubUrls).map( (url, index) => {
-       return <GithubCard url = {url} pos = {index} key = {index} firebase = {this.props.firebase} uid = {this.props.uid} />
-    })
+    return Object.values(this.state.githubUrls).map((url, index) => {
+      return (
+        <GithubCard
+          url={url}
+          pos={index}
+          key={index}
+          firebase={this.props.firebase}
+          uid={this.props.uid}
+        />
+      );
+    });
   }
+
 	componentWillMount() {
 		if (this.props.profile.name) {
-      let res =  Object.assign({}, this.state, this.props.profile);
-      if (this.props.profile.aboutMe){
-        res.aboutMe =  Object.assign({}, this.state.aboutMe, this.props.profile.aboutMe);
-        if (this.props.profile.aboutMe.highlights)
-          res.aboutMe.highlights =  Object.assign({}, this.state.aboutMe.highlights, this.props.profile.aboutMe.highlights);
+      let res = Object.assign({}, this.state, this.props.profile);
+      if (this.props.profile.aboutMe) {
+        res.aboutMe = Object.assign({}, this.state.aboutMe, this.props.profile.aboutMe);
+        if (this.props.profile.aboutMe.highlights) {
+          res.aboutMe.highlights = Object.assign({}, this.state.aboutMe.highlights, this.props.profile.aboutMe.highlights);
+        }
       }
 			this.setState(res);
 		}
@@ -129,6 +139,7 @@ class SettingsForm extends React.Component{
 		const items = columnName.split('/');
 		column = items[0];
 		let maindicc = dicc;
+
 		for (let i = 0; i < items.length; i++) {
 			column = items[i];
 			if (i == items.length - 1) {
@@ -137,42 +148,40 @@ class SettingsForm extends React.Component{
 				dicc = dicc[column];
 			}
 		}
+
 		this.setState(maindicc);
     const fieldStructure = columnName.split('/').join('.');
-    const obj = {[`${fieldStructure}`]:  newValue}
-    this.props.firebase.firestore().collection('users').doc(this.props.uid).update( obj );
+    const obj = { [`${fieldStructure}`]: newValue };
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).update(obj);
   }
 
   isUrlAndMyRepo(url) {
-
-    return  isUrl(url) && url.includes(`https://github.com/${this.state.github}`);
+    return isUrl(url) && url.includes(`https://github.com/${this.state.github}`);
   }
 
-  render () {
+  render() {
     const props = this.props;
 
+    return (
+      <React.Fragment>
+        {this.props.showOpenDialog && (
+          <Paper className={props.classes.paper}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend" className={props.classes.legend}>
+                Correo electrónico
+              </FormLabel>
+              <Input
+                id="email"
+                label="Email"
+                margin="none"
+                disabled
+                value={props.auth.email}
+              />
+            </FormControl>
+          </Paper>
+        )}
 
-    return (<React.Fragment>
-
-       {
-         this.props.showOpenDialog &&
-         <Paper className={props.classes.paper}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend" className={props.classes.legend}>
-              Correo electrónico
-            </FormLabel>
-            <Input
-              id="email"
-              label="Email"
-              margin="none"
-              disabled
-              value={props.auth.email}
-            />
-          </FormControl>
-        </Paper>
-      }
-
-      <FormControlWrapper
+        <FormControlWrapper
           {...props}
           inputLabel={'Nombre'}
           inputValue={this.state.name}
@@ -266,18 +275,15 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
-        {
-         this.props.showOpenDialog  &&
+
+        {this.props.showOpenDialog  && (
           <Paper className={props.classes.paper}>
-
-          <FormControl component="fieldset">
-            <FormLabel component="legend" className={props.classes.legend}>
-              Aquí tus 3 proyectos de Github más relevantes.
-              Verifica  que respete la siguiente estructura: https://github.com/aocsa/sushi-react-app
-            </FormLabel>
-
-
-            <FormControlWrapper
+            <FormControl component="fieldset">
+              <FormLabel component="legend" className={props.classes.legend}>
+                Aquí tus 3 proyectos de Github más relevantes.
+                Verifica  que respete la siguiente estructura: https://github.com/aocsa/sushi-react-app
+              </FormLabel>
+              <FormControlWrapper
                 {...props}
                 inputValue={this.state.githubUrls[0]}
                 error= { !this.isUrlAndMyRepo(this.state.githubUrls[0]) }
@@ -285,10 +291,8 @@ class SettingsForm extends React.Component{
                 inputId={'githubUrls/0'}
                 updateValueOnProfile={this.updateValueOnProfile}
                 usePaperContainer = {false}
-            />
-
-
-            <FormControlWrapper
+              />
+              <FormControlWrapper
                 {...props}
                 inputValue={this.state.githubUrls[1]}
                 error= { !this.isUrlAndMyRepo(this.state.githubUrls[1]) }
@@ -296,9 +300,8 @@ class SettingsForm extends React.Component{
                 inputId={'githubUrls/1'}
                 updateValueOnProfile={this.updateValueOnProfile}
                 usePaperContainer = {false}
-            />
-
-            <FormControlWrapper
+              />
+              <FormControlWrapper
                 {...props}
                 inputValue={this.state.githubUrls[2]}
                 error= { !this.isUrlAndMyRepo(this.state.githubUrls[2]) }
@@ -306,49 +309,48 @@ class SettingsForm extends React.Component{
                 inputId={'githubUrls/2'}
                 updateValueOnProfile={this.updateValueOnProfile}
                 usePaperContainer = {false}
-            />
+              />
             </FormControl>
           </Paper>
-       }
-       {
-         this.props.showOpenDialog &&
-         <div>
-          <Paper className={props.classes.paper}>
-            <Button onClick={this.handleOpen}>Ver mis projectos Github</Button>
+        )}
 
-            <a href={`https://laboratoria-la-talento-aocsa.firebaseapp.com/profile/${this.props.uid}`} target="_blank">Ver mi perfil en talento.laboratoria.la!</a>
+        {this.props.showOpenDialog && (
+          <div>
+            <Paper className={props.classes.paper}>
+              <Button onClick={this.handleOpen}>Ver mis projectos Github</Button>
+              <a
+                href={`https://laboratoria-la-talento-aocsa.firebaseapp.com/profile/${this.props.uid}`}
+                target="_blank"
+              >
+                Ver mi perfil en talento.laboratoria.la!
+              </a>
+            </Paper>
 
-
-          </Paper>
-
-          <Dialog
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={this.state.open}
-            onClose={this.handleClose}
-          >
-
+            <Dialog
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              open={this.state.open}
+              onClose={this.handleClose}
+            >
             <DialogTitle id="form-dialog-title">Github Projects</DialogTitle>
               <DialogContent>
                 <DialogContentText>
                   Tus projectos en github.
                 </DialogContentText>
-                <div>
-                  {
-                     this.createGithubCards(this.state.githubUrls)
-                  }
-                </div>
-
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cerrar
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      }
-    </React.Fragment>)
+                <div>{this.createGithubCards(this.state.githubUrls)}</div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Cerrar
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+      </React.Fragment>
+    );
   }
 }
+
+
 export default withStyles(styles)(SettingsForm);

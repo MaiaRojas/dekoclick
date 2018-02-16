@@ -90,7 +90,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
             Cancelar
           </Button>
           <Button
-            raised
+            variant="raised"
             color="primary"
             disabled={!props.courses || !props.courses.length}
             onClick={() => {

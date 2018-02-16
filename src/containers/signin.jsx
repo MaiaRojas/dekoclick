@@ -100,7 +100,7 @@ const SignInForm = (props) => (
     </div>
     <Button
       type="submit"
-      raised
+      variant="raised"
       color="primary"
       disabled={props.forgot && props.forgotRequested}
       className={props.classes.submitBtn}
@@ -140,7 +140,7 @@ const SignInForgotToggle = (props) => (
 
 const SignInWithFacebookButton = (props) => (
   <Button
-    raised
+    variant="raised"
     color="primary"
     style={{ marginTop: 50 }}
     onClick={() => {
