@@ -72,39 +72,14 @@ CoursesList.defaultProps = {
 };
 
 
-const sortCourses = (courses) => {
-  if (!courses) {
-    return undefined;
-  }
-
-  const keys = Object.keys(courses || {});
-
-  if (!keys.length) {
-    return courses;
-  }
-
-  return keys
-    .map(key => ({
-      id: key,
-      ...courses[key],
-    }))
-    .sort((a, b) => {
-      if (a.order > b.order) {
-        return 1;
-      }
-      if (a.order < b.order) {
-        return -1;
-      }
-      return 0;
-    });
-};
-
-
 // list courses for a given cohort
 export default compose(
-  firestoreConnect(props => [{ collection: `cohorts/${props.cohort}/courses` }]),
+  firestoreConnect(props => [{
+    collection: `cohorts/${props.cohort}/courses`,
+    orderBy: ['order'],
+  }]),
   connect(({ firestore }, { cohort }) => ({
-    courses: sortCourses(firestore.data[`cohorts/${cohort}/courses`]),
+    courses: firestore.ordered[`cohorts/${cohort}/courses`],
   })),
   withStyles(styles),
 )(CoursesList);

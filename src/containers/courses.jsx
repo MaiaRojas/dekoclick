@@ -30,7 +30,7 @@ const Courses = ({ cohorts, auth }) => {
   return (
     <div className="courses">
       <TopBar title="Cursos" />
-      {cohorts.map(cohort => (
+      {[...cohorts].reverse().map(cohort => (
         <CoursesList
           key={cohort.id}
           cohort={cohort.id}
@@ -57,22 +57,11 @@ Courses.defaultProps = {
 };
 
 
-const selectCohorts = (users, uid) =>
-  (!users || !users[uid] || !users[uid].cohorts)
-    ? undefined
-    : Object.keys(users[uid].cohorts).sort().reverse().map(key => ({
-      id: key,
-      ...users[uid].cohorts[key],
-    }));
-
-
 export default compose(
   firestoreConnect(({ auth }) => [{
-    collection: 'users',
-    doc: auth.uid,
-    subcollections: [{ collection: 'cohorts' }],
+    collection: `users/${auth.uid}/cohorts`,
   }]),
   connect(({ firestore }, { auth }) => ({
-    cohorts: selectCohorts(firestore.data.users, auth.uid),
+    cohorts: firestore.ordered[`users/${auth.uid}/cohorts`],
   })),
 )(Courses);

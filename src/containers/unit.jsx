@@ -61,9 +61,7 @@ const addSelfAssessment = (parts) => {
 
 
 const Unit = (props) => {
-  console.log('Unit::unitProgressStats', props.unitProgressStats);
-
-  if (!props.unit || !props.parts || props.progress === undefined) {
+  if (!props.unit || !props.parts || props.unitProgress === undefined) {
     return (<CircularProgress />);
   }
 
@@ -76,8 +74,8 @@ const Unit = (props) => {
 
   const part = props.parts.filter(part => part.id === partid)[0];
   const partProgress = (part.type === 'self-assessment')
-    ? props.progress.find(item => item.type === 'self-assessment')
-    : props.progress.find(item => item.partid === partid);
+    ? props.unitProgress.find(item => item.type === 'self-assessment')
+    : props.unitProgress.find(item => item.partid === partid);
 
   let Component = UnitPart;
   if (part.type === 'practice' && part.exercises) {
@@ -97,7 +95,8 @@ const Unit = (props) => {
         </TopBar>
         <TrackedComponent
           unit={props.unit}
-          unitProgress={props.progress}
+          unitProgress={props.unitProgress}
+          unitProgressStats={props.unitProgressStats}
           parts={props.parts}
           part={part}
           partProgress={partProgress}
@@ -113,7 +112,7 @@ const Unit = (props) => {
 Unit.propTypes = {
   unit: PropTypes.shape({}),
   parts: PropTypes.arrayOf(PropTypes.shape({})),
-  progress: PropTypes.arrayOf(PropTypes.shape({})),
+  unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
     params: PropTypes.shape({
@@ -134,7 +133,7 @@ Unit.propTypes = {
 Unit.defaultProps = {
   unit: undefined,
   parts: undefined,
-  progress: undefined,
+  unitProgress: undefined,
 };
 
 
@@ -174,7 +173,7 @@ const selectUnitProgress = (data, { cohortid, courseid, unitid }, uid) => {
 const mapStateToProps = ({ firestore }, { auth, match }) => ({
   unit: selectUnit(firestore.data, match.params),
   parts: selectParts(firestore, match.params),
-  progress: firestore.ordered.progress,
+  unitProgress: firestore.ordered.progress,
   unitProgressStats: selectUnitProgress(firestore.data, match.params, auth.uid),
 });
 

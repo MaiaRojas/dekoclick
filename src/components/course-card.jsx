@@ -12,7 +12,7 @@ import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import Progress from './progress';
-import { computeCourseProgressStats } from '../util/progress';
+// import { computeCourseProgressStats } from '../util/progress';
 
 
 const styles = theme => ({
@@ -72,7 +72,7 @@ const CourseCard = props => (
       >
         {props.progress ? 'Continuar' : 'Empezar'}
       </Button>
-      <Progress value={computeCourseProgressStats(props.progress, props.course).percent} />
+      <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
     </CardActions>
   </Card>
 );
@@ -87,7 +87,9 @@ CourseCard.propTypes = {
     }),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
-  progress: PropTypes.shape({}),
+  progress: PropTypes.shape({
+    percent: PropTypes.number.isRequired,
+  }),
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
@@ -105,10 +107,12 @@ CourseCard.defaultProps = {
 export default compose(
   firestoreConnect(props => [{
     collection: `cohorts/${props.cohort}/users/${props.auth.uid}/progress`,
-    doc: props.course.id,
+    doc: props.course.id
   }]),
   connect(({ firestore }, { cohort, auth, course }) => ({
-    progress: (firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`] || {})[course.id],
+    progress: firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`]
+      ? firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`][course.id]
+      : undefined,
   })),
   withStyles(styles),
 )(CourseCard);

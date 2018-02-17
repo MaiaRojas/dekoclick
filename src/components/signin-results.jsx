@@ -67,7 +67,6 @@ const SignInResults = ({
   classes,
 }) => {
   const error = getError(authError, forgot, forgotResult, signupError, signinError);
-  console.log('SignInResults::error', error);
 
   if (!error && (!forgot || !forgotResult || !forgotResult.success)) {
     return null;

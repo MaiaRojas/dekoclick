@@ -28,11 +28,17 @@ const getPartProgress = (partid, unitProgress) =>
     : unitProgress.find(item => item.partid === partid);
 
 
+const getPartProgressStats = (part, unitProgressStats) =>
+  (part.type === 'self-assessment')
+    ? unitProgressStats.selfAssessment
+    : (unitProgressStats.parts || {})[part.id];
+
+
 const UnitNav = ({
   unit,
   parts,
   unitProgressStats,
-  progress,
+  unitProgress,
   classes,
   match,
   history,
@@ -56,8 +62,8 @@ const UnitNav = ({
           partid={part.id}
           order={idx}
           part={part}
-          progress={getPartProgress(part.id, progress || [])}
-          partProgressStats={((unitProgressStats || {}).parts || {})[part.id]}
+          partProgress={getPartProgress(part.id, unitProgress || [])}
+          partProgressStats={getPartProgressStats(part, unitProgressStats || {})}
           match={match}
           history={history}
         />))
@@ -72,7 +78,7 @@ UnitNav.propTypes = {
     title: PropTypes.string.isRequired,
   }).isRequired,
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  progress: PropTypes.arrayOf(PropTypes.shape({})),
+  unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -88,7 +94,7 @@ UnitNav.propTypes = {
 
 
 UnitNav.defaultProps = {
-  progress: null,
+  unitProgress: null,
 };
 
 

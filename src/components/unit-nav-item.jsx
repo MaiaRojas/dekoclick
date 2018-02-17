@@ -48,51 +48,19 @@ const partTypeToIcon = (type) => {
 };
 
 
-const progressToIcon = (part, progress) => {
-  if (part.type === 'read') {
-    if (progress && progress.readAt) {
-      return <DoneIcon />;
-    }
-  } else if (part.type === 'quiz') {
-    if (progress && progress.results) {
-      return <DoneIcon />;
-    } else if (progress) {
-      return <TimerIcon />;
-    }
-  } else if (part.type === 'practice' && part.exercises) {
-    const stats = Object.keys(part.exercises).reduce((memo, key) => {
-      if (progress && progress[key] && progress[key].testResults) {
-        if (progress[key].testResults.failures) {
-          return { ...memo, incomplete: memo.incomplete + 1 };
-        }
-        return { ...memo, complete: memo.complete + 1 };
-      }
-      return { ...memo, pending: memo.pending + 1 };
-    }, { pending: 0, incomplete: 0, complete: 0 });
-    if (!stats.pending && !stats.incomplete) {
-      return <DoneIcon />;
-    } else if (stats.incomplete) {
-      return <WarningIcon />;
-    }
-  } else if (part.type === 'self-assessment') {
-    if (progress && progress.submittedAt) {
-      return <DoneIcon />;
-    }
-  } else if (part.type === 'seminar' && progress && progress.openedAt) {
+const progressToIcon = (part, partProgress, partProgressStats) => {
+  if (partProgressStats && partProgressStats.completed === 1) {
     return <DoneIcon />;
-  } else if (part.type === 'workshop' && progress && progress.openedAt) {
-    return <DoneIcon />;
-  } else if (part.type === 'practice' && progress && progress.openedAt) {
-    return <DoneIcon />;
-  } else if (part.type === 'other' && progress && progress.openedAt) {
-    return <DoneIcon />;
+  } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {
+    return <TimerIcon />;
+  } else if (part.type === 'practice' && part.exercises && partProgressStats && partProgressStats && partProgressStats.completed) {
+    return <WarningIcon />;
   }
-
   return null;
 };
 
 
-const UnitNavItem = props => console.log('UnitNavItem', props.partProgressStats) || (
+const UnitNavItem = props => (
   <ListItem
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
@@ -103,16 +71,13 @@ const UnitNavItem = props => console.log('UnitNavItem', props.partProgressStats)
     </ListItemIcon>
     <ListItemText
       classes={{
-        root: (props.progress || {}).openedAt ? props.classes.read : props.classes.unread,
+        root: (props.partProgress || {}).openedAt ? props.classes.read : props.classes.unread,
       }}
       primary={`${props.order}. ${props.part.title}`}
     />
     <ListItemSecondaryAction>
       <IconButton disabled>
-        {props.partProgressStats && props.partProgressStats.completed === 1 && (
-          <DoneIcon />
-        )}
-        {/*progressToIcon(props.part, props.progress)*/}
+        {progressToIcon(props.part, props.partProgress, props.partProgressStats)}
       </IconButton>
     </ListItemSecondaryAction>
   </ListItem>
@@ -125,7 +90,8 @@ UnitNavItem.propTypes = {
     title: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
   }).isRequired,
-  progress: PropTypes.shape({}),
+  partProgress: PropTypes.shape({}),
+  partProgressStats: PropTypes.shape({}),
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
     read: PropTypes.string.isRequired,
@@ -144,7 +110,8 @@ UnitNavItem.propTypes = {
 
 
 UnitNavItem.defaultProps = {
-  progress: undefined,
+  partProgress: undefined,
+  partProgressStats: undefined,
 };
 
 

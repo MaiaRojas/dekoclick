@@ -246,8 +246,6 @@ const postSignUp = (props, uid, email) => {
 
 
 const SignIn = props => {
-  console.log('SignIn', props);
-
   const { email, password } = props.data;
   const auth = props.firestore.auth();
 

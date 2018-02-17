@@ -55,7 +55,7 @@ const UnitPart = ({
   auth,
   classes,
   match,
-}) => console.log(partProgress) || (
+}) => (
   <div className={classes.root}>
     <div className={classes.meta}>
       <Chip

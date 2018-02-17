@@ -75,8 +75,7 @@ class SelfAssessment extends React.Component {
   }
 
   getSelfLearningTitle(selfLearning) {
-    console.log('getSelfLearningTitle', selfLearning);
-    // return this.props.parts[selfLearning].title;
+    return this.props.parts.find(part => part.id === selfLearning).title; // [selfLearning].title;
   }
 
   sentimentToIcon(val) {
