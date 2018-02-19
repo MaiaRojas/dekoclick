@@ -9,7 +9,7 @@ const RESET = 'lms.laboratoria.la/cohortCalendarAddDialog/RESET';
 
 
 // Action Creators
-export const toggleCohortCalendarAddDialog = (obj) => ({
+export const toggleCohortCalendarAddDialog = obj => ({
   type: TOGGLE,
   payload: obj,
 });
@@ -109,7 +109,7 @@ const validateCalendarEventFields = (data, state) =>
     const { err, sanitized } = validateCalendarEventField(key, data[key], state);
     return err
       ? { ...memo, errors: { ...memo.errors, [key]: err } }
-      : { ...memo, sanitized: { ...memo.sanitized, [key]: sanitized }};
+      : { ...memo, sanitized: { ...memo.sanitized, [key]: sanitized } };
   }, {
     errors: {},
     sanitized: {},
@@ -165,7 +165,7 @@ export default (state = { ...initialState }, action = {}) => {
               return memo;
             }
             return { ...memo, [errorKey]: state.errors[errorKey] };
-          }, {})
+          }, {}),
       };
     case VALIDATE_AND_SUBMIT:
       const errors = Object.keys(state.data).reduce((memo, key) => {

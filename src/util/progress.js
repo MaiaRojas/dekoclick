@@ -21,7 +21,7 @@ export const updateProgress = (
   };
 
   if (typeof partProgressChanges === 'undefined') {
-    Object.assign(partProgressDoc, exerciseid)
+    Object.assign(partProgressDoc, exerciseid);
   } else {
     Object.assign(partProgressDoc, { exerciseid }, partProgressChanges);
     partPath += `-${exerciseid}`;
@@ -31,7 +31,5 @@ export const updateProgress = (
 
   return db.runTransaction(t =>
     t.get(docRef).then(docSnap =>
-      t[docSnap.exists ? 'update' : 'set'](docRef, partProgressDoc)
-    )
-  );
+      t[docSnap.exists ? 'update' : 'set'](docRef, partProgressDoc)));
 };

@@ -31,12 +31,10 @@ const sortByOrder = (a, b) => {
 export const keys = Object.keys(programs).sort(sortByOrder);
 
 
-export const sorted = keys.reduce((memo, key) => {
-  return [
-    ...memo,
-    programs[key],
-  ];
-}, []);
+export const sorted = keys.reduce((memo, key) => [
+  ...memo,
+  programs[key],
+], []);
 
 
 export const getById = id => programs[id];

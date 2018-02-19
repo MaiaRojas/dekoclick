@@ -108,8 +108,11 @@ const Unit = (props) => {
 
 Unit.propTypes = {
   unit: PropTypes.shape({}),
-  parts: PropTypes.arrayOf(PropTypes.shape({})),
+  parts: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  })),
   unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
+  unitProgressStats: PropTypes.shape({}),
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
     params: PropTypes.shape({
@@ -131,6 +134,7 @@ Unit.defaultProps = {
   unit: undefined,
   parts: undefined,
   unitProgress: undefined,
+  unitProgressStats: undefined,
 };
 
 
@@ -197,7 +201,7 @@ export default compose(
     {
       collection: `cohorts/${cohortid}/users/${auth.uid}/progress/${courseid}/syllabus`,
       doc: unitid,
-    }
+    },
   ]),
   connect(mapStateToProps),
   withStyles(styles),

@@ -39,13 +39,13 @@ export const updateForgotRequested = () => ({
   type: FORGOT_REQUESTED,
 });
 
-export const updateSignupError = (err) => ({
+export const updateSignupError = err => ({
   type: UPDATE_SIGNUP_ERROR,
   payload: err,
 });
 
 
-export const updateSigninError = (err) => ({
+export const updateSigninError = err => ({
   type: UPDATE_SIGNIN_ERROR,
   payload: err,
 });
@@ -122,7 +122,7 @@ export default (state = initialState(), action = {}) => {
               return memo;
             }
             return { ...memo, [errorKey]: state.errors[errorKey] };
-          }, {})
+          }, {}),
       };
     case VALIDATE_AND_SUBMIT:
       const errors = Object.keys(state.data).reduce((memo, key) => {

@@ -21,7 +21,6 @@ import {
   updateSigninError,
 } from '../reducers/signin';
 import SignInResults from '../components/signin-results';
-import isEmail from '../util/isEmail';
 
 
 const styles = theme => ({
@@ -65,7 +64,8 @@ const SignInForm = props => (
         autoComplete="email"
         value={props.data.email}
         error={!!props.errors.email}
-        helperText={props.errors && props.errors.email && <FormattedMessage id={props.errors.email} />}
+        helperText={props.errors && props.errors.email &&
+          <FormattedMessage id={props.errors.email} />}
         onChange={e => props.updateSignInField('email', e.target.value)}
         fullWidth
         margin="normal"
@@ -77,7 +77,8 @@ const SignInForm = props => (
           value={props.data.password}
           type="password"
           error={!!props.errors.password}
-          helperText={props.errors && props.errors.password && <FormattedMessage id={props.errors.password} />}
+          helperText={props.errors && props.errors.password &&
+            <FormattedMessage id={props.errors.password} />}
           onChange={e => props.updateSignInField('password', e.target.value)}
           fullWidth
           autoComplete="current-password"

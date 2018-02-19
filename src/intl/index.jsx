@@ -7,7 +7,7 @@ import pt from 'react-intl/locale-data/pt';
 import messages from './messages';
 
 
-addLocaleData([ ...en, ...es, ...pt ]);
+addLocaleData([...en, ...es, ...pt]);
 
 
 const prefixToLocale = {
@@ -26,15 +26,17 @@ const browserLocale =
 const getLocale = (preferredLang) => {
   if (preferredLang && messages[preferredLang]) {
     return preferredLang;
-  } else if (preferredLang && messages[prefixToLocale[preferredLang.split('-')[0]]]) {
-    return prefixToLocale[preferredLang.split('-')[0]];
-  } else if (browserLocale && messages[browserLocale]) {
-    return browserLocale;
-  } else if (browserLocale && messages[prefixToLocale[browserLocale.split('-')[0]]]) {
-    return prefixToLocale[browserLocale.split('-')[0]];
-  } else {
-    return 'es-ES';
   }
+  if (preferredLang && messages[prefixToLocale[preferredLang.split('-')[0]]]) {
+    return prefixToLocale[preferredLang.split('-')[0]];
+  }
+  if (browserLocale && messages[browserLocale]) {
+    return browserLocale;
+  }
+  if (browserLocale && messages[prefixToLocale[browserLocale.split('-')[0]]]) {
+    return prefixToLocale[browserLocale.split('-')[0]];
+  }
+  return 'es-ES';
 };
 
 
@@ -45,6 +47,14 @@ const Intl = (props) => {
       {props.children}
     </IntlProvider>
   );
+};
+
+
+Intl.propTypes = {
+  profile: PropTypes.shape({
+    preferredLang: PropTypes.string,
+  }).isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 

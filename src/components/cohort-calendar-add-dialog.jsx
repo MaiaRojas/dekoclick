@@ -8,7 +8,6 @@ import { withStyles } from 'material-ui/styles';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -73,15 +72,15 @@ const CohortCalendarAddDialog = ({
   if (isValid) {
     firebase.firestore().collection('calendar')
       .add({ ...data, cohortid })
-      .then(docRef => resetCohortCalendarAddDialog())
+      .then(() => resetCohortCalendarAddDialog())
       .catch(console.error);
     return null;
   }
 
   return (
-    <div className={''}>
-      <Dialog open={true} onClose={toggleCalendarAddDialog}>
-        <DialogTitle>{data.id ? 'Edit event': 'New event'}</DialogTitle>
+    <div>
+      <Dialog open onClose={toggleCalendarAddDialog}>
+        <DialogTitle>{data.id ? 'Edit event' : 'New event'}</DialogTitle>
         <DialogContent>
           <FormControl
             error={hasOwnProperty(errors, 'type')}
@@ -214,6 +213,28 @@ const CohortCalendarAddDialog = ({
 };
 
 
+CohortCalendarAddDialog.propTypes = {
+  cohortid: PropTypes.string.isRequired,
+  data: PropTypes.shape({}).isRequired,
+  errors: PropTypes.shape({}).isRequired,
+  isValid: PropTypes.bool,
+  profiles: PropTypes.arrayOf(PropTypes.shape({})),
+  updateCohortCalendarAddDialogField: PropTypes.func.isRequired,
+  validateAndSubmitCohortCalendarAddDialogForm: PropTypes.func.isRequired,
+  resetCohortCalendarAddDialog: PropTypes.func.isRequired,
+  toggleCalendarAddDialog: PropTypes.func.isRequired,
+  classes: PropTypes.shape({}).isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+
+CohortCalendarAddDialog.defaultProps = {
+  isValid: undefined,
+  profiles: undefined,
+};
+
 const sortProfiles = (() => {
   let cachedProfiles = [];
   return (firestore, ownProps) => {
@@ -262,9 +283,8 @@ const mapDispatchToProps = {
 
 
 export default compose(
-  firestoreConnect(
-    props => Object.keys(props.users || []).map(key => `users/${key}`)
-  ),
+  firestoreConnect(props =>
+    Object.keys(props.users || []).map(key => `users/${key}`)),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(CohortCalendarAddDialog);
