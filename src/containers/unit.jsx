@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { injectIntl } from 'react-intl';
 import { withStyles } from 'material-ui/styles';
 import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
@@ -31,15 +32,8 @@ const styles = theme => ({
   },
 });
 
-const selfAssessmentPart = {
-  duration: 10,
-  format: 'self-paced',
-  title: 'Autoevaluación',
-  type: 'self-assessment',
-};
 
-
-const addSelfAssessment = (parts) => {
+const addSelfAssessment = (parts, intl) => {
   const hasSelfAssessment = parts.reduce(
     (memo, part) => memo || /\d{1,2}-self-assessment/.test(part.id),
     false,
@@ -55,7 +49,10 @@ const addSelfAssessment = (parts) => {
 
   return parts.concat({
     id: `${selfAssessment}-self-assessment`,
-    ...selfAssessmentPart,
+    duration: 10,
+    format: 'self-paced',
+    title: intl.formatMessage({ id: 'unit.selfAssessment' }),
+    type: 'self-assessment',
   });
 };
 
@@ -148,14 +145,14 @@ const selectUnit = (data, { cohortid, courseid, unitid }) => {
 };
 
 
-const selectParts = (firestore, { cohortid, courseid, unitid }) => {
+const selectParts = (firestore, { cohortid, courseid, unitid }, intl) => {
   const key = `cohorts/${cohortid}/courses/${courseid}/syllabus/${unitid}/parts`;
 
   if (!firestore.ordered || !firestore.ordered[key]) {
     return undefined;
   }
 
-  return addSelfAssessment(firestore.ordered[key]);
+  return addSelfAssessment(firestore.ordered[key], intl);
 };
 
 
@@ -170,15 +167,16 @@ const selectUnitProgress = (data, { cohortid, courseid, unitid }, uid) => {
 };
 
 
-const mapStateToProps = ({ firestore }, { auth, match }) => ({
+const mapStateToProps = ({ firestore }, { auth, match, intl }) => ({
   unit: selectUnit(firestore.data, match.params),
-  parts: selectParts(firestore, match.params),
+  parts: selectParts(firestore, match.params, intl),
   unitProgress: firestore.ordered.progress,
   unitProgressStats: selectUnitProgress(firestore.data, match.params, auth.uid),
 });
 
 
 export default compose(
+  injectIntl,
   firestoreConnect(({ auth, match: { params: { cohortid, courseid, unitid } } }) => [
     {
       collection: `cohorts/${cohortid}/courses/${courseid}/syllabus`,

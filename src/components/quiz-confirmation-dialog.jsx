@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import Button from 'material-ui/Button';
 import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import { withStyles } from 'material-ui/styles';
@@ -25,23 +26,24 @@ const QuizConfirmationDialog = ({ classes, ...props }) => (
     open={props.quizConfirmationDialogOpen}
     classes={{ paper: classes.dialog }}
   >
-    <DialogTitle>Piénsalo bien...</DialogTitle>
+    <DialogTitle><FormattedMessage id="quiz-confirmation-dialog.title" /></DialogTitle>
     <DialogContent>
       <Alert
         type="warn"
-        message={`¿Estás totalmente segura de que quieres comenzar a responder
-          ESTE quiz? Si comienzas ahora, tendrás ${props.part.durationString}
-          para completar el
-          cuestionario. Pasado ese tiempo, el cuestionario se bloquea y no
-          podrás seguir respondiendo.`}
+        message={
+          <FormattedMessage
+            id="quiz-confirmation-dialog.content"
+            values={{ duration: props.part.durationString }}
+          />
+        }
       />
     </DialogContent>
     <DialogActions>
       <Button onClick={props.toggleQuizConfirmationDialog}>
-        Cancelar
+        <FormattedMessage id="quiz-confirmation-dialog.cancel" />
       </Button>
       <Button variant="raised" color="primary" onClick={props.startQuizAndCloseConfirmationDialog}>
-        Sí, comenzar ahora
+        <FormattedMessage id="quiz-confirmation-dialog.start" />
       </Button>
     </DialogActions>
   </Dialog>

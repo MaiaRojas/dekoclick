@@ -8,6 +8,7 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import ThumbUpIcon from 'material-ui-icons/ThumbUp';
 import ThumbDownIcon from 'material-ui-icons/ThumbDown';
+import { FormattedMessage } from 'react-intl';
 import { updateProgress } from '../util/progress';
 
 
@@ -160,7 +161,7 @@ class UnitPartTracker extends React.Component {
                   onChange={e => e.target.checked && this.markRead()}
                 />
               }
-              label="Marcar como leido"
+              label={<FormattedMessage id="unit-part-tracker:markAsRead" />}
             />
           }
           <div>

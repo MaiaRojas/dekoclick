@@ -9,6 +9,7 @@ import LocalLibraryIcon from 'material-ui-icons/LocalLibrary';
 import GroupIcon from 'material-ui-icons/Group';
 import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
+import { FormattedMessage } from 'react-intl';
 import LeftDrawer from './left-drawer';
 
 
@@ -114,7 +115,7 @@ const MainNav = props => (
         <ListItemIcon>
           <LocalLibraryIcon />
         </ListItemIcon>
-        <ListItemText primary="Mis cursos" />
+        <ListItemText primary={<FormattedMessage id="main-nav.courses" />} />
       </ListItem>
       {props.profile && props.profile.roles && props.profile.roles.admin &&
         <ListItem
@@ -136,7 +137,7 @@ const MainNav = props => (
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary="Settings" />
+        <ListItemText primary={<FormattedMessage id="main-nav.settings" />} />
       </ListItem>
       <div className={props.classes.bottom}>
         <Divider />
@@ -148,7 +149,7 @@ const MainNav = props => (
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
-          <ListItemText primary="Cerrar sessión" />
+          <ListItemText primary={<FormattedMessage id="main-nav.signout" />} />
         </ListItem>
       </div>
     </List>

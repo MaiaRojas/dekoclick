@@ -16,6 +16,7 @@ import PlayArrowIcon from 'material-ui-icons/PlayArrow';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import { LinearProgress } from 'material-ui/Progress';
+import { FormattedMessage } from 'react-intl';
 import Content from './content';
 import ExerciseTestResults from './exercise-test-results';
 import { selectTab, runTestsStart, runTestsEnd } from '../reducers/exercise';
@@ -134,8 +135,8 @@ const Exercise = (props) => {
           textColor="primary"
           centered
         >
-          <Tab label="Enunciado" />
-          <Tab label="Código" />
+          <Tab label={<FormattedMessage id="exercise.problem" />} />
+          <Tab label={<FormattedMessage id="exercise.code" />} />
         </Tabs>
       </AppBar>
       {props.currentTab === 0 &&
@@ -160,11 +161,11 @@ const Exercise = (props) => {
           />
           <Button variant="raised" className={classes.button} onClick={() => runTests(editorText, props)}>
             <PlayArrowIcon />
-            Ejecutar tests
+            <FormattedMessage id="exercise.runTests" />
           </Button>
           <Button variant="raised" className={classes.button} onClick={reset(props)}>
             <RefreshIcon />
-            Resetear
+            <FormattedMessage id="exercise.reset" />
           </Button>
           {props.testsRunning &&
             <LinearProgress className={classes.linearProgress} />

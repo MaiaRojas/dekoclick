@@ -19,18 +19,16 @@ import theme from './style/theme';
 import App from './containers/app';
 
 
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <Component />
-        </MuiThemeProvider>
-      </Provider>
-    </AppContainer>,
-    document.getElementById('root'),
-  );
-};
+const render = Component => ReactDOM.render(
+  <AppContainer>
+    <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <Component />
+      </MuiThemeProvider>
+    </Provider>
+  </AppContainer>,
+  document.getElementById('root'),
+);
 
 
 render(App);

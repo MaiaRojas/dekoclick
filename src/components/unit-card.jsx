@@ -8,6 +8,7 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
+import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
 import { computeUnitProgressStats } from '../util/progress';
 
@@ -36,7 +37,7 @@ const UnitCard = props => (
   <Card className={props.classes.card}>
     <CardContent>
       <Typography variant="title">
-        Unidad {props.idx + 1}: {props.unit.title}
+        <FormattedMessage id="unit-card.unit" /> {props.idx + 1}: {props.unit.title}
       </Typography>
       <Typography
         paragraph
@@ -49,7 +50,10 @@ const UnitCard = props => (
         <div className={props.classes.count}>
           <FolderIcon />
           <Typography className={props.classes.countText}>
-            {props.unit.stats.partCount} partes
+            <FormattedMessage
+              id="unit-card.parts"
+              values={{ count: props.unit.stats.partCount }}
+            />
           </Typography>
         </div>
       )}
@@ -57,7 +61,8 @@ const UnitCard = props => (
         <div className={props.classes.count}>
           <ScheduleIcon />
           <Typography className={props.classes.countText}>
-            <Hidden smDown>Duración estimada: </Hidden>{props.unit.stats.durationString}
+            <Hidden smDown><FormattedMessage id="unit-card.estimatedDuration" />: </Hidden>
+            {props.unit.stats.durationString}
           </Typography>
         </div>
       }
@@ -68,7 +73,7 @@ const UnitCard = props => (
         to={`/cohorts/${props.cohort}/courses/${props.course}/${props.id}`}
         component={Link}
       >
-        {props.progress ? 'Continuar' : 'Empezar'}
+        <FormattedMessage id={`unit-card.${props.progress ? 'continue' : 'start'}`} />
       </Button>
       <Progress value={(props.progressStats || {}).percent || 0} />
     </CardActions>

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { CircularProgress } from 'material-ui/Progress';
+import Intl from '../intl';
 import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
 import SignIn from './signin';
@@ -22,41 +23,42 @@ const App = (props) => {
     return (<CircularProgress />);
   }
 
-  if (props.auth.isEmpty) {
-    return (
-      <Router>
-        <Route
-          path="/:action?/:cohortid?"
-          component={SignIn}
-          authError={props.authError}
-        />
-      </Router>
-    );
-  }
-
   return (
-    <Router>
-      <ScrollToTop>
-        <Switch>
-          <WrappedRoute
-            path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
-            component={Unit}
-            mainNav={false}
-            {...props}
-          />
-          <WrappedRoute
-            path="/cohorts/:cohortid/courses/:courseid"
-            component={Course}
-            {...props}
-          />
-          <WrappedRoute path="/cohorts/:cohortid" component={Cohort} {...props} />
-          <WrappedRoute path="/cohorts" component={Cohorts} {...props} />
-          <WrappedRoute path="/courses" component={Courses} {...props} />
-          <WrappedRoute path="/settings" component={Settings} {...props} />
-          <WrappedRoute exact path="/" component={Dashboard} {...props} />
-        </Switch>
-      </ScrollToTop>
-    </Router>
+    <Intl {...props}>
+      <Router>
+        {props.auth.isEmpty
+          ? (
+            <Route
+              path="/:action?/:cohortid?"
+              component={SignIn}
+              authError={props.authError}
+            />
+          )
+          : (
+            <ScrollToTop>
+              <Switch>
+                <WrappedRoute
+                  path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
+                  component={Unit}
+                  mainNav={false}
+                  {...props}
+                />
+                <WrappedRoute
+                  path="/cohorts/:cohortid/courses/:courseid"
+                  component={Course}
+                  {...props}
+                />
+                <WrappedRoute path="/cohorts/:cohortid" component={Cohort} {...props} />
+                <WrappedRoute path="/cohorts" component={Cohorts} {...props} />
+                <WrappedRoute path="/courses" component={Courses} {...props} />
+                <WrappedRoute path="/settings" component={Settings} {...props} />
+                <WrappedRoute exact path="/" component={Dashboard} {...props} />
+              </Switch>
+            </ScrollToTop>
+          )
+        }
+      </Router>
+    </Intl>
   );
 };
 

@@ -7,6 +7,7 @@ import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import { FormattedMessage } from 'react-intl';
 import QuizConfirmationDialog from './quiz-confirmation-dialog';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
@@ -109,12 +110,10 @@ const Quiz = (props) => {
     return (
       <div className={classes.root}>
         <Typography className={classes.p}>
-          Puedes responder el cuestionario una sola vez y
-          tendrás {part.duration} minutos para hacerlo. Pasados ese tiempo, el
-          cuestionario se bloquea y no podrás seguir respondiendo.
+          <FormattedMessage id="quiz.warnBeforeStart" values={{ duration: part.duration }} />
         </Typography>
         <Typography className={classes.p}>
-          ¿Estás segura(o) de que quieres responder ahora?
+          <FormattedMessage id="quiz.areYouSure" />
         </Typography>
         <Button
           variant="raised"
@@ -122,7 +121,7 @@ const Quiz = (props) => {
           className={classes.startButton}
           onClick={props.toggleQuizConfirmationDialog}
         >
-          Sí, responder ahora
+          <FormattedMessage id="quiz.start" />
         </Button>
         <QuizConfirmationDialog part={part} />
       </div>
@@ -152,7 +151,7 @@ const Quiz = (props) => {
       }
       {!progress.results && (
         <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
-          Enviar
+          <FormattedMessage id="quiz.send" />
         </Button>
       )}
     </div>

@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import SentimentVerySatisfiedIcon from 'material-ui-icons/SentimentVerySatisfied';
 import SentimentNeutralIcon from 'material-ui-icons/SentimentNeutral';
 import SentimentVeryDissatisfiedIcon from 'material-ui-icons/SentimentVeryDissatisfied';
+import { FormattedMessage } from 'react-intl';
 import { updateProgress } from '../util/progress';
 
 
@@ -173,19 +174,19 @@ class SelfAssessment extends React.Component {
             Autoevaluación completada el {formatDate(progress.submittedAt)}
           </Typography>
           <Typography variant="subheading" gutterBottom>
-            1. Así me siento sobre la unidad que acaba de terminar...
+            1. <FormattedMessage id="self-assessment.sentiment" />
           </Typography>
           <Typography gutterBottom>
             {this.sentimentToIcon(progress.sentiment)}
           </Typography>
           <Typography variant="subheading" gutterBottom>
-            2. ¿Por qué te sientes así?
+            2. <FormattedMessage id="self-assessment.feelings" />
           </Typography>
           <Typography gutterBottom>
             {progress.feelings}
           </Typography>
           <Typography variant="subheading" gutterBottom>
-            3. Marca todos los temas que NO te han quedado claros
+            3. <FormattedMessage id="self-assessment.topics" />
           </Typography>
           {(progress.topics || []).map((key, idx) => (
             <Typography key={key || idx}>
@@ -195,7 +196,7 @@ class SelfAssessment extends React.Component {
             </Typography>
           ))}
           <Typography variant="subheading" gutterBottom>
-            4. ¿Hay algo que quieras destacar/mejorar de esta unidad?
+            4. <FormattedMessage id="self-assessment.improvements" />
           </Typography>
           <Typography gutterBottom>
             {progress.improvements || '-'}
@@ -207,7 +208,7 @@ class SelfAssessment extends React.Component {
     return (
       <div className={classes.root}>
         <Typography variant="headline" gutterBottom className={classes.headline}>
-          Autoevaluación
+          <FormattedMessage id="self-assessment.title" />
         </Typography>
 
         <Paper className={classes.paper}>
@@ -218,7 +219,7 @@ class SelfAssessment extends React.Component {
             required
           >
             <FormLabel component="legend">
-              1. Así me siento sobre la unidad que acaba de terminar...
+              1. <FormattedMessage id="self-assessment.sentiment" />
             </FormLabel>
             <FormGroup className={classes.formGroup}>
               <IconButton
@@ -251,7 +252,7 @@ class SelfAssessment extends React.Component {
             required
           >
             <FormLabel component="legend">
-              2. ¿Por qué te sientes así?
+              2. <FormattedMessage id="self-assessment.feelings" />
             </FormLabel>
             <TextField
               multiline
@@ -263,11 +264,11 @@ class SelfAssessment extends React.Component {
           </FormControl>
         </Paper>
 
-        {selfPacedParts.length &&
+        {selfPacedParts.length > 0 &&
           <Paper className={classes.paper}>
             <FormControl className={classes.fieldset} component="fieldset">
               <FormLabel component="legend">
-                3. Marca todos los temas que NO te han quedado claros
+                3. <FormattedMessage id="self-assessment.topics" />
               </FormLabel>
               <FormGroup>
                 {selfPacedParts.map((selfPacedPart, idx) => (
@@ -311,7 +312,7 @@ class SelfAssessment extends React.Component {
         <Paper className={classes.paper}>
           <FormControl className={classes.fieldset} component="fieldset">
             <FormLabel component="legend">
-              {selfPacedParts.length ? '4' : '3'}. ¿Hay algo que quieras destacar/mejorar de esta unidad?
+              {selfPacedParts.length ? '4' : '3'}. <FormattedMessage id="self-assessment.improvements" />
             </FormLabel>
             <TextField
               multiline
@@ -324,7 +325,7 @@ class SelfAssessment extends React.Component {
         </Paper>
 
         <Button variant="raised" color="primary" onClick={this.submit}>
-          Enviar autoevaluación
+          <FormattedMessage id="self-assessment.send" />
         </Button>
       </div>
     );

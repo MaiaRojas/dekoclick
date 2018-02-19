@@ -51,7 +51,10 @@ const TopBar = props => (
 
 
 TopBar.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
   children: PropTypes.shape({}),
   displayDrawer: PropTypes.func.isRequired,
   classes: PropTypes.shape({

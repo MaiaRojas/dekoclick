@@ -11,8 +11,8 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
+import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
-// import { computeCourseProgressStats } from '../util/progress';
 
 
 const styles = theme => ({
@@ -51,7 +51,10 @@ const CourseCard = props => (
         <div className={props.classes.count}>
           <FolderIcon />
           <Typography className={props.classes.countText}>
-            {props.course.stats.unitCount} unidades
+            <FormattedMessage
+              id="course-card.units"
+              values={{ count: props.course.stats.unitCount }}
+            />
           </Typography>
         </div>
       )}
@@ -59,7 +62,8 @@ const CourseCard = props => (
         <div className={props.classes.count}>
           <ScheduleIcon />
           <Typography className={props.classes.countText}>
-            <Hidden smDown>Duración estimada: </Hidden>{props.course.stats.durationString}
+            <Hidden smDown><FormattedMessage id="course-card.estimatedDuration" />: </Hidden>
+            {props.course.stats.durationString}
           </Typography>
         </div>
       }
@@ -70,7 +74,7 @@ const CourseCard = props => (
         to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
         component={Link}
       >
-        {props.progress ? 'Continuar' : 'Empezar'}
+        <FormattedMessage id={`course-card.${props.progress ? 'continue' : 'start'}`} />
       </Button>
       <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
     </CardActions>

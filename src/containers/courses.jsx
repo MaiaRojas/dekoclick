@@ -4,43 +4,30 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
+import { FormattedMessage } from 'react-intl';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CoursesList from '../components/courses-list';
 
 
-const Courses = ({ cohorts, auth }) => {
-  if (!cohorts) {
-    return (<CircularProgress />);
-  }
-
-  if (!cohorts.length) {
-    return (
-      <div className="courses">
-        <TopBar title="Cursos" />
-        <Alert
-          message="Hmmm... parece que todavía no hay ningún curso asociado a
-            tu cuenta. Si crees que esto es un error, contacta a tu instructor o
-            training manager para verificar tu cuenta."
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="courses">
-      <TopBar title="Cursos" />
-      {[...cohorts].reverse().map(cohort => (
-        <CoursesList
-          key={cohort.id}
-          cohort={cohort.id}
-          role={cohort.role}
-          auth={auth}
-        />
-      ))}
-    </div>
-  );
-};
+const Courses = ({ cohorts, auth }) => (
+  <div className="courses">
+    <TopBar title={<FormattedMessage id="courses.title" />} />
+    {!cohorts
+      ? <CircularProgress />
+      : !cohorts.length
+        ? <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+        : [...cohorts].reverse().map(cohort => (
+            <CoursesList
+              key={cohort.id}
+              cohort={cohort.id}
+              role={cohort.role}
+              auth={auth}
+            />
+          ))
+    }
+  </div>
+);
 
 
 Courses.propTypes = {

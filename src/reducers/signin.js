@@ -56,18 +56,18 @@ const validateField = (key, value, state) => {
     case 'email':
       const trimmed = (value || '').trim();
       return {
-        err: (!isEmail(trimmed)) ? 'Please enter a valid email' : null,
+        err: (!isEmail(trimmed)) ? 'signin.errors.invalidEmail' : null,
         sanitized: trimmed,
       };
     case 'password':
       return {
-        err: (!state.forgot && !value) ? 'Password can not be empty' : null,
+        err: (!state.forgot && !value) ? 'signin.errors.invalidPassword' : null,
         sanitized: value,
       };
     case 'password2':
       return {
         err: (state.signup && !state.forgot && value !== state.data.password)
-          ? 'Password missmatch'
+          ? 'signin.errors.passwordMissmatch'
           : null,
         sanitized: value,
       };

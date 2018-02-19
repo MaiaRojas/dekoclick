@@ -7,6 +7,7 @@ import DoneIcon from 'material-ui-icons/Done';
 import ErrorIcon from 'material-ui-icons/Error';
 import red from 'material-ui/colors/red';
 import green from 'material-ui/colors/green';
+import { FormattedMessage } from 'react-intl';
 
 
 const styles = theme => ({
@@ -91,20 +92,22 @@ Suite.propTypes = {
 };
 
 
-const failureSummaryLine = stats =>
-  `${stats.failures} de ${stats.tests} tests fallaron `;
-
-
-const successSummaryLine = stats => `${stats.passes} tests pasaron ;-) `;
-
-
-const summaryLine = stats =>
-  `${stats.failures ? failureSummaryLine(stats) : successSummaryLine(stats)} (${stats.duration}ms)`;
-
-
 const Summary = ({ stats }) => (
   <ListItem>
-    <ListItemText primary={summaryLine(stats)} />
+    <ListItemText
+      primary={
+        stats.failures
+          ? <FormattedMessage
+              id="exercise-test-results.failures"
+              values={{ failures: stats.failures, tests: stats.tests }}
+            />
+          : <FormattedMessage
+              id="exercise-test-results.passes"
+              values={{ passes: stats.passes }}
+            />
+      }
+      secondary={`(${stats.duration}ms)`}
+    />
   </ListItem>
 );
 

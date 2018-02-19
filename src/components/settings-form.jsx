@@ -6,8 +6,9 @@ import Avatar from 'material-ui/Avatar';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import { FormControl, FormLabel } from 'material-ui/Form';
-import Input from 'material-ui/Input';
+import Input, { InputLabel } from 'material-ui/Input';
 import Button from 'material-ui/Button';
+import Select from 'material-ui/Select';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import EditIcon from 'material-ui-icons/Edit';
@@ -161,6 +162,11 @@ class SettingsForm extends React.Component{
 
   render() {
     const props = this.props;
+    const locales = {
+      'es-ES': 'Español',
+      'pt-BR': 'Portugues',
+      'en-US': 'English',
+    };
 
     return (
       <React.Fragment>
@@ -181,6 +187,23 @@ class SettingsForm extends React.Component{
           </Paper>
         )}
 
+        <Paper className={props.classes.paper}>
+          <FormControl>
+            <FormLabel component="legend" className={props.classes.legend}>
+              Preferred language
+            </FormLabel>
+            <Select
+              value={this.state.preferredLang || 'es-ES'}
+              onChange={e => this.updateValueOnProfile('preferredLang', e.target.value)}
+              input={<Input id="preferredLang" />}
+            >
+              {Object.keys(locales).map(key => (
+                <MenuItem key={key} value={key}>{locales[key]}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Paper>
+
         <FormControlWrapper
           {...props}
           inputLabel={'Nombre'}
@@ -189,6 +212,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           inputLabel={'GitHub'}
@@ -199,6 +223,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           inputLabel={'Linkedin'}
@@ -209,6 +234,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}
@@ -220,6 +246,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}
@@ -231,6 +258,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}
@@ -242,6 +270,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}
@@ -253,6 +282,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}
@@ -264,6 +294,7 @@ class SettingsForm extends React.Component{
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer = {this.props.showOpenDialog}
         />
+
         <FormControlWrapper
           {...props}
           multiline = {true}

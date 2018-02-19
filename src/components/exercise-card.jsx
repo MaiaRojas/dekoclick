@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Card, { CardHeader } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
+import { FormattedMessage } from 'react-intl';
 
 
 const matchParamsToURL = ({
@@ -15,11 +16,11 @@ const matchParamsToURL = ({
 
 const progressToString = (progress) => {
   if (!progress.testResults) {
-    return 'Pendiente';
+    return <FormattedMessage id="exercise-card.pending" />;
   } else if (progress.testResults.failures === 0) {
-    return 'Completado';
+    return <FormattedMessage id="exercise-card.complete" />;
   } else if (progress.testResults.failures > 0) {
-    return 'Incompleto';
+    return <FormattedMessage id="exercise-card.incomplete" />;
   }
   return '';
 };

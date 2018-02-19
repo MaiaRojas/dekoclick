@@ -9,6 +9,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import { FormattedMessage } from 'react-intl';
 import {
   updateSignInField,
   validateAndSubmitSignInForm,
@@ -49,7 +50,7 @@ const styles = theme => ({
 });
 
 
-const SignInForm = (props) => (
+const SignInForm = props => (
   <form
     onSubmit={(e) => {
       e.preventDefault();
@@ -60,11 +61,11 @@ const SignInForm = (props) => (
     <div className="controls">
       <TextField
         id="email"
-        label="Email"
+        label={<FormattedMessage id="signin.email" />}
         autoComplete="email"
         value={props.data.email}
         error={!!props.errors.email}
-        helperText={props.errors && props.errors.email}
+        helperText={props.errors && props.errors.email && <FormattedMessage id={props.errors.email} />}
         onChange={e => props.updateSignInField('email', e.target.value)}
         fullWidth
         margin="normal"
@@ -72,11 +73,11 @@ const SignInForm = (props) => (
       {!props.forgot &&
         <TextField
           id="password"
-          label="Password"
+          label={<FormattedMessage id="signin.password" />}
           value={props.data.password}
           type="password"
           error={!!props.errors.password}
-          helperText={props.errors && props.errors.password}
+          helperText={props.errors && props.errors.password && <FormattedMessage id={props.errors.password} />}
           onChange={e => props.updateSignInField('password', e.target.value)}
           fullWidth
           autoComplete="current-password"
@@ -86,11 +87,11 @@ const SignInForm = (props) => (
       {props.signup &&
         <TextField
           id="password2"
-          label="Verify password"
+          label={<FormattedMessage id="signin.verifyPassword" />}
           value={props.data.password2}
           type="password"
           error={!!props.errors.password2}
-          helperText={props.errors && props.errors.password2}
+          helperText={props.errors && props.errors.password2 && <FormattedMessage id={props.errors.password2} />}
           onChange={e => props.updateSignInField('password2', e.target.value)}
           fullWidth
           autoComplete="verify-password"
@@ -107,8 +108,10 @@ const SignInForm = (props) => (
     >
       {
         props.forgot
-          ? 'Reset password'
-          : props.signup ? 'Create account' : 'Sign in'
+          ? <FormattedMessage id="signin.forgot" />
+          : props.signup
+            ? <FormattedMessage id="signin.signup" />
+            : <FormattedMessage id="signin.signin" />
       }
     </Button>
     <SignInResults
@@ -132,7 +135,9 @@ const SignInForgotToggle = (props) => (
         return false;
       }}
     >
-      {props.forgot ? 'Sign in' : 'Forgot password?'}
+      {props.forgot
+        ? <FormattedMessage id="signin.signin" />
+        : <FormattedMessage id="signin.forgot" />}
     </a>
   </Typography>
 );
@@ -223,7 +228,9 @@ const SignInWithFacebookButton = (props) => (
       });
     }}
   >
-    {props.signup ? 'Sign up with Facebook' : 'Sign in with Facebook'}
+    {props.signup
+      ? <FormattedMessage id="signin.signupWithFacebook" />
+      : <FormattedMessage id="signin.signinWithFacebook" />}
   </Button>
 );
 
