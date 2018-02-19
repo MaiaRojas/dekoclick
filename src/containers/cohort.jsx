@@ -7,7 +7,6 @@ import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import Grid from 'material-ui/Grid';
 import List from 'material-ui/List';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
@@ -69,8 +68,7 @@ const Cohort = ({
   match,
   classes,
   history,
-  firebase,
-  auth
+  auth,
 }) => {
   if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
     return (<CircularProgress />);
@@ -205,6 +203,7 @@ Cohort.propTypes = {
   currentTab: PropTypes.number.isRequired,
   userAddDialogOpen: PropTypes.bool.isRequired,
   courseAddDialogOpen: PropTypes.bool.isRequired,
+  courseAddDialogOpen: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
   toggleCalendarAddDialog: PropTypes.func.isRequired,
   toggleUserAddDialog: PropTypes.func.isRequired,
@@ -215,6 +214,7 @@ Cohort.propTypes = {
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({}).isRequired,
+  auth: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
   }).isRequired,

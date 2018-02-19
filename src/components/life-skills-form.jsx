@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
-import IconButton from 'material-ui/IconButton';
-import CommentIcon from 'material-ui-icons/Comment';
 
 
 const styles = theme => ({
@@ -17,80 +15,78 @@ const styles = theme => ({
 
 
 class CheckboxList extends React.Component {
-  state = {
-    checked: [],
-  };
+  constructor(props) {
+    super(props);
 
-  lifeSkills = [
-    'selfLearning',
-    'problemSolving',
-    'timeManagement',
-    'askForHelp',
-    'adaptability',
-    'proactivity',
-    'decisionMaking',
-    'teamWork',
-    'communication',
-    'feedback',
-    'conflictResolution',
-  ];
+    this.state = {
+      checked: [],
+    };
 
-  lifeSkillsIntr = [
-    'Autoaprendizaje',
-    'Solución de problemas',
-    'Planificación y manejo del tiempo',
-    'Comunica su progreso y pide ayuda a tiempo',
-    'Adaptabilidad',
-    'Proactividad',
-    'Toma de decisiones',
-    'Trabajo en equipo',
-    'Comunicación eficaz',
-    'Dar y recibir feedback',
-    'Negociación/resolución de conflictos',
-  ];
+    this.lifeSkills = [
+      'selfLearning',
+      'problemSolving',
+      'timeManagement',
+      'askForHelp',
+      'adaptability',
+      'proactivity',
+      'decisionMaking',
+      'teamWork',
+      'communication',
+      'feedback',
+      'conflictResolution',
+    ];
 
-  handleToggle = value => () => {
-    const { checked } = this.state;
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    this.lifeSkillsIntr = [
+      'Autoaprendizaje',
+      'Solución de problemas',
+      'Planificación y manejo del tiempo',
+      'Comunica su progreso y pide ayuda a tiempo',
+      'Adaptabilidad',
+      'Proactividad',
+      'Toma de decisiones',
+      'Trabajo en equipo',
+      'Comunicación eficaz',
+      'Dar y recibir feedback',
+      'Negociación/resolución de conflictos',
+    ];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+    this.handleToggle = value => () => {
+      const { checked } = this.state;
+      const currentIndex = checked.indexOf(value);
+      const newChecked = [...checked];
 
-    this.setState({ checked: newChecked });
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
 
-    newChecked.forEach(lifeSkill => {
-      const columnName = `lifeSkills/${lifeSkill}/${ this.props.auth.uid}`;
-      const fieldStructure = columnName.split('/').join('.');
-      this.props.firebase.firestore().collection('users').doc(this.props.uid)
-        .update({
-          [`${fieldStructure}`]: {
-            author: this.props.auth.displayName,
-            company: 'Laboratoria',
-            companyUrl: 'www.laboratoria.la',
-          },
-        })
-    });
-  };
+      this.setState({ checked: newChecked });
+
+      newChecked.forEach((lifeSkill) => {
+        const columnName = `lifeSkills/${lifeSkill}/${this.props.auth.uid}`;
+        const fieldStructure = columnName.split('/').join('.');
+        this.props.firebase.firestore().collection('users').doc(this.props.uid)
+          .update({
+            [`${fieldStructure}`]: {
+              author: this.props.auth.displayName,
+              company: 'Laboratoria',
+              companyUrl: 'www.laboratoria.la',
+            },
+          });
+      });
+    };
+  }
 
   componentWillMount() {
-    const findLifeSkill = (authorIds, uid) => {
-      // console.log('authorids', authorIds);
-      // console.log('uid', uid);
-      // console.log('authorIds[uid]', authorIds[uid]);
-      return authorIds[uid] != null;
-    }
+    const findLifeSkill = (authorIds, uid) => authorIds[uid] != null;
 
     this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
-      .then(snap => {
-        let skills = snap.data().lifeSkills;
-        let newChecked = [];
+      .then((snap) => {
+        const skills = snap.data().lifeSkills;
+        const newChecked = [];
         if (skills) {
-          Object.keys(skills).forEach(key => {
-          // skills.forEach(key => {
+          Object.keys(skills).forEach((key) => {
             if (findLifeSkill(skills[key], this.props.auth.uid)) {
               newChecked.push(key);
             }
@@ -118,7 +114,7 @@ class CheckboxList extends React.Component {
                 tabIndex={-1}
                 disableRipple
               />
-              <ListItemText primary={ `${ this.lifeSkillsIntr [index]}`} />
+              <ListItemText primary={`${this.lifeSkillsIntr[index]}`} />
             </ListItem>
           ))}
         </List>
@@ -129,7 +125,7 @@ class CheckboxList extends React.Component {
 
 
 CheckboxList.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({}).isRequired,
 };
 
 

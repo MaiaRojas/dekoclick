@@ -172,13 +172,13 @@ CohortNewDialogForm.propTypes = {
 };
 
 
-const isNewCohort = ({ cohorts, cohortKey }) =>
+const isNewCohort = (cohorts, cohortKey) =>
   Object.keys(cohorts).indexOf(cohortKey) === -1;
 
 
 const CohortNewDialogConfirm = props => (
   <DialogContent>
-    {isNewCohort(props) ?
+    {isNewCohort(props.cohorts, props.cohortKey) ?
       <DialogContentText>
         Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
         Estás segura de que quieres hacer esto?
@@ -264,7 +264,9 @@ const validate = (props) => {
 const CohortNewDialog = ({ classes, ...props }) => (
   <div className={classes.container}>
     <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
-      <DialogTitle>{isNewCohort(props) ? 'New cohort' : 'Update cohort'}</DialogTitle>
+      <DialogTitle>
+        {isNewCohort(props.cohorts, props.cohortKey) ? 'New cohort' : 'Update cohort'}
+      </DialogTitle>
       {props.cohortKey ?
         <CohortNewDialogConfirm classes={classes} {...props} /> :
         <CohortNewDialogForm classes={classes} {...props} />
@@ -296,7 +298,7 @@ const CohortNewDialog = ({ classes, ...props }) => (
               .then(props.resetCohortNewDialog, console.error);
           }}
         >
-          {isNewCohort(props) ? 'Create' : 'Update'}
+          {isNewCohort(props.cohorts, props.cohortKey) ? 'Create' : 'Update'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -314,7 +316,7 @@ CohortNewDialog.propTypes = {
   resetCohortNewDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
   firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+    firestore: PropTypes.func.isRequired,
   }).isRequired,
 };
 

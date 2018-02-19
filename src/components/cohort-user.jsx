@@ -12,7 +12,7 @@ import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
 import gravatarUrl from '../util/gravatarUrl';
 import cohort from '../util/cohort';
-import CohortUserOpenModalButton from './cohort-user-open-modal-button'
+import CohortUserOpenModalButton from './cohort-user-open-modal-button';
 
 
 const styles = theme => ({
@@ -140,9 +140,10 @@ CohortUser.propTypes = {
     email: PropTypes.string.isRequired,
     github: PropTypes.string,
   }).isRequired,
+  auth: PropTypes.shape({}).isRequired,
   toggleMoveDialog: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+    firestore: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     emailContainer: PropTypes.string.isRequired,

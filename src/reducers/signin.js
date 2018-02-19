@@ -52,9 +52,10 @@ export const updateSigninError = err => ({
 
 
 const validateField = (key, value, state) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
   switch (key) {
     case 'email':
-      const trimmed = (value || '').trim();
       return {
         err: (!isEmail(trimmed)) ? 'signin.errors.invalidEmail' : null,
         sanitized: trimmed,
@@ -167,7 +168,7 @@ export default (state = initialState(), action = {}) => {
         signinError: action.payload,
         isValid: undefined,
       };
+    default:
+      return state;
   }
-
-  return state;
 };

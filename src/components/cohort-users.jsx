@@ -22,7 +22,7 @@ const profilesLoaded = profiles => Object.keys(profiles)
   .reduce((memo, uid) => memo && profiles[uid], true);
 
 
-const CohortUsers = (props) =>  {
+const CohortUsers = (props) => {
   if (!profilesLoaded(props.profiles || {})) {
     return <CircularProgress />;
   }
@@ -53,9 +53,8 @@ CohortUsers.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   profiles: PropTypes.shape({}).isRequired,
   toggleMoveDialog: PropTypes.func.isRequired,
-  firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
-  }).isRequired,
+  auth: PropTypes.shape({}).isRequired,
+  firebase: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
   }).isRequired,

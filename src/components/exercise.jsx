@@ -90,7 +90,7 @@ const runTests = (editorText, props) => {
     updateExerciseProgress(firestore, auth, match, changes);
 
   worker.onerror = (event) => {
-    storeResults({ code, error: event.message, updatedAt: (new Date()).toJSON() })
+    storeResults({ code, error: event.message, updatedAt: (new Date()).toJSON() });
     worker.terminate();
     props.runTestsEnd();
   };
@@ -106,7 +106,13 @@ const runTests = (editorText, props) => {
 };
 
 
-const reset = ({ id, exercise, firestore, auth, match }) => () =>
+const reset = ({
+  id,
+  exercise,
+  firestore,
+  auth,
+  match,
+}) => () =>
   updateExerciseProgress(firestore, auth, match, {
     code: getBoilerplate(exercise.files, id),
     testResults: null,
@@ -152,14 +158,18 @@ const Exercise = (props) => {
             mode="javascript"
             theme="github"
             editorProps={{
-              $blockScrolling: true,
+              $blockScrolling: Infinity,
             }}
             value={code}
             onChange={(text) => {
               editorText = text;
             }}
           />
-          <Button variant="raised" className={classes.button} onClick={() => runTests(editorText, props)}>
+          <Button
+            variant="raised"
+            className={classes.button}
+            onClick={() => runTests(editorText, props)}
+          >
             <PlayArrowIcon />
             <FormattedMessage id="exercise.runTests" />
           </Button>

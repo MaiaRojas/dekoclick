@@ -88,6 +88,7 @@ CourseCard.propTypes = {
     title: PropTypes.string.isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
+      unitCount: PropTypes.number.isRequired,
     }),
   }).isRequired,
   cohort: PropTypes.string.isRequired,
@@ -111,7 +112,7 @@ CourseCard.defaultProps = {
 export default compose(
   firestoreConnect(props => [{
     collection: `cohorts/${props.cohort}/users/${props.auth.uid}/progress`,
-    doc: props.course.id
+    doc: props.course.id,
   }]),
   connect(({ firestore }, { cohort, auth, course }) => ({
     progress: firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`]

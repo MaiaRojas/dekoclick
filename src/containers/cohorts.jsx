@@ -76,8 +76,8 @@ const processCohorts = ({
         // courses: Object.keys(cohortCourses[cohort.id] || {}),
         // users: Object.keys(cohortUsers[cohort.id] || {}).length,
         // students: Object.keys(cohortUsers[cohort.id] || {})
-          // .filter(uid => cohortUsers[cohort.id][uid] === 'student')
-          // .length,
+        //   .filter(uid => cohortUsers[cohort.id][uid] === 'student')
+        //   .length,
       },
     ], [])
     .sort((a, b) => {
@@ -163,7 +163,10 @@ const Cohorts = (props) => {
             >
               <div>
                 <IconButton
-                  disabled={Object.keys(cohort.coursesIndex || {}).length > 0 || cohort.usersCount > 0}
+                  disabled={
+                    Object.keys(cohort.coursesIndex || {}).length > 0
+                      || cohort.usersCount > 0
+                  }
                   onClick={() =>
                     window.confirm(`Estás segura de que quieres borrar el cohort ${cohort.id}?`) &&
                       props.firestore.firestore()

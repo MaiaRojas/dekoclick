@@ -33,6 +33,8 @@ export default {
   'unit-card.start': 'Começar',
   'unit-card.continue': 'Continuar',
 
+  'unit-part.formSubmitted': 'Este formulário já foi enviado',
+
   'unit-part-tracker:markAsRead': 'Marcar como lido',
 
   'unit.selfAssessment': 'Auto-avaliação',

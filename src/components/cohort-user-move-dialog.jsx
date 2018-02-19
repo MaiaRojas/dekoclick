@@ -28,7 +28,7 @@ const styles = () => ({
 
 
 const CohortUserMoveDialog = (props) => {
-  if (!props.uid || !props.user || !isLoaded(props.targetCohort)) {
+  if (!props.uid || !props.user || props.targetCohort === undefined) {
     return null;
   }
 

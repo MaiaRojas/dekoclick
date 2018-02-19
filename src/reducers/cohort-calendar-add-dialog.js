@@ -1,6 +1,3 @@
-import moment from 'moment';
-
-
 // Action types
 const TOGGLE = 'lms.laboratoria.la/cohortCalendarAddDialog/TOGGLE';
 const UPDATE_FIELD = 'lms.laboratoria.la/cohortCalendarAddDialog/UPDATE_FIELD';
@@ -125,7 +122,7 @@ const handleToggleAction = (state, payload) => {
     return { ...state, open: !state.open };
   }
 
-  const { errors, sanitized } = validateCalendarEventFields(payload, state);
+  const { sanitized } = validateCalendarEventFields(payload, state);
 
   return {
     ...state,

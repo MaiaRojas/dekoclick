@@ -1,4 +1,4 @@
-export const programs = {
+const programs = {
   pre: {
     id: 'pre',
     order: 0,
@@ -28,16 +28,16 @@ const sortByOrder = (a, b) => {
 };
 
 
-export const keys = Object.keys(programs).sort(sortByOrder);
+const keys = Object.keys(programs).sort(sortByOrder);
 
 
-export const sorted = keys.reduce((memo, key) => [
+const sorted = keys.reduce((memo, key) => [
   ...memo,
   programs[key],
 ], []);
 
 
-export const getById = id => programs[id];
+const getById = id => programs[id];
 
 
 export default {

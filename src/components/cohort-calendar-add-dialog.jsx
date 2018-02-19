@@ -49,7 +49,7 @@ const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      maxHeight: (ITEM_HEIGHT * 4.5) + ITEM_PADDING_TOP,
       width: 250,
     },
   },
@@ -60,9 +60,9 @@ const CohortCalendarAddDialog = ({
   data,
   errors,
   isValid,
-  updateCohortCalendarAddDialogField,
-  validateAndSubmitCohortCalendarAddDialogForm,
-  resetCohortCalendarAddDialog,
+  updateField,
+  validateAndSubmitForm,
+  reset,
   cohortid,
   profiles,
   toggleCalendarAddDialog,
@@ -72,7 +72,7 @@ const CohortCalendarAddDialog = ({
   if (isValid) {
     firebase.firestore().collection('calendar')
       .add({ ...data, cohortid })
-      .then(() => resetCohortCalendarAddDialog())
+      .then(() => reset())
       .catch(console.error);
     return null;
   }
@@ -89,7 +89,7 @@ const CohortCalendarAddDialog = ({
             <InputLabel htmlFor="type">Type</InputLabel>
             <Select
               value={data.type}
-              onChange={e => updateCohortCalendarAddDialogField('type', e.target.value)}
+              onChange={e => updateField('type', e.target.value)}
               input={<Input id="type" />}
             >
               <MenuItem value="classroom">Classroom</MenuItem>
@@ -103,7 +103,7 @@ const CohortCalendarAddDialog = ({
             id="title"
             className={classes.textField}
             value={data.title}
-            onChange={e => updateCohortCalendarAddDialogField('title', e.target.value)}
+            onChange={e => updateField('title', e.target.value)}
             error={hasOwnProperty(errors, 'title')}
             helperText="..."
             margin="dense"
@@ -115,7 +115,7 @@ const CohortCalendarAddDialog = ({
             id="description"
             className={classes.textField}
             value={data.description}
-            onChange={e => updateCohortCalendarAddDialogField('description', e.target.value)}
+            onChange={e => updateField('description', e.target.value)}
             error={hasOwnProperty(errors, 'description')}
             helperText="..."
             margin="dense"
@@ -129,7 +129,7 @@ const CohortCalendarAddDialog = ({
               control={
                 <Switch
                   checked={data.allDay}
-                  onChange={(e, checked) => updateCohortCalendarAddDialogField('allDay', checked)}
+                  onChange={(e, checked) => updateField('allDay', checked)}
                 />
               }
               label="All day event"
@@ -139,7 +139,7 @@ const CohortCalendarAddDialog = ({
             id="start"
             className={classes.dateField}
             value={data.start ? moment(data.start).format('YYYY-MM-DDTHH:mm') : ''}
-            onChange={e => updateCohortCalendarAddDialogField('start', moment(e.target.value).toDate())}
+            onChange={e => updateField('start', moment(e.target.value).toDate())}
             error={hasOwnProperty(errors, 'start')}
             margin="dense"
             label="Start date"
@@ -151,7 +151,7 @@ const CohortCalendarAddDialog = ({
               id="end"
               className={classes.dateField}
               value={data.end ? moment(data.end).format('YYYY-MM-DDTHH:mm') : ''}
-              onChange={e => updateCohortCalendarAddDialogField('end', moment(e.target.value).toDate())}
+              onChange={e => updateField('end', moment(e.target.value).toDate())}
               error={hasOwnProperty(errors, 'end')}
               margin="dense"
               label="End date"
@@ -164,7 +164,7 @@ const CohortCalendarAddDialog = ({
               control={
                 <Switch
                   checked={data.allCohort}
-                  onChange={(e, checked) => updateCohortCalendarAddDialogField('allCohort', checked)}
+                  onChange={(e, checked) => updateField('allCohort', checked)}
                 />
               }
               label="Invite all cohort users (students, instructors and admins)"
@@ -176,7 +176,7 @@ const CohortCalendarAddDialog = ({
               <Select
                 multiple
                 value={data.invitees}
-                onChange={e => updateCohortCalendarAddDialogField('invitees', e.target.value)}
+                onChange={e => updateField('invitees', e.target.value)}
                 input={<Input id="invitees" />}
                 renderValue={selected =>
                   selected
@@ -202,7 +202,7 @@ const CohortCalendarAddDialog = ({
           <Button
             variant="raised"
             color="primary"
-            onClick={validateAndSubmitCohortCalendarAddDialogForm}
+            onClick={validateAndSubmitForm}
           >
             {data.id ? 'Save' : 'Create'}
           </Button>
@@ -219,9 +219,9 @@ CohortCalendarAddDialog.propTypes = {
   errors: PropTypes.shape({}).isRequired,
   isValid: PropTypes.bool,
   profiles: PropTypes.arrayOf(PropTypes.shape({})),
-  updateCohortCalendarAddDialogField: PropTypes.func.isRequired,
-  validateAndSubmitCohortCalendarAddDialogForm: PropTypes.func.isRequired,
-  resetCohortCalendarAddDialog: PropTypes.func.isRequired,
+  updateField: PropTypes.func.isRequired,
+  validateAndSubmitForm: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   toggleCalendarAddDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
   firebase: PropTypes.shape({
@@ -276,9 +276,9 @@ const mapStateToProps = ({ cohortCalendarAddDialog, firestore }, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  updateCohortCalendarAddDialogField,
-  validateAndSubmitCohortCalendarAddDialogForm,
-  resetCohortCalendarAddDialog,
+  updateField: updateCohortCalendarAddDialogField,
+  validateAndSubmitForm: validateAndSubmitCohortCalendarAddDialogForm,
+  reset: resetCohortCalendarAddDialog,
 };
 
 

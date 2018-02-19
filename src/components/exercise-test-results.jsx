@@ -98,13 +98,13 @@ const Summary = ({ stats }) => (
       primary={
         stats.failures
           ? <FormattedMessage
-              id="exercise-test-results.failures"
-              values={{ failures: stats.failures, tests: stats.tests }}
-            />
+            id="exercise-test-results.failures"
+            values={{ failures: stats.failures, tests: stats.tests }}
+          />
           : <FormattedMessage
-              id="exercise-test-results.passes"
-              values={{ passes: stats.passes }}
-            />
+            id="exercise-test-results.passes"
+            values={{ passes: stats.passes }}
+          />
       }
       secondary={`(${stats.duration}ms)`}
     />

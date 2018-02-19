@@ -103,27 +103,26 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
               const batch = db.batch();
 
               courseRef.get()
-                .then(courseSnap =>
+                .then(courseSnap => (
                   (!courseSnap.exists)
                     ? new Error('Not found')
                     : batch.set(cohortCourseRef, courseSnap.data())
-                )
+                ))
                 .then(() =>
                   syllabusRef.get().then((syllabusSnap) => {
                     const partsPromises = [];
-                    syllabusSnap.forEach(docSnap => {
+                    syllabusSnap.forEach((docSnap) => {
                       const cohortCourseUnitRef = cohortCourseSyllabusRef.doc(docSnap.id);
                       batch.set(cohortCourseUnitRef, docSnap.data());
                       const partsRef = syllabusRef.doc(docSnap.id).collection('parts');
-                      partsPromises.push(partsRef.get().then(partsSnap => {
-                        partsSnap.forEach(partSnap => {
+                      partsPromises.push(partsRef.get().then((partsSnap) => {
+                        partsSnap.forEach((partSnap) => {
                           batch.set(cohortCourseUnitRef.collection('parts').doc(partSnap.id), partSnap.data());
                         });
                       }));
                     });
                     return Promise.all(partsPromises);
-                  })
-                )
+                  }))
                 .then(() => batch.commit())
                 .then(props.resetCohortCourseAddDialog)
                 .catch(console.error);
@@ -147,7 +146,7 @@ CohortCourseAddDialog.propTypes = {
   resetCohortCourseAddDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
   firebase: PropTypes.shape({
-    database: PropTypes.func.isRequired,
+    firestore: PropTypes.func.isRequired,
   }).isRequired,
 };
 
@@ -158,10 +157,11 @@ CohortCourseAddDialog.defaultProps = {
 };
 
 
-const selectCourses = (cohortCourses, courses) =>
+const selectCourses = (cohortCourses, courses) => (
   (!courses || !courses.length)
     ? courses
-    : courses.filter(item => !hasOwnProperty(cohortCourses || {}, item.id));
+    : courses.filter(item => !hasOwnProperty(cohortCourses || {}, item.id))
+);
 
 
 const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { courses }) => ({

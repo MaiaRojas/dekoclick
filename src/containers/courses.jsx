@@ -18,13 +18,13 @@ const Courses = ({ cohorts, auth }) => (
       : !cohorts.length
         ? <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
         : [...cohorts].reverse().map(cohort => (
-            <CoursesList
-              key={cohort.id}
-              cohort={cohort.id}
-              role={cohort.role}
-              auth={auth}
-            />
-          ))
+          <CoursesList
+            key={cohort.id}
+            cohort={cohort.id}
+            role={cohort.role}
+            auth={auth}
+          />
+        ))
     }
   </div>
 );

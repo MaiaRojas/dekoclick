@@ -92,7 +92,9 @@ const SignInForm = props => (
           value={props.data.password2}
           type="password"
           error={!!props.errors.password2}
-          helperText={props.errors && props.errors.password2 && <FormattedMessage id={props.errors.password2} />}
+          helperText={props.errors && props.errors.password2 && (
+            <FormattedMessage id={props.errors.password2} />
+          )}
           onChange={e => props.updateSignInField('password2', e.target.value)}
           fullWidth
           autoComplete="verify-password"
@@ -124,6 +126,22 @@ const SignInForm = props => (
     />
   </form>
 );
+
+
+SignInForm.propTypes = {
+  data: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+    password2: PropTypes.string,
+  }).isRequired,
+  errors: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+    password2: PropTypes.string,
+  }).isRequired,
+  validateAndSubmitSignInForm: PropTypes.func.isRequired,
+  updateSignInField: PropTypes.func.isRequired,
+};
 
 
 const SignInForgotToggle = (props) => (
@@ -178,7 +196,7 @@ const SignInWithFacebookButton = (props) => (
         // console.log(err);
         if (err.code === 'auth/account-exists-with-different-credential') {
           const pendingCred = err.credential;
-          const email = err.email;
+          const { email } = err;
 
           auth.fetchProvidersForEmail(email).then((providers) => {
             // If the user has several providers, the first provider in the
@@ -201,7 +219,7 @@ const SignInWithFacebookButton = (props) => (
 
             // All the other cases are external providers.
             // TODO: implement getProviderForProviderId.
-            var provider = getProviderForProviderId(providers[0]);
+            const provider = getProviderForProviderId(providers[0]);
             // At this point, you should let the user know that he already
             // has an account but with a different provider, and let him
             // validate the fact he wants to sign in with this provider.
@@ -209,7 +227,7 @@ const SignInWithFacebookButton = (props) => (
             // triggered asynchronously, so in real scenario you should ask
             // the user to click on a "continue" button that will trigger
             // the signInWithPopup.
-            return auth.signInWithPopup(provider).then((result) => {
+            return auth.signInWithPopup(provider).then((result) =>
               // Remember that the user may have signed in with an account
               // that has a different email address than the first one. This
               // can happen as Firebase doesn't control the provider's sign
@@ -219,11 +237,10 @@ const SignInWithFacebookButton = (props) => (
               // Link to Facebook credential.
               // As we have access to the pending credential, we can
               // directly call the link method.
-              return result.user.link(pendingCred).then(() => {
+              result.user.link(pendingCred).then(() => {
                 // Facebook account successfully linked to existing user.
                 // goToApp();
-              });
-            });
+              }));
           });
         }
       });
@@ -241,8 +258,7 @@ const postSignUp = (props, uid, email) => {
   const db = props.firestore.firestore();
   return db.doc(`users/${uid}`).set({ email })
     .then(() =>
-      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' })
-    )
+      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' }))
     .then(() => {
       props.resetSignInForm();
       // TODO: for some reason props.history.push() doesn't trigger route, so
@@ -253,7 +269,7 @@ const postSignUp = (props, uid, email) => {
 };
 
 
-const SignIn = props => {
+const SignIn = (props) => {
   const { email, password } = props.data;
   const auth = props.firestore.auth();
 
@@ -292,15 +308,15 @@ const SignIn = props => {
         {props.signup && !props.cohort
           ? (<div style={{ textAlign: 'center' }}>No cohort selected</div>)
           : (
-              <div>
-                {props.signup && (
-                  <div style={{ textAlign: 'center' }}>{props.cohortid}</div>
-                )}
-                <SignInForm {...props} />
-                {!props.signup && <SignInForgotToggle {...props} />}
-                <SignInWithFacebookButton {...props} />
-              </div>
-            )
+            <div>
+              {props.signup && (
+                <div style={{ textAlign: 'center' }}>{props.cohortid}</div>
+              )}
+              <SignInForm {...props} />
+              {!props.signup && <SignInForgotToggle {...props} />}
+              <SignInWithFacebookButton {...props} />
+            </div>
+          )
         }
       </Paper>
     </div>
@@ -382,10 +398,9 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect((props) =>
-    props.match.params.action === 'signup'
+  firestoreConnect(props =>
+    (props.match.params.action === 'signup')
       ? [{ collection: 'cohorts', doc: props.match.params.cohortid }]
-      : []
-  ),
+      : []),
   withStyles(styles),
 )(SignIn);

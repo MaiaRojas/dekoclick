@@ -36,16 +36,16 @@ class UnitPartTracker extends React.Component {
 
   componentDidMount() {
     this.markOpened();
-    // if (this.isReadType()) {
+    if (this.canBeMarkedAsRead()) {
       this.checkReadCompleted();
       window.addEventListener('scroll', this.handleScroll);
-    // }
+    }
   }
 
   componentWillUnmount() {
-    // if (this.isReadType()) {
+    if (this.canBeMarkedAsRead()) {
       window.removeEventListener('scroll', this.handleScroll);
-    // }
+    }
   }
 
   getUnitProgressPath() {
@@ -71,9 +71,21 @@ class UnitPartTracker extends React.Component {
     );
   }
 
-  // isReadType() {
-  //   return ['lectura', 'read'].indexOf(this.props.part.type) > -1;
-  // }
+  canBeMarkedAsRead() {
+    if (this.props.part.type === 'quiz') {
+      return false;
+    }
+    if (this.props.part.type === 'self-assessment') {
+      return false;
+    }
+    if (this.props.part.type === 'practice' && this.props.part.exercises) {
+      return false;
+    }
+    if (this.props.part.embeds && this.props.part.embeds.find(embed => embed.type === 'form')) {
+      return false;
+    }
+    return true;
+  }
 
   markOpened() {
     if (this.props.partProgress && this.props.partProgress.openedAt) {
@@ -152,7 +164,7 @@ class UnitPartTracker extends React.Component {
         <Component {...rest} />
         <hr className={classes.hr} />
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-          {/*this.isReadType()*/ true &&
+          {this.canBeMarkedAsRead() &&
             <FormControlLabel
               control={
                 <Checkbox

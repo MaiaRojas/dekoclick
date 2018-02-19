@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
-import { FormControl, FormLabel } from 'material-ui/Form';
-import Input from 'material-ui/Input';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import EditIcon from 'material-ui-icons/Edit';
 import TopBar from '../components/top-bar';
-import SettingsForm from '../components/settings-form'
+import SettingsForm from '../components/settings-form';
+
 
 const styles = theme => ({
   paper: {
@@ -26,14 +21,14 @@ const styles = theme => ({
 const Settings = props => (
   <div className="settings">
     <TopBar title="Settings" />
-
-         <SettingsForm {...props} uid = {props.auth.uid} showOpenDialog = {true} />
-   </div>
+    <SettingsForm {...props} uid={props.auth.uid} showOpenDialog />
+  </div>
 );
 
 
 Settings.propTypes = {
   auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     displayName: PropTypes.string,
   }).isRequired,

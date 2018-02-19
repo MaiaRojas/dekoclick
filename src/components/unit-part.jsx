@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { injectIntl } from 'react-intl';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 import Content from './content';
@@ -11,7 +13,6 @@ const styles = theme => ({
     width: '100%',
     maxWidth: theme.maxContentWidth,
     height: '100%',
-    // background: '#fff',
     margin: '0 auto',
     padding: theme.spacing.unit * 4,
   },
@@ -31,27 +32,54 @@ const paramsToQueryStrign = (params) =>
     (memo, key) => (params[key])
       ? `${memo ? `${memo}&` : ''}${key}=${encodeURIComponent(params[key])}`
       : memo,
-    ''
+    '',
   );
 
 
-const addTypeFormUrlParams = (body, auth, { params }) =>
-  body.replace(
-    /src="(https:\/\/[a-z0-9\-]+.typeform.com\/to\/[a-zA-Z0-9]+)"/,
-    `src="$1?${paramsToQueryStrign({
+const typeformUrlPattern = /https:\/\/[a-z0-9\-]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
+
+
+const processTypeFormUrls = (part, unitProgress, auth, { params }, intl) => {
+  if (!part.embeds || !part.embeds.filter(embed => embed.type === 'form').length) {
+    return part.body;
+  }
+
+  const fragment = document.createElement('div');
+  fragment.innerHTML = part.body;
+  const iframes = fragment.getElementsByTagName('iframe');
+
+  Array.prototype.slice.call(iframes).forEach((iframe) => {
+    const matches = typeformUrlPattern.exec(iframe.src);
+    const formProgress = matches && matches.length > 1 && unitProgress.find(
+      item => item.partid === params.partid && item.formid === matches[1],
+    );
+
+    if (formProgress && formProgress.submittedAt) {
+      const newNode = document.createElement('div');
+      newNode.innerHTML = intl.formatMessage({ id: 'unit-part.formSubmitted' });
+      iframe.parentNode.replaceChild(newNode, iframe);
+      return;
+    }
+
+    iframe.src += `?${paramsToQueryStrign({
       uid: auth.uid,
       email: auth.email,
       fname: auth.displayName,
       ...params,
-    })}"`
-  );
+    })}`;
+  });
+
+  return fragment.innerHTML;
+};
 
 
 const UnitPart = ({
   unit,
+  unitProgress,
   parts,
   part,
   partProgress,
+  intl,
   auth,
   classes,
   match,
@@ -68,11 +96,9 @@ const UnitPart = ({
       />
     </div>
     {part.type === 'self-assessment' &&
-      <div>
-        <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
-      </div>
+      <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
     }
-    {part.body && <Content html={addTypeFormUrlParams(part.body, auth, match)} />}
+    {part.body && <Content html={processTypeFormUrls(part, unitProgress, auth, match, intl)} />}
   </div>
 );
 
@@ -99,4 +125,7 @@ UnitPart.propTypes = {
 };
 
 
-export default withStyles(styles)(UnitPart);
+export default compose(
+  injectIntl,
+  withStyles(styles),
+)(UnitPart);

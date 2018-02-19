@@ -91,9 +91,8 @@ const selectSyllabus = (firestore, { cohortid, courseid }) => {
 };
 
 
-const selectProgressStats = (firestore, { cohortid, courseid }, uid) => {
-  return firestore.ordered[`cohorts/${cohortid}/users/${uid}/progress/${courseid}/syllabus`];
-};
+const selectProgressStats = (firestore, { cohortid, courseid }, uid) =>
+  firestore.ordered[`cohorts/${cohortid}/users/${uid}/progress/${courseid}/syllabus`];
 
 
 export default compose(

@@ -163,9 +163,8 @@ class SelfAssessment extends React.Component {
 
   render() {
     const { classes, progress } = this.props;
-    const selfPacedParts = this.props.parts.filter(
-      part => part.format === 'self-paced' && part.type !== 'self-assessment'
-    );//.sort();
+    const selfPacedParts = this.props.parts
+      .filter(part => part.format === 'self-paced' && part.type !== 'self-assessment');
 
     if (progress && progress.submittedAt) {
       return (
@@ -223,18 +222,21 @@ class SelfAssessment extends React.Component {
             </FormLabel>
             <FormGroup className={classes.formGroup}>
               <IconButton
+                className={classes.sentimentIcon}
                 color={this.state.sentiment === 1 ? 'primary' : 'default'}
                 onClick={() => this.setState({ sentiment: 1 })}
               >
                 {this.sentimentToIcon(1)}
               </IconButton>
               <IconButton
+                className={classes.sentimentIcon}
                 color={this.state.sentiment === 0 ? 'primary' : 'default'}
                 onClick={() => this.setState({ sentiment: 0 })}
               >
                 {this.sentimentToIcon(0)}
               </IconButton>
               <IconButton
+                className={classes.sentimentIcon}
                 color={this.state.sentiment === -1 ? 'primary' : 'default'}
                 onClick={() => this.setState({ sentiment: -1 })}
               >

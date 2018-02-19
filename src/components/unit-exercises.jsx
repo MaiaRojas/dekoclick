@@ -32,7 +32,7 @@ const UnitExercises = ({
   const id = match.params.exerciseid;
   const exercises = parseExercises(part.exercises);
   const exercisesProgress = unitProgress.filter(
-    item => item.partid === part.id && item.type === 'exercise'
+    item => item.partid === part.id && item.type === 'exercise',
   );
 
   if (!id) {

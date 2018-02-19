@@ -14,6 +14,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 40,
   },
   title: {
     margin: `0 0 ${theme.spacing.unit * 2}px`,
@@ -33,7 +34,7 @@ const CohortSection = ({
   onAdd,
 }) => (
   <div>
-    <div className={classes.heading} style={{ marginTop: 40 }}>
+    <div className={classes.heading}>
       <Typography variant="headline" gutterBottom className={classes.title}>
         {title}
       </Typography>
@@ -54,6 +55,19 @@ const CohortSection = ({
     </div>
   </div>
 );
+
+
+CohortSection.propTypes = {
+  children: PropTypes.element.isRequired,
+  classes: PropTypes.shape({}).isRequired,
+  title: PropTypes.string.isRequired,
+  onAdd: PropTypes.func,
+};
+
+
+CohortSection.defaultProps = {
+  onAdd: undefined,
+};
 
 
 export default withStyles(styles)(CohortSection);

@@ -1,24 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
-import { FormControl, FormLabel } from 'material-ui/Form';
-import Input from 'material-ui/Input';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import EditIcon from 'material-ui-icons/Edit';
-import TopBar from '../components/top-bar';
-import { CircularProgress } from 'material-ui/Progress';
-import { firebaseConnect, dataToJS, isLoaded, isEmpty } from 'react-redux-firebase';
-import MenuItem from 'material-ui/Menu/MenuItem';
+import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import hasOwnProperty from '../util/hasOwnProperty';
 import AppBar from 'material-ui/AppBar';
 import GithubCard from '../components/github-card';
-import SettingsForm from '../components/settings-form'
-import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
+import SettingsForm from '../components/settings-form';
 import LifeSkillsForm from '../components/life-skills-form';
 
 
@@ -31,87 +19,73 @@ const styles = theme => ({
   legend: {
     marginBottom: theme.spacing.unit * 2,
   },
-  // listItem: {
-  //   width: '100%',
-  //   maxWidth: 360,
-  //   backgroundColor: theme.palette.background.paper,
-  // },
 });
 
 
-function TabContainer(props) {
-  return (
-    <div component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </div>
-  );
-}
-
-
 class ValidationForm extends React.Component {
-	state = {
-    githubUrls: [],
-    recomendation: '',
-    selectedTab: 0,
-    githubUrls: {},
-	};
+  constructor(props) {
+    super(props);
+    this.state = {
+      githubUrls: [],
+      recomendation: '',
+      selectedTab: 0,
+      githubUrls: {},
+    };
 
-  handleChange = (event, selectedTab) => {
-    this.setState({ ...this.state, selectedTab });
+    this.handleChange = (event, selectedTab) => {
+      this.setState({ ...this.state, selectedTab });
+    };
   }
 
   projectsForm() {
-    return this.state.githubUrls && Object.values(this.state.githubUrls).map((url, index) => {
-      return (
-        <GithubCard
-          url={url}
-          pos={index}
-          key={index}
-          firebase={this.props.firebase}
-          uid={this.props.uid}
-        />
-      );
-    });
+    return this.state.githubUrls && Object.values(this.state.githubUrls).map((url, index) => (
+      <GithubCard
+        url={url}
+        pos={index}
+        key={index}
+        firebase={this.props.firebase}
+        uid={this.props.uid}
+      />
+    ));
   }
 
   endorseForm() {
-    const { classes } = this.props;
-    const db = this.props.firebase.firestore();
-    const userDocRef = db.collection('users').doc(this.props.uid);
+    const { uid, auth, profile, firebase, classes } = this.props;
+    const db = firebase.firestore();
+    const userDocRef = db.collection('users').doc(uid);
 
     return (
       <div>
-        <LifeSkillsForm
-          firebase={this.props.firebase}
-          uid={this.props.uid}
-          auth={this.props.auth}
-        />
-
-        <FormControl component="fieldset" fullWidth={true}>
+        <LifeSkillsForm firebase={firebase} uid={uid} auth={auth} />
+        <FormControl component="fieldset" fullWidth>
           <TextField
-            id={'recomendation'}
-            label={`Escribe una recomendación para ${this.props.profile.name}`}
+            id="recomendation"
+            label={`Escribe una recomendación para ${profile.name}`}
             value={this.state.recomendation || ''}
             multiline
             rowsMax="5"
-            className={this.props.classes.textField}
+            className={classes.textField}
             margin="normal"
-            error={ this.state.recomendation.length > 280  }
-            helperText={ this.state.recomendation.length > 280 ? 'Error: use solo 280 caracteres' : 'Puedes usar hasta 280 caracteres.' }
+            error={this.state.recomendation.length > 280}
+            helperText={
+              this.state.recomendation.length > 280
+                ? 'Error: use solo 280 caracteres'
+                : 'Puedes usar hasta 280 caracteres.'
+            }
             margin="dense"
             onChange={(e) => {
               this.setState({ recomendation: e.target.value });
               userDocRef.update({
-                [`recomendations.${this.props.auth.uid}`]: {
-                  from: this.props.auth.displayName,
+                [`recomendations.${auth.uid}`]: {
+                  from: auth.displayName,
                   company: 'Laboratoria',
                   companyUrl: 'www.laboratoria.la',
                   detail: e.target.value,
                 },
               });
-             }}
-           />
-         </FormControl>
+            }}
+          />
+        </FormControl>
       </div>
     );
   }
@@ -125,24 +99,23 @@ class ValidationForm extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.profile) {
-      if (this.props.profile.githubUrls) {
+    const { profile, auth } = this.props;
+    if (profile) {
+      if (profile.githubUrls) {
         this.setState({
-          githubUrls: Object.values(this.props.profile.githubUrls)
-        })
+          githubUrls: Object.values(profile.githubUrls),
+        });
       }
 
-      if (this.props.profile.recomendations && this.props.profile.recomendations[this.props.auth.uid]) {
+      if (profile.recomendations && profile.recomendations[auth.uid]) {
         this.setState({
-          recomendation: this.props.profile.recomendations[this.props.auth.uid].detail,
+          recomendation: profile.recomendations[auth.uid].detail,
         });
       }
     }
   }
 
-	render() {
-		const props = this.props;
-
+  render() {
     return (
       <div className="settings">
         <AppBar position="static" color="default">
@@ -167,14 +140,6 @@ class ValidationForm extends React.Component {
 }
 
 
-const ValidationContainer = (props) => {
-	// if (!props.profile.name) {
-	// 	return <CircularProgress />;
-	// }
-	return <ValidationForm {...props} />;
-};
-
-
 ValidationForm.propTypes = {
   classes: PropTypes.shape({
     paper: PropTypes.string.isRequired,
@@ -183,4 +148,4 @@ ValidationForm.propTypes = {
 };
 
 
-export default withStyles(styles)(ValidationContainer);
+export default withStyles(styles)(ValidationForm);

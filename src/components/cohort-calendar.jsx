@@ -57,14 +57,29 @@ const CohortCalendar = (props) => {
 };
 
 
-const selectCalendarEvents = (ordered) =>
+CohortCalendar.propTypes = {
+  cohort: PropTypes.shape({
+    start: PropTypes.string.isRequired,
+    end: PropTypes.string,
+  }).isRequired,
+  events: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleCalendarAddDialog: PropTypes.func.isRequired,
+};
+
+
+CohortCalendar.defaultProps = {
+  events: undefined,
+};
+
+
+const selectCalendarEvents = ordered => (
   (!ordered || !ordered.calendar)
     ? undefined
-    : ordered.calendar.map(item =>
+    : ordered.calendar.map(item => (
       (item.allDay && item.start && !item.end)
         ? { ...item, end: new Date(item.start + (24 * 60 * 60 * 1000)) }
-        : item
-    );
+        : item))
+);
 
 
 export default compose(
@@ -74,7 +89,7 @@ export default compose(
     orderBy: [['start', 'desc']],
   }]),
   connect(
-    ({ firestore: { ordered } }, { cohortid }) => ({
+    ({ firestore: { ordered } }) => ({
       events: selectCalendarEvents(ordered),
     }),
   ),

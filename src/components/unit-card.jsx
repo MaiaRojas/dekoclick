@@ -10,7 +10,6 @@ import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
-import { computeUnitProgressStats } from '../util/progress';
 
 
 const styles = theme => ({
@@ -88,6 +87,7 @@ UnitCard.propTypes = {
     description: PropTypes.string.isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
+      partCount: PropTypes.number.isRequired,
     }),
   }).isRequired,
   progressStats: PropTypes.shape({}),

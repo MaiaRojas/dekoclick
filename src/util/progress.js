@@ -33,3 +33,6 @@ export const updateProgress = (
     t.get(docRef).then(docSnap =>
       t[docSnap.exists ? 'update' : 'set'](docRef, partProgressDoc)));
 };
+
+
+export default { updateProgress };

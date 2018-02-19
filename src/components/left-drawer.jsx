@@ -25,7 +25,7 @@ const LeftDrawer = props => (
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
-        anchor={'left'}
+        anchor="left"
       >
         {props.children}
       </Drawer>
