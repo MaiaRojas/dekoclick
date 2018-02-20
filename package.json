@@ -8,7 +8,7 @@
     "pretest": "eslint --ext .js --ext .jsx src/ test/",
     "test": "FIREBASE_API_KEY=xxx FIREBASE_PROJECT=xxx FIREBASE_MESSAGING_SENDER_ID=xxx jest --verbose --coverage",
     "watch": "yarn test --watch",
-    "build": "NODE_ENV=production webpack -p",
+    "build": "NODE_ENV=production webpack",
     "build:staging": "yarn build --env.backend=laboratoria-la-staging",
     "build:production": "yarn build --env.backend=laboratoria-la",
     "deploy:staging": "firebase deploy --only hosting --project laboratoria-la-lms-staging",
@@ -72,6 +72,7 @@
     "redux-firestore": "^0.2.6",
     "redux-logger": "^3.0.6",
     "sinon": "^4.2.2",
+    "uglifyjs-webpack-plugin": "^1.2.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"

@@ -7,6 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
 
 const extractTextWebpackPlugin = new ExtractTextWebpackPlugin({
   filename: 'main.css'
@@ -132,6 +134,7 @@ module.exports = env => {
 
     config.plugins = [
       new CleanWebpackPlugin([targetPathRel]),
+      new UglifyJSPlugin(),
       new FaviconsWebpackPlugin({
         logo: './img/favicon.png',
         background: '#f7b617',
