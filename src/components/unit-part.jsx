@@ -27,11 +27,13 @@ const styles = theme => ({
 });
 
 
-const paramsToQueryStrign = (params) =>
+const paramsToQueryStrign = params =>
   Object.keys(params).reduce(
-    (memo, key) => (params[key])
-      ? `${memo ? `${memo}&` : ''}${key}=${encodeURIComponent(params[key])}`
-      : memo,
+    (memo, key) => (
+      (params[key])
+        ? `${memo ? `${memo}&` : ''}${key}=${encodeURIComponent(params[key])}`
+        : memo
+    ),
     '',
   );
 
@@ -61,12 +63,14 @@ const processTypeFormUrls = (part, unitProgress, auth, { params }, intl) => {
       return;
     }
 
-    iframe.src += `?${paramsToQueryStrign({
-      uid: auth.uid,
-      email: auth.email,
-      fname: auth.displayName,
-      ...params,
-    })}`;
+    Object.assign(iframe, {
+      src: `${iframe.src}?${paramsToQueryStrign({
+        uid: auth.uid,
+        email: auth.email,
+        fname: auth.displayName,
+        ...params,
+      })}`,
+    });
   });
 
   return fragment.innerHTML;
@@ -104,13 +108,17 @@ const UnitPart = ({
 
 
 UnitPart.propTypes = {
-  unit: PropTypes.shape({}),
+  unit: PropTypes.shape({}).isRequired,
+  unitProgress: PropTypes.shape({}),
+  parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
     format: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
     body: PropTypes.string,
   }).isRequired,
+  partProgress: PropTypes.shape({}),
+  intl: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     meta: PropTypes.string.isRequired,
@@ -122,6 +130,12 @@ UnitPart.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+};
+
+
+UnitPart.defaultProps = {
+  unitProgress: undefined,
+  partProgress: undefined,
 };
 
 

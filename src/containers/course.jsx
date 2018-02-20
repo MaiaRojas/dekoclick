@@ -64,8 +64,8 @@ Course.propTypes = {
 
 Course.defaultProps = {
   course: undefined,
-  progress: undefined,
   syllabus: undefined,
+  progressStats: undefined,
 };
 
 

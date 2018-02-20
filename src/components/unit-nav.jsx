@@ -22,23 +22,25 @@ const getUnitOrder = (unit, match) => {
 };
 
 
-const getPartProgress = (partid, unitProgress) =>
+const getPartProgress = (partid, unitProgress) => (
   (/^\d{2}-self-assessment$/.test(partid))
     ? unitProgress.find(item => item.type === 'self-assessment')
-    : unitProgress.find(item => item.partid === partid);
+    : unitProgress.find(item => item.partid === partid)
+);
 
 
-const getPartProgressStats = (part, unitProgressStats) =>
+const getPartProgressStats = (part, unitProgressStats) => (
   (part.type === 'self-assessment')
     ? unitProgressStats.selfAssessment
-    : (unitProgressStats.parts || {})[part.id];
+    : (unitProgressStats.parts || {})[part.id]
+);
 
 
 const UnitNav = ({
   unit,
   parts,
-  unitProgressStats,
   unitProgress,
+  unitProgressStats,
   classes,
   match,
   history,
@@ -79,6 +81,7 @@ UnitNav.propTypes = {
   }).isRequired,
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
+  unitProgressStats: PropTypes.shape({}),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -94,7 +97,8 @@ UnitNav.propTypes = {
 
 
 UnitNav.defaultProps = {
-  unitProgress: null,
+  unitProgress: undefined,
+  unitProgressStats: undefined,
 };
 
 

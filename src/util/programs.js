@@ -9,9 +9,14 @@ const programs = {
     order: 1,
     name: 'Bootcamp',
   },
+  jp: {
+    id: 'jp',
+    order: 2,
+    name: 'Job plcacement',
+  },
   ec: {
     id: 'ec',
-    order: 2,
+    order: 3,
     name: 'Educación continua',
   },
 };
@@ -22,7 +27,7 @@ const sortByOrder = (a, b) => {
     return 1;
   }
   if (programs[a].order < programs[b].order) {
-    return 1;
+    return -1;
   }
   return 0;
 };

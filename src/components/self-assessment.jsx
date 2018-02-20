@@ -336,8 +336,8 @@ class SelfAssessment extends React.Component {
 
 
 SelfAssessment.propTypes = {
-  unit: PropTypes.shape({}),
-  parts: PropTypes.arrayOf(PropTypes.shape({})),
+  unit: PropTypes.shape({}).isRequired,
+  parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   progress: PropTypes.shape({}),
   firestore: PropTypes.shape({
     auth: PropTypes.func.isRequired,
@@ -352,8 +352,6 @@ SelfAssessment.propTypes = {
 
 
 SelfAssessment.defaultProps = {
-  unit: undefined,
-  parts: undefined,
   progress: undefined,
 };
 

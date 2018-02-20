@@ -23,6 +23,22 @@ import {
 import SignInResults from '../components/signin-results';
 
 
+// handle successful signup (add profile data and assign cohort)
+const postSignUp = (props, uid, email) => {
+  const db = props.firestore.firestore();
+  return db.doc(`users/${uid}`).set({ email })
+    .then(() =>
+      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' }))
+    .then(() => {
+      props.resetSignInForm();
+      // TODO: for some reason props.history.push() doesn't trigger route, so
+      // forcing a page reload for the time being; ugly... I know :-S
+      // props.history.push('/');
+      window.location = '/';
+    });
+};
+
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -139,12 +155,30 @@ SignInForm.propTypes = {
     password: PropTypes.string,
     password2: PropTypes.string,
   }).isRequired,
+  forgot: PropTypes.bool.isRequired,
+  signup: PropTypes.bool.isRequired,
+  forgotRequested: PropTypes.bool.isRequired,
+  forgotResult: PropTypes.shape({}),
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
   updateSignInField: PropTypes.func.isRequired,
+  classes: PropTypes.shape({
+    submitBtn: PropTypes.string.isRequired,
+  }).isRequired,
+  authError: PropTypes.shape({}),
+  signupError: PropTypes.shape({}),
+  signinError: PropTypes.shape({}),
 };
 
 
-const SignInForgotToggle = (props) => (
+SignInForm.defaultProps = {
+  forgotResult: undefined,
+  authError: undefined,
+  signupError: undefined,
+  signinError: undefined,
+};
+
+
+const SignInForgotToggle = props => (
   <Typography>
     <a
       href="/"
@@ -162,7 +196,13 @@ const SignInForgotToggle = (props) => (
 );
 
 
-const SignInWithFacebookButton = (props) => (
+SignInForgotToggle.propTypes = {
+  forgot: PropTypes.bool.isRequired,
+  toggleForgot: PropTypes.func.isRequired,
+};
+
+
+const SignInWithFacebookButton = props => (
   <Button
     variant="raised"
     color="primary"
@@ -182,7 +222,7 @@ const SignInWithFacebookButton = (props) => (
       // console.log(firestore.auth().languageCode);
 
       provider.setCustomParameters({
-        'display': 'popup',
+        display: 'popup',
       });
 
       auth.signInWithPopup(provider).then((result) => {
@@ -227,7 +267,7 @@ const SignInWithFacebookButton = (props) => (
             // triggered asynchronously, so in real scenario you should ask
             // the user to click on a "continue" button that will trigger
             // the signInWithPopup.
-            return auth.signInWithPopup(provider).then((result) =>
+            return auth.signInWithPopup(provider).then(result =>
               // Remember that the user may have signed in with an account
               // that has a different email address than the first one. This
               // can happen as Firebase doesn't control the provider's sign
@@ -253,19 +293,9 @@ const SignInWithFacebookButton = (props) => (
 );
 
 
-// handle successful signup (add profile data and assign cohort)
-const postSignUp = (props, uid, email) => {
-  const db = props.firestore.firestore();
-  return db.doc(`users/${uid}`).set({ email })
-    .then(() =>
-      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' }))
-    .then(() => {
-      props.resetSignInForm();
-      // TODO: for some reason props.history.push() doesn't trigger route, so
-      // forcing a page reload for the time being; ugly... I know :-S
-      // props.history.push('/');
-      window.location = '/';
-    });
+SignInWithFacebookButton.propTypes = {
+  signup: PropTypes.bool.isRequired,
+  firestore: PropTypes.shape({}).isRequired,
 };
 
 
@@ -342,10 +372,15 @@ SignIn.propTypes = {
   toggleForgot: PropTypes.func.isRequired,
   updateForgotRequested: PropTypes.func.isRequired,
   updateForgotResult: PropTypes.func.isRequired,
+  updateSignupError: PropTypes.func.isRequired,
+  updateSigninError: PropTypes.func.isRequired,
+  resetSignInForm: PropTypes.func.isRequired,
   authError: PropTypes.shape({
     code: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   }),
+  signupError: PropTypes.shape({}),
+  signinError: PropTypes.shape({}),
   firestore: PropTypes.shape({
     auth: PropTypes.func.isRequired,
   }).isRequired,
@@ -359,7 +394,10 @@ SignIn.propTypes = {
 
 
 SignIn.defaultProps = {
+  isValid: undefined,
   authError: undefined,
+  signupError: undefined,
+  signinError: undefined,
   forgotRequested: false,
   forgotResult: undefined,
   cohortid: undefined,
@@ -398,9 +436,10 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect(props =>
+  firestoreConnect(props => (
     (props.match.params.action === 'signup')
       ? [{ collection: 'cohorts', doc: props.match.params.cohortid }]
-      : []),
+      : []
+  )),
   withStyles(styles),
 )(SignIn);

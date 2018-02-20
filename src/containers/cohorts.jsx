@@ -20,7 +20,7 @@ import TopBar from '../components/top-bar';
 import CohortNewDialog from '../components/cohort-new-dialog';
 import { toggleCohortNewDialog } from '../reducers/cohort-new-dialog';
 import { setCohortsCampusFilter, setCohortsProgramFilter } from '../reducers/cohorts';
-import cohortParser from '../util/cohort';
+import { parse as parseCohortId } from '../util/cohort';
 import programs from '../util/programs';
 
 
@@ -42,14 +42,6 @@ const styles = theme => ({
     minWidth: 120,
   },
 });
-
-
-// const trackIdToName = {
-//   core: 'Common core',
-//   js: 'JavaScript',
-//   ux: 'UX',
-//   mobile: 'Mobile',
-// };
 
 
 const parseDate = (str) => {
@@ -183,7 +175,7 @@ const Cohorts = (props) => {
         </Paper>
       ))}
       {props.newDialogOpen &&
-        <CohortNewDialog campuses={props.campuses} {...props} />
+        <CohortNewDialog campuses={props.campuses} />
       }
     </div>
   );
@@ -205,7 +197,10 @@ Cohorts.propTypes = {
     filterContainer: PropTypes.string.isRequired,
     formControl: PropTypes.string.isRequired,
   }).isRequired,
-  firestore: PropTypes.shape({}).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  firestore: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 
@@ -223,7 +218,7 @@ const filterCohorts = (cohorts, filters) => {
   }
 
   return cohorts.reduce((memo, cohort) => {
-    const parsed = cohortParser.parse(cohort.id);
+    const parsed = parseCohortId(cohort.id);
     if (filters.campus && filters.campus !== parsed.campus) {
       return memo;
     }

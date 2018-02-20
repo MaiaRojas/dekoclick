@@ -59,8 +59,8 @@ const Cohort = ({
   users,
   currentTab,
   calendarAddDialogOpen,
-  userAddDialogOpen,
   courseAddDialogOpen,
+  userAddDialogOpen,
   selectTab,
   toggleCalendarAddDialog,
   toggleUserAddDialog,
@@ -201,9 +201,9 @@ Cohort.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({})),
   courses: PropTypes.arrayOf(PropTypes.shape({})),
   currentTab: PropTypes.number.isRequired,
+  calendarAddDialogOpen: PropTypes.bool.isRequired,
+  courseAddDialogOpen: PropTypes.bool.isRequired,
   userAddDialogOpen: PropTypes.bool.isRequired,
-  courseAddDialogOpen: PropTypes.bool.isRequired,
-  courseAddDialogOpen: PropTypes.bool.isRequired,
   selectTab: PropTypes.func.isRequired,
   toggleCalendarAddDialog: PropTypes.func.isRequired,
   toggleUserAddDialog: PropTypes.func.isRequired,
@@ -240,8 +240,8 @@ const mapStateToProps = ({
   courses: firestore.ordered[`cohorts/${match.params.cohortid}/courses`],
   currentTab: cohort.currentTab,
   calendarAddDialogOpen: cohortCalendarAddDialog.open,
-  userAddDialogOpen: cohortUserAddDialog.open,
   courseAddDialogOpen: cohortCourseAddDialog.open,
+  userAddDialogOpen: cohortUserAddDialog.open,
 });
 
 

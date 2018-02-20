@@ -103,6 +103,7 @@ SignInResults.propTypes = {
     message: PropTypes.string.isRequired,
   }),
   signupError: PropTypes.shape({}),
+  signinError: PropTypes.shape({}),
   classes: PropTypes.shape({
     results: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
@@ -118,6 +119,7 @@ SignInResults.defaultProps = {
   authError: undefined,
   forgotResult: undefined,
   signupError: undefined,
+  signinError: undefined,
 };
 
 

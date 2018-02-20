@@ -80,9 +80,9 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         onChange={e => props.updateCohortNewDialogProgram(e.target.value)}
         input={<Input id="program" />}
       >
-        <MenuItem value="pre">Selección</MenuItem>
-        <MenuItem value="bc">Bootcamp</MenuItem>
-        <MenuItem value="ec">Educación Continua</MenuItem>
+        {programs.sorted.map(program => (
+          <MenuItem key={program.id} value={program.id}>{program.name}</MenuItem>
+        ))}
       </Select>
     </FormControl>
     <FormControl
@@ -211,7 +211,7 @@ const validate = (props) => {
     campus, program, track, name, start, end,
   } = props;
   const errors = [];
-  const campusesKeys = props.campuses.map(campus => campus.id);
+  const campusesKeys = props.campuses.map(item => item.id);
 
   if (campusesKeys.indexOf(campus) === -1) {
     errors.push({
@@ -308,6 +308,7 @@ const CohortNewDialog = ({ classes, ...props }) => (
 
 CohortNewDialog.propTypes = {
   open: PropTypes.bool.isRequired,
+  cohorts: PropTypes.shape({}).isRequired,
   cohortKey: PropTypes.string.isRequired,
   errors: PropTypes.shape({}).isRequired,
   toggleCohortNewDialog: PropTypes.func.isRequired,

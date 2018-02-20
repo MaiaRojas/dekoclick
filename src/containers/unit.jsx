@@ -69,7 +69,7 @@ const Unit = (props) => {
     return <Redirect to={`${props.match.url}/${props.parts[0].id}`} />;
   }
 
-  const part = props.parts.filter(part => part.id === partid)[0];
+  const part = props.parts.filter(p => p.id === partid)[0];
   const partProgress = (part.type === 'self-assessment')
     ? props.unitProgress.find(item => item.type === 'self-assessment')
     : props.unitProgress.find(item => item.partid === partid);

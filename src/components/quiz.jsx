@@ -165,8 +165,8 @@ Quiz.propTypes = {
   }).isRequired,
   partProgress: PropTypes.shape({
     results: PropTypes.shape({}),
-    startedAt: PropTypes.date,
-    submittedAt: PropTypes.date,
+    startedAt: PropTypes.instanceOf(Date),
+    submittedAt: PropTypes.instanceOf(Date),
   }),
   firestore: PropTypes.shape({
     update: PropTypes.func.isRequired,
@@ -188,7 +188,7 @@ Quiz.propTypes = {
 
 
 Quiz.defaultProps = {
-  progress: undefined,
+  partProgress: undefined,
 };
 
 

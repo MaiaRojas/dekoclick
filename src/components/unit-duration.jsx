@@ -101,7 +101,7 @@ UnitDuration.propTypes = {
     type: PropTypes.string.isRequired,
   }).isRequired,
   progress: PropTypes.shape({
-    startedAt: PropTypes.date,
+    startedAt: PropTypes.instanceOf(Date),
     results: PropTypes.shape({}),
   }).isRequired,
 };

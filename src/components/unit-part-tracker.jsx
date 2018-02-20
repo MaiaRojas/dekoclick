@@ -204,15 +204,22 @@ UnitPartTracker.propTypes = {
   ]).isRequired,
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,
+    exercises: PropTypes.shape({}),
+    embeds: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   partProgress: PropTypes.shape({
-    openedAt: PropTypes.date,
-    readAt: PropTypes.date,
+    openedAt: PropTypes.instanceOf(Date),
+    readAt: PropTypes.instanceOf(Date),
     like: PropTypes.bool,
   }),
-  auth: PropTypes.shape({}).isRequired,
+  auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+  }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,

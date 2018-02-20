@@ -378,7 +378,12 @@ class SettingsForm extends React.Component {
 
 
 SettingsForm.propTypes = {
-  showOpenDialog: PropTypes.bool.isRequired,
+  showOpenDialog: PropTypes.bool,
+};
+
+
+SettingsForm.defaultProps = {
+  showOpenDialog: undefined,
 };
 
 

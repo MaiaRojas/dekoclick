@@ -16,7 +16,7 @@ import {
   resetCohortUserMoveDialog,
   moveUser,
 } from '../reducers/cohort-user-move-dialog';
-import cohort from '../util/cohort';
+import { parse, stringify } from '../util/cohort';
 
 
 const styles = () => ({
@@ -109,10 +109,10 @@ CohortUserMoveDialog.defaultProps = {
 
 
 const getTargetCohortId = (cohortid) => {
-  const parsedCohortId = cohort.parse(cohortid);
+  const parsedCohortId = parse(cohortid);
   const targetShift = (parsedCohortId.name === 'am') ? 'pm' : 'am';
   const targetCohortIdObj = { ...parsedCohortId, name: targetShift };
-  return cohort.stringify(targetCohortIdObj);
+  return stringify(targetCohortIdObj);
 };
 
 
@@ -127,7 +127,7 @@ const mapStateToProps = ({ firestore, cohortUserMoveDialog }, { cohortid }) => {
     targetCohort: {
       ...((firestore.data.cohorts || {})[targetCohortId]),
       id: targetCohortId,
-      parsedId: cohort.parse(targetCohortId),
+      parsedId: parse(targetCohortId),
     },
   };
 };

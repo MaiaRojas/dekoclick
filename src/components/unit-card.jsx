@@ -72,7 +72,7 @@ const UnitCard = props => (
         to={`/cohorts/${props.cohort}/courses/${props.course}/${props.id}`}
         component={Link}
       >
-        <FormattedMessage id={`unit-card.${props.progress ? 'continue' : 'start'}`} />
+        <FormattedMessage id={`unit-card.${props.progressStats ? 'continue' : 'start'}`} />
       </Button>
       <Progress value={(props.progressStats || {}).percent || 0} />
     </CardActions>
@@ -81,6 +81,7 @@ const UnitCard = props => (
 
 
 UnitCard.propTypes = {
+  id: PropTypes.string.isRequired,
   idx: PropTypes.number.isRequired,
   unit: PropTypes.shape({
     title: PropTypes.string.isRequired,
@@ -91,9 +92,8 @@ UnitCard.propTypes = {
     }),
   }).isRequired,
   progressStats: PropTypes.shape({}),
-  cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  cohort: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,

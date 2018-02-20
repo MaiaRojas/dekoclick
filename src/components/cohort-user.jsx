@@ -11,7 +11,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
 import gravatarUrl from '../util/gravatarUrl';
-import cohort from '../util/cohort';
+import { parse } from '../util/cohort';
 import CohortUserOpenModalButton from './cohort-user-open-modal-button';
 
 
@@ -59,7 +59,7 @@ UserAvatar.propTypes = {
 const CohortUser = (props) => {
   // Averigua si es un cohort de common core del bootcamp para saber si se puede
   // "migrar" al turno de la mañana o tarde según corresponda.
-  const { program, name } = cohort.parse(props.cohortid);
+  const { program, name } = parse(props.cohortid);
   const canMigrate = (program === 'bc' && ['am', 'pm'].indexOf(name) >= 0);
 
   return (
@@ -140,7 +140,7 @@ CohortUser.propTypes = {
     email: PropTypes.string.isRequired,
     github: PropTypes.string,
   }).isRequired,
-  auth: PropTypes.shape({}).isRequired,
+  auth: PropTypes.shape({}),
   toggleMoveDialog: PropTypes.func.isRequired,
   firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
@@ -149,6 +149,11 @@ CohortUser.propTypes = {
     emailContainer: PropTypes.string.isRequired,
     truncate: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+
+CohortUser.defaultProps = {
+  auth: undefined,
 };
 
 
