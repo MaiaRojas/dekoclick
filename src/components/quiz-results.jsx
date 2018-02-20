@@ -6,6 +6,7 @@ import Typography from 'material-ui/Typography';
 import green from 'material-ui/colors/green';
 import yellow from 'material-ui/colors/yellow';
 import red from 'material-ui/colors/red';
+import { FormattedMessage } from 'react-intl';
 
 
 const styles = theme => ({
@@ -47,7 +48,7 @@ const QuizResults = ({ results, classes }) => {
   return (
     <Paper className={`${classes.root} ${colorClass}`}>
       <Typography variant="body1" className={`${classes.body} ${colorClass}`}>
-        Ya respondiste este cuestionario y acertaste el
+        <FormattedMessage id="quiz-results.score" />
       </Typography>
       <Typography variant="display1" className={colorClass}>
         {`${percent}%`}

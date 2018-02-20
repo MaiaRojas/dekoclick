@@ -83,7 +83,7 @@ const handleSubmit = ({
 
   updateQuizProgress(firestore, auth, match, {
     results,
-    submittedAt: (new Date()).toJSON(),
+    submittedAt: new Date(),
   });
 };
 

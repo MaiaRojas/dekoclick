@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import SentimentVerySatisfiedIcon from 'material-ui-icons/SentimentVerySatisfied';
 import SentimentNeutralIcon from 'material-ui-icons/SentimentNeutral';
 import SentimentVeryDissatisfiedIcon from 'material-ui-icons/SentimentVeryDissatisfied';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedDate } from 'react-intl';
 import { updateProgress } from '../util/progress';
 
 
@@ -48,12 +48,6 @@ const styles = theme => ({
     display: 'none',
   },
 });
-
-
-const formatDate = (submittedAt) => {
-  const date = new Date(submittedAt);
-  return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
-};
 
 
 class SelfAssessment extends React.Component {
@@ -170,7 +164,8 @@ class SelfAssessment extends React.Component {
       return (
         <div className={classes.root}>
           <Typography variant="headline" gutterBottom className={classes.headline}>
-            Autoevaluación completada el {formatDate(progress.submittedAt)}
+            <FormattedMessage id="self-assessment.submittedOn" /> {' '}
+            <FormattedDate value={progress.submittedAt} />
           </Typography>
           <Typography variant="subheading" gutterBottom>
             1. <FormattedMessage id="self-assessment.sentiment" />

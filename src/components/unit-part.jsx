@@ -109,7 +109,7 @@ const UnitPart = ({
 
 UnitPart.propTypes = {
   unit: PropTypes.shape({}).isRequired,
-  unitProgress: PropTypes.shape({}),
+  unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   part: PropTypes.shape({
     type: PropTypes.string.isRequired,

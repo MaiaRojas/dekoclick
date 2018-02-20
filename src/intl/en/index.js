@@ -45,6 +45,7 @@ export default {
   'self-assessment.topics': 'Check all parts that you feel you don\'t yet understand',
   'self-assessment.improvements': 'Is there anything you would like to highlight or improve in this unit?',
   'self-assessment.send': 'Send self assessment',
+  'self-assessment.submittedOn': 'Self assessment submitted on',
 
   'quiz.warnBeforeStart': `You can answer this quiz only once and you will
     have {duration} minutes to do so. After this time has passed, the quiz
@@ -60,6 +61,8 @@ export default {
     you will not be able to continue answering questions.`,
   'quiz-confirmation-dialog.cancel': 'Cancel',
   'quiz-confirmation-dialog.start': 'Yes, start now',
+
+  'quiz-results.score': 'You already took this quiz and got a score of',
 
   'exercise-card.pending': 'Pending',
   'exercise-card.complete': 'Done',

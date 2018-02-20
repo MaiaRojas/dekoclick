@@ -45,6 +45,7 @@ export default {
   'self-assessment.topics': 'Marque todos os tópicos que NÃO foram claros para você',
   'self-assessment.improvements': 'Existe alguma coisa que você deseja destacar/melhorar desta unidade?',
   'self-assessment.send': 'Enviar auto-avaliação',
+  'self-assessment.submittedOn': 'Auto-avaliação concluída em',
 
   'quiz.warnBeforeStart': `Você pode responder o questionário uma vez e você
     terá {duration} minutos para fazê-lo. Após esse tempo, o questionário está
@@ -60,6 +61,8 @@ export default {
     você não poderá continuar respondendo.`,
   'quiz-confirmation-dialog.cancel': 'Cancelar',
   'quiz-confirmation-dialog.start': 'Sim, comece agora',
+
+  'quiz-results.score': 'Você já respondeu este questionário e adivinhou',
 
   'exercise-card.pending': 'Pendente',
   'exercise-card.complete': 'Concluído',

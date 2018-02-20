@@ -37,7 +37,7 @@ blockquote {
 }
 
 code {
-  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace;
+  font-family: Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace;
   font-size: 13px;
   color: #880000;
   background-color: #f0f0f0;
@@ -93,4 +93,6 @@ pre > code {
 
 .ace_editor {
   margin-top: 10px;
+  font-size: 16px !important;
+  font-family: Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace !important;
 }

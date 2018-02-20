@@ -90,13 +90,13 @@ const runTests = (editorText, props) => {
     updateExerciseProgress(firestore, auth, match, changes);
 
   worker.onerror = (event) => {
-    storeResults({ code, error: event.message, updatedAt: (new Date()).toJSON() });
+    storeResults({ code, error: event.message, updatedAt: new Date() });
     worker.terminate();
     props.runTestsEnd();
   };
 
   worker.onmessage = (e) => {
-    storeResults({ code, testResults: e.data, updatedAt: (new Date()).toJSON() });
+    storeResults({ code, testResults: e.data, updatedAt: new Date() });
     worker.terminate();
     props.runTestsEnd();
   };
@@ -157,6 +157,7 @@ const Exercise = (props) => {
             name={props.id}
             mode="javascript"
             theme="github"
+            tabSize={2}
             editorProps={{
               $blockScrolling: Infinity,
             }}
