@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
-import 'brace/theme/github';
+// import 'brace/theme/github';
+import 'brace/theme/solarized_dark';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -156,7 +157,7 @@ const Exercise = (props) => {
             style={{ width: '100%', marginBottom: 30 }}
             name={props.id}
             mode="javascript"
-            theme="github"
+            theme="solarized_dark"
             tabSize={2}
             editorProps={{
               $blockScrolling: Infinity,
