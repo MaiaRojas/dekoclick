@@ -39,22 +39,55 @@ const styles = theme => ({
 
 
 const UnitCardAdmin = (props) => {
-  const toggle = () =>
+  const selfAssessmentIsEnabled = courseSettings =>
+    courseSettings
+    && courseSettings.units
+    && courseSettings.units[props.unit.id]
+    && courseSettings.units[props.unit.id].selfAssessment
+    && courseSettings.units[props.unit.id].selfAssessment.enabled === false
+      ? false
+      : true;
+
+  const toggleDialog = () =>
     props.toggleAdminActions(`${props.cohort}/${props.course}/${props.unit.id}`);
+
+  const toggleSelfAssessmentEnable = () => {
+    const db = props.firestore.firestore();
+    const courseSettingsDocPath = `cohorts/${props.cohort}/coursesSettings/${props.course}`;
+    const courseSettingsDocRef = db.doc(courseSettingsDocPath);
+
+    db.runTransaction(t =>
+      t.get(courseSettingsDocRef).then((docSnap) => {
+        const data = docSnap.data() || {};
+        t[docSnap.exists ? 'update' : 'set'](courseSettingsDocRef, {
+          ...data,
+          units: {
+            ...(data.units || {}),
+            [props.unit.id]: {
+              ...(data.units || {})[props.unit.id] || {},
+              selfAssessment: {
+                enabled: !selfAssessmentIsEnabled(data),
+              },
+            },
+          }
+        });
+      })
+    );
+  };
 
   return (
     <div className={props.classes.root}>
       <IconButton
         className={props.classes.headingButton}
         aria-label="Manage"
-        onClick={toggle}
+        onClick={toggleDialog}
       >
         <SettingsIcon />
       </IconButton>
       <Dialog
         fullScreen={false}
         open={!!props.openUnits[`${props.cohort}/${props.course}/${props.unit.id}`]}
-        onClose={toggle}
+        onClose={toggleDialog}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">Unit options</DialogTitle>
@@ -65,37 +98,15 @@ const UnitCardAdmin = (props) => {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={!!((((props.courseSettings || {}).units || {})[props.unit.id] || {}).selfAssessment || {}).enabled}
-                    onChange={() => {
-                      const db = props.firestore.firestore();
-                      const courseSettingsDocPath = `cohorts/${props.cohort}/coursesSettings/${props.course}`;
-                      const courseSettingsDocRef = db.doc(courseSettingsDocPath);
-
-                      db.runTransaction((t) => {
-                        return t.get(courseSettingsDocRef).then((docSnap) => {
-                          const data = docSnap.data() || {};
-                          t[docSnap.exists ? 'update' : 'set'](courseSettingsDocRef, {
-                            ...data,
-                            units: {
-                              ...(data.units || {}),
-                              [props.unit.id]: {
-                                ...(data.units || {})[props.unit.id] || {},
-                                selfAssessment: {
-                                  enabled: !(((data.units || {})[props.unit.id] || {}).selfAssessment || {}).enabled,
-                                },
-                              },
-                            }
-                          });
-                        });
-                      });
-                    }}
+                    checked={selfAssessmentIsEnabled(props.courseSettings)}
+                    onChange={toggleSelfAssessmentEnable}
                     value="enable"
                   />
                 }
                 label="Enable"
               />
             </FormGroup>
-            <FormHelperText>Be careful</FormHelperText>
+            {/* <FormHelperText>Be careful</FormHelperText> */}
           </FormControl>
         </DialogContent>
       </Dialog>

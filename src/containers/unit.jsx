@@ -72,9 +72,9 @@ const Unit = (props) => {
   const unitSettings = ((props.courseSettings || {}).units || {})[unitid] || {};
   const selfAssessmentSettings = unitSettings.selfAssessment || {};
   console.log(unitSettings, selfAssessmentSettings);
-  const parts = selfAssessmentSettings.enabled
-    ? addSelfAssessment(props.parts, props.intl)
-    : props.parts;
+  const parts = selfAssessmentSettings.enabled === false
+    ? props.parts
+    : addSelfAssessment(props.parts, props.intl);
 
   if (!partid && parts.length) {
     return <Redirect to={`${props.match.url}/${parts[0].id}`} />;
