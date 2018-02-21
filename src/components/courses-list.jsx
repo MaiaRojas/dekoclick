@@ -6,12 +6,23 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import SettingsIcon from 'material-ui-icons/Settings';
 import CourseCard from './course-card';
 
 
 const styles = theme => ({
+  heading: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 40,
+  },
   headline: {
     marginBottom: theme.spacing.unit * 2,
+  },
+  headingButton: {
+    top: theme.spacing.unit * -1,
   },
   container: {
     display: 'flex',
@@ -26,6 +37,8 @@ const CoursesList = ({
   courses,
   classes,
   auth,
+  profile,
+  history,
 }) => {
   if (!courses) {
     return (<CircularProgress />);
@@ -35,16 +48,31 @@ const CoursesList = ({
     return (<div>No courses :-(</div>);
   }
 
+  const canManageCourse =
+    ['instructor', 'admin'].indexOf(cohort.role) > -1
+    || (profile.roles && profile.roles.admin);
+
   return (
     <div>
-      <Typography variant="headline" gutterBottom className={classes.headline}>
-        {cohort}
-      </Typography>
+      <div className={classes.heading}>
+        <Typography variant="headline" gutterBottom className={classes.headline}>
+          {cohort.id}
+        </Typography>
+        {canManageCourse && (
+          <IconButton
+            className={classes.headingButton}
+            aria-label="Manage"
+            onClick={() => history.push(`/cohorts/${cohort.id}`)}
+          >
+            <SettingsIcon />
+          </IconButton>
+        )}
+      </div>
       <div className={classes.container}>
         {courses.map(course =>
           (<CourseCard
             key={course.id}
-            cohort={cohort}
+            cohort={cohort.id}
             course={course}
             auth={auth}
           />))}
@@ -58,7 +86,9 @@ CoursesList.propTypes = {
   courses: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
   })),
-  cohort: PropTypes.string.isRequired,
+  cohort: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
   auth: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     headline: PropTypes.string.isRequired,
@@ -72,14 +102,13 @@ CoursesList.defaultProps = {
 };
 
 
-// list courses for a given cohort
 export default compose(
   firestoreConnect(props => [{
-    collection: `cohorts/${props.cohort}/courses`,
+    collection: `cohorts/${props.cohort.id}/courses`,
     orderBy: ['order'],
   }]),
   connect(({ firestore }, { cohort }) => ({
-    courses: firestore.ordered[`cohorts/${cohort}/courses`],
+    courses: firestore.ordered[`cohorts/${cohort.id}/courses`],
   })),
   withStyles(styles),
 )(CoursesList);

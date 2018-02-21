@@ -10,11 +10,15 @@ import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
+import UnitCardAdmin from './unit-card-admin';
 
 
 const styles = theme => ({
   card: {
     marginBottom: theme.spacing.unit * 4,
+  },
+  cardContent: {
+    position: 'relative',
   },
   cardActions: {
     justifyContent: 'space-between',
@@ -34,7 +38,15 @@ const styles = theme => ({
 
 const UnitCard = props => (
   <Card className={props.classes.card}>
-    <CardContent>
+    <CardContent className={props.classes.cardContent}>
+      {props.canManageCourse &&
+        <UnitCardAdmin
+          unit={props.unit}
+          cohort={props.cohort}
+          course={props.course}
+          courseSettings={props.courseSettings}
+        />
+      }
       <Typography variant="title">
         <FormattedMessage id="unit-card.unit" /> {props.idx + 1}: {props.unit.title}
       </Typography>
@@ -69,7 +81,7 @@ const UnitCard = props => (
         size="small"
         variant="raised"
         color="primary"
-        to={`/cohorts/${props.cohort}/courses/${props.course}/${props.id}`}
+        to={`/cohorts/${props.cohort}/courses/${props.course}/${props.unit.id}`}
         component={Link}
       >
         <FormattedMessage id={`unit-card.${props.progressStats ? 'continue' : 'start'}`} />
@@ -81,9 +93,9 @@ const UnitCard = props => (
 
 
 UnitCard.propTypes = {
-  id: PropTypes.string.isRequired,
   idx: PropTypes.number.isRequired,
   unit: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     stats: PropTypes.shape({
@@ -92,8 +104,9 @@ UnitCard.propTypes = {
     }),
   }).isRequired,
   progressStats: PropTypes.shape({}),
-  course: PropTypes.string.isRequired,
   cohort: PropTypes.string.isRequired,
+  course: PropTypes.string.isRequired,
+  canManageCourse: PropTypes.bool,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
@@ -105,6 +118,7 @@ UnitCard.propTypes = {
 
 UnitCard.defaultProps = {
   progressStats: undefined,
+  canManageCourse: false,
 };
 
 

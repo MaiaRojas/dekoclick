@@ -10,7 +10,7 @@ import Alert from '../components/alert';
 import CoursesList from '../components/courses-list';
 
 
-const Courses = ({ cohorts, auth }) => (
+const Courses = ({ cohorts, auth, profile, history }) => (
   <div className="courses">
     <TopBar title={<FormattedMessage id="courses.title" />} />
     {!cohorts
@@ -20,9 +20,10 @@ const Courses = ({ cohorts, auth }) => (
         : [...cohorts].reverse().map(cohort => (
           <CoursesList
             key={cohort.id}
-            cohort={cohort.id}
-            role={cohort.role}
+            cohort={cohort}
             auth={auth}
+            profile={profile}
+            history={history}
           />
         ))
     }

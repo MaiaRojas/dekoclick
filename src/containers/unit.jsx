@@ -58,18 +58,29 @@ const addSelfAssessment = (parts, intl) => {
 
 
 const Unit = (props) => {
-  if (!props.unit || !props.parts || props.unitProgress === undefined) {
+  if (props.unit === undefined
+    || !props.parts
+    || props.unitProgress === undefined
+    || props.courseSettings === undefined) {
     return (<CircularProgress />);
   }
 
   const { classes, ...propsMinusClasses } = props;
-  const { partid } = props.match.params;
+  const { unitid, partid } = props.match.params;
 
-  if (!partid && props.parts.length) {
-    return <Redirect to={`${props.match.url}/${props.parts[0].id}`} />;
+  console.log('Unit::courseSettings', props.courseSettings);
+  const unitSettings = ((props.courseSettings || {}).units || {})[unitid] || {};
+  const selfAssessmentSettings = unitSettings.selfAssessment || {};
+  console.log(unitSettings, selfAssessmentSettings);
+  const parts = selfAssessmentSettings.enabled
+    ? addSelfAssessment(props.parts, props.intl)
+    : props.parts;
+
+  if (!partid && parts.length) {
+    return <Redirect to={`${props.match.url}/${parts[0].id}`} />;
   }
 
-  const part = props.parts.filter(p => p.id === partid)[0];
+  const part = parts.filter(p => p.id === partid)[0];
   const partProgress = (part.type === 'self-assessment')
     ? props.unitProgress.find(item => item.type === 'self-assessment')
     : props.unitProgress.find(item => item.partid === partid);
@@ -85,7 +96,7 @@ const Unit = (props) => {
 
   return (
     <div className="app">
-      <UnitNav {...propsMinusClasses} />
+      <UnitNav {...propsMinusClasses} parts={parts} />
       <div className={classes.main}>
         <TopBar title={part.title}>
           <UnitDuration part={part} progress={partProgress || {}} />
@@ -93,8 +104,7 @@ const Unit = (props) => {
         <TrackedComponent
           unit={props.unit}
           unitProgress={props.unitProgress}
-          unitProgressStats={props.unitProgressStats}
-          parts={props.parts}
+          parts={parts}
           part={part}
           partProgress={partProgress}
           match={props.match}
@@ -113,6 +123,7 @@ Unit.propTypes = {
   })),
   unitProgress: PropTypes.arrayOf(PropTypes.shape({})),
   unitProgressStats: PropTypes.shape({}),
+  courseSettings: PropTypes.shape({}),
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
     params: PropTypes.shape({
@@ -135,47 +146,26 @@ Unit.defaultProps = {
   parts: undefined,
   unitProgress: undefined,
   unitProgressStats: undefined,
+  courseSettings: undefined,
 };
 
 
-const selectUnit = (data, { cohortid, courseid, unitid }) => {
-  const key = `cohorts/${cohortid}/courses/${courseid}/syllabus`;
-
-  if (!data || !data[key] || !data[key][unitid]) {
-    return undefined;
-  }
-
-  return data[key][unitid];
-};
-
-
-const selectParts = (firestore, { cohortid, courseid, unitid }, intl) => {
-  const key = `cohorts/${cohortid}/courses/${courseid}/syllabus/${unitid}/parts`;
-
-  if (!firestore.ordered || !firestore.ordered[key]) {
-    return undefined;
-  }
-
-  return addSelfAssessment(firestore.ordered[key], intl);
-};
-
-
-const selectUnitProgress = (data, { cohortid, courseid, unitid }, uid) => {
-  const key = `cohorts/${cohortid}/users/${uid}/progress/${courseid}/syllabus`;
-
-  if (!data || !data[key]) {
-    return undefined;
-  }
-
-  return data[key][unitid];
-};
-
-
-const mapStateToProps = ({ firestore }, { auth, match, intl }) => ({
-  unit: selectUnit(firestore.data, match.params),
-  parts: selectParts(firestore, match.params, intl),
+const mapStateToProps = ({ firestore }, {
+  auth: { uid },
+  match: { params: { cohortid, courseid, unitid } },
+  intl,
+}) => ({
+  unit: firestore.data[`cohorts/${cohortid}/courses/${courseid}/syllabus`]
+    ? (firestore.data[`cohorts/${cohortid}/courses/${courseid}/syllabus`][unitid] || null)
+    : undefined,
+  parts: firestore.ordered[`cohorts/${cohortid}/courses/${courseid}/syllabus/${unitid}/parts`],
   unitProgress: firestore.ordered.progress,
-  unitProgressStats: selectUnitProgress(firestore.data, match.params, auth.uid),
+  unitProgressStats: firestore.data[`cohorts/${cohortid}/users/${uid}/progress`]
+    ? (((firestore.data[`cohorts/${cohortid}/users/${uid}/progress`][courseid] || {}).units || {})[unitid] || null)
+    : undefined,
+  courseSettings: firestore.data[`cohorts/${cohortid}/coursesSettings`]
+    ? (firestore.data[`cohorts/${cohortid}/coursesSettings`][courseid] || null)
+    : undefined,
 });
 
 
@@ -199,8 +189,12 @@ export default compose(
       ],
     },
     {
-      collection: `cohorts/${cohortid}/users/${auth.uid}/progress/${courseid}/syllabus`,
-      doc: unitid,
+      collection: `cohorts/${cohortid}/users/${auth.uid}/progress`,
+      doc: courseid,
+    },
+    {
+      collection: `cohorts/${cohortid}/coursesSettings`,
+      doc: courseid,
     },
   ]),
   connect(mapStateToProps),

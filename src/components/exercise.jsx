@@ -131,7 +131,7 @@ const Exercise = (props) => {
 
   return (
     <div>
-      <Typography variant="display1" gutterBottom component="h2" className={classes.title}>
+      <Typography style={{ textTransform: 'none' }} variant="display1" gutterBottom className={classes.title}>
         {exercise.title}
       </Typography>
       <AppBar position="static" color="default">

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui-icons/Add';
 
 
@@ -20,9 +20,7 @@ const styles = theme => ({
     margin: `0 0 ${theme.spacing.unit * 2}px`,
   },
   headingButton: {
-    top: theme.spacing.unit * -2,
-    width: theme.spacing.unit * 6,
-    height: theme.spacing.unit * 6,
+    top: theme.spacing.unit * -1,
   },
 });
 
@@ -39,15 +37,13 @@ const CohortSection = ({
         {title}
       </Typography>
       {onAdd && typeof onAdd === 'function' && (
-        <Button
-          variant="fab"
-          color="default"
-          aria-label="add user"
+        <IconButton
+          aria-label="Add user"
           className={classes.headingButton}
           onClick={onAdd}
         >
           <AddIcon />
-        </Button>
+        </IconButton>
       )}
     </div>
     <div>
