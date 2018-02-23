@@ -49,7 +49,6 @@ const partTypeToIcon = (type) => {
 
 
 const progressToIcon = (part, partProgress, partProgressStats) => {
-  console.log('progressToIcon', part, partProgress, partProgressStats);
   if (partProgressStats && partProgressStats.completed === 1) {
     return <DoneIcon />;
   } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {

@@ -68,10 +68,8 @@ const Unit = (props) => {
   const { classes, ...propsMinusClasses } = props;
   const { unitid, partid } = props.match.params;
 
-  console.log('Unit::courseSettings', props.courseSettings);
   const unitSettings = ((props.courseSettings || {}).units || {})[unitid] || {};
   const selfAssessmentSettings = unitSettings.selfAssessment || {};
-  console.log(unitSettings, selfAssessmentSettings);
   const parts = selfAssessmentSettings.enabled === false
     ? props.parts
     : addSelfAssessment(props.parts, props.intl);

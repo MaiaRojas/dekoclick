@@ -186,9 +186,9 @@ class SettingsForm extends React.Component {
               Preferred language
             </FormLabel>
             <Select
-              value={this.state.preferredLang || props.profile.preferredLang || 'es-ES'}
-              onChange={e => this.updateValueOnProfile('preferredLang', e.target.value)}
-              input={<Input id="preferredLang" />}
+              value={this.state.locale || props.profile.locale || 'es-ES'}
+              onChange={e => this.updateValueOnProfile('locale', e.target.value)}
+              input={<Input id="locale" />}
             >
               {Object.keys(locales).map(key => (
                 <MenuItem key={key} value={key}>{locales[key]}</MenuItem>

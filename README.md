@@ -80,3 +80,9 @@ export FIREBASE_MESSAGING_SENDER_ID=123456
 yarn build
 firebase deploy --only hosting --project "${FIREBASE_PROJECT}"
 ```
+
+## Modo de mantenimiento
+
+```sh
+firebase deploy --only hosting -p maintenance
+```

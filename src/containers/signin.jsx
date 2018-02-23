@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import {
   updateSignInField,
@@ -21,14 +22,23 @@ import {
   updateSigninError,
 } from '../reducers/signin';
 import SignInResults from '../components/signin-results';
+import { parse as parseCohortId } from '../util/cohort.js';
 
 
 // handle successful signup (add profile data and assign cohort)
-const postSignUp = (props, uid, email) => {
+const postSignUp = (props, userRecord) => {
   const db = props.firestore.firestore();
-  return db.doc(`users/${uid}`).set({ email })
+  const campus = props.campuses.find(
+    campus => campus.id === parseCohortId(props.cohortid).campus
+  );
+  return db.doc(`users/${userRecord.uid}`).set({
+    email: userRecord.email,
+    name: userRecord.displayName || '',
+    locale: (campus && campus.locale) ? campus.locale : 'es-ES',
+    timezone: (campus && campus.timezone) ? campus.timezone : 'America/Lima',
+  })
     .then(() =>
-      db.doc(`cohorts/${props.cohortid}/users/${uid}`).set({ role: 'student' }))
+      db.doc(`cohorts/${props.cohortid}/users/${userRecord.uid}`).set({ role: 'student' }))
     .then(() => {
       props.resetSignInForm();
       // TODO: for some reason props.history.push() doesn't trigger route, so
@@ -61,6 +71,13 @@ const styles = theme => ({
   },
   submitBtn: {
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
+  },
+  noCohortSelected: {
+    textAlign: 'center',
+  },
+  signupCohort: {
+    marginTop: 32,
+    textAlign: 'center',
   },
 });
 
@@ -226,9 +243,8 @@ const SignInWithFacebookButton = props => (
       });
 
       auth.signInWithPopup(provider).then((result) => {
-        // console.log(result);
-        if (props.signup) {
-          postSignUp(props, result.user.uid, result.user.email);
+        if (props.signup || result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+          postSignUp(props, result.user);
         }
         // // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // const token = result.credential.accessToken;
@@ -307,8 +323,8 @@ const SignIn = (props) => {
     return <Redirect to="/" />;
   }
 
-  if (props.signup && props.cohort === undefined) {
-    return null;
+  if (props.signup && (props.cohort === undefined || !props.campuses)) {
+    return <CircularProgress />;
   }
 
   // `props.isValid` significa que el formulario ha sido enviado (submitted) y
@@ -316,7 +332,7 @@ const SignIn = (props) => {
   if (props.isValid) {
     if (props.signup) {
       auth.createUserWithEmailAndPassword(email, password)
-        .then(data => postSignUp(props, data.uid, email))
+        .then(userRecord => postSignUp(props, userRecord))
         .catch(props.updateSignupError);
     } else if (props.forgot) {
       auth.sendPasswordResetEmail(email)
@@ -336,11 +352,16 @@ const SignIn = (props) => {
       <Paper className={props.classes.paper}>
         <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
         {props.signup && !props.cohort
-          ? (<div style={{ textAlign: 'center' }}>No cohort selected</div>)
+          ? (<div className={props.classes.noCohortSelected}>No cohort selected</div>)
           : (
             <div>
               {props.signup && (
-                <div style={{ textAlign: 'center' }}>{props.cohortid}</div>
+                <div className={props.classes.signupCohort}>
+                  Registro para nuestro proceso de selección en {' '}
+                  {(props.campuses.find(
+                    campus => campus.id === parseCohortId(props.cohortid).campus
+                  ) || {}).name}.
+                </div>
               )}
               <SignInForm {...props} />
               {!props.signup && <SignInForgotToggle {...props} />}
@@ -367,6 +388,7 @@ SignIn.propTypes = {
   signup: PropTypes.bool.isRequired,
   cohortid: PropTypes.string,
   cohort: PropTypes.shape({}),
+  campuses: PropTypes.arrayOf(PropTypes.shape({})),
   updateSignInField: PropTypes.func.isRequired,
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
   toggleForgot: PropTypes.func.isRequired,
@@ -402,10 +424,11 @@ SignIn.defaultProps = {
   forgotResult: undefined,
   cohortid: undefined,
   cohort: undefined,
+  campuses: undefined,
 };
 
 
-const mapStateToProps = ({ signin, firestore: { data } }, { match }) => ({
+const mapStateToProps = ({ signin, firestore }, { match }) => ({
   data: signin.data,
   errors: signin.errors,
   isValid: signin.isValid,
@@ -416,9 +439,10 @@ const mapStateToProps = ({ signin, firestore: { data } }, { match }) => ({
   signupError: signin.signupError,
   signinError: signin.signinError,
   cohortid: match.params.cohortid,
-  cohort: !data.cohorts
+  cohort: !firestore.data.cohorts
     ? undefined
-    : data.cohorts[match.params.cohortid] || null,
+    : firestore.data.cohorts[match.params.cohortid] || null,
+  campuses: firestore.ordered.campuses,
 });
 
 
@@ -436,7 +460,7 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect(props => (
+  firestoreConnect(props => [{ collection: 'campuses' }].concat(
     (props.match.params.action === 'signup')
       ? [{ collection: 'cohorts', doc: props.match.params.cohortid }]
       : []

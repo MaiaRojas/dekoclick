@@ -33,6 +33,11 @@ const render = (Component) => {
 };
 
 
+// Clear splash page (beating heart...)
+document.body.className = '';
+document.getElementsByClassName('spinner-wrapper')[0].remove();
+
+
 render(App);
 
 
