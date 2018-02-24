@@ -10,6 +10,12 @@ export default {
   'signin.errors.invalidEmail': 'Correo electrónico no válido',
   'signin.errors.invalidPassword': 'Contraseña no válida',
   'signin.errors.passwordMissmatch': 'Verificación de contraseña no coincide',
+  'signin.enrollment': 'Registro para nuestro proceso de selección en {campus}.',
+  'signin.fbAccountExistsWithSameEmail':
+    `Ya existe una cuenta registrada con el correo {email}. Si quieres vincular
+    tu cuenta de Facebook a tu cuenta de Laboratoria, confirma tu contraseña de
+    Laboratoria:`,
+  'signin.fbConnect': 'Conecta tu cuenta de Facebook',
 
   'main-nav.courses': 'Mis cursos',
   'main-nav.settings': 'Configuración',

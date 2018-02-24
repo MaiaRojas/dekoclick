@@ -10,6 +10,8 @@ const UPDATE_FORGOT_RESULT = 'lms.laboratoria.la/signin/UPDATE_FORGOT_RESULT';
 const FORGOT_REQUESTED = 'lms.laboratoria.la/signin/FORGOT_REQUESTED';
 const UPDATE_SIGNUP_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNUP_ERROR';
 const UPDATE_SIGNIN_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNIN_ERROR';
+const TOGGLE_FB_PASSWORD_PROMPT = 'lms.laboratoria.la/signin/TOGGLE_FB_PASSWORD_PROMPT';
+const UPDATE_FB_PASSWORD_PROMPT_PASSWORD = 'lms.laboratoria.la/signin/UPDATE_FB_PASSWORD_PROMPT_PASSWORD';
 
 
 // Action Creators
@@ -48,6 +50,16 @@ export const updateSignupError = err => ({
 export const updateSigninError = err => ({
   type: UPDATE_SIGNIN_ERROR,
   payload: err,
+});
+
+export const toggleFbPasswordPrompt = (email, pendingCred) => ({
+  type: TOGGLE_FB_PASSWORD_PROMPT,
+  payload: { email, pendingCred },
+});
+
+export const updateFbPasswordPromptPassword = val => ({
+  type: UPDATE_FB_PASSWORD_PROMPT_PASSWORD,
+  payload: val,
 });
 
 
@@ -95,6 +107,12 @@ const initialState = () => ({
   signup: window.location.pathname.split('/')[1] === 'signup',
   signupError: null,
   signinError: null,
+  fbPasswordPrompt: {
+    open: false,
+    password: '',
+    error: '',
+    pendingCred: null,
+  },
 });
 
 
@@ -167,6 +185,27 @@ export default (state = initialState(), action = {}) => {
         ...state,
         signinError: action.payload,
         isValid: undefined,
+      };
+    case TOGGLE_FB_PASSWORD_PROMPT:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          email: action.payload.email,
+        },
+        fbPasswordPrompt: {
+          ...state.fbPasswordPrompt,
+          open: !state.fbPasswordPrompt.open,
+          pendingCred: action.payload.pendingCred,
+        },
+      };
+    case UPDATE_FB_PASSWORD_PROMPT_PASSWORD:
+      return {
+        ...state,
+        fbPasswordPrompt: {
+          ...state.fbPasswordPrompt,
+          password: action.payload,
+        },
       };
     default:
       return state;

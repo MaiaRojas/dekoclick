@@ -10,6 +10,12 @@ export default {
   'signin.errors.invalidEmail': 'Please enter a valid email',
   'signin.errors.invalidPassword': 'Password can not be empty',
   'signin.errors.passwordMissmatch': 'Password missmatch',
+  'signin.enrollment': 'Admissions enrollment for our {campus} campus.',
+  'signin.fbAccountExistsWithSameEmail':
+    `An account already exists for {email}. If you want to connect your facebook
+    account to your Laboratoria account, please confirm your Laboratoria
+    password:`,
+  'signin.fbConnect': 'Connect your Facebook account',
 
   'main-nav.courses': 'My courses',
   'main-nav.settings': 'Settings',

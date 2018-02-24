@@ -10,6 +10,11 @@ export default {
   'signin.errors.invalidEmail': 'Por favor digite um email válido',
   'signin.errors.invalidPassword': 'A senha não pode estar vazia',
   'signin.errors.passwordMissmatch': 'Senha incorreta',
+  'signin.enrollment': 'Registro para nosso processo de seleção em {campus}.',
+  'signin.fbAccountExistsWithSameEmail':
+    `Uma conta já existe para {email}. Se quiser conectar sua conta do Facebook
+    à sua conta do Laboratoria, confirme sua senha do Laboratoria:`,
+  'signin.fbConnect': 'Conecte sua conta do Facebook',
 
   'main-nav.courses': 'Meus cursos',
   'main-nav.settings': 'Configurações',

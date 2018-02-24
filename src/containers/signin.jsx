@@ -20,8 +20,11 @@ import {
   updateForgotRequested,
   updateSignupError,
   updateSigninError,
+  toggleFbPasswordPrompt,
+  updateFbPasswordPromptPassword,
 } from '../reducers/signin';
-import SignInResults from '../components/signin-results';
+import SignInForm from '../components/signin-form';
+import Alert from '../components/alert';
 import { parse as parseCohortId } from '../util/cohort.js';
 
 
@@ -80,119 +83,6 @@ const styles = theme => ({
     textAlign: 'center',
   },
 });
-
-
-const SignInForm = props => (
-  <form
-    onSubmit={(e) => {
-      e.preventDefault();
-      props.validateAndSubmitSignInForm();
-      return false;
-    }}
-  >
-    <div className="controls">
-      <TextField
-        id="email"
-        label={<FormattedMessage id="signin.email" />}
-        autoComplete="email"
-        value={props.data.email}
-        error={!!props.errors.email}
-        helperText={props.errors && props.errors.email &&
-          <FormattedMessage id={props.errors.email} />}
-        onChange={e => props.updateSignInField('email', e.target.value)}
-        fullWidth
-        margin="normal"
-      />
-      {!props.forgot &&
-        <TextField
-          id="password"
-          label={<FormattedMessage id="signin.password" />}
-          value={props.data.password}
-          type="password"
-          error={!!props.errors.password}
-          helperText={props.errors && props.errors.password &&
-            <FormattedMessage id={props.errors.password} />}
-          onChange={e => props.updateSignInField('password', e.target.value)}
-          fullWidth
-          autoComplete="current-password"
-          margin="normal"
-        />
-      }
-      {props.signup &&
-        <TextField
-          id="password2"
-          label={<FormattedMessage id="signin.verifyPassword" />}
-          value={props.data.password2}
-          type="password"
-          error={!!props.errors.password2}
-          helperText={props.errors && props.errors.password2 && (
-            <FormattedMessage id={props.errors.password2} />
-          )}
-          onChange={e => props.updateSignInField('password2', e.target.value)}
-          fullWidth
-          autoComplete="verify-password"
-          margin="normal"
-        />
-      }
-    </div>
-    <Button
-      type="submit"
-      variant="raised"
-      color="primary"
-      disabled={props.forgot && props.forgotRequested}
-      className={props.classes.submitBtn}
-    >
-      {
-        props.forgot
-          ? <FormattedMessage id="signin.forgot" />
-          : props.signup
-            ? <FormattedMessage id="signin.signup" />
-            : <FormattedMessage id="signin.signin" />
-      }
-    </Button>
-    <SignInResults
-      authError={props.authError}
-      forgot={props.forgot}
-      forgotResult={props.forgotResult}
-      signupError={props.signupError}
-      signinError={props.signinError}
-    />
-  </form>
-);
-
-
-SignInForm.propTypes = {
-  data: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-    password2: PropTypes.string,
-  }).isRequired,
-  errors: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-    password2: PropTypes.string,
-  }).isRequired,
-  forgot: PropTypes.bool.isRequired,
-  signup: PropTypes.bool.isRequired,
-  forgotRequested: PropTypes.bool.isRequired,
-  forgotResult: PropTypes.shape({}),
-  validateAndSubmitSignInForm: PropTypes.func.isRequired,
-  updateSignInField: PropTypes.func.isRequired,
-  classes: PropTypes.shape({
-    submitBtn: PropTypes.string.isRequired,
-  }).isRequired,
-  authError: PropTypes.shape({}),
-  signupError: PropTypes.shape({}),
-  signinError: PropTypes.shape({}),
-};
-
-
-SignInForm.defaultProps = {
-  forgotResult: undefined,
-  authError: undefined,
-  signupError: undefined,
-  signinError: undefined,
-};
 
 
 const SignInForgotToggle = props => (
@@ -259,23 +149,12 @@ const SignInWithFacebookButton = props => (
             // list will be the "recommended" provider to use.
 
             if (providers[0] === 'password') {
-              const password = prompt([
-                `Ya existe una cuenta registrada con el correo ${email}. `,
-                'Si quieres vincular tu cuenta de Facebook a tu cuenta de ',
-                'Laboratoria, confirma tu contraseña de Laboratoria:',
-              ].join(''));
-              return auth.signInWithEmailAndPassword(email, password)
-                .then(user => user.link(pendingCred))
-                .then(() => {
-                  // Facebook account successfully linked to existing user.
-                  // goToApp();
-                })
-                .catch(err => console.error(err));
+              return props.toggleFbPasswordPrompt(email, pendingCred);
             }
 
             // All the other cases are external providers.
             // TODO: implement getProviderForProviderId.
-            const provider = getProviderForProviderId(providers[0]);
+            // const provider = getProviderForProviderId(providers[0]);
             // At this point, you should let the user know that he already
             // has an account but with a different provider, and let him
             // validate the fact he wants to sign in with this provider.
@@ -283,7 +162,7 @@ const SignInWithFacebookButton = props => (
             // triggered asynchronously, so in real scenario you should ask
             // the user to click on a "continue" button that will trigger
             // the signInWithPopup.
-            return auth.signInWithPopup(provider).then(result =>
+            // return auth.signInWithPopup(provider).then(result =>
               // Remember that the user may have signed in with an account
               // that has a different email address than the first one. This
               // can happen as Firebase doesn't control the provider's sign
@@ -293,10 +172,10 @@ const SignInWithFacebookButton = props => (
               // Link to Facebook credential.
               // As we have access to the pending credential, we can
               // directly call the link method.
-              result.user.link(pendingCred).then(() => {
+              // result.user.link(pendingCred).then(() => {
                 // Facebook account successfully linked to existing user.
                 // goToApp();
-              }));
+              // }));
           });
         }
       });
@@ -315,6 +194,49 @@ SignInWithFacebookButton.propTypes = {
 };
 
 
+const SignInFbPasswordPrompt = props => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ maxWidth: 360 }}>
+      <Alert
+        message={
+          <FormattedMessage
+            id="signin.fbAccountExistsWithSameEmail"
+            values={{ email: props.data.email }}
+          />
+        }
+      />
+      <TextField
+        id="password"
+        label={<FormattedMessage id="signin.password" />}
+        value={props.fbPasswordPrompt.password}
+        type="password"
+        error={!!props.fbPasswordPrompt.error}
+        helperText={props.fbPasswordPrompt.error &&
+          <FormattedMessage id={props.fbPasswordPrompt.error} />}
+        onChange={e => props.updateFbPasswordPromptPassword(e.target.value)}
+        fullWidth
+        autoComplete="current-password"
+        margin="normal"
+      />
+      <Button
+        variant="raised"
+        color="primary"
+        className={props.classes.submitBtn}
+        onClick={() => {
+          const { email } = props.data;
+          const { password, pendingCred } = props.fbPasswordPrompt;
+          props.firestore.auth().signInWithEmailAndPassword(email, password)
+            .then(user => user.linkWithCredential(pendingCred))
+            .catch(err => alert(err.message));
+        }}
+      >
+        <FormattedMessage id="signin.fbConnect" />
+      </Button>
+    </div>
+  </div>
+);
+
+
 const SignIn = (props) => {
   const { email, password } = props.data;
   const auth = props.firestore.auth();
@@ -325,6 +247,10 @@ const SignIn = (props) => {
 
   if (props.signup && (props.cohort === undefined || !props.campuses)) {
     return <CircularProgress />;
+  }
+
+  if (props.fbPasswordPrompt && props.fbPasswordPrompt.open) {
+    return (<SignInFbPasswordPrompt {...props} />);
   }
 
   // `props.isValid` significa que el formulario ha sido enviado (submitted) y
@@ -357,10 +283,14 @@ const SignIn = (props) => {
             <div>
               {props.signup && (
                 <div className={props.classes.signupCohort}>
-                  Registro para nuestro proceso de selección en {' '}
-                  {(props.campuses.find(
-                    campus => campus.id === parseCohortId(props.cohortid).campus
-                  ) || {}).name}.
+                  <FormattedMessage
+                    id="signin.enrollment"
+                    values={{
+                      campus: (props.campuses.find(
+                        campus => campus.id === parseCohortId(props.cohortid).campus
+                      ) || {}).name,
+                    }}
+                  />
                 </div>
               )}
               <SignInForm {...props} />
@@ -403,6 +333,12 @@ SignIn.propTypes = {
   }),
   signupError: PropTypes.shape({}),
   signinError: PropTypes.shape({}),
+  fbPasswordPrompt: PropTypes.shape({
+    open: PropTypes.bool.isRequired,
+    password: PropTypes.string,
+    error: PropTypes.string,
+  }).isRequired,
+  updateFbPasswordPromptPassword: PropTypes.func.isRequired,
   firestore: PropTypes.shape({
     auth: PropTypes.func.isRequired,
   }).isRequired,
@@ -438,6 +374,7 @@ const mapStateToProps = ({ signin, firestore }, { match }) => ({
   signup: signin.signup,
   signupError: signin.signupError,
   signinError: signin.signinError,
+  fbPasswordPrompt: signin.fbPasswordPrompt,
   cohortid: match.params.cohortid,
   cohort: !firestore.data.cohorts
     ? undefined
@@ -455,6 +392,8 @@ const mapDispatchToProps = {
   updateForgotResult,
   updateSignupError,
   updateSigninError,
+  toggleFbPasswordPrompt,
+  updateFbPasswordPromptPassword,
 };
 
 
