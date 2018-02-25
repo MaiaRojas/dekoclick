@@ -133,6 +133,9 @@ module.exports = env => {
   if (isProduction) { // Dist files
 
     config.plugins = [
+      new Webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      }),
       new CleanWebpackPlugin([targetPathRel]),
       new UglifyJSPlugin(),
       new FaviconsWebpackPlugin({
