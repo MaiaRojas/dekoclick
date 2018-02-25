@@ -10,6 +10,7 @@ import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
+import UnitCardLock from './unit-card-lock';
 import UnitCardAdmin from './unit-card-admin';
 
 
@@ -36,60 +37,120 @@ const styles = theme => ({
 });
 
 
-const UnitCard = props => (
-  <Card className={props.classes.card}>
-    <CardContent className={props.classes.cardContent}>
-      {props.canManageCourse &&
-        <UnitCardAdmin
-          unit={props.unit}
-          cohort={props.cohort}
-          course={props.course}
-          courseSettings={props.courseSettings}
+const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
+  Object.keys(unitSettings.dependencies || {}).sort().reduce((memo, depPath) => {
+    const [unitid, partid, embedCat, formid] = depPath.split('/');
+    const unitProgressStats = courseProgressStats.units[unitid] || { parts: {} };
+    const partProgressStats = unitProgressStats.parts[partid] || {};
+    const dep = unitSettings.dependencies[depPath] || {};
+    const progress = (formid)
+      ? (partProgressStats.forms || {})[formid]
+      : partProgressStats;
+
+    let ok = true;
+    let completed = true;
+    let score = true;
+
+    if (dep.percent && (!progress || !progress.percent)) {
+      ok = false;
+      completed = false;
+    }
+
+    if (dep.completed && (!progress || !progress.completed)) {
+      ok = false;
+      completed = false;
+    }
+
+    if (dep.score) { // a specific minimum or maximum score is required!
+      if (dep.score.operator === '<' && dep.score.value < progress.score) {
+        ok = false;
+        score = false;
+      }
+      if (dep.score.operator === '>' && dep.score.value > progress.score) {
+        ok = false;
+        score = false;
+      }
+    }
+
+    return {
+      ...memo,
+      ok: memo.ok && ok,
+      results: {
+        ...memo.results,
+        [depPath]: { dep, progress, ok },
+      },
+      completed: memo.completed && completed,
+      score: memo.score && score,
+    };
+  }, { ok: true, results: {}, completed: true, score: true });
+
+
+const UnitCard = props => {
+  const courseSettings = props.courseSettings || { units: {} };
+  const unitSettings = courseSettings.units[props.unit.id] || {};
+  const courseProgressStats = props.courseProgressStats || { units: {} };
+  const unitProgressStats = courseProgressStats.units[props.unit.id];
+  const depsCheck = checkDependencies(props.unit.id, unitSettings, courseProgressStats);
+
+  return (
+    <Card style={!depsCheck.ok ? { position: 'relative' } : {}} className={props.classes.card}>
+      {!depsCheck.ok && (<UnitCardLock depsCheck={depsCheck} syllabus={props.syllabus} />)}
+      <CardContent style={!depsCheck.ok ? { opacity: 0.2 } : {}} className={props.classes.cardContent}>
+        {props.canManageCourse &&
+          <UnitCardAdmin
+            unit={props.unit}
+            cohort={props.cohort}
+            course={props.course}
+            courseSettings={props.courseSettings}
+            syllabus={props.syllabus}
+            courseProgressStats={props.courseProgressStats}
+          />
+        }
+        <Typography variant="title">
+          <FormattedMessage id="unit-card.unit" /> {props.idx + 1}: {props.unit.title}
+        </Typography>
+        <Typography
+          paragraph
+          component="p"
+          dangerouslySetInnerHTML={{ __html: props.unit.description }}
         />
-      }
-      <Typography variant="title">
-        <FormattedMessage id="unit-card.unit" /> {props.idx + 1}: {props.unit.title}
-      </Typography>
-      <Typography
-        paragraph
-        component="p"
-        dangerouslySetInnerHTML={{ __html: props.unit.description }}
-      />
-    </CardContent>
-    <CardActions className={props.classes.cardActions}>
-      {props.unit.stats && props.unit.stats.partCount && (
-        <div className={props.classes.count}>
-          <FolderIcon />
-          <Typography className={props.classes.countText}>
-            <FormattedMessage
-              id="unit-card.parts"
-              values={{ count: props.unit.stats.partCount }}
-            />
-          </Typography>
-        </div>
-      )}
-      {props.unit.stats && props.unit.stats.durationString &&
-        <div className={props.classes.count}>
-          <ScheduleIcon />
-          <Typography className={props.classes.countText}>
-            <Hidden smDown><FormattedMessage id="unit-card.estimatedDuration" />: </Hidden>
-            {props.unit.stats.durationString}
-          </Typography>
-        </div>
-      }
-      <Button
-        size="small"
-        variant="raised"
-        color="primary"
-        to={`/cohorts/${props.cohort}/courses/${props.course}/${props.unit.id}`}
-        component={Link}
-      >
-        <FormattedMessage id={`unit-card.${props.progressStats ? 'continue' : 'start'}`} />
-      </Button>
-      <Progress value={(props.progressStats || {}).percent || 0} />
-    </CardActions>
-  </Card>
-);
+      </CardContent>
+      <CardActions className={props.classes.cardActions}>
+        {props.unit.stats && props.unit.stats.partCount && (
+          <div className={props.classes.count}>
+            <FolderIcon />
+            <Typography className={props.classes.countText}>
+              <FormattedMessage
+                id="unit-card.parts"
+                values={{ count: props.unit.stats.partCount }}
+              />
+            </Typography>
+          </div>
+        )}
+        {props.unit.stats && props.unit.stats.durationString &&
+          <div className={props.classes.count}>
+            <ScheduleIcon />
+            <Typography className={props.classes.countText}>
+              <Hidden smDown><FormattedMessage id="unit-card.estimatedDuration" />: </Hidden>
+              {props.unit.stats.durationString}
+            </Typography>
+          </div>
+        }
+        <Button
+          size="small"
+          variant="raised"
+          color="primary"
+          to={`/cohorts/${props.cohort}/courses/${props.course}/${props.unit.id}`}
+          component={Link}
+          disabled={!depsCheck.ok}
+        >
+          <FormattedMessage id={`unit-card.${unitProgressStats ? 'continue' : 'start'}`} />
+        </Button>
+        <Progress value={(unitProgressStats || {}).percent || 0} />
+      </CardActions>
+    </Card>
+  );
+};
 
 
 UnitCard.propTypes = {
@@ -103,10 +164,12 @@ UnitCard.propTypes = {
       partCount: PropTypes.number.isRequired,
     }),
   }).isRequired,
-  progressStats: PropTypes.shape({}),
+  courseProgressStats: PropTypes.shape({}),
   cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
+  courseSettings: PropTypes.shape({}),
   canManageCourse: PropTypes.bool,
+  syllabus: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
@@ -117,7 +180,8 @@ UnitCard.propTypes = {
 
 
 UnitCard.defaultProps = {
-  progressStats: undefined,
+  courseProgressStats: undefined,
+  courseSettings: undefined,
   canManageCourse: false,
 };
 

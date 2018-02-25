@@ -12,13 +12,19 @@ import UnitCard from '../components/unit-card';
 
 
 const Course = (props) => {
-  if (!props.course || !props.cohortUser) {
+  if (!props.course || props.cohortUser === undefined || props.courseProgressStats === undefined) {
     return (<CircularProgress />);
   }
 
+  const isAdmin = props.profile.roles && props.profile.roles.admin;
+
+  if (!props.cohortUser && !isAdmin) {
+    return null; // unauthorised?
+  }
+
   const canManageCourse =
-    ['instructor', 'admin'].indexOf(props.cohortUser.role) > -1
-    || (props.profile.roles && props.profile.roles.admin);
+    isAdmin
+    || ['instructor', 'admin'].indexOf(props.cohortUser.role) > -1;
 
   return (
     <div className="course">
@@ -36,11 +42,12 @@ const Course = (props) => {
             key={unit.id}
             idx={idx}
             unit={unit}
-            progressStats={((props.progressStats || {}).units || {})[unit.id]}
+            courseProgressStats={props.courseProgressStats}
             course={props.match.params.courseid}
             cohort={props.match.params.cohortid}
             canManageCourse={canManageCourse}
             courseSettings={props.courseSettings}
+            syllabus={props.syllabus}
           />
         ))}
       </div>
@@ -60,7 +67,7 @@ Course.propTypes = {
   cohortUser: PropTypes.shape({
     role: PropTypes.string.isRequired,
   }),
-  progressStats: PropTypes.shape({}),
+  courseProgressStats: PropTypes.shape({}),
   courseSettings: PropTypes.shape({}),
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -75,7 +82,7 @@ Course.defaultProps = {
   course: undefined,
   syllabus: undefined,
   cohortUser: undefined,
-  progressStats: undefined,
+  courseProgressStats: undefined,
   courseSettings: undefined,
 };
 
@@ -102,16 +109,16 @@ export default compose(
       doc: courseid,
     },
   ]),
-  connect(({ firestore }, { auth, match: { params: { cohortid, courseid } } }) => ({
+  connect(({ firestore }, { auth, profile, match: { params: { cohortid, courseid } } }) => ({
     course: firestore.data[`cohorts/${cohortid}/courses`]
       ? firestore.data[`cohorts/${cohortid}/courses`][courseid]
       : undefined,
     syllabus: firestore.ordered[`cohorts/${cohortid}/courses/${courseid}/syllabus`],
     cohortUser: firestore.data[`cohorts/${cohortid}/users`]
-      ? firestore.data[`cohorts/${cohortid}/users`][auth.uid]
+      ? firestore.data[`cohorts/${cohortid}/users`][auth.uid] || null
       : undefined,
-    progressStats: firestore.data[`cohorts/${cohortid}/users/${auth.uid}/progress`]
-      ? firestore.data[`cohorts/${cohortid}/users/${auth.uid}/progress`][courseid]
+    courseProgressStats: firestore.data[`cohorts/${cohortid}/users/${auth.uid}/progress`]
+      ? firestore.data[`cohorts/${cohortid}/users/${auth.uid}/progress`][courseid] || null
       : undefined,
     courseSettings: firestore.data[`cohorts/${cohortid}/coursesSettings`]
       ? firestore.data[`cohorts/${cohortid}/coursesSettings`][courseid]

@@ -226,6 +226,10 @@ const SignInFbPasswordPrompt = props => (
           const { email } = props.data;
           const { password, pendingCred } = props.fbPasswordPrompt;
           props.firestore.auth().signInWithEmailAndPassword(email, password)
+            .then(user => {
+              props.toggleFbPasswordPrompt('', null);
+              return user;
+            })
             .then(user => user.linkWithCredential(pendingCred))
             .catch(err => alert(err.message));
         }}
