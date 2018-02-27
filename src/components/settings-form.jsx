@@ -180,7 +180,8 @@ class SettingsForm extends React.Component {
           </Paper>
         )}
 
-        <Paper className={props.classes.paper}>
+        {
+          this.props.showOpenDialog && <Paper className={props.classes.paper}>
           <FormControl>
             <FormLabel component="legend" className={props.classes.legend}>
               Preferred language
@@ -195,7 +196,8 @@ class SettingsForm extends React.Component {
               ))}
             </Select>
           </FormControl>
-        </Paper>
+          </Paper>
+        }
 
         <FormControlWrapper
           {...props}
@@ -341,9 +343,9 @@ class SettingsForm extends React.Component {
         {this.props.showOpenDialog && (
           <div>
             <Paper className={props.classes.paper}>
-              <Button onClick={this.handleOpen}>Ver mis projectos Github</Button>
+              <Button onClick={this.handleOpen}> Verificar mis projectos de Github</Button>
               <a
-                href={`https://laboratoria-la-talento-aocsa.firebaseapp.com/profile/${this.props.uid}`}
+                href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`}
                 target="_blank"
               >
                 Ver mi perfil en talento.laboratoria.la!

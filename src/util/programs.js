@@ -12,7 +12,7 @@ const programs = {
   jp: {
     id: 'jp',
     order: 2,
-    name: 'Job plcacement',
+    name: 'Job placement',
   },
   ec: {
     id: 'ec',

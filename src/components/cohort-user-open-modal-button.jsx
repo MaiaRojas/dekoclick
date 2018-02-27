@@ -45,6 +45,9 @@ class CohortUserOpenModalButton extends React.Component {
             <CohortUserValidationForm {...this.props} />
           </DialogContent>
           <DialogActions>
+            <p>
+              <a href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`} target="_blank">Ver su perfil en talento.laboratoria.la!</a>
+            </p>
             <Button onClick={this.handleClose} color="primary">
               Cerrar
             </Button>

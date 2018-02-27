@@ -22,6 +22,9 @@ const octokit = Github();
  * License: MIT
  */
 function ParseMarkDown() {
+  this.firstImage = false;
+  this.firstUrl = false;
+  this.firstName = false;
   // Rules
   this.rules = [
     // headers
@@ -30,6 +33,10 @@ function ParseMarkDown() {
       replacement: (text, chars, content) => {
         const level = chars.length;
         if (level === 1) {
+          if (!this.firstName) {
+            this.firstName = true;
+            this.project.name = content;
+          }
           this.project.name = content;
         }
         return `<h${level}>${content.trim()}</h${level}>`;
@@ -39,7 +46,11 @@ function ParseMarkDown() {
     {
       regex: /!\[([^\[]+)\]\(([^\)]+)\)/g,
       replacement: (text, chars, content) => {
-        this.project.image = content;
+        var level = chars.length;
+        if (!this.firstImage) {
+          this.firstImage = true;
+          this.project.image = content;
+        }
         return `<img src="${content}" alt="${chars}">`;
       },
     },
@@ -47,7 +58,12 @@ function ParseMarkDown() {
     {
       regex: /\[([^\[]+)\]\(([^\)]+)\)/g,
       replacement: (text, chars, content) => {
-        this.project.where = chars;
+        if (!this.firstUrl) {
+          var level = chars.length;
+          this.project.where = chars;
+          this.project.url = content;
+          this.firstUrl = true;
+        }
         return `<a href="${content}">${chars}</a>`;
       },
     },
@@ -57,6 +73,7 @@ function ParseMarkDown() {
     name: '',
     image: '',
     where: '',
+    url: '',
   };
 
   // Add a rule.

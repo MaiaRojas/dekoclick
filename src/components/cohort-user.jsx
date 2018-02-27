@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
+import { FormControlLabel, FormGroup } from 'material-ui/Form';
+import Switch from 'material-ui/Switch';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
@@ -54,6 +56,40 @@ UserAvatar.propTypes = {
     name: PropTypes.string,
   }).isRequired,
 };
+
+class AvailabilityCheck extends React.Component {
+
+  constructor (props) {
+    super(props);
+    let isFired = false;
+    if (this.props.profile){
+      if (this.props.profile.available === false) {
+        isFired = true;
+      }
+    }
+    this.state = { isFired: isFired };    
+    this.handleChange = isFired => {
+      this.setState({ isFired: isFired })
+      this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { available : isFired? false : true} )
+    };
+  }
+
+  render () {
+    return (
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.state.isFired}
+              onChange={(event, checked) => this.handleChange(checked)}
+            />
+          }
+          label={!this.state.isFired?'disponible':'contratada'}
+        />
+      </FormGroup>
+      )
+  }
+}
 
 
 const CohortUser = (props) => {
@@ -122,6 +158,9 @@ const CohortUser = (props) => {
           >
             <DeleteIcon />
           </IconButton>
+          {
+            props.cohortUser.role === 'student' && <AvailabilityCheck {...props}/>
+          }
         </CardActions>
       </Card>
     </Grid>

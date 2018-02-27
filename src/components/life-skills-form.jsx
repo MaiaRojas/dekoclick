@@ -15,6 +15,7 @@ const styles = theme => ({
 
 
 class CheckboxList extends React.Component {
+  
   constructor(props) {
     super(props);
 
@@ -50,32 +51,64 @@ class CheckboxList extends React.Component {
       'Negociación/resolución de conflictos',
     ];
 
+    this.clearLifeSkill = (authorUid) => {
+      this.props.firebase.firestore().collection('users').doc(this.props.uid).get().then ( (doc) => {
+        let data = doc.data();
+        let lifeSkills = data.lifeSkills;
+        if (lifeSkills) {
+          Object.keys(lifeSkills).forEach( (skillKeyName) => {
+            const lifeSkill = lifeSkills[skillKeyName];
+  
+            if ( data.lifeSkills[skillKeyName][authorUid] ) {
+              const columnName = `lifeSkills/${skillKeyName}/${ authorUid }`;
+              const fieldStructure = columnName.split('/').join('.');
+              this.props.firebase.firestore().collection('users').doc(this.props.uid)
+                .update({
+                  [`${fieldStructure}`]:  this.props.firebase.firestore.FieldValue.delete(),
+                })
+            }
+          });
+        }
+      })
+    }
+  
+    this.updateLifeSkill = (lifeSkill, authorUid) => {
+      const columnName = `lifeSkills/${lifeSkill}/${ authorUid }`;
+      const fieldStructure = columnName.split('/').join('.');
+  
+      this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
+        this.props.firebase.firestore().collection('users').doc(this.props.uid)
+        .update({
+          [`${fieldStructure}`]: {
+            author: adminUser.data().name,
+            authorLinkedin: adminUser.data().linkedin,
+            company: 'Laboratoria',
+            companyUrl: 'www.laboratoria.la',
+          },
+        })
+      })
+    }
+
     this.handleToggle = value => () => {
       const { checked } = this.state;
       const currentIndex = checked.indexOf(value);
       const newChecked = [...checked];
-
+  
       if (currentIndex === -1) {
         newChecked.push(value);
       } else {
         newChecked.splice(currentIndex, 1);
       }
-
       this.setState({ checked: newChecked });
-
-      newChecked.forEach((lifeSkill) => {
-        const columnName = `lifeSkills/${lifeSkill}/${this.props.auth.uid}`;
-        const fieldStructure = columnName.split('/').join('.');
-        this.props.firebase.firestore().collection('users').doc(this.props.uid)
-          .update({
-            [`${fieldStructure}`]: {
-              author: this.props.auth.displayName,
-              company: 'Laboratoria',
-              companyUrl: 'www.laboratoria.la',
-            },
-          });
-      });
-    };
+  
+      if (newChecked.length == 0) {
+        this.clearLifeSkill (this.props.auth.uid)
+      } else {
+        newChecked.forEach(lifeSkill => {
+          this.updateLifeSkill (lifeSkill, this.props.auth.uid)
+        });
+      }
+    }  
   }
 
   componentWillMount() {

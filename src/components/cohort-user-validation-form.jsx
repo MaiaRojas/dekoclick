@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
+import { FormControl, FormLabel, FormHelperText } from 'material-ui/Form';
+import Input, { InputLabel } from 'material-ui/Input';
+import Select from 'material-ui/Select';
 import GithubCard from '../components/github-card';
 import SettingsForm from '../components/settings-form';
 import LifeSkillsForm from '../components/life-skills-form';
@@ -22,12 +24,101 @@ const styles = theme => ({
 });
 
 
+
+class RecomendedAsForm extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      recomendedAs: '',
+    };
+  }
+
+  handleChange = event => {
+    this.setState({ recomendedAs: event.target.value });
+    this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { recomendedAs : event.target.value} )
+  };
+
+  componentWillMount() {
+      this.props.firebase.firestore().collection ('users').doc(this.props.uid).get ()
+        .then (res => {
+          this.setState({ recomendedAs: res.data().recomendedAs });
+        })
+  }
+
+  render () {
+    return (
+    <FormControl  >
+      <InputLabel htmlFor="recomended-as">Perfil</InputLabel>
+      <Select
+        native
+        value={this.state.recomendedAs}
+        onChange={this.handleChange}
+        inputProps={{
+          id: 'recomended-as',
+        }}
+      >
+        <option value="" />
+        <option value={'UX Designer'}>UX Designer</option>
+        <option value={'Frontend Developer'}>Frontend Developer</option>
+        <option value={'Frontend Designer'}>Frontend Designer</option>
+      </Select>
+    </FormControl>
+    )
+  }
+}
+
+
+class EnglishLevelForm extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      englishLevel: '',
+    };
+  }
+
+  handleChange = event => {
+    this.setState({ englishLevel: event.target.value });
+    this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { englishLevel : event.target.value} )
+
+  };
+
+  componentWillMount() {
+    this.props.firebase.firestore().collection ('users').doc(this.props.uid).get ().then (res => {
+     this.setState({ englishLevel: res.data().englishLevel });
+   })
+  }
+
+  render () {
+    return (
+    <FormControl  >
+      <InputLabel htmlFor="english-level">Nivel de Ingles</InputLabel>
+      <Select
+        native
+        value={this.state.englishLevel}
+        onChange={this.handleChange}
+        inputProps={{
+          id: 'english-level',
+        }}
+      >
+        <option value="" />
+        <option value={'basic'}>Básico</option>
+        <option value={'intermediate'}>Intermedio</option>
+        <option value={'advanced'}>Avanzado</option>
+      </Select>
+    </FormControl>
+    )
+  }
+}
+
+
 class ValidationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       githubUrls: [],
-      recomendation: '',
+      recommendation: '',
       selectedTab: 0,
       githubUrls: {},
     };
@@ -49,6 +140,32 @@ class ValidationForm extends React.Component {
     ));
   }
 
+  updateRecommendations (authorUid, detail) {
+    const db = this.props.firebase.firestore();
+    const userDocRef = db.collection('users').doc(this.props.uid);
+
+    if (detail.length === 0) {
+      return this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
+        return  userDocRef.update({
+          [`recommendations.${authorUid}`]: this.props.firebase.firestore.FieldValue.delete(),
+        });
+      })
+    }
+    else {
+      return this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
+        return userDocRef.update({
+          [`recommendations.${authorUid}`]: {
+            from: adminUser.data().name,
+            authorLinkedin : adminUser.data().linkedin,
+            company: 'Laboratoria',
+            companyUrl: 'www.laboratoria.la',
+            detail: detail,
+          },
+        });
+      })
+    }
+  }
+
   endorseForm() {
     const { uid, auth, profile, firebase, classes } = this.props;
     const db = firebase.firestore();
@@ -59,30 +176,23 @@ class ValidationForm extends React.Component {
         <LifeSkillsForm firebase={firebase} uid={uid} auth={auth} />
         <FormControl component="fieldset" fullWidth>
           <TextField
-            id="recomendation"
+            id="recommendation"
             label={`Escribe una recomendación para ${profile.name}`}
-            value={this.state.recomendation || ''}
+            value={this.state.recommendation || ''}
             multiline
             rowsMax="5"
             className={classes.textField}
             margin="normal"
-            error={this.state.recomendation.length > 280}
+            error={this.state.recommendation.length > 280}
             helperText={
-              this.state.recomendation.length > 280
+              this.state.recommendation.length > 280
                 ? 'Error: use solo 280 caracteres'
                 : 'Puedes usar hasta 280 caracteres.'
             }
             margin="dense"
             onChange={(e) => {
-              this.setState({ recomendation: e.target.value });
-              userDocRef.update({
-                [`recomendations.${auth.uid}`]: {
-                  from: auth.displayName,
-                  company: 'Laboratoria',
-                  companyUrl: 'www.laboratoria.la',
-                  detail: e.target.value,
-                },
-              });
+              this.setState({ recommendation: e.target.value });
+              this.updateRecommendations(this.props.auth.uid,  e.target.value);
             }}
           />
         </FormControl>
@@ -93,6 +203,8 @@ class ValidationForm extends React.Component {
   settingsForm() {
     return (
       <div component="div" style={{ padding: 8 * 3 }}>
+        <RecomendedAsForm {...this.props}/>
+        <EnglishLevelForm {...this.props}/>
         <SettingsForm {...this.props} />
       </div>
     );
@@ -107,9 +219,9 @@ class ValidationForm extends React.Component {
         });
       }
 
-      if (profile.recomendations && profile.recomendations[auth.uid]) {
+      if (profile.recommendations && profile.recommendations[auth.uid]) {
         this.setState({
-          recomendation: profile.recomendations[auth.uid].detail,
+          recommendation: profile.recommendations[auth.uid].detail,
         });
       }
     }
@@ -126,7 +238,7 @@ class ValidationForm extends React.Component {
             textColor="primary"
             fullWidth
           >
-            <Tab label="Info" />
+            <Tab label="About her" />
             <Tab label="Projects" />
             <Tab label="Endorse" />
           </Tabs>
