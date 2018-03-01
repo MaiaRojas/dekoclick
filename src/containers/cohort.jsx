@@ -97,17 +97,20 @@ const Cohort = ({
         </p>
       </CohortSection>
 
-      <CohortSection
-        title="Agenda"
-        onAdd={toggleCalendarAddDialog}
-      >
-        <CohortCalendar
-          cohortid={cohortid}
-          cohort={cohort}
-          toggleCalendarAddDialog={toggleCalendarAddDialog}
-        />
-      </CohortSection>
-
+      { 
+        
+        (parsedCohortId.program !== 'jp') && 
+        <CohortSection
+          title="Agenda"
+          onAdd={toggleCalendarAddDialog}
+        >
+          <CohortCalendar
+            cohortid={cohortid}
+            cohort={cohort}
+            toggleCalendarAddDialog={toggleCalendarAddDialog}
+          />
+        </CohortSection>
+      }
       <CohortSection
         title="Cursos"
         onAdd={toggleCourseAddDialog}
@@ -161,7 +164,7 @@ const Cohort = ({
                 </Tabs>
               </AppBar>
               {currentTab === 0 && (
-                <CohortUsers cohortid={cohortid} users={students} auth={auth} />
+                <CohortUsers cohortid={cohortid} users={students} auth={auth} parsedCohortId = {parsedCohortId} />
               )}
               {currentTab === 1 && (
                 <CohortUsers cohortid={cohortid} users={instructors} />

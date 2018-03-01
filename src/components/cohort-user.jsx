@@ -132,7 +132,7 @@ const CohortUser = (props) => {
             </IconButton>
           )}
 
-          {props.auth && (
+          { (props.cohortUser.role === 'student' && props.parsedCohortId &&  props.parsedCohortId.program === 'jp')  && (
             <CohortUserOpenModalButton
               profile={props.profile}
               firebase={props.firebase}
@@ -159,7 +159,7 @@ const CohortUser = (props) => {
             <DeleteIcon />
           </IconButton>
           {
-            props.cohortUser.role === 'student' && <AvailabilityCheck {...props}/>
+            (props.cohortUser.role === 'student' && props.parsedCohortId &&  props.parsedCohortId.program === 'jp') && <AvailabilityCheck {...props}/>
           }
         </CardActions>
       </Card>

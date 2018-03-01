@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Card, { CardHeader, CardMedia, CardContent/* , CardActions */ } from 'material-ui/Card';
+import Card, { CardHeader, CardMedia, CardContent } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import Typography from 'material-ui/Typography';
 import red from 'material-ui/colors/red';
-// import FavoriteIcon from 'material-ui-icons/Favorite';
-// import ShareIcon from 'material-ui-icons/Share';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import Github from '@octokit/rest';
 import isUrl from '../util/isUrl';
@@ -149,57 +147,43 @@ class GithubCard extends React.Component {
 
       this.props.firebase.firestore().doc(`/users/${this.props.uid}/`).get()
         .then((res) => {
-          if (false && res.data()) {
-            // console.log ('data>>', res.data().githubProjects);
-            const repoObj = res.data().githubProjects[projectId];
-            const repoErrors = {};
-            repoErrors.demo = !isUrl(repoObj.demo);
-            repoErrors.description = repoObj.description && repoObj.description.length < 140;
-            repoErrors.tags = repoObj.tags && repoObj.tags.length === 0;
-            repoErrors.name = repoObj.name && repoObj.name.length === 0;
-            repoErrors.image = repoObj.image && repoObj.image.length === 0 || !isUrl(repoObj.demo);
-            repoErrors.where = repoObj.where && repoObj.where.length === 0;
-            const composedObject = Object.assign({ ...this.state }, repoObj, { repoErrors });
-            this.setState(composedObject);
-          } else {
-            octokit.repos.get({ owner, repo }).then((res) => {
-              const date = new Date(res.data.updated_at);
-              octokit.repos.getReadme({ owner, repo }).then((result) => {
-                const decodedString = atob(result.data.content);
-                const regex = new ParseMarkDown();
-                regex.render(decodedString);
-                octokit.repos.getTopics({
-                  owner,
-                  repo,
-                }).then((resTags) => {
-                  const repoObj = {
-                    id: projectId,
-                    demo: res.data.homepage,
-                    github: res.data.html_url,
-                    license: res.data.license,
-                    description: res.data.description,
-                    date: date.getFullYear(),
-                    name: res.data.name,
-                    tags: resTags.data.names.join(', '),
-                    ...regex.project,
-                  };
-                  const repoErrors = {};
-                  repoErrors.demo = !isUrl(repoObj.demo);
-                  repoErrors.description = repoObj.description && repoObj.description.length < 140;
-                  repoErrors.tags = repoObj.tags && repoObj.tags.length === 0;
-                  repoErrors.name = repoObj.name && repoObj.name.length === 0;
-                  repoErrors.image = repoObj.image && repoObj.image.length === 0
-                    || !isUrl(repoObj.demo);
-                  repoErrors.where = repoObj.where && repoObj.where.length === 0;
+          octokit.repos.get({ owner, repo }).then((res) => {
+            const date = new Date(res.data.updated_at);
+            octokit.repos.getReadme({ owner, repo }).then((result) => {
+              const decodedString = atob(result.data.content);
+              const regex = new ParseMarkDown();
+              regex.render(decodedString);
+              octokit.repos.getTopics({
+                owner,
+                repo,
+              }).then((resTags) => {
+                const repoObj = {
+                  id: projectId,
+                  demo: res.data.homepage,
+                  github: res.data.html_url,
+                  license: res.data.license,
+                  description: res.data.description,
+                  date: date.getFullYear(),
+                  name: res.data.name,
+                  tags: resTags.data.names.join(', '),
+                  ...regex.project,
+                };
+                const repoErrors = {};
+                repoErrors.demo = !isUrl(repoObj.demo);
+                repoErrors.description = repoObj.description && repoObj.description.length < 140;
+                repoErrors.tags = repoObj.tags && repoObj.tags.length === 0;
+                repoErrors.name = repoObj.name && repoObj.name.length === 0;
+                repoErrors.image = repoObj.image && repoObj.image.length === 0
+                  || !isUrl(repoObj.demo);
+                repoErrors.where = repoObj.where && repoObj.where.length === 0;
 
-                  const composedObject = Object.assign({ ...this.state }, repoObj, { repoErrors });
-                  this.setState(composedObject);
-                  this.props.firebase.firestore().collection('users').doc(this.props.uid)
-                    .update({ [`githubProjects.${projectId}`]: repoObj });
-                });
+                const composedObject = Object.assign({ ...this.state }, repoObj, { repoErrors });
+                this.setState(composedObject);
+                this.props.firebase.firestore().collection('users').doc(this.props.uid)
+                  .update({ [`githubProjects.${projectId}`]: repoObj });
               });
             });
-          }
+          }); 
         })
         .catch(err => console.log(err));
     };
@@ -273,16 +257,6 @@ class GithubCard extends React.Component {
             </a>
           </div>
         </CardContent>
-        {/*
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
-          </IconButton>
-        </CardActions>
-        */}
       </Card>
     );
   }

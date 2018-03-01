@@ -40,6 +40,7 @@ const CohortUsers = (props) => {
             toggleMoveDialog={props.toggleMoveDialog}
             firebase={props.firebase}
             auth={props.auth}
+            parsedCohortId = {props.parsedCohortId}
           />
         ))}
       </Grid>
