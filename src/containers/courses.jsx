@@ -10,7 +10,9 @@ import Alert from '../components/alert';
 import CoursesList from '../components/courses-list';
 
 
-const Courses = ({ cohorts, auth, profile, history }) => (
+const Courses = ({
+  cohorts, auth, profile, history,
+}) => (
   <div className="courses">
     <TopBar title={<FormattedMessage id="courses.title" />} />
     {!cohorts

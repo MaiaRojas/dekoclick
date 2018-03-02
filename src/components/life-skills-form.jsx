@@ -15,7 +15,6 @@ const styles = theme => ({
 
 
 class CheckboxList extends React.Component {
-  
   constructor(props) {
     super(props);
 
@@ -52,63 +51,65 @@ class CheckboxList extends React.Component {
     ];
 
     this.clearLifeSkill = (authorUid) => {
-      this.props.firebase.firestore().collection('users').doc(this.props.uid).get().then ( (doc) => {
-        let data = doc.data();
-        let lifeSkills = data.lifeSkills;
-        if (lifeSkills) {
-          Object.keys(lifeSkills).forEach( (skillKeyName) => {
-            const lifeSkill = lifeSkills[skillKeyName];
-  
-            if ( data.lifeSkills[skillKeyName][authorUid] ) {
-              const columnName = `lifeSkills/${skillKeyName}/${ authorUid }`;
-              const fieldStructure = columnName.split('/').join('.');
-              this.props.firebase.firestore().collection('users').doc(this.props.uid)
-                .update({
-                  [`${fieldStructure}`]:  this.props.firebase.firestore.FieldValue.delete(),
-                })
-            }
-          });
-        }
-      })
-    }
-  
+      this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
+        .then((doc) => {
+          const data = doc.data();
+          const lifeSkills = data.lifeSkills;
+          if (lifeSkills) {
+            Object.keys(lifeSkills).forEach((skillKeyName) => {
+              const lifeSkill = lifeSkills[skillKeyName];
+
+              if (data.lifeSkills[skillKeyName][authorUid]) {
+                const columnName = `lifeSkills/${skillKeyName}/${authorUid}`;
+                const fieldStructure = columnName.split('/').join('.');
+                this.props.firebase.firestore().collection('users').doc(this.props.uid)
+                  .update({
+                    [`${fieldStructure}`]: this.props.firebase.firestore.FieldValue.delete(),
+                  });
+              }
+            });
+          }
+        });
+    };
+
     this.updateLifeSkill = (lifeSkill, authorUid) => {
-      const columnName = `lifeSkills/${lifeSkill}/${ authorUid }`;
+      const columnName = `lifeSkills/${lifeSkill}/${authorUid}`;
       const fieldStructure = columnName.split('/').join('.');
-  
-      this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
-        this.props.firebase.firestore().collection('users').doc(this.props.uid)
-        .update({
-          [`${fieldStructure}`]: {
-            author: adminUser.data().name,
-            authorLinkedin: adminUser.data().linkedin,
-            company: 'Laboratoria',
-            companyUrl: 'www.laboratoria.la',
-          },
-        })
-      })
-    }
+
+      this.props.firebase.firestore().collection('users').doc(authorUid).get()
+        .then((adminUser) => {
+          this.props.firebase.firestore().collection('users').doc(this.props.uid)
+            .update({
+              [`${fieldStructure}`]: {
+                author: adminUser.data().name,
+                authorLinkedin: adminUser.data().linkedin,
+                company: 'Laboratoria',
+                companyUrl: 'www.laboratoria.la',
+              },
+            });
+        });
+    };
 
     this.handleToggle = value => () => {
       const { checked } = this.state;
       const currentIndex = checked.indexOf(value);
       const newChecked = [...checked];
-  
+
       if (currentIndex === -1) {
         newChecked.push(value);
       } else {
         newChecked.splice(currentIndex, 1);
       }
       this.setState({ checked: newChecked });
-  
+
       if (newChecked.length == 0) {
-        this.clearLifeSkill (this.props.auth.uid)
+        this.clearLifeSkill(this.props.auth.uid);
       } else {
-        newChecked.forEach(lifeSkill => {
-          this.updateLifeSkill (lifeSkill, this.props.auth.uid)
+        newChecked.forEach((lifeSkill) => {
+          this.updateLifeSkill(lifeSkill, this.props.auth.uid);
         });
       }
-    }  
+    };
   }
 
   componentWillMount() {

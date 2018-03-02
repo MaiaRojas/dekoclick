@@ -43,7 +43,7 @@ const buildDepPath = ({ unitid, partid, formid }) =>
   `${unitid}${partid ? `/${partid}` : ''}${formid ? `/forms/${formid}` : ''}`;
 
 
-const CompletedInput = props => {
+const CompletedInput = (props) => {
   const key = !props.partid ? 'percent' : 'completed';
   const value = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {})[key] || {}).value || 0;
 
@@ -56,7 +56,7 @@ const CompletedInput = props => {
         value={value}
         onChange={e => props.updateDependencies(key, props)}
         type="number"
-        className={''/*classes.textField*/}
+        className=""
         inputProps={{ max: 100, min: 0, size: 3 }}
         InputLabelProps={{ shrink: true }}
       />
@@ -89,14 +89,14 @@ const CompletedInput = props => {
 };
 
 
-const ScoreInput = props => {
+const ScoreInput = (props) => {
   const { value, operator } = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {}).score || {});
   return (
     <div style={{ marginLeft: 8 }}>
       <TextField
         id="select-operator"
         select
-        className={''/* classes.textField */}
+        className=""
         value={operator || '>'}
         onChange={e =>
           props.updateDependencies('score', props, { operator: e.target.value })
@@ -117,7 +117,7 @@ const ScoreInput = props => {
           })
         }
         type="number"
-        className={''/*classes.textField*/}
+        className=""
         inputProps={{ max: 100, min: 0, size: 3 }}
         InputLabelProps={{ shrink: true }}
       />
@@ -126,7 +126,7 @@ const ScoreInput = props => {
 };
 
 
-const hasScore = props => {
+const hasScore = (props) => {
   if (props.formid) {
     return true;
   }
@@ -147,7 +147,8 @@ const Dependency = props => (
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-    }}>
+    }}
+    >
       <div>
         {props.formid
           ? `Typeform: ${props.formid}`
@@ -169,13 +170,11 @@ const Dependency = props => (
 
 
 const selfAssessmentIsEnabled = (courseSettings, unitid) =>
-  courseSettings
+  (!(courseSettings
   && courseSettings.units
   && courseSettings.units[unitid]
   && courseSettings.units[unitid].selfAssessment
-  && courseSettings.units[unitid].selfAssessment.enabled === false
-    ? false
-    : true;
+  && courseSettings.units[unitid].selfAssessment.enabled === false));
 
 
 const UnitCardAdmin = (props) => {
@@ -202,10 +201,9 @@ const UnitCardAdmin = (props) => {
                 enabled: !selfAssessmentIsEnabled(data, props.unit.id),
               },
             },
-          }
+          },
         });
-      })
-    );
+      }));
 
   const updateDependencies = (key, params, value) => {
     const depPath = buildDepPath(params);
@@ -216,12 +214,8 @@ const UnitCardAdmin = (props) => {
         const unit = units[props.unit.id] || {};
         const deps = unit.dependencies || {};
         const prevDep = deps[depPath] || {};
-        const otherDeps = Object.keys(deps || {}).reduce((memo, k) => {
-          return k !== depPath ? { ...memo, [k]: deps[k] } : memo;
-        }, {});
-        const prevDepOtherProps = Object.keys(prevDep || {}).reduce((memo, k) => {
-          return k !== key ? { ...memo, [k]: prevDep[k] } : memo;
-        }, {});
+        const otherDeps = Object.keys(deps || {}).reduce((memo, k) => (k !== depPath ? { ...memo, [k]: deps[k] } : memo), {});
+        const prevDepOtherProps = Object.keys(prevDep || {}).reduce((memo, k) => (k !== key ? { ...memo, [k]: prevDep[k] } : memo), {});
         t[docSnap.exists ? 'update' : 'set'](courseSettingsDocRef, {
           ...data,
           units: {
@@ -237,12 +231,11 @@ const UnitCardAdmin = (props) => {
             },
           },
         });
-      })
-    );
+      }));
   };
 
   const unitIdx = props.syllabus.reduce(
-    (memo, unit, idx) => (unit.id === props.unit.id) ? idx : memo,
+    (memo, unit, idx) => ((unit.id === props.unit.id) ? idx : memo),
     null,
   );
   const prevUnits = props.syllabus.slice(0, unitIdx);
