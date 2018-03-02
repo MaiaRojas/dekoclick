@@ -41,7 +41,12 @@ const getLocale = (preferredLang, campuses) => {
     const campusid = (pathnameParts[1] || '').split('-')[0];
     const campus = campuses.find(campus => campus.id === campusid);
     if (campus && campus.locale) {
-      return campus.locale;
+      if (messages[campus.locale]) {
+        return campus.locale;
+      }
+      if (messages[prefixToLocale[campus.locale.split('-')[0]]]) {
+        return prefixToLocale[campus.locale.split('-')[0]];
+      }
     }
   }
 
@@ -51,6 +56,7 @@ const getLocale = (preferredLang, campuses) => {
   if (browserLocale && messages[prefixToLocale[browserLocale.split('-')[0]]]) {
     return prefixToLocale[browserLocale.split('-')[0]];
   }
+
   return 'es-ES';
 };
 
