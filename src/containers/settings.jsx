@@ -21,7 +21,7 @@ const styles = theme => ({
 const Settings = props => (
   <div className="settings">
     <TopBar title="Settings" />
-    <SettingsForm {...props} uid={props.auth.uid} showOpenDialog />
+    <SettingsForm {...props} uid={props.auth.uid} showOptsInSettings />
   </div>
 );
 

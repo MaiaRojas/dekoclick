@@ -87,6 +87,7 @@ class SettingsForm extends React.Component {
         '2': '',
       },
       open: false,
+      isUserInJobPlacementProgram : false,
     };
 
     this.handleOpen = () => {
@@ -146,6 +147,29 @@ class SettingsForm extends React.Component {
         }
       }
       this.setState(res);
+      if (!this.props.showOptsInSettings) {        
+        this.setState ( {isUserInJobPlacementProgram : true }) 
+        return;
+      }
+      const httpGetAsync = (theUrl, callback) => {
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.onreadystatechange = function() { 
+              if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                  callback(JSON.parse(xmlHttp.responseText));
+          }
+          xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+          xmlHttp.send(null);
+      }
+      httpGetAsync ('https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/?program=jp', cohorts => {
+        cohorts.forEach (cohort => {
+          const cohortId = cohort.id;
+          httpGetAsync (  `https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/${cohortId}/users/?basicProfile=true`, users => {
+            const ret = users.find (s => s.id === this.props.uid)            
+            if (ret !== undefined)
+              this.setState ( {isUserInJobPlacementProgram : true }) 
+          })  
+        })  
+      })
     }
   }
 
@@ -163,7 +187,7 @@ class SettingsForm extends React.Component {
 
     return (
       <React.Fragment>
-        {this.props.showOpenDialog && (
+        {this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
               <FormLabel component="legend" className={props.classes.legend}>
@@ -181,7 +205,7 @@ class SettingsForm extends React.Component {
         )}
 
         {
-          this.props.showOpenDialog && <Paper className={props.classes.paper}>
+          this.props.showOptsInSettings && <Paper className={props.classes.paper}>
           <FormControl>
             <FormLabel component="legend" className={props.classes.legend}>
               Preferred language
@@ -205,7 +229,7 @@ class SettingsForm extends React.Component {
           inputValue={this.state.name}
           inputId="name"
           updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
+          usePaperContainer={this.props.showOptsInSettings}
         />
 
         <FormControlWrapper
@@ -216,7 +240,7 @@ class SettingsForm extends React.Component {
           error={isUrl(this.state.github)}
           inputId="github"
           updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
+          usePaperContainer={this.props.showOptsInSettings}
         />
 
         <FormControlWrapper
@@ -227,7 +251,7 @@ class SettingsForm extends React.Component {
           inputId="linkedin"
           error={isUrl(this.state.linkedin)}
           updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
+          usePaperContainer={this.props.showOptsInSettings}
         />
 
         <FormControlWrapper
@@ -239,70 +263,81 @@ class SettingsForm extends React.Component {
           error={this.state.aboutMe.summary.length > 280}
           inputId="aboutMe/summary"
           updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
+          usePaperContainer={this.props.showOptsInSettings}
         />
 
-        <FormControlWrapper
-          {...props}
-          multiline
-          inputLabel="Fortalezas y debilidades"
-          inputValue={this.state.aboutMe.highlights.strengthsAndWeaknesses}
-          error={this.state.aboutMe.highlights.strengthsAndWeaknesses.length > 280}
-          helperText={this.state.aboutMe.highlights.strengthsAndWeaknesses.length > 280 ? 'Use solo 280 caracteres' : ''}
-          inputId="aboutMe/highlights/strengthsAndWeaknesses"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
-        />
-
-        <FormControlWrapper
-          {...props}
-          multiline
-          inputLabel="Mayores retos enfrentados en la vida"
-          inputValue={this.state.aboutMe.highlights.biggestChallenges}
-          error={this.state.aboutMe.highlights.biggestChallenges.length > 280}
-          helperText={this.state.aboutMe.highlights.biggestChallenges.length > 280 ? 'Use solo 280 caracteres' : ''}
-          inputId="aboutMe/highlights/biggestChallenges"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
-        />
-
-        <FormControlWrapper
-          {...props}
-          multiline
-          inputLabel="Mayores logros conseguidos"
-          inputValue={this.state.aboutMe.highlights.biggestAchievements}
-          error={this.state.aboutMe.highlights.biggestAchievements.length > 280}
-          helperText={this.state.aboutMe.highlights.biggestAchievements.length > 280 ? 'Use solo 280 caracteres' : ''}
-          inputId="aboutMe/highlights/biggestAchievements"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
-        />
-
-        <FormControlWrapper
-          {...props}
-          multiline
-          inputLabel="Metas profesionales"
-          inputValue={this.state.aboutMe.highlights.careerGoals}
-          error={this.state.aboutMe.highlights.careerGoals.length > 280}
-          helperText={this.state.aboutMe.highlights.careerGoals.length > 280 ? 'Use solo 280 caracteres' : ''}
-          inputId="aboutMe/highlights/careerGoals"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
-        />
-
-        <FormControlWrapper
-          {...props}
-          multiline
-          inputLabel="Sector de interés"
-          inputValue={this.state.aboutMe.highlights.areaOfInterest}
-          error={this.state.aboutMe.highlights.areaOfInterest.length > 280}
-          helperText={this.state.aboutMe.highlights.areaOfInterest.length > 280 ? 'Use solo 280 caracteres' : ''}
-          inputId="aboutMe/highlights/areaOfInterest"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOpenDialog}
-        />
-
-        {this.props.showOpenDialog && (
+        {
+          this.state.isUserInJobPlacementProgram && 
+          <FormControlWrapper
+            {...props}
+            multiline
+            inputLabel="Fortalezas y debilidades"
+            inputValue={this.state.aboutMe.highlights.strengthsAndWeaknesses}
+            error={this.state.aboutMe.highlights.strengthsAndWeaknesses.length > 280}
+            helperText={this.state.aboutMe.highlights.strengthsAndWeaknesses.length > 280 ? 'Use solo 280 caracteres' : ''}
+            inputId="aboutMe/highlights/strengthsAndWeaknesses"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        }
+        
+        {
+          this.state.isUserInJobPlacementProgram && 
+          <FormControlWrapper
+            {...props}
+            multiline
+            inputLabel="Mayores retos enfrentados en la vida"
+            inputValue={this.state.aboutMe.highlights.biggestChallenges}
+            error={this.state.aboutMe.highlights.biggestChallenges.length > 280}
+            helperText={this.state.aboutMe.highlights.biggestChallenges.length > 280 ? 'Use solo 280 caracteres' : ''}
+            inputId="aboutMe/highlights/biggestChallenges"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        }
+        {
+          this.state.isUserInJobPlacementProgram && 
+          <FormControlWrapper
+            {...props}
+            multiline
+            inputLabel="Mayores logros conseguidos"
+            inputValue={this.state.aboutMe.highlights.biggestAchievements}
+            error={this.state.aboutMe.highlights.biggestAchievements.length > 280}
+            helperText={this.state.aboutMe.highlights.biggestAchievements.length > 280 ? 'Use solo 280 caracteres' : ''}
+            inputId="aboutMe/highlights/biggestAchievements"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        }
+        {
+          this.state.isUserInJobPlacementProgram && 
+          <FormControlWrapper
+            {...props}
+            multiline
+            inputLabel="Metas profesionales"
+            inputValue={this.state.aboutMe.highlights.careerGoals}
+            error={this.state.aboutMe.highlights.careerGoals.length > 280}
+            helperText={this.state.aboutMe.highlights.careerGoals.length > 280 ? 'Use solo 280 caracteres' : ''}
+            inputId="aboutMe/highlights/careerGoals"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        }
+        {
+          this.state.isUserInJobPlacementProgram && 
+          <FormControlWrapper
+            {...props}
+            multiline
+            inputLabel="Sector de interés"
+            inputValue={this.state.aboutMe.highlights.areaOfInterest}
+            error={this.state.aboutMe.highlights.areaOfInterest.length > 280}
+            helperText={this.state.aboutMe.highlights.areaOfInterest.length > 280 ? 'Use solo 280 caracteres' : ''}
+            inputId="aboutMe/highlights/areaOfInterest"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        }
+        { (this.state.isUserInJobPlacementProgram && this.props.showOptsInSettings) && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
               <FormLabel component="legend" className={props.classes.legend}>
@@ -340,7 +375,7 @@ class SettingsForm extends React.Component {
           </Paper>
         )}
 
-        {this.props.showOpenDialog && (
+        { (this.state.isUserInJobPlacementProgram && this.props.showOptsInSettings) && (
           <div>
             <Paper className={props.classes.paper}>
               <Button onClick={this.handleOpen}> Verificar mis projectos de Github</Button>
@@ -380,12 +415,12 @@ class SettingsForm extends React.Component {
 
 
 SettingsForm.propTypes = {
-  showOpenDialog: PropTypes.bool,
+  showOptsInSettings: PropTypes.bool,
 };
 
 
 SettingsForm.defaultProps = {
-  showOpenDialog: undefined,
+  showOptsInSettings: undefined,
 };
 
 
