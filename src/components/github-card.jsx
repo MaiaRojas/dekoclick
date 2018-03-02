@@ -10,15 +10,8 @@ import MoreVertIcon from 'material-ui-icons/MoreVert';
 import Github from '@octokit/rest';
 import isUrl from '../util/isUrl';
 
-
 const octokit = Github();
 
-
-/**
- * Author: Johnny Broadway <johnny@johnnybroadway.com>
- * Website: https://gist.github.com/jbroadway/2836900
- * License: MIT
- */
 function ParseMarkDown() {
   this.firstImage = false;
   this.firstUrl = false;
@@ -44,7 +37,7 @@ function ParseMarkDown() {
     {
       regex: /!\[([^\[]+)\]\(([^\)]+)\)/g,
       replacement: (text, chars, content) => {
-        var level = chars.length;
+        const level = chars.length;
         if (!this.firstImage) {
           this.firstImage = true;
           this.project.image = content;
@@ -57,7 +50,7 @@ function ParseMarkDown() {
       regex: /\[([^\[]+)\]\(([^\)]+)\)/g,
       replacement: (text, chars, content) => {
         if (!this.firstUrl) {
-          var level = chars.length;
+          const level = chars.length;
           this.project.where = chars;
           this.project.url = content;
           this.firstUrl = true;
@@ -136,13 +129,13 @@ class GithubCard extends React.Component {
       if (pos < 0) {
         return;
       }
-      const res = str.substring(pos + searchText.length);
-      const splitPos = res.search('/');
+      const substr = str.substring(pos + searchText.length);
+      const splitPos = substr.search('/');
       if (splitPos < 0) {
         return;
       }
-      const owner = res.substring(0, splitPos);
-      const repo = res.substring(splitPos + 1);
+      const owner = substr.substring(0, splitPos);
+      const repo = substr.substring(splitPos + 1);
       const projectId = this.props.pos;
 
       this.props.firebase.firestore().doc(`/users/${this.props.uid}/`).get()
@@ -183,7 +176,7 @@ class GithubCard extends React.Component {
                   .update({ [`githubProjects.${projectId}`]: repoObj });
               });
             });
-          }); 
+          });
         })
         .catch(err => console.log(err));
     };

@@ -82,10 +82,12 @@ const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
       completed: memo.completed && completed,
       score: memo.score && score,
     };
-  }, { ok: true, results: {}, completed: true, score: true });
+  }, {
+    ok: true, results: {}, completed: true, score: true,
+  });
 
 
-const UnitCard = props => {
+const UnitCard = (props) => {
   const courseSettings = props.courseSettings || { units: {} };
   const unitSettings = courseSettings.units[props.unit.id] || {};
   const courseProgressStats = props.courseProgressStats || { units: {} };

@@ -82,12 +82,12 @@ class SettingsForm extends React.Component {
         },
       },
       githubUrls: {
-        '0': '',
-        '1': '',
-        '2': '',
+        0: '',
+        1: '',
+        2: '',
       },
       open: false,
-      isUserInJobPlacementProgram : false,
+      isUserInJobPlacementProgram: false,
     };
 
     this.handleOpen = () => {
@@ -108,7 +108,7 @@ class SettingsForm extends React.Component {
       for (let i = 0; i < items.length; i += 1) {
         column = items[i];
         if (i === items.length - 1) {
-          dicc[column] = newValue ? newValue : '';
+          dicc[column] = newValue || '';
         } else {
           dicc = dicc[column];
         }
@@ -147,29 +147,51 @@ class SettingsForm extends React.Component {
         }
       }
       this.setState(res);
-      if (!this.props.showOptsInSettings) {        
-        this.setState ( {isUserInJobPlacementProgram : true }) 
+      if (!this.props.showOptsInSettings) {
+        this.setState({ isUserInJobPlacementProgram: true });
         return;
       }
       const httpGetAsync = (theUrl, callback) => {
-          var xmlHttp = new XMLHttpRequest();
-          xmlHttp.onreadystatechange = function() { 
-              if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                  callback(JSON.parse(xmlHttp.responseText));
-          }
-          xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-          xmlHttp.send(null);
-      }
-      httpGetAsync ('https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/?program=jp', cohorts => {
-        cohorts.forEach (cohort => {
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function () {
+          if (xmlHttp.readyState === 4 && xmlHttp.status === 200) { callback(JSON.parse(xmlHttp.responseText)); }
+        };
+        xmlHttp.open('GET', theUrl, true); // true for asynchronous
+        xmlHttp.send(null);
+      };
+      this.props.firebase.firestore().collection('cohorts')
+        .get()
+        .then((snap) => {
+          const selectedCohorts = [];
+          snap.forEach((doc) => {
+            const vals = Object.keys(req.query).map(key => req.query[key]);
+            const cohort = cohorts.parseId(doc.id);
+            if (vals.find(value => cohort.program === 'jp')) {
+              selectedCohorts.push(Object.assign({ id: doc.id }, doc.data()));
+            }
+          });
+          return selectedCohorts;
+        }).then ( (cohorts) => {
+          this.props.firebase.firestore().collection(`cohorts/${req.params.id}/users`).get()
+            .then((snap) => {
+              snap.forEach ((row) => {
+                const users = row.data();
+                const ret = users.find(s => s.id === this.props.uid);
+                if (ret !== undefined) { 
+                  this.setState({ isUserInJobPlacementProgram: true }); 
+                }
+              })
+            })
+        });
+      /*httpGetAsync('https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/?program=jp', (cohorts) => {
+        cohorts.forEach((cohort) => {
           const cohortId = cohort.id;
-          httpGetAsync (  `https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/${cohortId}/users/?basicProfile=true`, users => {
-            const ret = users.find (s => s.id === this.props.uid)            
-            if (ret !== undefined)
-              this.setState ( {isUserInJobPlacementProgram : true }) 
-          })  
-        })  
-      })
+          httpGetAsync(`https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/${cohortId}/users/?basicProfile=true`, (users) => {
+            const ret = users.find(s => s.id === this.props.uid);
+            if (ret !== undefined) { this.setState({ isUserInJobPlacementProgram: true }); }
+          });
+        });
+      });*/
     }
   }
 
@@ -206,20 +228,20 @@ class SettingsForm extends React.Component {
 
         {
           this.props.showOptsInSettings && <Paper className={props.classes.paper}>
-          <FormControl>
-            <FormLabel component="legend" className={props.classes.legend}>
+            <FormControl>
+              <FormLabel component="legend" className={props.classes.legend}>
               Preferred language
-            </FormLabel>
-            <Select
-              value={this.state.locale || props.profile.locale || 'es-ES'}
-              onChange={e => this.updateValueOnProfile('locale', e.target.value)}
-              input={<Input id="locale" />}
-            >
-              {Object.keys(locales).map(key => (
-                <MenuItem key={key} value={key}>{locales[key]}</MenuItem>
+              </FormLabel>
+              <Select
+                value={this.state.locale || props.profile.locale || 'es-ES'}
+                onChange={e => this.updateValueOnProfile('locale', e.target.value)}
+                input={<Input id="locale" />}
+              >
+                {Object.keys(locales).map(key => (
+                  <MenuItem key={key} value={key}>{locales[key]}</MenuItem>
               ))}
-            </Select>
-          </FormControl>
+              </Select>
+            </FormControl>
           </Paper>
         }
 
@@ -267,7 +289,7 @@ class SettingsForm extends React.Component {
         />
 
         {
-          this.state.isUserInJobPlacementProgram && 
+          this.state.isUserInJobPlacementProgram &&
           <FormControlWrapper
             {...props}
             multiline
@@ -280,9 +302,9 @@ class SettingsForm extends React.Component {
             usePaperContainer={this.props.showOptsInSettings}
           />
         }
-        
+
         {
-          this.state.isUserInJobPlacementProgram && 
+          this.state.isUserInJobPlacementProgram &&
           <FormControlWrapper
             {...props}
             multiline
@@ -296,7 +318,7 @@ class SettingsForm extends React.Component {
           />
         }
         {
-          this.state.isUserInJobPlacementProgram && 
+          this.state.isUserInJobPlacementProgram &&
           <FormControlWrapper
             {...props}
             multiline
@@ -310,7 +332,7 @@ class SettingsForm extends React.Component {
           />
         }
         {
-          this.state.isUserInJobPlacementProgram && 
+          this.state.isUserInJobPlacementProgram &&
           <FormControlWrapper
             {...props}
             multiline
@@ -324,7 +346,7 @@ class SettingsForm extends React.Component {
           />
         }
         {
-          this.state.isUserInJobPlacementProgram && 
+          this.state.isUserInJobPlacementProgram &&
           <FormControlWrapper
             {...props}
             multiline

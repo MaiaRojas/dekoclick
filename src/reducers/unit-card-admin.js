@@ -3,7 +3,7 @@ const TOGGLE_ACTIONS = 'lms.laboratoria.la/unit-card-admin/TOGGLE_ACTIONS';
 
 
 // Action Creators
-export const toggleUnitCardAdminActions = (unitid) => ({
+export const toggleUnitCardAdminActions = unitid => ({
   type: TOGGLE_ACTIONS,
   payload: unitid,
 });

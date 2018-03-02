@@ -32,7 +32,7 @@ import { parse as parseCohortId } from '../util/cohort.js';
 const postSignUp = (props, userRecord) => {
   const db = props.firestore.firestore();
   const campus = props.campuses.find(
-    campus => campus.id === parseCohortId(props.cohortid).campus
+    campus => campus.id === parseCohortId(props.cohortid).campus,
   );
   return db.doc(`users/${userRecord.uid}`).set({
     email: userRecord.email,
@@ -226,7 +226,7 @@ const SignInFbPasswordPrompt = props => (
           const { email } = props.data;
           const { password, pendingCred } = props.fbPasswordPrompt;
           props.firestore.auth().signInWithEmailAndPassword(email, password)
-            .then(user => {
+            .then((user) => {
               props.toggleFbPasswordPrompt('', null);
               return user;
             })
@@ -291,7 +291,7 @@ const SignIn = (props) => {
                     id="signin.enrollment"
                     values={{
                       campus: (props.campuses.find(
-                        campus => campus.id === parseCohortId(props.cohortid).campus
+                        campus => campus.id === parseCohortId(props.cohortid).campus,
                       ) || {}).name,
                     }}
                   />
@@ -406,7 +406,7 @@ export default compose(
   firestoreConnect(props => [{ collection: 'campuses' }].concat(
     (props.match.params.action === 'signup')
       ? [{ collection: 'cohorts', doc: props.match.params.cohortid }]
-      : []
+      : [],
   )),
   withStyles(styles),
 )(SignIn);

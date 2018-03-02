@@ -58,23 +58,22 @@ UserAvatar.propTypes = {
 };
 
 class AvailabilityCheck extends React.Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props);
     let isFired = false;
-    if (this.props.profile){
+    if (this.props.profile) {
       if (this.props.profile.available === false) {
         isFired = true;
       }
     }
-    this.state = { isFired: isFired };    
-    this.handleChange = isFired => {
-      this.setState({ isFired: isFired })
-      this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { available : isFired? false : true} )
+    this.state = { isFired };
+    this.handleChange = (isFired) => {
+      this.setState({ isFired });
+      this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ available: !isFired });
     };
   }
 
-  render () {
+  render() {
     return (
       <FormGroup>
         <FormControlLabel
@@ -84,10 +83,10 @@ class AvailabilityCheck extends React.Component {
               onChange={(event, checked) => this.handleChange(checked)}
             />
           }
-          label={!this.state.isFired?'disponible':'contratada'}
+          label={!this.state.isFired ? 'disponible' : 'contratada'}
         />
       </FormGroup>
-      )
+    );
   }
 }
 
@@ -132,7 +131,7 @@ const CohortUser = (props) => {
             </IconButton>
           )}
 
-          { (props.cohortUser.role === 'student' && props.parsedCohortId &&  props.parsedCohortId.program === 'jp')  && (
+          { (props.cohortUser.role === 'student' && props.parsedCohortId && props.parsedCohortId.program === 'jp') && (
             <CohortUserOpenModalButton
               profile={props.profile}
               firebase={props.firebase}
@@ -159,7 +158,7 @@ const CohortUser = (props) => {
             <DeleteIcon />
           </IconButton>
           {
-            (props.cohortUser.role === 'student' && props.parsedCohortId &&  props.parsedCohortId.program === 'jp') && <AvailabilityCheck {...props}/>
+            (props.cohortUser.role === 'student' && props.parsedCohortId && props.parsedCohortId.program === 'jp') && <AvailabilityCheck {...props} />
           }
         </CardActions>
       </Card>
