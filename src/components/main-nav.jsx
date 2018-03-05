@@ -129,16 +129,18 @@ const MainNav = props => (
           <ListItemText primary="Cohorts" />
         </ListItem>
       }
-      <ListItem
-        button
-        onClick={() => props.history.push('/settings')}
-        className={isActive(props, 'settings')}
-      >
-        <ListItemIcon>
-          <SettingsIcon />
-        </ListItemIcon>
-        <ListItemText primary={<FormattedMessage id="main-nav.settings" />} />
-      </ListItem>
+      {/*
+        <ListItem
+          button
+          onClick={() => props.history.push('/settings')}
+          className={isActive(props, 'settings')}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={<FormattedMessage id="main-nav.settings" />} />
+        </ListItem>
+      */}
       <div className={props.classes.bottom}>
         <Divider />
         <ListItem

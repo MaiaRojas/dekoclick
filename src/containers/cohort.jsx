@@ -97,16 +97,18 @@ const Cohort = ({
         </p>
       </CohortSection>
 
-      <CohortSection
-        title="Agenda"
-        onAdd={toggleCalendarAddDialog}
-      >
-        <CohortCalendar
-          cohortid={cohortid}
-          cohort={cohort}
-          toggleCalendarAddDialog={toggleCalendarAddDialog}
-        />
-      </CohortSection>
+      {/*
+        <CohortSection
+          title="Agenda"
+          onAdd={toggleCalendarAddDialog}
+        >
+          <CohortCalendar
+            cohortid={cohortid}
+            cohort={cohort}
+            toggleCalendarAddDialog={toggleCalendarAddDialog}
+          />
+        </CohortSection>
+      */}
 
       <CohortSection
         title="Cursos"
