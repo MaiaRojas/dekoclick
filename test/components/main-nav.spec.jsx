@@ -67,7 +67,7 @@ describe('<MainNav />', () => {
     )).dive();
 
     const el = component.getElement();
-    expect(el.props.children.props.children.length).toBe(9);
+    expect(el.props.children.props.children.length).toBe(8);
     const lastChild = el.props.children.props.children[el.props.children.props.children.length - 1];
     expect(lastChild.type).toBe('div');
     el.props.children.props.children.slice(0, -1).forEach((child) => {
