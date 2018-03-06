@@ -133,6 +133,9 @@ Unit.propTypes = {
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
   classes: PropTypes.shape({
     main: PropTypes.string.isRequired,
   }).isRequired,
@@ -151,7 +154,6 @@ Unit.defaultProps = {
 const mapStateToProps = ({ firestore }, {
   auth: { uid },
   match: { params: { cohortid, courseid, unitid } },
-  intl,
 }) => ({
   unit: firestore.data[`cohorts/${cohortid}/courses/${courseid}/syllabus`]
     ? (firestore.data[`cohorts/${cohortid}/courses/${courseid}/syllabus`][unitid] || null)

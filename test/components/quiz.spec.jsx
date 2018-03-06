@@ -7,7 +7,7 @@ import Quiz from '../../src/components/quiz';
 
 describe('<Quiz />', () => {
 
-  it('should print warning when missing part, progress, firebase, auth or match', () => {
+  it.skip('should print warning when missing part, progress, firebase, auth or match', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
     expect(() => render(<Provider store={store}><Quiz /></Provider>))
       .toThrow(/startedAt/);

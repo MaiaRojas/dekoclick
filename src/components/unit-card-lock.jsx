@@ -66,7 +66,7 @@ const UnitCardLock = ({ depsCheck, syllabus, classes }) => (
               <ListItemText
                 primary={`Unidad: ${unit.title}${partid ? ` > Parte: ${partid}` : ''}`}
                 secondary={
-                  (!result.progress.completed)
+                  (!result.progress || !result.progress.completed)
                     ? (<span>Incompleto</span>)
                     : (result.dep.score && result.progress.completed === result.dep.completed.value)
                       ? (<span>Puntiación insuficiente</span>)

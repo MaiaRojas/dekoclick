@@ -62,11 +62,11 @@ const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
     }
 
     if (dep.score) { // a specific minimum or maximum score is required!
-      if (dep.score.operator === '<' && dep.score.value < progress.score) {
+      if (!progress || (dep.score.operator === '<' && dep.score.value < progress.score)) {
         ok = false;
         score = false;
       }
-      if (dep.score.operator === '>' && dep.score.value > progress.score) {
+      if (!progress || (dep.score.operator === '>' && dep.score.value > progress.score)) {
         ok = false;
         score = false;
       }

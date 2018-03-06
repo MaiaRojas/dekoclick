@@ -129,6 +129,7 @@ const MainNav = props => (
           <ListItemText primary="Cohorts" />
         </ListItem>
       }
+      
       <ListItem
         button
         onClick={() => props.history.push('/settings')}
@@ -139,6 +140,7 @@ const MainNav = props => (
         </ListItemIcon>
         <ListItemText primary={<FormattedMessage id="main-nav.settings" />} />
       </ListItem>
+      
       <div className={props.classes.bottom}>
         <Divider />
         <ListItem
