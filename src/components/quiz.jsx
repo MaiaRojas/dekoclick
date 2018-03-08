@@ -161,6 +161,7 @@ const Quiz = (props) => {
 
 Quiz.propTypes = {
   part: PropTypes.shape({
+    duration: PropTypes.number.isRequired,
     questions: PropTypes.array.isRequired,
   }).isRequired,
   partProgress: PropTypes.shape({

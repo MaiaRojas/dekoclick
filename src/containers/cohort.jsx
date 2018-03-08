@@ -97,9 +97,7 @@ const Cohort = ({
         </p>
       </CohortSection>
 
-      {
-
-        (parsedCohortId.program !== 'jp') &&
+      {/*
         <CohortSection
           title="Agenda"
           onAdd={toggleCalendarAddDialog}
@@ -110,7 +108,8 @@ const Cohort = ({
             toggleCalendarAddDialog={toggleCalendarAddDialog}
           />
         </CohortSection>
-      }
+      */}
+
       <CohortSection
         title="Cursos"
         onAdd={toggleCourseAddDialog}

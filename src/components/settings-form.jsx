@@ -16,6 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import GithubCard from '../components/github-card';
 import isUrl from '../util/isUrl';
+import { parse as parseCohortid } from '../util/cohort';
 
 
 const styles = theme => ({
@@ -151,47 +152,16 @@ class SettingsForm extends React.Component {
         this.setState({ isUserInJobPlacementProgram: true });
         return;
       }
-      const httpGetAsync = (theUrl, callback) => {
-        const xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function () {
-          if (xmlHttp.readyState === 4 && xmlHttp.status === 200) { callback(JSON.parse(xmlHttp.responseText)); }
-        };
-        xmlHttp.open('GET', theUrl, true); // true for asynchronous
-        xmlHttp.send(null);
-      };
-      this.props.firebase.firestore().collection('cohorts')
+      this.props.firebase.firestore().collection(`/users/${this.props.uid}/cohorts`)
         .get()
-        .then((snap) => {
-          const selectedCohorts = [];
-          snap.forEach((doc) => {
-            const vals = Object.keys(req.query).map(key => req.query[key]);
-            const cohort = cohorts.parseId(doc.id);
-            if (vals.find(value => cohort.program === 'jp')) {
-              selectedCohorts.push(Object.assign({ id: doc.id }, doc.data()));
+        .then ( (snap) => {
+          snap.forEach (doc => {
+            const cohort = parseCohortid(doc.id);
+            if (cohort.program === 'jp' && doc.data() && doc.data().role === 'student') {
+              this.setState({ isUserInJobPlacementProgram: true }); 
             }
           });
-          return selectedCohorts;
-        }).then ( (cohorts) => {
-          this.props.firebase.firestore().collection(`cohorts/${req.params.id}/users`).get()
-            .then((snap) => {
-              snap.forEach ((row) => {
-                const users = row.data();
-                const ret = users.find(s => s.id === this.props.uid);
-                if (ret !== undefined) { 
-                  this.setState({ isUserInJobPlacementProgram: true }); 
-                }
-              })
-            })
-        });
-      /*httpGetAsync('https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/?program=jp', (cohorts) => {
-        cohorts.forEach((cohort) => {
-          const cohortId = cohort.id;
-          httpGetAsync(`https://laboratoria-la-dev-aocsa.firebaseapp.com/cohorts/${cohortId}/users/?basicProfile=true`, (users) => {
-            const ret = users.find(s => s.id === this.props.uid);
-            if (ret !== undefined) { this.setState({ isUserInJobPlacementProgram: true }); }
-          });
-        });
-      });*/
+        })
     }
   }
 

@@ -11,34 +11,40 @@ import CoursesList from '../components/courses-list';
 
 
 const Courses = ({
-  cohorts, auth, profile, history,
+  cohorts,
+  auth,
+  profile,
+  history,
 }) => (
   <div className="courses">
     <TopBar title={<FormattedMessage id="courses.title" />} />
-    {!cohorts
-      ? <CircularProgress />
-      : !cohorts.length
-        ? <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
-        : [...cohorts].reverse().map(cohort => (
-          <CoursesList
-            key={cohort.id}
-            cohort={cohort}
-            auth={auth}
-            profile={profile}
-            history={history}
-          />
-        ))
-    }
+    {!cohorts && <CircularProgress />}
+    {cohorts && !cohorts.length && (
+      <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+    )}
+    {cohorts && cohorts.length && (
+      [...cohorts].reverse().map(cohort => (
+        <CoursesList
+          key={cohort.id}
+          cohort={cohort}
+          auth={auth}
+          profile={profile}
+          history={history}
+        />
+      ))
+    )}
   </div>
 );
 
 
 Courses.propTypes = {
-  auth: PropTypes.shape({}).isRequired,
   cohorts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
   })),
+  auth: PropTypes.shape({}).isRequired,
+  profile: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 

@@ -25,7 +25,7 @@ import {
 } from '../reducers/signin';
 import SignInForm from '../components/signin-form';
 import Alert from '../components/alert';
-import { parse as parseCohortId } from '../util/cohort.js';
+import { parse as parseCohortId } from '../util/cohort';
 
 
 // handle successful signup (add profile data and assign cohort)
@@ -151,6 +151,8 @@ const SignInWithFacebookButton = props => (
             if (providers[0] === 'password') {
               return props.toggleFbPasswordPrompt(email, pendingCred);
             }
+
+            return console.error('Not registered via email nor FB???');
 
             // All the other cases are external providers.
             // TODO: implement getProviderForProviderId.
@@ -299,7 +301,7 @@ const SignIn = (props) => {
               )}
               <SignInForm {...props} />
               {!props.signup && <SignInForgotToggle {...props} />}
-              <SignInWithFacebookButton {...props} />
+              {false && <SignInWithFacebookButton {...props} />}
             </div>
           )
         }

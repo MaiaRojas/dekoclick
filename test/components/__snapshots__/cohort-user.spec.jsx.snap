@@ -11,7 +11,7 @@ Array [
     in CohortUser",
   ],
   Array [
-    "Warning: Failed prop type: The prop \`role\` is marked as required in \`CohortUser\`, but its value is \`undefined\`.
+    "Warning: Failed prop type: The prop \`cohortUser\` is marked as required in \`CohortUser\`, but its value is \`undefined\`.
     in CohortUser",
   ],
   Array [
