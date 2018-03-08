@@ -82,7 +82,7 @@ class CheckboxList extends React.Component {
             .update({
               [`${fieldStructure}`]: {
                 author: adminUser.data().name,
-                authorLinkedin: adminUser.data().linkedin,
+                authorLinkedin: adminUser.data().linkedin || '',
                 company: 'Laboratoria',
                 companyUrl: 'www.laboratoria.la',
               },
