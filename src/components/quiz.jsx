@@ -32,16 +32,21 @@ const styles = theme => ({
 });
 
 
-const arrayEqual = (a, b) => {
-  const bArray = (b && b.sort) ? b : Object.keys(b || {}).reduce((memo, key) => {
-    if (/^\d+$/.test(key)) {
-      // memo[parseInt(key, 10)] = b[key];
-      return Object.assign({}, memo, { [parseInt(key, 10)]: b[key] });
-    }
-    return memo;
-  }, []);
-  return a.sort().join(',') === bArray.sort().join(',');
-};
+const objectToArray = obj => (
+  (Array.isArray(obj))
+    ? obj
+    : Object.keys(obj || {})
+      .sort()
+      .reduce((memo, key) => (
+        (typeof key === 'number' || /^\d+$/.test(key))
+          ? Object.assign(memo, { [parseInt(key, 10)]: obj[key] })
+          : memo
+      ), [])
+);
+
+
+const arrayEqual = (a, b) =>
+  a.sort().join(',') === objectToArray(b).sort().join(',');
 
 
 const updateQuizProgress = (firestore, auth, match, changes) =>
@@ -144,7 +149,7 @@ const Quiz = (props) => {
           key={question.title}
           idx={idx}
           question={question}
-          progress={(idx in progress) ? progress[idx] : ''}
+          progress={(idx in progress) ? objectToArray(progress[idx]) : ''}
           hasResults={!!progress.results}
           updateProgress={updateQuestionProgress(firestore, auth, match)}
         />))
