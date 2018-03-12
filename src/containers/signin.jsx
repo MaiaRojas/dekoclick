@@ -36,9 +36,10 @@ const postSignUp = (props, userRecord) => {
   );
   return db.doc(`users/${userRecord.uid}`).set({
     email: userRecord.email,
-    name: userRecord.displayName || '',
+    name: (props.data.name || userRecord.displayName || '').trim(),
     locale: (campus && campus.locale) ? campus.locale : 'es-ES',
     timezone: (campus && campus.timezone) ? campus.timezone : 'America/Lima',
+    signupCohort: props.cohortid,
   })
     .then(() =>
       db.doc(`cohorts/${props.cohortid}/users/${userRecord.uid}`).set({ role: 'student' }))
@@ -313,6 +314,7 @@ const SignIn = (props) => {
 
 SignIn.propTypes = {
   data: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
   }).isRequired,

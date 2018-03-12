@@ -16,6 +16,18 @@ const SignInForm = props => (
   >
     <div className="controls">
       <TextField
+        id="name"
+        label={<FormattedMessage id="signin.name" />}
+        autoComplete="name"
+        value={props.data.name}
+        error={!!props.errors.name}
+        helperText={props.errors && props.errors.name &&
+          <FormattedMessage id={props.errors.name} />}
+        onChange={e => props.updateSignInField('name', e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
         id="email"
         label={<FormattedMessage id="signin.email" />}
         autoComplete="email"

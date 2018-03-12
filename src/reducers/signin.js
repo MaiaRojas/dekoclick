@@ -67,6 +67,11 @@ const validateField = (key, value, state) => {
   const trimmed = typeof value === 'string' ? value.trim() : '';
 
   switch (key) {
+    case 'name':
+      return {
+        err: (state.signup && !state.forgot && !trimmed) ? 'signin.errors.invalidName' : null,
+        sanitized: value,
+      };
     case 'email':
       return {
         err: (!isEmail(trimmed)) ? 'signin.errors.invalidEmail' : null,
@@ -95,7 +100,13 @@ const validateField = (key, value, state) => {
 
 const initialState = () => ({
   data: {
-    email: '',
+    name: '',
+    email: window.location.search.slice(1).split('&').reduce(
+      (memo, pair) => (
+        (pair.split('=')[0] === 'email') ? pair.split('=')[1] : memo
+      ),
+      '',
+    ),
     password: '',
     password2: '',
   },
