@@ -41,8 +41,12 @@ const paramsToQueryStrign = params =>
 const typeformUrlPattern = /https:\/\/[a-z0-9\-]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
 
 
-const processTypeFormUrls = (part, unitProgress, auth, { params }, intl) => {
-  if (!part.embeds || !part.embeds.filter(embed => embed.type === 'form').length) {
+const partHasTypeforms = part =>
+  (part && part.embeds && part.embeds.filter(embed => embed.type === 'form').length);
+
+
+const processTypeFormUrls = (part, unitProgress, auth, profile, { params }, intl) => {
+  if (!partHasTypeforms(part)) {
     return part.body;
   }
 
@@ -67,7 +71,7 @@ const processTypeFormUrls = (part, unitProgress, auth, { params }, intl) => {
       src: `${iframe.src}?${paramsToQueryStrign({
         uid: auth.uid,
         email: auth.email,
-        fname: auth.displayName,
+        fname: profile.name || auth.displayName,
         ...params,
       })}`,
     });
@@ -77,34 +81,100 @@ const processTypeFormUrls = (part, unitProgress, auth, { params }, intl) => {
 };
 
 
-const UnitPart = ({
-  unit,
-  unitProgress,
-  parts,
-  part,
-  partProgress,
-  intl,
-  auth,
-  classes,
-  match,
-}) => (
-  <div className={classes.root}>
-    <div className={classes.meta}>
-      <Chip
-        className={classes.metaChip}
-        label={`Tipo: ${part.type}`}
-      />
-      <Chip
-        className={classes.metaChip}
-        label={`Formato: ${part.format}`}
-      />
-    </div>
-    {part.type === 'self-assessment' &&
-      <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
+// const UnitPart = ({
+//   unit,
+//   unitProgress,
+//   parts,
+//   part,
+//   partProgress,
+//   intl,
+//   auth,
+//   classes,
+//   match,
+// }) => (
+//   <div className={classes.root}>
+//     <div className={classes.meta}>
+//       <Chip
+//         className={classes.metaChip}
+//         label={`Tipo: ${part.type}`}
+//       />
+//       <Chip
+//         className={classes.metaChip}
+//         label={`Formato: ${part.format}`}
+//       />
+//     </div>
+//     {part.type === 'self-assessment' &&
+//       <SelfAssessment match={match} unit={unit} parts={parts} progress={partProgress} />
+//     }
+//     {part.body && <Content html={processTypeFormUrls(part, unitProgress, auth, match, intl)} />}
+//   </div>
+// );
+
+class UnitPart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleTypeformSubmit = this.handleTypeformSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if (partHasTypeforms(this.props.part)) {
+      window.addEventListener('message', this.handleTypeformSubmit);
     }
-    {part.body && <Content html={processTypeFormUrls(part, unitProgress, auth, match, intl)} />}
-  </div>
-);
+  }
+
+  componentWillUnmount() {
+    if (partHasTypeforms(this.props.part)) {
+      window.removeEventListener('message', this.handleTypeformSubmit);
+    }
+  }
+
+  handleTypeformSubmit(event) {
+    // console.log('handleTypeformSubmit', event);
+    if (event.data === 'form-submit') {
+      // ...
+    }
+  }
+
+  render() {
+    const {
+      unit,
+      unitProgress,
+      parts,
+      part,
+      partProgress,
+      intl,
+      auth,
+      profile,
+      classes,
+      match,
+    } = this.props;
+    return (
+      <div className={classes.root}>
+        <div className={classes.meta}>
+          <Chip
+            className={classes.metaChip}
+            label={`Tipo: ${part.type}`}
+          />
+          <Chip
+            className={classes.metaChip}
+            label={`Formato: ${part.format}`}
+          />
+        </div>
+        {part.type === 'self-assessment' &&
+          <SelfAssessment
+            match={match}
+            unit={unit}
+            parts={parts}
+            progress={partProgress}
+          />
+        }
+        {part.body && (
+          <Content html={processTypeFormUrls(part, unitProgress, auth, profile, match, intl)} />
+        )}
+      </div>
+    )
+  }
+}
 
 
 UnitPart.propTypes = {

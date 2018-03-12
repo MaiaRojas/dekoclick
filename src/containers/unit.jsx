@@ -107,6 +107,7 @@ const Unit = (props) => {
           partProgress={partProgress}
           match={props.match}
           auth={props.auth}
+          profile={props.profile}
         />
       </div>
     </div>
