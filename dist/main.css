@@ -49,6 +49,10 @@ pre > code {
   padding: 0.5em;
 }
 
+table {
+  width: 100%;
+}
+
 .app {
   width: 100%;
   display: flex;
