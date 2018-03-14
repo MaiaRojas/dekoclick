@@ -208,7 +208,7 @@ const parseDateString = str => new Date(
 
 const validate = (props) => {
   const {
-    campus, program, track, name, start, end,
+    campus, program, track, name, start, end, publicAdmission,
   } = props;
   const errors = [];
   const campusesKeys = props.campuses.map(item => item.id);
@@ -255,7 +255,7 @@ const validate = (props) => {
   return {
     cohort: {
       key: `${campus}-${start.slice(0, 7)}-${program}-${track}-${name}`,
-      value: { start, end },
+      value: { start, end, publicAdmission },
     },
   };
 };

@@ -42,6 +42,7 @@ const postSignUp = (props, userRecord) => {
     signupCohort: props.cohortid,
   })
     .then(() =>
+      // TODO: This should happen in backend!!! Refactor PUT /users/:id ???
       db.doc(`cohorts/${props.cohortid}/users/${userRecord.uid}`).set({ role: 'student' }))
     .then(() => {
       props.resetSignInForm();
@@ -284,7 +285,7 @@ const SignIn = (props) => {
     <div className={props.classes.root}>
       <Paper className={props.classes.paper}>
         <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
-        {props.signup && !props.cohort
+        {props.signup && (!props.cohort || !props.cohort.publicAdmission)
           ? (<div className={props.classes.noCohortSelected}>No cohort selected</div>)
           : (
             <div>
