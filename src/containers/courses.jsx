@@ -22,7 +22,7 @@ const Courses = ({
     {cohorts && !cohorts.length && (
       <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
     )}
-    {cohorts && cohorts.length && (
+    {cohorts && cohorts.length > 0 && (
       [...cohorts].reverse().map(cohort => (
         <CoursesList
           key={cohort.id}
