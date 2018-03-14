@@ -107,9 +107,9 @@ export default (state = { ...initialState }, action = {}) => {
     case FETCH_USER_SUCCESS:
       return {
         ...state,
-        name: (action.payload.profile || {}).name || action.payload.displayName || '',
-        github: (action.payload.profile || {}).github || '',
-        userRecord: action.payload,
+        name: action.payload.name || (action.payload.userRecord || {}).displayName || '',
+        github: action.payload.github || '',
+        userRecord: action.payload.userRecord,
         userRecordLoading: false,
         userRecordError: null,
       };
