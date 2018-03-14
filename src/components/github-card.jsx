@@ -163,7 +163,7 @@ class GithubCard extends React.Component {
                 };
                 const repoErrors = {};
                 repoErrors.demo = !isUrl(repoObj.demo);
-                repoErrors.description = repoObj.description && repoObj.description.length < 140;
+                repoErrors.description = repoObj.description && repoObj.description.length > 280;
                 repoErrors.tags = repoObj.tags && repoObj.tags.length === 0;
                 repoErrors.name = repoObj.name && repoObj.name.length === 0;
                 repoErrors.image = repoObj.image && repoObj.image.length === 0

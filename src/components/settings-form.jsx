@@ -158,7 +158,7 @@ class SettingsForm extends React.Component {
           snap.forEach (doc => {
             const cohort = parseCohortid(doc.id);
             if (cohort.program === 'jp' && doc.data() && doc.data().role === 'student') {
-              this.setState({ isUserInJobPlacementProgram: true }); 
+              this.setState({ isUserInJobPlacementProgram: true });
             }
           });
         })
@@ -220,6 +220,17 @@ class SettingsForm extends React.Component {
           inputLabel="Nombre"
           inputValue={this.state.name}
           inputId="name"
+          updateValueOnProfile={this.updateValueOnProfile}
+          usePaperContainer={this.props.showOptsInSettings}
+        />
+
+        <FormControlWrapper
+          {...props}
+          inputLabel="Portafolio"
+          inputValue={this.state.portfolio}
+          helperText="Ejemplo: Si tu portafolio es: https://Mi.portafolio.com/, entonces escribir solamente el nick 'Mi.portafolio.com'"
+          error={isUrl(this.state.portfolio)}
+          inputId="portfolio"
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer={this.props.showOptsInSettings}
         />
