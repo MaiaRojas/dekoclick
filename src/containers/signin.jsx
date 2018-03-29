@@ -60,11 +60,17 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: '#F7F7F7',
+    textAlign: 'center',
+    flexDirection:'column',
   },
   paper: {
     margin: theme.spacing.unit * 4,
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
+    width: '100%',
+    maxWidth: theme.leftDrawerWidth,
+  },
+  contentLogo: {
     width: '100%',
     maxWidth: theme.leftDrawerWidth,
   },
@@ -76,6 +82,11 @@ const styles = theme => ({
   },
   submitBtn: {
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
+    backgroundColor: '#ffe521',
+    width: '100%',
+    fontSize: 18,
+    lineHeight: '24px',
+    borderRadius: 0,
   },
   noCohortSelected: {
     textAlign: 'center',
@@ -83,6 +94,11 @@ const styles = theme => ({
   signupCohort: {
     marginTop: 32,
     textAlign: 'center',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
   },
 });
 
@@ -283,8 +299,10 @@ const SignIn = (props) => {
 
   return (
     <div className={props.classes.root}>
+      <div className={props.classes.contentLogo}>
+        <img className={props.classes.logo} src="/img/logo+negro.png" alt="Laboratoria LMS" />
+      </div>
       <Paper className={props.classes.paper}>
-        <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
         {props.signup && (!props.cohort || !props.cohort.publicAdmission)
           ? (<div className={props.classes.noCohortSelected}>No cohort selected</div>)
           : (
@@ -354,8 +372,12 @@ SignIn.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
+    contentLogo:PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     submitBtn: PropTypes.string.isRequired,
+    noCohortSelected:PropTypes.string.isRequired,
+    signupCohort:PropTypes.string.isRequired,
+    textField:PropTypes.string.isRequired,
   }).isRequired,
 };
 

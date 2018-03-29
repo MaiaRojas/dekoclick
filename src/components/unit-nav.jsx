@@ -1,15 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import LeftDrawer from './left-drawer';
 import UnitNavItem from './unit-nav-item';
+import IconButton from 'material-ui/IconButton';
+import ExitToAppIcon from 'material-ui-icons/ExitToApp';
+import { FormattedMessage } from 'react-intl';
 
 
 const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
+  },
+  divider:{
+    backgroundColor: theme.palette.common.white,
+  },
+  icon: {
+    color: theme.palette.primary.main,
+  },
+  signoutBtn: {
+    backgroundColor: theme.palette.common.black,
+  },
+  listItemIcon :{
+    color: theme.palette.common.white,
   },
 });
 
@@ -44,20 +59,16 @@ const UnitNav = ({
   classes,
   match,
   history,
+  firebase,
 }) => (
-  <LeftDrawer>
+  <LeftDrawer
+    unit={unit}
+    parts={parts}
+    match={match}
+    history={history}
+    >
     <List disablePadding className={classes.list}>
-      <ListItem
-        button
-        onClick={() =>
-          history.push(`/cohorts/${match.params.cohortid}/courses/${match.params.courseid}`)
-        }
-      >
-        <ListItemText
-          primary={`Unidad ${getUnitOrder(unit, match)}: ${unit.title}`}
-        />
-      </ListItem>
-      <Divider />
+      <Divider className={classes.divider} />
       {parts.map((part, idx) =>
         (<UnitNavItem
           key={part.id}
@@ -71,6 +82,22 @@ const UnitNav = ({
         />))
       }
     </List>
+    <div className={classes.bottom}>
+      <Divider  className={classes.divider}/>
+      <ListItem
+        button
+        className={classes.signoutBtn}
+        onClick={() => firebase.logout()}
+      >
+        <ListItemIcon className={classes.listItemIcon}>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        <ListItemText
+          className={'unitNav-text'}
+          primary={<FormattedMessage id="main-nav.signout" />}
+        />
+      </ListItem>
+    </div>
   </LeftDrawer>
 );
 
@@ -92,6 +119,13 @@ UnitNav.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({
     list: PropTypes.string.isRequired,
+    divider: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    signoutBtn: PropTypes.string.isRequired,
+    listItemIcon:PropTypes.string.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    logout: PropTypes.func.isRequired,
   }).isRequired,
 };
 

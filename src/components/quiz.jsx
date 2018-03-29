@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import QuizConfirmationDialog from './quiz-confirmation-dialog';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
+import QuizTitle from './quiz-title';
 import {
   toggleQuizConfirmationDialog,
   resetQuizConfirmationDialog,
@@ -29,6 +30,9 @@ const styles = theme => ({
   startButton: {
     marginTop: theme.spacing.unit,
   },
+  content:{
+    marginBottom: theme.spacing.unit * 4,
+  }
 });
 
 
@@ -143,22 +147,25 @@ const Quiz = (props) => {
 
   return (
     <div className={classes.root}>
-      {progress.results && <QuizResults results={progress.results} />}
-      {part.questions.map((question, idx) =>
-        (<QuizQuestion
-          key={question.title}
-          idx={idx}
-          question={question}
-          progress={(idx in progress) ? objectToArray(progress[idx]) : ''}
-          hasResults={!!progress.results}
-          updateProgress={updateQuestionProgress(firestore, auth, match)}
-        />))
-      }
-      {!progress.results && (
-        <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
-          <FormattedMessage id="quiz.send" />
-        </Button>
-      )}
+      <QuizTitle/>
+      <div className={classes.content}>
+        {progress.results && <QuizResults results={progress.results} />}
+        {part.questions.map((question, idx) =>
+          (<QuizQuestion
+            key={question.title}
+            idx={idx}
+            question={question}
+            progress={(idx in progress) ? objectToArray(progress[idx]) : ''}
+            hasResults={!!progress.results}
+            updateProgress={updateQuestionProgress(firestore, auth, match)}
+          />))
+        }
+        {!progress.results && (
+          <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
+            <FormattedMessage id="quiz.send" />
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
@@ -186,7 +193,12 @@ Quiz.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    p: PropTypes.string.isRequired,
+    startButton: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+  }).isRequired,
   startQuiz: PropTypes.bool.isRequired,
   resetQuizConfirmationDialog: PropTypes.func.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,

@@ -16,19 +16,21 @@ import LeftDrawer from './left-drawer';
 const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
-  },
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.background.secondary,
+    },
   logo: {
     height: 20,
     display: 'block',
     margin: 'auto',
-    padding: 10,
+    padding: 10,  
   },
   profileBadge: {
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px`,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.secondary,
   },
   active: {
-    backgroundColor: theme.palette.primary[500],
+    // backgroundColor: theme.palette.primary[500],
   },
   bottom: {
     position: 'absolute',
@@ -36,7 +38,18 @@ const styles = theme => ({
     width: '100%',
   },
   signoutBtn: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.common.black,
+  },
+  divider:{
+    backgroundColor: theme.palette.common.white,
+  },
+  listItemIcon :{
+    color: theme.palette.common.white,
+  },
+  avatar: {
+    width:`${theme.spacing.unit * 5}px`,
+    height: `${theme.spacing.unit * 5}px`,
+    borderRadius: 0,
   },
 });
 
@@ -78,44 +91,44 @@ const isActive = ({ match, classes }, container) => {
 const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
-      <ListItem>
-        <img
-          alt="Laboratoria, código que transforma"
-          className={props.classes.logo}
-          src="/img/logo.svg"
-        />
-      </ListItem>
-      <Divider />
+      <Divider className={props.classes.divider}/>
       <ListItem className={props.classes.profileBadge}>
-        <Avatar>
+        <Avatar className={props.classes.avatar} >
           {nameToInitials(getName(props.auth, props.profile))}
         </Avatar>
         <ListItemText
+          className={'mainNav-email'}
           primary={getName(props.auth, props.profile)}
           secondary={getEmail(props.auth, props.profile)}
         />
       </ListItem>
-      <Divider />
+      <Divider className={props.classes.divider} />
       <ListItem
-        style={{ display: 'none' }}
+        style={{ display: 'none'}}
         button
         onClick={() => props.history.push('/')}
         className={isActive(props, 'dashboard')}
       >
-        <ListItemIcon>
+        <ListItemIcon className={props.classes.listItemIcon}>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" />
+        <ListItemText
+          className={'mainNav-text'}
+          primary="Dashboard"
+        />
       </ListItem>
       <ListItem
         button
         onClick={() => props.history.push('/courses')}
         className={isActive(props, 'courses')}
       >
-        <ListItemIcon>
+        <ListItemIcon className={props.classes.listItemIcon}>
           <LocalLibraryIcon />
         </ListItemIcon>
-        <ListItemText primary={<FormattedMessage id="main-nav.courses" />} />
+        <ListItemText
+          className={'mainNav-text'}
+          primary={<FormattedMessage id="main-nav.courses" />}
+        />
       </ListItem>
       {props.profile && props.profile.roles && props.profile.roles.admin &&
         <ListItem
@@ -123,35 +136,44 @@ const MainNav = props => (
           onClick={() => props.history.push('/cohorts')}
           className={isActive(props, 'cohorts')}
         >
-          <ListItemIcon>
+          <ListItemIcon className={props.classes.listItemIcon}>
             <GroupIcon />
           </ListItemIcon>
-          <ListItemText primary="Cohorts" />
+          <ListItemText
+            className={'mainNav-text'}
+            primary="Cohorts"
+          />
         </ListItem>
       }
-      
+
       <ListItem
         button
         onClick={() => props.history.push('/settings')}
         className={isActive(props, 'settings')}
       >
-        <ListItemIcon>
+        <ListItemIcon className={props.classes.listItemIcon}>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary={<FormattedMessage id="main-nav.settings" />} />
+        <ListItemText
+          className={'mainNav-text'}
+          primary={<FormattedMessage id="main-nav.settings" />}
+        />
       </ListItem>
-      
+
       <div className={props.classes.bottom}>
-        <Divider />
+        <Divider  className={props.classes.divider}/>
         <ListItem
           button
           className={props.classes.signoutBtn}
           onClick={() => props.firebase.logout()}
         >
-          <ListItemIcon>
+          <ListItemIcon className={props.classes.listItemIcon}>
             <ExitToAppIcon />
           </ListItemIcon>
-          <ListItemText primary={<FormattedMessage id="main-nav.signout" />} />
+          <ListItemText
+            className={'mainNav-text'}
+            primary={<FormattedMessage id="main-nav.signout" />}
+          />
         </ListItem>
       </div>
     </List>
@@ -178,6 +200,9 @@ MainNav.propTypes = {
     active: PropTypes.string.isRequired,
     bottom: PropTypes.string.isRequired,
     signoutBtn: PropTypes.string.isRequired,
+    divider: PropTypes.string.isRequired,
+    listItemIcon: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
   }).isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   match: PropTypes.shape({

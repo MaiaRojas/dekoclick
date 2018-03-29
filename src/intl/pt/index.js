@@ -60,6 +60,7 @@ export default {
   'quiz.areYouSure': 'Tem certeza de que deseja responder agora?',
   'quiz.start': 'Sim, responda agora',
   'quiz.send': 'Enviar',
+  'quiz.title': 'Avaliação',
 
   'quiz-confirmation-dialog.title': 'Pense bem...',
   'quiz-confirmation-dialog.content': `Você tem certeza de que deseja começar

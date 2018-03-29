@@ -15,6 +15,7 @@ const Courses = ({
   auth,
   profile,
   history,
+  drawerOpen,
 }) => (
   <div className="courses">
     <TopBar title={<FormattedMessage id="courses.title" />} />
@@ -25,6 +26,7 @@ const Courses = ({
     {cohorts && cohorts.length > 0 && (
       [...cohorts].reverse().map(cohort => (
         <CoursesList
+          drawerOpen={drawerOpen}
           key={cohort.id}
           cohort={cohort}
           auth={auth}
@@ -52,6 +54,9 @@ Courses.defaultProps = {
   cohorts: undefined,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 export default compose(
   firestoreConnect(({ auth }) => [{
@@ -60,4 +65,5 @@ export default compose(
   connect(({ firestore }, { auth }) => ({
     cohorts: firestore.ordered[`users/${auth.uid}/cohorts`],
   })),
+  connect(mapStateToProps),
 )(Courses);

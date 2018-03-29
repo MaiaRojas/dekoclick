@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import Avatar from 'material-ui/Avatar';
@@ -9,6 +11,34 @@ import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
+
+
+const drawerWidth = 320;
+const styles = theme => ({
+  appBar: {
+    width: `100%`,
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - 73px)`,
+      marginLeft: '73px',
+    },
+  },
+  appBarShift: {
+    width: '100%',
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+});
 
 
 const Course = (props) => {
@@ -36,7 +66,10 @@ const Course = (props) => {
           />
         }
       </TopBar>
-      <div>
+      <div
+        position="absolute"
+        className={classNames( props.classes.appBar, props.drawerOpen && props.classes.appBarShift )}
+      >
         {props.syllabus && props.syllabus.map((unit, idx) => (
           <UnitCard
             key={unit.id}
@@ -86,6 +119,9 @@ Course.defaultProps = {
   courseSettings: undefined,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 export default compose(
   firestoreConnect(({ auth, match: { params: { cohortid, courseid } } }) => [
@@ -124,4 +160,6 @@ export default compose(
       ? firestore.data[`cohorts/${cohortid}/coursesSettings`][courseid]
       : undefined,
   })),
+  connect(mapStateToProps),
+  withStyles(styles),
 )(Course);

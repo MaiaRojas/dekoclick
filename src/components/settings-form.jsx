@@ -408,6 +408,10 @@ class SettingsForm extends React.Component {
 
 SettingsForm.propTypes = {
   showOptsInSettings: PropTypes.bool,
+  classes: PropTypes.shape({
+    paper: PropTypes.string.isRequired,
+    legend: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

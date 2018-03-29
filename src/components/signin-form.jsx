@@ -29,8 +29,12 @@ const SignInForm = props => (
           margin="normal"
         />
       )}
+
       <TextField
         id="email"
+        InputLabelProps={{
+          shrink: true,
+        }}
         label={<FormattedMessage id="signin.email" />}
         autoComplete="email"
         value={props.data.email}
@@ -40,10 +44,14 @@ const SignInForm = props => (
         onChange={e => props.updateSignInField('email', e.target.value)}
         fullWidth
         margin="normal"
+        className={props.classes.TextField}
       />
       {!props.forgot &&
         <TextField
           id="password"
+          InputLabelProps={{
+            shrink: true,
+          }}
           label={<FormattedMessage id="signin.password" />}
           value={props.data.password}
           type="password"
