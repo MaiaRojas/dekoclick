@@ -28,6 +28,9 @@ const styles = theme => ({
   unread: {
     fontWeight: 700,
   },
+  icon: {
+    color: theme.palette.primary.main,
+  }
 });
 
 
@@ -50,11 +53,11 @@ const partTypeToIcon = (type) => {
 
 const progressToIcon = (part, partProgress, partProgressStats) => {
   if (partProgressStats && partProgressStats.completed === 1) {
-    return <DoneIcon />;
+    return <DoneIcon className={'progress-icon'}/>;
   } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {
-    return <TimerIcon />;
+    return <TimerIcon className={'progress-icon'}/>;
   } else if (part.type === 'practice' && part.exercises && partProgressStats && partProgressStats && partProgressStats.completed) {
-    return <WarningIcon />;
+    return <WarningIcon className={'progress-icon'} />;
   }
   return null;
 };
@@ -62,14 +65,16 @@ const progressToIcon = (part, partProgress, partProgressStats) => {
 
 const UnitNavItem = props => (
   <ListItem
+    style={{borderBottom: '1px solid #ffffff'}}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
     className={props.partid === props.match.params.partid ? props.classes.active : ''}
   >
-    <ListItemIcon>
+    <ListItemIcon className={props.classes.icon}>
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
     <ListItemText
+      className={'unitNav-text'}
       classes={{
         primary: (props.partProgress || {}).openedAt
           ? props.classes.read

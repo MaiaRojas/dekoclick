@@ -26,7 +26,7 @@ const styles = theme => ({
   cardActions: {
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    height: 72,
+    height: 120,
   },
   count: {
     display: 'flex',
@@ -36,16 +36,21 @@ const styles = theme => ({
     display: 'inline-block',
     marginLeft: 6,
   },
+  cardContent: {
+    backgroundColor: theme.palette.primary.main,
+    height: '60px',
+  },
 });
 
 
 const CourseCard = props => (
   <Card className={props.classes.card}>
-    <CardContent>
+    <CardContent className={props.classes.cardContent}>
       <Typography variant="title">
         {props.course.title}
       </Typography>
     </CardContent>
+    <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
     <CardActions className={props.classes.cardActions}>
       {props.course.stats && props.course.stats.unitCount && (
         <div className={props.classes.count}>
@@ -76,7 +81,6 @@ const CourseCard = props => (
       >
         <FormattedMessage id={`course-card.${props.progress ? 'continue' : 'start'}`} />
       </Button>
-      <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
     </CardActions>
   </Card>
 );
@@ -100,6 +104,7 @@ CourseCard.propTypes = {
     cardActions: PropTypes.string.isRequired,
     count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
+    cardContent: PropTypes.string.isRequired,
   }).isRequired,
 };
 

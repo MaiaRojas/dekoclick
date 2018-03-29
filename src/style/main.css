@@ -6,28 +6,28 @@ html, body, .root, .root > div {
 }
 
 body {
-  color: #2b2b2b;
-  font-family: museo-sans, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #000000;
+  font-family: 'Open Sans',"Helvetica Neue", Arial, sans-serif;
   font-weight: 100;
   font-size: 16px;
   line-height: 145%;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Montserrat, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Bitter', serif, "Helvetica Neue", Arial;
   font-weight: 700;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 
 a {
   text-decoration: none;
-  border-bottom: 1px solid #F7B617;
-  color: #2b2b2b;
+  border-bottom: 1px solid #000000;
+  color: #000000;
 }
 
-a:hover {
-  border-bottom: 1px solid #CB9513;
-}
+/* a:hover {
+  border-bottom: 1px solid #000000;
+} */
 
 blockquote {
   background-color: #f0f0f0;
@@ -53,6 +53,13 @@ table {
   width: 100%;
 }
 
+label ,legend {
+  color: #000000 !important;
+  font-weight: bold !important;
+}
+span > span {
+   color: #000000;
+ }
 .app {
   width: 100%;
   display: flex;
@@ -65,6 +72,25 @@ table {
   padding: 36px;
   width: 100%;
   min-height: 100vh;
+}
+
+.progress-icon {
+  color: #ffffff;
+}
+
+.unitNav-text h3 {
+  color: #ffffff;
+}
+
+.leftDrawer-text h3,
+.mainNav-text h3,
+.mainNav-email h3 {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.mainNav-email p {
+  color: #ffffff;
 }
 
 .content p,
@@ -104,7 +130,7 @@ table {
 
 /* Heart Loader (splash screen)*/
 .loading {
-  background-color: #ffc107;
+  background-color: #ffe521;
   width: 100%;
   height: 100%;
   overflow: hidden;

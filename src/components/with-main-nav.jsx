@@ -9,10 +9,15 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.default,
   },
   main: {
-    marginLeft: 0,
-    [theme.breakpoints.up('md')]: {
-      marginLeft: theme.leftDrawerWidth,
-    },
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 4,
+    // [theme.breakpoints.up('md')]: {
+    //   marginLeft: theme.leftDrawerWidth,
+    // },
+  },
+  flex: {
+    flex: 1,
   },
 });
 
@@ -31,6 +36,8 @@ WithMainNav.propTypes = {
   component: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
+    main: PropTypes.string.isRequired,
+    flex: PropTypes.string.isRequired,
   }).isRequired,
 };
 

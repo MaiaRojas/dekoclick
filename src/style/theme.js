@@ -4,43 +4,65 @@ import { amber } from 'material-ui/colors';
 
 const theme = createMuiTheme({
   palette: {
-    primary: amber,
-    // type: 'dark',
+    // primary: amber,
+    primary: {
+      main:'#ffe521',
+      secondary: '#000000',
+    },
+    secondary: {
+      main: '#bdbdbd',
+    },
+    text:{
+      primary: '#000000',
+      secondary: '#ffffff',
+    },
+    background: {
+      default: '#ffffff',
+    },
   },
   typography: {
     htmlFontSize: 16,
-    color: '#2b2b2b',
-    fontFamily: 'museo-sans, "Helvetica Neue", Arial, sans-serif',
+    color: '#ffffff',
+    fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
     fontWeight: 100,
     fontSize: 16,
     lineHeight: '145%',
     body1: {
-      fontFamily: 'museo-sans, "Helvetica Neue", Arial, sans-serif',
+      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
       fontWeight: 100,
     },
     headline: {
-      fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
+      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
       textTransform: 'uppercase',
-      fontWeight: 700,
+      fontWeight: 100,
       color: '#999',
     },
     title: {
-      fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
-      textTransform: 'uppercase',
+      fontFamily: '"Bitter", serif, "Helvetica Neue", Arial',
+      // textTransform: 'uppercase',
       fontWeight: 700,
+      lineHeight: '2rem',
+      fontSize: '1.5rem',
     },
     subheading: {
-      // fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
+      // fontFamily: '"Bitter", serif,"Helvetica Neue", Arial',
       // textTransform: 'uppercase',
       fontWeight: 300,
     },
     button: {
-      fontFamily: 'Montserrat, "Helvetica Neue", Arial, sans-serif',
+      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
       fontWeight: 700,
+      boxShadow: 'none !important',
+      borderRadius: 0,
     },
+    display1:{
+      fontFamily: '"Bitter", serif, "Helvetica Neue", Arial',
+      color:'#000000',
+    }
   },
   maxContentWidth: 760,
   leftDrawerWidth: 320,
+  leftDrawerWidthMin: 73,
 });
 
 

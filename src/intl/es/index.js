@@ -1,7 +1,7 @@
 export default {
   'signin.signin': 'Iniciar sesión',
   'signin.signup': 'Crear cuenta',
-  'signin.forgot': 'Restaurar contraseña',
+  'signin.forgot': '¿Olvidaste tu contraseña?',
   'signin.signupWithFacebook': 'Crear cuenta con Facebook',
   'signin.signinWithFacebook': 'Inicia sesión con Facebook',
   'signin.name': 'Nombre',
@@ -23,7 +23,7 @@ export default {
   'main-nav.settings': 'Configuración',
   'main-nav.signout': 'Cerrar sesión',
 
-  'courses.title': 'Cursos',
+  'courses.title': 'Mis Cursos',
   'courses.noCoursesWarning': [
     'Hmmm... parece que todavía no hay ningún curso asociado a',
     'tu cuenta. Si crees que esto es un error, contacta a tu instructor o',
@@ -61,6 +61,7 @@ export default {
   'quiz.areYouSure': '¿Estás segura de que quieres responder ahora?',
   'quiz.start': 'Sí, responder ahora',
   'quiz.send': 'Enviar',
+  'quiz.title': 'Evaluación',
 
   'quiz-confirmation-dialog.title': 'Piénsalo bien...',
   'quiz-confirmation-dialog.content': `¿Estás totalmente segura de que quieres

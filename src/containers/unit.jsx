@@ -26,9 +26,9 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 4}px`,
     width: '100%',
     minHeight: '100vh',
-    [theme.breakpoints.up('md')]: {
-      marginLeft: theme.leftDrawerWidth,
-    },
+    // [theme.breakpoints.up('md')]: {
+    //   marginLeft: theme.leftDrawerWidth,
+    // },
   },
 });
 

@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import { CircularProgress } from 'material-ui/Progress';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -25,13 +26,36 @@ import { toggleCohortUserAddDialog } from '../reducers/cohort-user-add-dialog';
 import { parse as parseCohortid } from '../util/cohort';
 import programs from '../util/programs';
 
-
+const drawerWidth = 320;
 const styles = theme => ({
   root: {
     width: '100%',
   },
   courseListWrapper: {
     background: theme.palette.background.paper,
+  },
+  appBar: {
+    width: `100%`,
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - 73px)`,
+      marginLeft: '73px',
+    },
+  },
+  appBarShift: {
+    width: '100%',
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
 });
 
@@ -69,6 +93,7 @@ const Cohort = ({
   classes,
   history,
   auth,
+  drawerOpen,
 }) => {
   if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
     return (<CircularProgress />);
@@ -88,111 +113,115 @@ const Cohort = ({
   return (
     <div className={`cohort ${classes.root}`}>
       <TopBar title={`Cohort: ${cohortid}`} />
+      <div
+        position="absolute"
+        className={classNames( classes.appBar, drawerOpen && classes.appBarShift )}
+      >
+        <CohortSection title="Overview">
+          <p>
+            Campus: {parsedCohortId.campus.toUpperCase()}<br />
+            Program: {program && program.name && program.name}<br />
+            Track: {parsedCohortId.track}
+          </p>
+        </CohortSection>
 
-      <CohortSection title="Overview">
-        <p>
-          Campus: {parsedCohortId.campus.toUpperCase()}<br />
-          Program: {program && program.name && program.name}<br />
-          Track: {parsedCohortId.track}
-        </p>
-      </CohortSection>
+        {/*
+          <CohortSection
+            title="Agenda"
+            onAdd={toggleCalendarAddDialog}
+          >
+            <CohortCalendar
+              cohortid={cohortid}
+              cohort={cohort}
+              toggleCalendarAddDialog={toggleCalendarAddDialog}
+            />
+          </CohortSection>
+        */}
 
-      {/*
         <CohortSection
-          title="Agenda"
-          onAdd={toggleCalendarAddDialog}
+          title="Cursos"
+          onAdd={toggleCourseAddDialog}
         >
-          <CohortCalendar
+          {!courses.length ?
+            (
+              <Alert
+                message="Todavía no se han añadido cursos a este cohort. Puedes
+                  añadir cursos usando el botón '+' a la derecha."
+              />
+            )
+            :
+            (
+              <div className={classes.courseListWrapper}>
+                <List dense={false}>
+                  {courses.map(course => (
+                    <CohortCourse
+                      key={course.id}
+                      cohortid={cohortid}
+                      courseid={course.id}
+                      course={course}
+                      history={history}
+                    />
+                  ))}
+                </List>
+              </div>
+            )
+          }
+        </CohortSection>
+
+        <CohortSection
+          title={`Usuarixs (${users.length})`}
+          onAdd={toggleUserAddDialog}
+        >
+          {!users.length ?
+            (
+              <Alert
+                message="Todavía no se han añadido usuarios a este curso. Para
+                añadir alumnxs, instructorxs o admins usa el botón '+' a la
+                derecha."
+              />
+            )
+            :
+            (
+              <div>
+                <AppBar position="static">
+                  <Tabs value={currentTab} onChange={(e, val) => selectTab(val)}>
+                    <Tab label={`Alumnxs (${students.length})`} />
+                    <Tab label={`Instructorxs (${instructors.length})`} />
+                    <Tab label={`Admins (${admins.length})`} />
+                  </Tabs>
+                </AppBar>
+                {currentTab === 0 && (
+                  <CohortUsers cohortid={cohortid} users={students} auth={auth} parsedCohortId={parsedCohortId} />
+                )}
+                {currentTab === 1 && (
+                  <CohortUsers cohortid={cohortid} users={instructors} />
+                )}
+                {currentTab === 2 && (
+                  <CohortUsers cohortid={cohortid} users={admins} />
+                )}
+              </div>
+            )
+          }
+        </CohortSection>
+
+        {calendarAddDialogOpen && (
+          <CohortCalendarAddDialog
             cohortid={cohortid}
-            cohort={cohort}
+            users={users}
             toggleCalendarAddDialog={toggleCalendarAddDialog}
           />
-        </CohortSection>
-      */}
+        )}
 
-      <CohortSection
-        title="Cursos"
-        onAdd={toggleCourseAddDialog}
-      >
-        {!courses.length ?
-          (
-            <Alert
-              message="Todavía no se han añadido cursos a este cohort. Puedes
-                añadir cursos usando el botón '+' a la derecha."
-            />
-          )
-          :
-          (
-            <div className={classes.courseListWrapper}>
-              <List dense={false}>
-                {courses.map(course => (
-                  <CohortCourse
-                    key={course.id}
-                    cohortid={cohortid}
-                    courseid={course.id}
-                    course={course}
-                    history={history}
-                  />
-                ))}
-              </List>
-            </div>
-          )
-        }
-      </CohortSection>
+        {courseAddDialogOpen && (
+          <CohortCourseAddDialog cohortid={cohortid} courses={courses} />
+        )}
 
-      <CohortSection
-        title={`Usuarixs (${users.length})`}
-        onAdd={toggleUserAddDialog}
-      >
-        {!users.length ?
-          (
-            <Alert
-              message="Todavía no se han añadido usuarios a este curso. Para
-              añadir alumnxs, instructorxs o admins usa el botón '+' a la
-              derecha."
-            />
-          )
-          :
-          (
-            <div>
-              <AppBar position="static">
-                <Tabs value={currentTab} onChange={(e, val) => selectTab(val)}>
-                  <Tab label={`Alumnxs (${students.length})`} />
-                  <Tab label={`Instructorxs (${instructors.length})`} />
-                  <Tab label={`Admins (${admins.length})`} />
-                </Tabs>
-              </AppBar>
-              {currentTab === 0 && (
-                <CohortUsers cohortid={cohortid} users={students} auth={auth} parsedCohortId={parsedCohortId} />
-              )}
-              {currentTab === 1 && (
-                <CohortUsers cohortid={cohortid} users={instructors} />
-              )}
-              {currentTab === 2 && (
-                <CohortUsers cohortid={cohortid} users={admins} />
-              )}
-            </div>
-          )
-        }
-      </CohortSection>
+        {userAddDialogOpen && (
+          <CohortUserAddDialog cohortid={cohortid} />
+        )}
 
-      {calendarAddDialogOpen && (
-        <CohortCalendarAddDialog
-          cohortid={cohortid}
-          users={users}
-          toggleCalendarAddDialog={toggleCalendarAddDialog}
-        />
-      )}
-
-      {courseAddDialogOpen && (
-        <CohortCourseAddDialog cohortid={cohortid} courses={courses} />
-      )}
-
-      {userAddDialogOpen && (
-        <CohortUserAddDialog cohortid={cohortid} />
-      )}
-
-      <CohortUserMoveDialog cohortid={cohortid} />
+        <CohortUserMoveDialog cohortid={cohortid} />
+      </div>
     </div>
   );
 };
@@ -236,6 +265,7 @@ const mapStateToProps = ({
   cohortCalendarAddDialog,
   cohortUserAddDialog,
   cohortCourseAddDialog,
+  topbar,
 }, { match }) => ({
   cohort: (firestore.data.cohorts || {})[match.params.cohortid],
   users: firestore.ordered[`cohorts/${match.params.cohortid}/users`],
@@ -244,6 +274,7 @@ const mapStateToProps = ({
   calendarAddDialogOpen: cohortCalendarAddDialog.open,
   courseAddDialogOpen: cohortCourseAddDialog.open,
   userAddDialogOpen: cohortUserAddDialog.open,
+  drawerOpen: topbar.drawerOpen,
 });
 
 

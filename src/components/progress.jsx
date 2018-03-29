@@ -8,15 +8,24 @@ import Tooltip from 'material-ui/Tooltip';
 const styles = theme => ({
   root: {
     width: '100%',
-    margin: `${theme.spacing.unit}px 0`,
+    // margin: `${theme.spacing.unit}px 0`,
   },
+  progress:{
+    backgroundColor: '#fafafa',
+    height: 10,
+  }
 });
 
 
 const Progress = ({ value, classes }) => (
   <div className={classes.root}>
     <Tooltip title={`${value}%`} placement="left">
-      <LinearProgress variant="determinate" value={value} />
+      <LinearProgress
+        className={classes.progress}
+        variant="determinate"
+        value={value}
+        color="secondary"
+      />
     </Tooltip>
   </div>
 );
@@ -26,6 +35,7 @@ Progress.propTypes = {
   value: PropTypes.number.isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
+    progress: PropTypes.string.isRequired,
   }).isRequired,
 };
 
