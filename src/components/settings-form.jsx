@@ -101,9 +101,9 @@ class SettingsForm extends React.Component {
 
     this.updateValueOnProfile = (columnName, newValue) => {
       let dicc = this.state;
-      let column = '';
+      // let column = '';
       const items = columnName.split('/');
-      column = items[0];
+      let [column] = items;
       const maindicc = dicc;
 
       for (let i = 0; i < items.length; i += 1) {
@@ -120,18 +120,6 @@ class SettingsForm extends React.Component {
       const obj = { [`${fieldStructure}`]: newValue };
       this.props.firebase.firestore().collection('users').doc(this.props.uid).update(obj);
     };
-  }
-
-  createGithubCards() {
-    return Object.values(this.state.githubUrls).map((url, index) => (
-      <GithubCard
-        url={url}
-        pos={index}
-        key={index}
-        firebase={this.props.firebase}
-        uid={this.props.uid}
-      />
-    ));
   }
 
   componentWillMount() {
@@ -154,17 +142,28 @@ class SettingsForm extends React.Component {
       }
       this.props.firebase.firestore().collection(`/users/${this.props.uid}/cohorts`)
         .get()
-        .then ( (snap) => {
-          snap.forEach (doc => {
+        .then((snap) => {
+          snap.forEach((doc) => {
             const cohort = parseCohortid(doc.id);
             if (cohort.program === 'jp' && doc.data() && doc.data().role === 'student') {
               this.setState({ isUserInJobPlacementProgram: true });
             }
           });
-        })
+        });
     }
   }
 
+  createGithubCards() {
+    return Object.values(this.state.githubUrls).map((url, index) => (
+      <GithubCard
+        url={url}
+        pos={index}
+        key={index}
+        firebase={this.props.firebase}
+        uid={this.props.uid}
+      />
+    ));
+  }
   isUrlAndMyRepo(url) {
     return isUrl(url) && url.includes(`https://github.com/${this.state.github}`);
   }
@@ -196,11 +195,11 @@ class SettingsForm extends React.Component {
           </Paper>
         )}
 
-        {
-          this.props.showOptsInSettings && <Paper className={props.classes.paper}>
+        {this.props.showOptsInSettings && (
+          <Paper className={props.classes.paper}>
             <FormControl>
               <FormLabel component="legend" className={props.classes.legend}>
-              Preferred language
+                Preferred language
               </FormLabel>
               <Select
                 value={this.state.locale || props.profile.locale || 'es-ES'}
@@ -209,28 +208,17 @@ class SettingsForm extends React.Component {
               >
                 {Object.keys(locales).map(key => (
                   <MenuItem key={key} value={key}>{locales[key]}</MenuItem>
-              ))}
+                ))}
               </Select>
             </FormControl>
           </Paper>
-        }
+        )}
 
         <FormControlWrapper
           {...props}
           inputLabel="Nombre"
           inputValue={this.state.name}
           inputId="name"
-          updateValueOnProfile={this.updateValueOnProfile}
-          usePaperContainer={this.props.showOptsInSettings}
-        />
-
-        <FormControlWrapper
-          {...props}
-          inputLabel="Portafolio"
-          inputValue={this.state.portfolio}
-          helperText="Ejemplo: Si tu portafolio es: https://Mi.portafolio.com/, entonces escribir solamente el nick 'Mi.portafolio.com'"
-          error={isUrl(this.state.portfolio)}
-          inputId="portfolio"
           updateValueOnProfile={this.updateValueOnProfile}
           usePaperContainer={this.props.showOptsInSettings}
         />
@@ -269,8 +257,7 @@ class SettingsForm extends React.Component {
           usePaperContainer={this.props.showOptsInSettings}
         />
 
-        {
-          this.state.isUserInJobPlacementProgram &&
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -282,10 +269,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
+        )}
 
-        {
-          this.state.isUserInJobPlacementProgram &&
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -297,9 +283,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -311,9 +297,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -325,9 +311,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -339,7 +325,20 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
+          <FormControlWrapper
+            {...props}
+            inputLabel="Portafolio"
+            inputValue={this.state.portfolio}
+            helperText="Ejemplo: Si tu portafolio es: https://Mi.portafolio.com/, entonces escribir solamente el nick 'Mi.portafolio.com'"
+            error={isUrl(this.state.portfolio)}
+            inputId="portfolio"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        )}
         { (this.state.isUserInJobPlacementProgram && this.props.showOptsInSettings) && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
@@ -417,8 +416,43 @@ class SettingsForm extends React.Component {
 }
 
 
+FormControlWrapper.propTypes = {
+  inputId: PropTypes.string.isRequired,
+  inputLabel: PropTypes.string,
+  inputValue: PropTypes.string.isRequired,
+  multiline: PropTypes.bool,
+  classes: PropTypes.shape({
+    textField: PropTypes.string,
+    paper: PropTypes.string,
+  }),
+  error: PropTypes.bool,
+  helperText: PropTypes.string,
+  disabled: PropTypes.string,
+  updateValueOnProfile: PropTypes.func.isRequired,
+  usePaperContainer: PropTypes.bool.isRequired,
+};
+
+FormControlWrapper.defaultProps = {
+  multiline: undefined,
+  classes: undefined,
+  error: undefined,
+  helperText: undefined,
+  inputLabel: undefined,
+  disabled: undefined,
+};
+
 SettingsForm.propTypes = {
   showOptsInSettings: PropTypes.bool,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+  profile: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    aboutMe: PropTypes.shape({
+      highlights: PropTypes.object.isRequired,
+    }),
+  }).isRequired,
 };
 
 

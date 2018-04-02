@@ -30,14 +30,14 @@ function ParseMarkDown() {
           }
           this.project.name = content;
         }
+
         return `<h${level}>${content.trim()}</h${level}>`;
       },
     },
     // image replacement
     {
-      regex: /!\[([^\[]+)\]\(([^\)]+)\)/g,
+      regex: /!\[([^[]+)\]\(([^)]+)\)/g,
       replacement: (text, chars, content) => {
-        const level = chars.length;
         if (!this.firstImage) {
           this.firstImage = true;
           this.project.image = content;
@@ -47,10 +47,9 @@ function ParseMarkDown() {
     },
     // hyperlink
     {
-      regex: /\[([^\[]+)\]\(([^\)]+)\)/g,
+      regex: /\[([^[]+)\]\(([^)]+)\)/g,
       replacement: (text, chars, content) => {
         if (!this.firstUrl) {
-          const level = chars.length;
           this.project.where = chars;
           this.project.url = content;
           this.firstUrl = true;
@@ -75,16 +74,15 @@ function ParseMarkDown() {
 
   // Render some Markdown into HTML.
   this.render = (text) => {
-    text = `\n${text}\n`;
+    let newtext = `\n${text}\n`;
     this.rules.forEach((rule) => {
-      text = text.replace(rule.regex, rule.replacement);
+      newtext = newtext.replace(rule.regex, rule.replacement);
     });
-    return text.trim();
+    return newtext.trim();
   };
 }
 
 const styles = theme => ({
-  card: {},
   media: {
     height: 154,
   },
@@ -161,14 +159,15 @@ class GithubCard extends React.Component {
                   tags: resTags.data.names.join(', '),
                   ...regex.project,
                 };
+
                 const repoErrors = {};
                 repoErrors.demo = !isUrl(repoObj.demo);
                 repoErrors.description = repoObj.description && repoObj.description.length > 280;
-                repoErrors.tags = repoObj.tags && repoObj.tags.length === 0;
+                repoErrors.tags = repoObj.tags.length === 0;
                 repoErrors.name = repoObj.name && repoObj.name.length === 0;
-                repoErrors.image = repoObj.image && repoObj.image.length === 0
+                repoErrors.image = (repoObj.image && repoObj.image.length === 0)
                   || !isUrl(repoObj.demo);
-                repoErrors.where = repoObj.where && repoObj.where.length === 0;
+                repoErrors.where = repoObj.where.length === 0;
 
                 const composedObject = Object.assign({ ...this.state }, repoObj, { repoErrors });
                 this.setState(composedObject);
@@ -218,7 +217,7 @@ class GithubCard extends React.Component {
           }
           title={project.name}
           subheader={
-            error.where
+            error.where || error.where === null
               ? 'El Lugar donde realizastes este proyecto no existe o presenta un error'
               : `${project.where}-${project.date}`
           }
@@ -234,14 +233,17 @@ class GithubCard extends React.Component {
         />
         <CardContent>
           <Typography component="p">
-            {error.description
+            { error.description || error.description === null
               ? 'La descripción de este repositorio no existe o presenta un error'
               : project.description
             }
           </Typography>
           <div>
-            <strong>Tecnologia utilizada: </strong>
-            {project.tags}
+            <strong>Tecnología utilizada: </strong>
+            { error.tags
+              ? 'Los tags de este repositorio no existe o presenta un error'
+              : project.tags
+            }
             <br />
             <a href={project.github} target="_blank">Repositorio en Github</a>
             <br />
@@ -258,6 +260,12 @@ class GithubCard extends React.Component {
 
 GithubCard.propTypes = {
   classes: PropTypes.shape({}).isRequired,
+  url: PropTypes.string.isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  pos: PropTypes.number.isRequired,
+  uid: PropTypes.string.isRequired,
 };
 
 
