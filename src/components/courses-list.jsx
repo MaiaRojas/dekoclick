@@ -66,7 +66,7 @@ const CoursesList = ({
         )}
       </div>
       <div className={classes.container}>
-        {!courses.length ? (<div><FormattedMessage id="course-list.content" /></div>) : (courses.map(course =>
+        {!courses.length ? (<FormattedMessage id="course-list.content" />) : (courses.map(course =>
           (<CourseCard
             key={course.id}
             cohort={cohort.id}
@@ -91,6 +91,8 @@ CoursesList.propTypes = {
     headline: PropTypes.string.isRequired,
     container: PropTypes.string.isRequired,
   }).isRequired,
+  profile: PropTypes.string.isRequired,
+  history: PropTypes.string.isRequired,
 };
 
 
