@@ -12,7 +12,7 @@ import List from 'material-ui/List';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CohortSection from '../components/cohort-section';
-import CohortCalendar from '../components/cohort-calendar';
+// import CohortCalendar from '../components/cohort-calendar';
 import CohortCourse from '../components/cohort-course';
 import CohortUsers from '../components/cohort-users';
 import CohortCalendarAddDialog from '../components/cohort-calendar-add-dialog';
@@ -35,14 +35,14 @@ const styles = theme => ({
     background: theme.palette.background.paper,
   },
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
@@ -115,7 +115,7 @@ const Cohort = ({
       <TopBar title={`Cohort: ${cohortid}`} />
       <div
         position="absolute"
-        className={classNames( classes.appBar, drawerOpen && classes.appBarShift )}
+        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
       >
         <CohortSection title="Overview">
           <p>
@@ -191,7 +191,12 @@ const Cohort = ({
                   </Tabs>
                 </AppBar>
                 {currentTab === 0 && (
-                  <CohortUsers cohortid={cohortid} users={students} auth={auth} parsedCohortId={parsedCohortId} />
+                  <CohortUsers
+                    cohortid={cohortid}
+                    users={students}
+                    auth={auth}
+                    parsedCohortId={parsedCohortId}
+                  />
                 )}
                 {currentTab === 1 && (
                   <CohortUsers cohortid={cohortid} users={instructors} />
@@ -249,6 +254,7 @@ Cohort.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
   }).isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
 };
 
 
