@@ -10,8 +10,6 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SettingsIcon from 'material-ui-icons/Settings';
 import CourseCard from './course-card';
-import { displayDrawer } from '../reducers/top-bar';
-import TopBar from '../components/top-bar';
 
 
 const drawerWidth = 320;
@@ -36,19 +34,19 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
   appBarShift: {
-    width: `100%`,
+    width: '100%',
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -84,7 +82,8 @@ const CoursesList = ({
   return (
     <div
       position="absolute"
-      className={classNames( classes.appBar, drawerOpen && classes.appBarShift )}>
+      className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
+    >
       <div className={classes.heading}>
         <Typography variant="subheading" gutterBottom className={classes.headline}>
           {cohort.id}
@@ -128,15 +127,16 @@ CoursesList.propTypes = {
     headingButton: PropTypes.string.isRequired,
     container: PropTypes.string.isRequired,
     appBar: PropTypes.string.isRequired,
-    appBarShift:PropTypes.string.isRequired,
+    appBarShift: PropTypes.string.isRequired,
   }).isRequired,
+  profile: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 
 CoursesList.defaultProps = {
   courses: undefined,
 };
-
 
 
 export default compose(

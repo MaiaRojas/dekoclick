@@ -16,14 +16,14 @@ import UnitCard from '../components/unit-card';
 const drawerWidth = 320;
 const styles = theme => ({
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
@@ -68,7 +68,9 @@ const Course = (props) => {
       </TopBar>
       <div
         position="absolute"
-        className={classNames( props.classes.appBar, props.drawerOpen && props.classes.appBarShift )}
+        className={
+          classNames(props.classes.appBar, props.drawerOpen && props.classes.appBarShift)
+        }
       >
         {props.syllabus && props.syllabus.map((unit, idx) => (
           <UnitCard
@@ -108,6 +110,16 @@ Course.propTypes = {
       cohortid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  profile: PropTypes.shape({
+    roles: PropTypes.shape({
+      admin: PropTypes.bool.isRequired,
+    }),
+  }).isRequired,
+  classes: PropTypes.shape({
+    appBar: PropTypes.string.isRequired,
+    appBarShift: PropTypes.string.isRequired,
+  }).isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 
@@ -117,6 +129,7 @@ Course.defaultProps = {
   cohortUser: undefined,
   courseProgressStats: undefined,
   courseSettings: undefined,
+  drawerOpen: undefined,
 };
 
 const mapStateToProps = ({ topbar }) => ({

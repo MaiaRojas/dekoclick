@@ -2,19 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import { FormattedMessage } from 'react-intl';
 import Divider from 'material-ui/Divider';
+import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
 import UnitNavItem from './unit-nav-item';
-import IconButton from 'material-ui/IconButton';
-import ExitToAppIcon from 'material-ui-icons/ExitToApp';
-import { FormattedMessage } from 'react-intl';
 
 
 const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
   },
-  divider:{
+  divider: {
     backgroundColor: theme.palette.common.white,
   },
   icon: {
@@ -23,18 +22,10 @@ const styles = theme => ({
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
   },
-  listItemIcon :{
+  listItemIcon: {
     color: theme.palette.common.white,
   },
 });
-
-
-const getUnitOrder = (unit, match) => {
-  if (typeof unit.order === 'number') {
-    return unit.order;
-  }
-  return parseInt(match.params.unitid.slice(0, 2), 10);
-};
 
 
 const getPartProgress = (partid, unitProgress) => (
@@ -66,7 +57,7 @@ const UnitNav = ({
     parts={parts}
     match={match}
     history={history}
-    >
+  >
     <List disablePadding className={classes.list}>
       <Divider className={classes.divider} />
       {parts.map((part, idx) =>
@@ -83,7 +74,7 @@ const UnitNav = ({
       }
     </List>
     <div className={classes.bottom}>
-      <Divider  className={classes.divider}/>
+      <Divider className={classes.divider} />
       <ListItem
         button
         className={classes.signoutBtn}
@@ -93,7 +84,7 @@ const UnitNav = ({
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText
-          className={'unitNav-text'}
+          className="unitNav-text"
           primary={<FormattedMessage id="main-nav.signout" />}
         />
       </ListItem>
@@ -122,7 +113,7 @@ UnitNav.propTypes = {
     divider: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     signoutBtn: PropTypes.string.isRequired,
-    listItemIcon:PropTypes.string.isRequired,
+    listItemIcon: PropTypes.string.isRequired,
   }).isRequired,
   firebase: PropTypes.shape({
     logout: PropTypes.func.isRequired,

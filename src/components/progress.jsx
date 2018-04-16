@@ -10,10 +10,10 @@ const styles = theme => ({
     width: '100%',
     // margin: `${theme.spacing.unit}px 0`,
   },
-  progress:{
+  progress: {
     backgroundColor: '#fafafa',
     height: 10,
-  }
+  },
 });
 
 

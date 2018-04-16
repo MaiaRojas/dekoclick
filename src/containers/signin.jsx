@@ -62,7 +62,7 @@ const styles = theme => ({
     minHeight: '100vh',
     backgroundColor: '#F7F7F7',
     textAlign: 'center',
-    flexDirection:'column',
+    flexDirection: 'column',
   },
   paper: {
     margin: theme.spacing.unit * 4,
@@ -151,7 +151,7 @@ const SignInWithFacebookButton = props => (
       });
 
       auth.signInWithPopup(provider).then((result) => {
-        if (props.signup || result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+        if (props.signup || (result.additionalUserInfo && result.additionalUserInfo.isNewUser)) {
           postSignUp(props, result.user);
         }
         // // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -261,6 +261,25 @@ const SignInFbPasswordPrompt = props => (
 );
 
 
+SignInFbPasswordPrompt.propTypes = {
+  data: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+  }).isRequired,
+  fbPasswordPrompt: PropTypes.shape({
+    password: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
+  }).isRequired,
+  updateFbPasswordPromptPassword: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    submitBtn: PropTypes.string.isRequired,
+  }).isRequired,
+  firestore: PropTypes.shape({
+    auth: PropTypes.string.isRequired,
+  }).isRequired,
+  toggleFbPasswordPrompt: PropTypes.shape({}).isRequired,
+};
+
+
 const SignIn = (props) => {
   const { email, password } = props.data;
   const auth = props.firestore.auth();
@@ -344,7 +363,9 @@ SignIn.propTypes = {
   forgotResult: PropTypes.shape({}),
   signup: PropTypes.bool.isRequired,
   cohortid: PropTypes.string,
-  cohort: PropTypes.shape({}),
+  cohort: PropTypes.shape({
+    publicAdmission: PropTypes.string,
+  }),
   campuses: PropTypes.arrayOf(PropTypes.shape({})),
   updateSignInField: PropTypes.func.isRequired,
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
@@ -372,12 +393,12 @@ SignIn.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
-    contentLogo:PropTypes.string.isRequired,
+    contentLogo: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     submitBtn: PropTypes.string.isRequired,
-    noCohortSelected:PropTypes.string.isRequired,
-    signupCohort:PropTypes.string.isRequired,
-    textField:PropTypes.string.isRequired,
+    noCohortSelected: PropTypes.string.isRequired,
+    signupCohort: PropTypes.string.isRequired,
+    textField: PropTypes.string.isRequired,
   }).isRequired,
 };
 

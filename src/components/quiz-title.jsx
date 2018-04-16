@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   root: {
-    backgroundColor:theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     padding: theme.spacing.unit * 3,
     display: 'flex',
     alignItems: 'start',
@@ -22,18 +22,16 @@ const styles = theme => ({
 });
 
 
-const QuizTitle = ({classes}) => {
-  return (
-    <Paper className={classes.root}>
-      <Typography variant="body1" className={classes.body}>
-        <span style={{ marginLeft: 8 }}>Quiz</span>
-      </Typography>
-      <Typography variant="display1">
-        <FormattedMessage id="quiz.title" />
-      </Typography>
-    </Paper>
-  );
-};
+const QuizTitle = ({ classes }) => (
+  <Paper className={classes.root}>
+    <Typography variant="body1" className={classes.body}>
+      <span style={{ marginLeft: 8 }}>Quiz</span>
+    </Typography>
+    <Typography variant="display1">
+      <FormattedMessage id="quiz.title" />
+    </Typography>
+  </Paper>
+);
 
 
 QuizTitle.propTypes = {

@@ -88,8 +88,7 @@ const SignInForm = props => (
       disabled={props.forgot && props.forgotRequested}
       className={props.classes.submitBtn}
     >
-      {
-        props.forgot
+      { props.forgot
           ? <FormattedMessage id="signin.forgot" />
           : props.signup
             ? <FormattedMessage id="signin.signup" />
@@ -107,16 +106,18 @@ const SignInForm = props => (
 );
 
 
-SignInForm.propTypes = {
+SignInForm.PropTypes = {
   data: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,
     password2: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   errors: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,
     password2: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   forgot: PropTypes.bool.isRequired,
   signup: PropTypes.bool.isRequired,
@@ -125,8 +126,9 @@ SignInForm.propTypes = {
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
   updateSignInField: PropTypes.func.isRequired,
   classes: PropTypes.shape({
-    submitBtn: PropTypes.string.isRequired,
-  }).isRequired,
+    submitBtn: PropTypes.string,
+    TextField: PropTypes.string,
+  }),
   authError: PropTypes.shape({}),
   signupError: PropTypes.shape({}),
   signinError: PropTypes.shape({}),
@@ -138,6 +140,7 @@ SignInForm.defaultProps = {
   authError: undefined,
   signupError: undefined,
   signinError: undefined,
+  classes: undefined,
 };
 
 

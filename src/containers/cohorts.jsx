@@ -43,14 +43,14 @@ const styles = theme => ({
     minWidth: 120,
   },
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
@@ -123,8 +123,9 @@ const Cohorts = (props) => {
       </TopBar>
       <div
         position="absolute"
-        className={classNames( props.classes.appBar, props.drawerOpen && props.classes.appBarShift )}
-        >
+        className={
+          classNames(props.classes.appBar, props.drawerOpen && props.classes.appBarShift)}
+      >
         <div className={props.classes.filterContainer}>
           <FormControl className={props.classes.formControl}>
             <InputLabel htmlFor="campus">Campus</InputLabel>
@@ -137,7 +138,7 @@ const Cohorts = (props) => {
               {props.campuses.map(campus => (
                 <MenuItem key={campus.id} value={campus.id}>{campus.name}</MenuItem>
               ))}
-              <MenuItem  value="global"><em>Global</em></MenuItem>
+              <MenuItem value="global"><em>Global</em></MenuItem>
             </Select>
           </FormControl>
           <FormControl className={props.classes.formControl}>
@@ -205,8 +206,8 @@ const Cohorts = (props) => {
         {props.newDialogOpen &&
           <CohortNewDialog campuses={props.campuses} />
         }
-        </div>
       </div>
+    </div>
   );
 };
 
@@ -232,6 +233,7 @@ Cohorts.propTypes = {
   firestore: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
   }).isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 
@@ -240,6 +242,7 @@ Cohorts.defaultProps = {
   campuses: undefined,
   campusFilter: '',
   programFilter: '',
+  drawerOpen: undefined,
 };
 
 
@@ -261,7 +264,9 @@ const filterCohorts = (cohorts, filters) => {
 };
 
 
-const mapStateToProps = ({ firestore, cohorts, cohortNewDialog, topbar }) => ({
+const mapStateToProps = ({
+  firestore, cohorts, cohortNewDialog, topbar,
+}) => ({
   cohorts: filterCohorts(firestore.ordered.cohorts, {
     campus: cohorts.campusFilter,
     program: cohorts.programFilter,

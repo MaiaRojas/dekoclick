@@ -18,12 +18,12 @@ const styles = theme => ({
     width: theme.leftDrawerWidth,
     color: theme.palette.common.white,
     backgroundColor: theme.palette.background.secondary,
-    },
+  },
   logo: {
     height: 20,
     display: 'block',
     margin: 'auto',
-    padding: 10,  
+    padding: 10,
   },
   profileBadge: {
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px`,
@@ -40,14 +40,14 @@ const styles = theme => ({
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
   },
-  divider:{
+  divider: {
     backgroundColor: theme.palette.common.white,
   },
-  listItemIcon :{
+  listItemIcon: {
     color: theme.palette.common.white,
   },
   avatar: {
-    width:`${theme.spacing.unit * 5}px`,
+    width: `${theme.spacing.unit * 5}px`,
     height: `${theme.spacing.unit * 5}px`,
     borderRadius: 0,
   },
@@ -91,20 +91,20 @@ const isActive = ({ match, classes }, container) => {
 const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
-      <Divider className={props.classes.divider}/>
+      <Divider className={props.classes.divider} />
       <ListItem className={props.classes.profileBadge}>
         <Avatar className={props.classes.avatar} >
           {nameToInitials(getName(props.auth, props.profile))}
         </Avatar>
         <ListItemText
-          className={'mainNav-email'}
+          className="mainNav-email"
           primary={getName(props.auth, props.profile)}
           secondary={getEmail(props.auth, props.profile)}
         />
       </ListItem>
       <Divider className={props.classes.divider} />
       <ListItem
-        style={{ display: 'none'}}
+        style={{ display: 'none' }}
         button
         onClick={() => props.history.push('/')}
         className={isActive(props, 'dashboard')}
@@ -113,7 +113,7 @@ const MainNav = props => (
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText
-          className={'mainNav-text'}
+          className="mainNav-text"
           primary="Dashboard"
         />
       </ListItem>
@@ -126,7 +126,7 @@ const MainNav = props => (
           <LocalLibraryIcon />
         </ListItemIcon>
         <ListItemText
-          className={'mainNav-text'}
+          className="mainNav-text"
           primary={<FormattedMessage id="main-nav.courses" />}
         />
       </ListItem>
@@ -140,7 +140,7 @@ const MainNav = props => (
             <GroupIcon />
           </ListItemIcon>
           <ListItemText
-            className={'mainNav-text'}
+            className="mainNav-text"
             primary="Cohorts"
           />
         </ListItem>
@@ -155,13 +155,13 @@ const MainNav = props => (
           <SettingsIcon />
         </ListItemIcon>
         <ListItemText
-          className={'mainNav-text'}
+          className="mainNav-text"
           primary={<FormattedMessage id="main-nav.settings" />}
         />
       </ListItem>
 
       <div className={props.classes.bottom}>
-        <Divider  className={props.classes.divider}/>
+        <Divider className={props.classes.divider} />
         <ListItem
           button
           className={props.classes.signoutBtn}
@@ -171,7 +171,7 @@ const MainNav = props => (
             <ExitToAppIcon />
           </ListItemIcon>
           <ListItemText
-            className={'mainNav-text'}
+            className="mainNav-text"
             primary={<FormattedMessage id="main-nav.signout" />}
           />
         </ListItem>

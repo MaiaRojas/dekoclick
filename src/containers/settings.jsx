@@ -19,14 +19,14 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 2,
   },
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
@@ -49,7 +49,7 @@ const Settings = props => (
     <TopBar title="Settings" />
     <div
       position="absolute"
-      className={classNames( props.classes.appBar, props.drawerOpen && props.classes.appBarShift )}
+      className={classNames(props.classes.appBar, props.drawerOpen && props.classes.appBarShift)}
     >
       <SettingsForm {...props} uid={props.auth.uid} showOptsInSettings />
     </div>

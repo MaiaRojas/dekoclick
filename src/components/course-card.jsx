@@ -38,7 +38,7 @@ const styles = theme => ({
   },
   cardContent: {
     backgroundColor: theme.palette.primary.main,
-    height: '60px',
+    minHeight: '60px',
   },
 });
 

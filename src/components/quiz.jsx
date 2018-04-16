@@ -30,9 +30,9 @@ const styles = theme => ({
   startButton: {
     marginTop: theme.spacing.unit,
   },
-  content:{
+  content: {
     marginBottom: theme.spacing.unit * 4,
-  }
+  },
 });
 
 
@@ -147,7 +147,7 @@ const Quiz = (props) => {
 
   return (
     <div className={classes.root}>
-      <QuizTitle/>
+      <QuizTitle />
       <div className={classes.content}>
         {progress.results && <QuizResults results={progress.results} />}
         {part.questions.map((question, idx) =>

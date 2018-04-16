@@ -20,14 +20,14 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 4,
   },
   appBar: {
-    width: `100%`,
+    width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 73px)`,
+      width: 'calc(100% - 73px)',
       marginLeft: '73px',
     },
   },
@@ -188,7 +188,7 @@ class UnitPartTracker extends React.Component {
     return (
       <div
         position="absolute"
-        className={classNames( classes.appBar, drawerOpen && classes.appBarShift )}
+        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
       >
         <Component {...rest} />
         <hr className={classes.hr} />
@@ -227,6 +227,7 @@ class UnitPartTracker extends React.Component {
 
 
 UnitPartTracker.propTypes = {
+  drawerOpen: PropTypes.bool,
   component: PropTypes.oneOfType([
     PropTypes.func.isRequired,
     PropTypes.shape({}).isRequired,
@@ -267,6 +268,7 @@ UnitPartTracker.propTypes = {
 
 UnitPartTracker.defaultProps = {
   partProgress: undefined,
+  drawerOpen: undefined,
 };
 
 const mapStateToProps = ({ topbar }) => ({

@@ -30,7 +30,7 @@ const styles = theme => ({
   },
   icon: {
     color: theme.palette.primary.main,
-  }
+  },
 });
 
 
@@ -53,11 +53,11 @@ const partTypeToIcon = (type) => {
 
 const progressToIcon = (part, partProgress, partProgressStats) => {
   if (partProgressStats && partProgressStats.completed === 1) {
-    return <DoneIcon className={'progress-icon'}/>;
+    return <DoneIcon className="progress-icon" />;
   } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {
-    return <TimerIcon className={'progress-icon'}/>;
+    return <TimerIcon className="progress-icon" />;
   } else if (part.type === 'practice' && part.exercises && partProgressStats && partProgressStats && partProgressStats.completed) {
-    return <WarningIcon className={'progress-icon'} />;
+    return <WarningIcon className="progress-icon" />;
   }
   return null;
 };
@@ -65,7 +65,7 @@ const progressToIcon = (part, partProgress, partProgressStats) => {
 
 const UnitNavItem = props => (
   <ListItem
-    style={{borderBottom: '1px solid #ffffff'}}
+    style={{ borderBottom: '1px solid #ffffff' }}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
     className={props.partid === props.match.params.partid ? props.classes.active : ''}
@@ -74,7 +74,7 @@ const UnitNavItem = props => (
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
     <ListItemText
-      className={'unitNav-text'}
+      className="unitNav-text"
       classes={{
         primary: (props.partProgress || {}).openedAt
           ? props.classes.read
@@ -103,6 +103,7 @@ UnitNavItem.propTypes = {
     active: PropTypes.string.isRequired,
     read: PropTypes.string.isRequired,
     unread: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({

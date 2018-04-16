@@ -5,7 +5,6 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import green from 'material-ui/colors/green';
 import yellow from 'material-ui/colors/yellow';
-import red from 'material-ui/colors/red';
 import { FormattedMessage } from 'react-intl';
 
 
@@ -40,7 +39,7 @@ const styles = theme => ({
 const QuizResults = ({ results, classes }) => {
   const percent = Math.floor((results.passes / results.total) * 100);
 
-  let colorClass = classes.grey;
+  const colorClass = classes.grey;
   // if (percent > 79) {
   //   colorClass = classes.green;
   // } else if (percent > 69) {

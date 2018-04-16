@@ -47,11 +47,13 @@ Courses.propTypes = {
   auth: PropTypes.shape({}).isRequired,
   profile: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({}).isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 
 Courses.defaultProps = {
   cohorts: undefined,
+  drawerOpen: undefined,
 };
 
 const mapStateToProps = ({ topbar }) => ({

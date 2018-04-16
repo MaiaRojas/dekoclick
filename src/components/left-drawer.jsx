@@ -6,12 +6,11 @@ import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import Hidden from 'material-ui/Hidden';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import { displayDrawer } from '../reducers/top-bar';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import { displayDrawer } from '../reducers/top-bar';
 
 
-const drawerWidth = 320;
 const styles = theme => ({
   drawer: {
     width: theme.leftDrawerWidth,
@@ -52,21 +51,22 @@ const styles = theme => ({
     height: 60,
     display: 'block',
     margin: 'auto',
-    padding: 10  ,
+    padding: 10,
   },
   logoShort: {
     height: 45,
     display: 'block',
     margin: 'auto',
-    padding: 10  ,
+    padding: 10,
   },
   icon: {
     color: theme.palette.primary.main,
   },
   center: {
     justifyContent: 'center',
-  }
+  },
 });
+
 
 const LeftDrawerUnit = ({
   classes,
@@ -74,7 +74,7 @@ const LeftDrawerUnit = ({
   match,
   unit,
 }) => (
-  <div className = {classes.toolbar}>
+  <div className={classes.toolbar}>
     <ListItem
       button
       onClick={() =>
@@ -82,21 +82,31 @@ const LeftDrawerUnit = ({
       }
     >
       <ListItemIcon className={classes.icon}>
-        <ChevronLeftIcon/>
+        <ChevronLeftIcon />
       </ListItemIcon>
       <ListItemText
-        className={'leftDrawer-text'}
-        secondary={`Unidad ${getUnitOrder(unit, match)}`}   primary={`${unit.title}`}
+        className="leftDrawer-text"
+        secondary={`Unidad ${getUnitOrder(unit, match)}`}
+        primary={`${unit.title}`}
       />
     </ListItem>
   </div>
 );
 
+
+LeftDrawerUnit.propTypes = {
+  classes: PropTypes.shape({}).isRequired,
+  history: PropTypes.string.isRequired,
+  match: PropTypes.string.isRequired,
+  unit: PropTypes.string.isRequired,
+};
+
+
 const LeftDrawerMain = ({
   classes,
   drawerOpen,
 }) => (
-  <div className = {classes.toolbar}>
+  <div className={classes.toolbar}>
     <ListItem className={classes.center}>
       { drawerOpen ?
         (<img
@@ -104,7 +114,7 @@ const LeftDrawerMain = ({
           className={classes.logoLarge}
           src="/img/logo.png"
         />)
-        :(
+        : (
           <img
             alt="Laboratoria, código que transforma"
             className={classes.logoShort}
@@ -115,45 +125,52 @@ const LeftDrawerMain = ({
   </div>
 );
 
-const LeftDrawer = props => {
-  const { classes, theme, unit, match, history, firebase } = props;
-return (
-  <div>
-    <Hidden mdUp>
-      <Drawer
-        classes={{ paper: props.classes.drawer }}
-        open={props.drawerOpen}
-        onClose={() => props.displayDrawer()}
-        variant="temporary"
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        anchor="left"
-      >
-      { props.children.length > 1 ?
-        ( <LeftDrawerUnit {...props}/> ):
-        ( <LeftDrawerMain {...props}/> )
-      }
-        {props.children}
-      </Drawer>
-    </Hidden>
-    <Hidden smDown implementation="css">
-      <Drawer
-        classes={{
-          paper: classNames(props.classes.drawerPaper, !props.drawerOpen  && classes.drawerPaperClose),
-        }}
-        open={ props.drawerOpen }
-        variant="permanent"
-      >
-      { props.children.length > 1 ?
-        ( <LeftDrawerUnit {...props}/>):
-        ( <LeftDrawerMain {...props}/>)
-      }
-        {props.children}
-      </Drawer>
-    </Hidden>
-  </div>
-  )
+
+LeftDrawerMain.propTypes = {
+  drawerOpen: PropTypes.bool.isRequired,
+  classes: PropTypes.shape({}).isRequired,
+};
+
+
+const LeftDrawer = (props) => {
+  const { classes } = props;
+  return (
+    <div>
+      <Hidden mdUp>
+        <Drawer
+          classes={{ paper: classes.drawer }}
+          open={props.drawerOpen}
+          onClose={() => props.displayDrawer()}
+          variant="temporary"
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          anchor="left"
+        >
+          { props.children.length > 1 ?
+            (<LeftDrawerUnit {...props} />) :
+            (<LeftDrawerMain {...props} />)
+          }
+          {props.children}
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classNames(classes.drawerPaper, !props.drawerOpen && classes.drawerPaperClose),
+          }}
+          open={props.drawerOpen}
+          variant="permanent"
+        >
+          { props.children.length > 1 ?
+            (<LeftDrawerUnit {...props} />) :
+            (<LeftDrawerMain {...props} />)
+          }
+          {props.children}
+        </Drawer>
+      </Hidden>
+    </div>
+  );
 };
 
 
@@ -213,4 +230,5 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles, { withTheme: true }),)(LeftDrawer);
+  withStyles(styles, { withTheme: true }),
+)(LeftDrawer);
