@@ -34,6 +34,7 @@ export default {
   'course-card.estimatedDuration': 'Duración estimada',
   'course-card.start': 'Empezar',
   'course-card.continue': 'Continuar',
+  'course-list.content': 'Este cohort no contiene cursos asignados.',
 
   'unit-card.unit': 'Unidad',
   'unit-card.parts': '{count, plural, =0 { sin partes } one {# parte} other {# partes}}',
