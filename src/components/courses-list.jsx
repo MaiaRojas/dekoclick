@@ -66,13 +66,16 @@ const CoursesList = ({
         )}
       </div>
       <div className={classes.container}>
-        {!courses.length ? (<FormattedMessage id="course-list.content" />) : (courses.map(course =>
-          (<CourseCard
-            key={course.id}
-            cohort={cohort.id}
-            course={course}
-            auth={auth}
-          />)))}
+        {!courses.length
+          ? <FormattedMessage id="course-list.content" />
+          : (courses.map(course => (
+            <CourseCard
+              key={course.id}
+              cohort={cohort.id}
+              course={course}
+              auth={auth}
+            />
+          )))}
       </div>
     </div>
   );
@@ -91,8 +94,8 @@ CoursesList.propTypes = {
     headline: PropTypes.string.isRequired,
     container: PropTypes.string.isRequired,
   }).isRequired,
-  profile: PropTypes.string.isRequired,
-  history: PropTypes.string.isRequired,
+  profile: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 
