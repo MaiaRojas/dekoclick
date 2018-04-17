@@ -91,8 +91,8 @@ CoursesList.propTypes = {
     headline: PropTypes.string.isRequired,
     container: PropTypes.string.isRequired,
   }).isRequired,
-  profile: PropTypes.string.isRequired,
-  history: PropTypes.string.isRequired,
+  profile: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 
