@@ -19,6 +19,11 @@ const programs = {
     order: 3,
     name: 'Educación continua',
   },
+  l4b: {
+    id: 'l4b',
+    order: 4,
+    name: 'L4B',
+  },
 };
 
 
