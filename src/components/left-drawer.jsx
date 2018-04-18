@@ -104,9 +104,9 @@ const LeftDrawerUnit = ({
 
 LeftDrawerUnit.propTypes = {
   classes: PropTypes.shape({}).isRequired,
-  history: PropTypes.string.isRequired,
-  match: PropTypes.string.isRequired,
-  unit: PropTypes.string.isRequired,
+  history: PropTypes.shape({}).isRequired,
+  match: PropTypes.shape({}).isRequired,
+  unit: PropTypes.shape({}).isRequired,
 };
 
 

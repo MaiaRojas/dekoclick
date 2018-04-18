@@ -181,10 +181,15 @@ const Dependency = props => (
 
 
 Dependency.propTypes = {
-  formid: PropTypes.string.isRequired,
-  partid: PropTypes.string.isRequired,
+  formid: PropTypes.string,
+  partid: PropTypes.string,
   unitid: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.array.isRequired,
+};
+
+Dependency.defaultProps = {
+  formid: undefined,
+  partid: undefined,
 };
 
 

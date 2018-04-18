@@ -200,7 +200,7 @@ UnitPart.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  profile: PropTypes.string.isRequired,
+  profile: PropTypes.shape({}).isRequired,
 };
 
 

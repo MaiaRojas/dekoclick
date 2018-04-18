@@ -93,13 +93,18 @@ class AvailabilityCheck extends React.Component {
 
 AvailabilityCheck.propTypes = {
   profile: PropTypes.shape({
-    available: PropTypes.string.isRequired,
-  }).isRequired,
+    available: PropTypes.bool,
+  }),
   firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
   }).isRequired,
   uid: PropTypes.string.isRequired,
 };
+
+
+AvailabilityCheck.defaultProps = {
+  profile: undefined,
+}
 
 
 const CohortUser = (props) => {

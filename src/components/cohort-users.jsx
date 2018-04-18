@@ -55,7 +55,7 @@ CohortUsers.propTypes = {
   profiles: PropTypes.shape({}).isRequired,
   toggleMoveDialog: PropTypes.func.isRequired,
   auth: PropTypes.shape({}),
-  parsedCohortId: PropTypes.func.isRequired,
+  parsedCohortId: PropTypes.shape({}),
   firebase: PropTypes.shape({}).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
@@ -65,6 +65,7 @@ CohortUsers.propTypes = {
 
 CohortUsers.defaultProps = {
   auth: undefined,
+  parsedCohortId: undefined,
 };
 
 
