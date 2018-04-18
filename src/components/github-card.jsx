@@ -217,7 +217,7 @@ class GithubCard extends React.Component {
           }
           title={project.name}
           subheader={
-            error.where || error.where === null
+            (error.where || error.where === null)
               ? 'El Lugar donde realizastes este proyecto no existe o presenta un error'
               : `${project.where}-${project.date}`
           }
@@ -227,20 +227,20 @@ class GithubCard extends React.Component {
           image={project.image}
           title={
             error.image
-              ? 'La imagen  de este repositorio no existe o presenta un  error'
+              ? 'La imagen  de este repositorio no existe o presenta un error'
               : project.name
           }
         />
         <CardContent>
           <Typography component="p">
-            { error.description || error.description === null
+            {(error.description || error.description === null)
               ? 'La descripción de este repositorio no existe o presenta un error'
               : project.description
             }
           </Typography>
           <div>
             <strong>Tecnología utilizada: </strong>
-            { error.tags
+            {error.tags
               ? 'Los tags de este repositorio no existe o presenta un error'
               : project.tags
             }
