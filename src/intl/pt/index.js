@@ -24,17 +24,18 @@ export default {
 
   'courses.title': 'Cursos',
   'courses.noCoursesWarning': [
-    'Hmmm... parece que todavía no hay ningún curso asociado a',
-    'tu cuenta. Si crees que esto es un error, contacta a tu instructor o',
-    'training manager para verificar tu cuenta.',
+    'Hmmmm...parece que não há nenhum curso associado à',
+    'sua conta. Se você acredita que há algum engano, entre em',
+    'contato para que possamos verificar.',
   ].join(' '),
 
   'course-card.units': '{count, plural, =0 { sin unidades } one {# unidad} other {# unidades}}',
   'course-card.estimatedDuration': 'Duração estimada',
   'course-card.start': 'Começar',
   'course-card.continue': 'Continuar',
+  'course-list.content': 'Esta coorte não contém cursos atribuídos.',
 
-  'unit-card.unit': 'Unidad',
+  'unit-card.unit': 'Unidade',
   'unit-card.parts': '{count, plural, =0 { sin partes } one {# parte} other {# partes}}',
   'unit-card.estimatedDuration': 'Duração estimada',
   'unit-card.start': 'Começar',

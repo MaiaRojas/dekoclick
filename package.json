@@ -1,6 +1,6 @@
 {
   "name": "lms.laboratoria.la",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.html",
   "license": "UNLICENSED",
   "private": true,
@@ -20,7 +20,8 @@
   "author": "Laboratoria <sumate@laboratoria.la> (http://laboratoria.la/)",
   "contributors": [
     "Lupo Montero <lupo@laboratoria.la> (https://github.com/lupomontero)",
-    "Giancarlo Corzo <gian@laboratoria.la> (https://github.com/giancorzo)"
+    "Giancarlo Corzo <gian@laboratoria.la> (https://github.com/giancorzo)",
+    "Maricarmen Rojas Tinco <maia@laboratoria.la> (https://github.com/MaiaRojas)"
   ],
   "dependencies": {
     "@octokit/rest": "^14.0.9",

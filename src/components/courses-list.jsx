@@ -6,6 +6,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
+import { FormattedMessage } from 'react-intl';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SettingsIcon from 'material-ui-icons/Settings';
@@ -72,10 +73,6 @@ const CoursesList = ({
     return (<CircularProgress />);
   }
 
-  if (!courses.length) {
-    return (<div>No courses :-(</div>);
-  }
-
   const canManageCourse =
     ['instructor', 'admin'].indexOf(cohort.role) > -1
     || (profile.roles && profile.roles.admin);
@@ -99,13 +96,16 @@ const CoursesList = ({
         )}
       </div>
       <div className={classes.container}>
-        {courses.map(course =>
-          (<CourseCard
-            key={course.id}
-            cohort={cohort.id}
-            course={course}
-            auth={auth}
-          />))}
+        {!courses.length
+          ? <FormattedMessage id="course-list.content" />
+          : (courses.map(course => (
+            <CourseCard
+              key={course.id}
+              cohort={cohort.id}
+              course={course}
+              auth={auth}
+            />
+          )))}
       </div>
     </div>
   );
@@ -129,8 +129,8 @@ CoursesList.propTypes = {
     appBar: PropTypes.string.isRequired,
     appBarShift: PropTypes.string.isRequired,
   }).isRequired,
-  profile: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  profile: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 

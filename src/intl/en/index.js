@@ -34,6 +34,8 @@ export default {
   'course-card.estimatedDuration': 'Estimated duration',
   'course-card.start': 'Start',
   'course-card.continue': 'Continue',
+  'course-list.content': 'This cohort does not have any courses.',
+
 
   'unit-card.unit': 'Unit',
   'unit-card.parts': '{count, plural, =0 { no parts } one {# part} other {# parts}}',

@@ -122,18 +122,6 @@ class SettingsForm extends React.Component {
     };
   }
 
-  createGithubCards() {
-    return Object.values(this.state.githubUrls).map((url, index) => (
-      <GithubCard
-        url={url}
-        pos={index}
-        key={index}
-        firebase={this.props.firebase}
-        uid={this.props.uid}
-      />
-    ));
-  }
-
   componentWillMount() {
     if (this.props.profile.name) {
       const res = Object.assign({}, this.state, this.props.profile);
@@ -165,6 +153,17 @@ class SettingsForm extends React.Component {
     }
   }
 
+  createGithubCards() {
+    return Object.values(this.state.githubUrls).map((url, index) => (
+      <GithubCard
+        url={url}
+        pos={index}
+        key={index}
+        firebase={this.props.firebase}
+        uid={this.props.uid}
+      />
+    ));
+  }
   isUrlAndMyRepo(url) {
     return isUrl(url) && url.includes(`https://github.com/${this.state.github}`);
   }
@@ -179,7 +178,8 @@ class SettingsForm extends React.Component {
 
     return (
       <React.Fragment>
-        {this.props.showOptsInSettings && (
+        {
+          this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
               <FormLabel component="legend" className={props.classes.legend}>
@@ -200,7 +200,7 @@ class SettingsForm extends React.Component {
           <Paper className={props.classes.paper}>
             <FormControl>
               <FormLabel component="legend" className={props.classes.legend}>
-              Preferred language
+                Preferred language
               </FormLabel>
               <Select
                 value={this.state.locale || props.profile.locale || 'es-ES'}
@@ -209,11 +209,11 @@ class SettingsForm extends React.Component {
               >
                 {Object.keys(locales).map(key => (
                   <MenuItem key={key} value={key}>{locales[key]}</MenuItem>
-              ))}
+                ))}
               </Select>
             </FormControl>
-          </Paper>)
-        }
+          </Paper>
+        )}
 
         <FormControlWrapper
           {...props}
@@ -258,8 +258,7 @@ class SettingsForm extends React.Component {
           usePaperContainer={this.props.showOptsInSettings}
         />
 
-        {
-          this.state.isUserInJobPlacementProgram &&
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -271,10 +270,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
+        )}
 
-        {
-          this.state.isUserInJobPlacementProgram &&
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -286,9 +284,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -300,9 +298,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -314,9 +312,9 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
-        {
-          this.state.isUserInJobPlacementProgram &&
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
           <FormControlWrapper
             {...props}
             multiline
@@ -328,7 +326,20 @@ class SettingsForm extends React.Component {
             updateValueOnProfile={this.updateValueOnProfile}
             usePaperContainer={this.props.showOptsInSettings}
           />
-        }
+        )}
+
+        {this.state.isUserInJobPlacementProgram && (
+          <FormControlWrapper
+            {...props}
+            inputLabel="Portafolio"
+            inputValue={this.state.portfolio}
+            helperText="Ejemplo: Si tu portafolio es: https://Mi.portafolio.com/, entonces escribir solamente el nick 'Mi.portafolio.com'"
+            error={isUrl(this.state.portfolio)}
+            inputId="portfolio"
+            updateValueOnProfile={this.updateValueOnProfile}
+            usePaperContainer={this.props.showOptsInSettings}
+          />
+        )}
         { (this.state.isUserInJobPlacementProgram && this.props.showOptsInSettings) && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">

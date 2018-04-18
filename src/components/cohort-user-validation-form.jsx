@@ -26,24 +26,23 @@ const styles = theme => ({
 
 
 class RecomendedAsForm extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
       recomendedAs: '',
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = event => {
+  handleChange(event) {
     this.setState({ recomendedAs: event.target.value });
     this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { recomendedAs : event.target.value} )
   };
 
   componentWillMount() {
-      this.props.firebase.firestore().collection ('users').doc(this.props.uid).get ()
-        .then (res => {
-          this.setState({ recomendedAs: res.data().recomendedAs });
-        })
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
+      .then(res => this.setState({ recomendedAs: res.data().recomendedAs }));
   }
 
   render () {
@@ -70,24 +69,25 @@ class RecomendedAsForm extends React.Component {
 
 
 class EnglishLevelForm extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
       englishLevel: '',
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = event => {
+  handleChange(event) {
     this.setState({ englishLevel: event.target.value });
-    this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { englishLevel : event.target.value} )
-
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).update({
+      englishLevel: event.target.value
+    });
   };
 
   componentWillMount() {
-    this.props.firebase.firestore().collection ('users').doc(this.props.uid).get ().then (res => {
-     this.setState({ englishLevel: res.data().englishLevel });
-   })
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
+      .then (res => this.setState({ englishLevel: res.data().englishLevel }));
   }
 
   render () {

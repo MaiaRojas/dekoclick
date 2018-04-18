@@ -99,6 +99,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         <MenuItem value="js">JavaScript</MenuItem>
         <MenuItem value="ux">UX</MenuItem>
         <MenuItem value="mobile">Mobile</MenuItem>
+        <MenuItem value="business">Business</MenuItem>
       </Select>
     </FormControl>
     <FormGroup className={classes.formControl}>
@@ -225,10 +226,10 @@ const validate = (props) => {
       message: `Program should be one of ${programs.keys}`,
     });
   }
-  if (['core', 'js', 'ux', 'mobile'].indexOf(track) === -1) {
+  if (['core', 'js', 'ux', 'mobile', 'business'].indexOf(track) === -1) {
     errors.push({
       field: 'track',
-      message: `Track should be one of ${['core', 'js', 'ux', 'mobile']}`,
+      message: `Track should be one of ${['core', 'js', 'ux', 'mobile', 'business']}`,
     });
   }
   if (!name) {
