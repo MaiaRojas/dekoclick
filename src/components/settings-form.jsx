@@ -430,7 +430,7 @@ FormControlWrapper.propTypes = {
   helperText: PropTypes.string,
   disabled: PropTypes.string,
   updateValueOnProfile: PropTypes.func.isRequired,
-  usePaperContainer: PropTypes.bool.isRequired,
+  usePaperContainer: PropTypes.bool,
 };
 
 FormControlWrapper.defaultProps = {
@@ -440,6 +440,7 @@ FormControlWrapper.defaultProps = {
   helperText: undefined,
   inputLabel: undefined,
   disabled: undefined,
+  usePaperContainer: undefined,
 };
 
 SettingsForm.propTypes = {

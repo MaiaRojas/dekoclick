@@ -54,10 +54,10 @@ class CheckboxList extends React.Component {
       this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
         .then((doc) => {
           const data = doc.data();
-          const lifeSkills = data.lifeSkills;
+          const [lifeSkills] = data;
           if (lifeSkills) {
             Object.keys(lifeSkills).forEach((skillKeyName) => {
-              const lifeSkill = lifeSkills[skillKeyName];
+              // const lifeSkill = lifeSkills[skillKeyName];
 
               if (data.lifeSkills[skillKeyName][authorUid]) {
                 const columnName = `lifeSkills/${skillKeyName}/${authorUid}`;
@@ -102,7 +102,7 @@ class CheckboxList extends React.Component {
       }
       this.setState({ checked: newChecked });
 
-      if (newChecked.length == 0) {
+      if (newChecked.length === 0) {
         this.clearLifeSkill(this.props.auth.uid);
       } else {
         newChecked.forEach((lifeSkill) => {
@@ -160,6 +160,13 @@ class CheckboxList extends React.Component {
 
 CheckboxList.propTypes = {
   classes: PropTypes.shape({}).isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+  auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

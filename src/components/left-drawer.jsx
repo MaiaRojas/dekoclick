@@ -68,6 +68,14 @@ const styles = theme => ({
 });
 
 
+const getUnitOrder = (unit, match) => {
+  if (typeof unit.order === 'number') {
+    return unit.order;
+  }
+  return parseInt(match.params.unitid.slice(0, 2), 10);
+};
+
+
 const LeftDrawerUnit = ({
   classes,
   history,
@@ -209,14 +217,6 @@ LeftDrawer.defaultProps = {
   match: undefined,
   history: undefined,
   firebase: undefined,
-};
-
-
-const getUnitOrder = (unit, match) => {
-  if (typeof unit.order === 'number') {
-    return unit.order;
-  }
-  return parseInt(match.params.unitid.slice(0, 2), 10);
 };
 
 

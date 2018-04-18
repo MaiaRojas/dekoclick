@@ -39,7 +39,7 @@ const styles = theme => ({
 
 const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
   Object.keys(unitSettings.dependencies || {}).sort().reduce((memo, depPath) => {
-    const [unitid, partid, embedCat, formid] = depPath.split('/');
+    const [unitid, partid, formid] = depPath.split('/');
     const unitProgressStats = courseProgressStats.units[unitid] || { parts: {} };
     const partProgressStats = unitProgressStats.parts[partid] || {};
     const dep = unitSettings.dependencies[depPath] || {};
@@ -97,7 +97,10 @@ const UnitCard = (props) => {
   return (
     <Card style={!depsCheck.ok ? { position: 'relative' } : {}} className={props.classes.card}>
       {!depsCheck.ok && (<UnitCardLock depsCheck={depsCheck} syllabus={props.syllabus} />)}
-      <CardContent style={!depsCheck.ok ? { opacity: 0.2 } : {}} className={props.classes.cardContent}>
+      <CardContent
+        style={!depsCheck.ok ? { opacity: 0.2 } : {}}
+        className={props.classes.cardContent}
+      >
         {props.canManageCourse &&
           <UnitCardAdmin
             unit={props.unit}
@@ -175,6 +178,7 @@ UnitCard.propTypes = {
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
+    cardContent: PropTypes.string.isRequired,
     count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
   }).isRequired,

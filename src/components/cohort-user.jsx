@@ -91,6 +91,17 @@ class AvailabilityCheck extends React.Component {
 }
 
 
+AvailabilityCheck.propTypes = {
+  profile: PropTypes.shape({
+    available: PropTypes.string.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+};
+
+
 const CohortUser = (props) => {
   // Averigua si es un cohort de common core del bootcamp para saber si se puede
   // "migrar" al turno de la mañana o tarde según corresponda.
@@ -186,6 +197,9 @@ CohortUser.propTypes = {
   classes: PropTypes.shape({
     emailContainer: PropTypes.string.isRequired,
     truncate: PropTypes.string.isRequired,
+  }).isRequired,
+  parsedCohortId: PropTypes.shape({
+    program: PropTypes.string.isRequired,
   }).isRequired,
 };
 

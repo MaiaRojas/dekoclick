@@ -106,7 +106,7 @@ const SignInForm = props => (
 );
 
 
-SignInForm.PropTypes = {
+SignInForm.propTypes = {
   data: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,

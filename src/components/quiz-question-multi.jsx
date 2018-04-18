@@ -80,7 +80,7 @@ QuizQuestionMulti.propTypes = {
   labelClassName: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     formGroup: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
 };
 
 

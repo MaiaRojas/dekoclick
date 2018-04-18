@@ -331,7 +331,7 @@ class SelfAssessment extends React.Component {
 
 
 SelfAssessment.propTypes = {
-  unit: PropTypes.shape({}).isRequired,
+  // unit: PropTypes.shape({}).isRequired,
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   progress: PropTypes.shape({}),
   firestore: PropTypes.shape({
@@ -342,6 +342,14 @@ SelfAssessment.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({
     sentimentIcon: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 

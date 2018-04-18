@@ -1,18 +1,18 @@
 import { createMuiTheme } from 'material-ui/styles';
-import { amber } from 'material-ui/colors';
+// import { amber } from 'material-ui/colors';
 
 
 const theme = createMuiTheme({
   palette: {
     // primary: amber,
     primary: {
-      main:'#ffe521',
+      main: '#ffe521',
       secondary: '#000000',
     },
     secondary: {
       main: '#bdbdbd',
     },
-    text:{
+    text: {
       primary: '#000000',
       secondary: '#ffffff',
     },
@@ -55,10 +55,10 @@ const theme = createMuiTheme({
       boxShadow: 'none !important',
       borderRadius: 0,
     },
-    display1:{
+    display1: {
       fontFamily: '"Bitter", serif, "Helvetica Neue", Arial',
-      color:'#000000',
-    }
+      color: '#000000',
+    },
   },
   maxContentWidth: 760,
   leftDrawerWidth: 320,

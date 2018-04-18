@@ -10,10 +10,6 @@ const styles = theme => ({
     width: '100%',
     // margin: `${theme.spacing.unit}px 0`,
   },
-  progress: {
-    backgroundColor: '#fafafa',
-    height: 10,
-  },
 });
 
 
@@ -21,7 +17,7 @@ const Progress = ({ value, classes }) => (
   <div className={classes.root}>
     <Tooltip title={`${value}%`} placement="left">
       <LinearProgress
-        className={classes.progress}
+        className="linea-progress"
         variant="determinate"
         value={value}
         color="secondary"
@@ -35,7 +31,6 @@ Progress.propTypes = {
   value: PropTypes.number.isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
-    progress: PropTypes.string.isRequired,
   }).isRequired,
 };
 

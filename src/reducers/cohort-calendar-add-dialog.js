@@ -37,12 +37,13 @@ export const validateCalendarEventField = (key, value, state) => {
           : null,
         sanitized: value,
       };
-    case 'title':
+    case 'title': {
       const trimmed = (value || '').trim();
       return {
         err: (!trimmed) ? 'Title is required' : null,
         sanitized: trimmed,
       };
+    }
     case 'allDay':
       return {
         err: (typeof value !== 'boolean') ? 'allDay must be a boolean' : null,
@@ -137,10 +138,11 @@ const handleToggleAction = (state, payload) => {
 // Reducer
 export default (state = { ...initialState }, action = {}) => {
   switch (action.type) {
-    case TOGGLE:
+    case TOGGLE: {
       console.log(handleToggleAction(state, action.payload));
       return handleToggleAction(state, action.payload);
-    case UPDATE_FIELD:
+    }
+    case UPDATE_FIELD: {
       const { key, value } = action.payload;
       const { err, sanitized } = validateCalendarEventField(key, value, state);
       if (err) {
@@ -164,7 +166,8 @@ export default (state = { ...initialState }, action = {}) => {
             return { ...memo, [errorKey]: state.errors[errorKey] };
           }, {}),
       };
-    case VALIDATE_AND_SUBMIT:
+    }
+    case VALIDATE_AND_SUBMIT: {
       const errors = Object.keys(state.data).reduce((memo, key) => {
         const { err } = validateCalendarEventField(key, state.data[key], state);
         return (err) ? { ...memo, [key]: err } : memo;
@@ -174,6 +177,7 @@ export default (state = { ...initialState }, action = {}) => {
         isValid: Object.keys(errors).length === 0,
         errors,
       };
+    }
     case RESET:
       return { ...initialState };
     default:

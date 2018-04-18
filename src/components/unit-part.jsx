@@ -38,7 +38,7 @@ const paramsToQueryStrign = params =>
   );
 
 
-const typeformUrlPattern = /https:\/\/[a-z0-9\-]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
+const typeformUrlPattern = /https:\/\/[a-z0-9]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
 
 
 const partHasTypeforms = part =>
@@ -172,7 +172,7 @@ class UnitPart extends React.Component {
           <Content html={processTypeFormUrls(part, unitProgress, auth, profile, match, intl)} />
         )}
       </div>
-    )
+    );
   }
 }
 
@@ -200,6 +200,7 @@ UnitPart.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  profile: PropTypes.string.isRequired,
 };
 
 

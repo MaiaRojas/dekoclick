@@ -63,6 +63,7 @@ CohortUserOpenModalButton.propTypes = {
   profile: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }).isRequired,
+  uid: PropTypes.string.isRequired,
 };
 
 
