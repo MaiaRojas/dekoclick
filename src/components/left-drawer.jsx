@@ -40,7 +40,7 @@ const styles = theme => ({
     },
   },
   toolbar: {
-    maxHeight: 64,
+    maxHeight: 90,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',

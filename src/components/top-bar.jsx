@@ -25,6 +25,7 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: 'calc(100% - 73px)',
       position: 'fixed',
+      minHeight: '90px',
     },
   },
   appBarShift: {
