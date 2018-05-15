@@ -6,6 +6,8 @@ import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 import Content from './content';
 import SelfAssessment from './self-assessment';
+import QuizTitle from './quiz-title';
+import PartTitle from './part-title';
 
 
 const styles = theme => ({
@@ -15,6 +17,7 @@ const styles = theme => ({
     height: '100%',
     margin: '0 auto',
     padding: theme.spacing.unit * 4,
+    background: '#fff',
   },
   meta: {
     display: 'flex',
@@ -148,7 +151,7 @@ class UnitPart extends React.Component {
       classes,
       match,
     } = this.props;
-    return (
+    return console.log(this.props) || (
       <div className={classes.root}>
         <div className={classes.meta}>
           <Chip

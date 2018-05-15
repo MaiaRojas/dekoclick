@@ -13,6 +13,19 @@ body {
   line-height: 145%;
 }
 
+.scroll-style::-webkit-scrollbar {
+  width: 1em;
+}
+
+.scroll-style::-webkit-scrollbar-track {
+	background:#f7f7f7;
+}
+.scroll-style::-webkit-scrollbar-thumb {
+	background: #000;
+	border-radius: 10px;
+	border:1px solid rgba(0,0,0,0.3);
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Bitter', serif, "Helvetica Neue", Arial;
   font-weight: 700;
@@ -68,7 +81,7 @@ span > span {
 }
 
 .main {
-  margin-top: 60px;
+  margin-top: 90px;
   padding: 36px;
   width: 100%;
   min-height: 100vh;
@@ -113,7 +126,16 @@ span > span {
   max-width: 100%;
 }
 
-.content .video-container {
+.content .audio-container {
+  position: relative;
+  padding-bottom: 20%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}
+
+.content .video-container ,
+.content .slide-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
@@ -123,7 +145,13 @@ span > span {
 
 .content .video-container iframe,
 .content .video-container object,
-.content .video-container embed {
+.content .video-container embed,
+.content .slide-container iframe,
+.content .slide-container object,
+.content .slide-container embed,
+.content .audio-container iframe,
+.content .audio-container object,
+.content .audio-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -208,4 +236,12 @@ span > span {
   100% {
     transform: scale(0.9);
   }
+}
+
+.triangulo_izq {
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-right: 100px solid #000;
+  border-bottom: 50px solid transparent;
 }

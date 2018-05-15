@@ -121,6 +121,7 @@ const MainNav = props => (
         button
         onClick={() => props.history.push('/courses')}
         className={isActive(props, 'courses')}
+        style={{minHeight: '60px'}}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <LocalLibraryIcon />
@@ -135,6 +136,7 @@ const MainNav = props => (
           button
           onClick={() => props.history.push('/cohorts')}
           className={isActive(props, 'cohorts')}
+          style={{minHeight: '60px'}}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
             <GroupIcon />
@@ -150,6 +152,7 @@ const MainNav = props => (
         button
         onClick={() => props.history.push('/settings')}
         className={isActive(props, 'settings')}
+        style={{minHeight: '60px'}}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <SettingsIcon />
@@ -166,6 +169,7 @@ const MainNav = props => (
           button
           className={props.classes.signoutBtn}
           onClick={() => props.firebase.logout()}
+          style={{minHeight: '90px'}}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
             <ExitToAppIcon />

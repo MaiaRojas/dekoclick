@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SettingsIcon from 'material-ui-icons/Settings';
+import EditIcon from 'material-ui-icons/Edit';
 import CourseCard from './course-card';
 
 
@@ -91,7 +92,7 @@ const CoursesList = ({
             aria-label="Manage"
             onClick={() => history.push(`/cohorts/${cohort.id}`)}
           >
-            <SettingsIcon />
+            <EditIcon />
           </IconButton>
         )}
       </div>

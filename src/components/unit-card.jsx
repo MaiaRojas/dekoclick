@@ -17,6 +17,7 @@ import UnitCardAdmin from './unit-card-admin';
 const styles = theme => ({
   card: {
     marginBottom: theme.spacing.unit * 4,
+    boxShadow: theme.shadow,
   },
   cardContent: {
     position: 'relative',
@@ -95,7 +96,12 @@ const UnitCard = (props) => {
   const depsCheck = checkDependencies(props.unit.id, unitSettings, courseProgressStats);
 
   return (
-    <Card style={!depsCheck.ok ? { position: 'relative' } : {}} className={props.classes.card}>
+    <Card
+      // to={`/cohorts/${props.cohort}/courses/${props.course}/${props.unit.id}`}
+      // component={Link}
+      // disabled={!depsCheck.ok}
+      style={!depsCheck.ok ? { position: 'relative' } : {}}
+      className={props.classes.card}>
       {!depsCheck.ok && (<UnitCardLock depsCheck={depsCheck} syllabus={props.syllabus} />)}
       <CardContent
         style={!depsCheck.ok ? { opacity: 0.2 } : {}}
@@ -109,6 +115,7 @@ const UnitCard = (props) => {
             courseSettings={props.courseSettings}
             syllabus={props.syllabus}
             courseProgressStats={props.courseProgressStats}
+            style={{position:'relative'}}
           />
         }
         <Typography variant="title">
@@ -123,7 +130,7 @@ const UnitCard = (props) => {
       <CardActions className={props.classes.cardActions}>
         {props.unit.stats && props.unit.stats.partCount && (
           <div className={props.classes.count}>
-            <FolderIcon />
+            {/* <FolderIcon /> */}
             <Typography className={props.classes.countText}>
               <FormattedMessage
                 id="unit-card.parts"
@@ -132,9 +139,14 @@ const UnitCard = (props) => {
             </Typography>
           </div>
         )}
+        <div className={props.classes.count}>
+          <Typography className={props.classes.countText}>
+            |
+          </Typography>
+        </div>
         {props.unit.stats && props.unit.stats.durationString &&
           <div className={props.classes.count}>
-            <ScheduleIcon />
+            {/* <ScheduleIcon /> */}
             <Typography className={props.classes.countText}>
               <Hidden smDown><FormattedMessage id="unit-card.estimatedDuration" />: </Hidden>
               {props.unit.stats.durationString}

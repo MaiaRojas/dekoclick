@@ -17,7 +17,7 @@ const theme = createMuiTheme({
       secondary: '#ffffff',
     },
     background: {
-      default: '#ffffff',
+      default: '#f7f7f7f7',
     },
   },
   typography: {
@@ -60,10 +60,14 @@ const theme = createMuiTheme({
       color: '#000000',
     },
   },
+  spacing: {
+    unit1:7,
+  },
   maxContentWidth: 760,
   leftDrawerWidth: 320,
   leftDrawerWidthMin: 73,
+  shadow : "1px 1px 0px 1px #e1e1e1",
 });
 
-
+console.log(theme);
 export default theme;

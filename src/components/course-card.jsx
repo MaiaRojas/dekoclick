@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
@@ -13,10 +14,20 @@ import FolderIcon from 'material-ui-icons/FolderOpen';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
+import TopBar from '../components/top-bar';
 
 
 const styles = theme => ({
   card: {
+    width: '32%',
+    marginBottom: theme.spacing.unit * 4,
+    borderBottom: 0,
+    boxShadow: theme.shadow,
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  cardClose: {
     width: '49%',
     marginBottom: theme.spacing.unit * 4,
     [theme.breakpoints.down('md')]: {
@@ -24,7 +35,7 @@ const styles = theme => ({
     },
   },
   cardActions: {
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     flexWrap: 'wrap',
     height: 120,
   },
@@ -35,6 +46,7 @@ const styles = theme => ({
   countText: {
     display: 'inline-block',
     marginLeft: 6,
+    fontWeight: 700,
   },
   cardContent: {
     backgroundColor: theme.palette.primary.main,
@@ -44,7 +56,14 @@ const styles = theme => ({
 
 
 const CourseCard = props => (
-  <Card className={props.classes.card}>
+  <Card
+    // className={props.classes.card}
+    className={
+      classNames(props.classes.card, props.drawerOpen && props.classes.cardClose)
+    }
+    to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
+    component={Link}
+  >
     <CardContent className={props.classes.cardContent}>
       <Typography variant="title">
         {props.course.title}
@@ -54,7 +73,7 @@ const CourseCard = props => (
     <CardActions className={props.classes.cardActions}>
       {props.course.stats && props.course.stats.unitCount && (
         <div className={props.classes.count}>
-          <FolderIcon />
+          {/* <FolderIcon /> */}
           <Typography className={props.classes.countText}>
             <FormattedMessage
               id="course-card.units"
@@ -63,28 +82,30 @@ const CourseCard = props => (
           </Typography>
         </div>
       )}
+      <div className={props.classes.count}>
+        <Typography className={props.classes.countText}>
+          |
+        </Typography>
+      </div>
       {props.course.stats && props.course.stats.durationString &&
         <div className={props.classes.count}>
-          <ScheduleIcon />
+          {/* <ScheduleIcon /> */}
           <Typography className={props.classes.countText}>
-            <Hidden smDown><FormattedMessage id="course-card.estimatedDuration" />: </Hidden>
             {props.course.stats.durationString}
           </Typography>
         </div>
       }
-      <Button
-        variant="raised"
-        size="small"
-        color="primary"
-        to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
-        component={Link}
-      >
-        <FormattedMessage id={`course-card.${props.progress ? 'continue' : 'start'}`} />
-      </Button>
     </CardActions>
   </Card>
 );
 
+{/* <Button
+variant="raised"
+size="small"
+color="primary"
+>
+<FormattedMessage id={`course-card.${props.progress ? 'continue' : 'start'}`} />
+</Button> */}
 
 CourseCard.propTypes = {
   course: PropTypes.shape({
@@ -106,12 +127,19 @@ CourseCard.propTypes = {
     countText: PropTypes.string.isRequired,
     cardContent: PropTypes.string.isRequired,
   }).isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 
 CourseCard.defaultProps = {
   progress: undefined,
+  drawerOpen: undefined,
+
 };
+
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 
 export default compose(
@@ -124,5 +152,6 @@ export default compose(
       ? firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`][course.id]
       : undefined,
   })),
+  connect(mapStateToProps),
   withStyles(styles),
 )(CourseCard);

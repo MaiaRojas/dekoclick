@@ -5,6 +5,7 @@ import { withFirestore } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { FormGroup, FormControl, FormControlLabel, FormLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
@@ -201,9 +202,19 @@ class SelfAssessment extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="headline" gutterBottom className={classes.headline}>
+        {/* <Typography variant="headline" gutterBottom className={classes.headline}>
           <FormattedMessage id="self-assessment.title" />
-        </Typography>
+        </Typography> */}
+        <ListItem
+          variant="headline" gutterBottom className={classes.headline}
+        >
+          <ListItemText
+            primary={
+              <FormattedMessage id="self-assessment.title" />
+            }
+            secondary="Feedback"
+          />
+        </ListItem>
 
         <Paper className={classes.paper}>
           <FormControl

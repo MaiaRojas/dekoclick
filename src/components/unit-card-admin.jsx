@@ -24,6 +24,7 @@ const styles = theme => ({
     position: 'absolute',
     top: 8,
     right: 4,
+    zIndex: 1205,
   },
   headingButton: {
     top: theme.spacing.unit * -1,

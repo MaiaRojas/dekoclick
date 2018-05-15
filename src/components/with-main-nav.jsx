@@ -11,7 +11,7 @@ const styles = theme => ({
   main: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 4,
+    padding: `${theme.spacing.unit * 3}px  ${theme.spacing.unit * 15}px`,
     // [theme.breakpoints.up('md')]: {
     //   marginLeft: theme.leftDrawerWidth,
     // },

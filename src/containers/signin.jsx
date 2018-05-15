@@ -69,6 +69,7 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
     width: '100%',
     maxWidth: theme.leftDrawerWidth,
+    boxShadow: theme.shadow,
   },
   contentLogo: {
     width: '100%',
@@ -76,7 +77,7 @@ const styles = theme => ({
   },
   logo: {
     width: '100%',
-    maxWidth: 200,
+    // maxWidth: 200,
     display: 'block',
     margin: `0 auto ${theme.spacing.unit}px`,
   },
@@ -84,7 +85,7 @@ const styles = theme => ({
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
     backgroundColor: '#ffe521',
     width: '100%',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: '24px',
     borderRadius: 0,
   },

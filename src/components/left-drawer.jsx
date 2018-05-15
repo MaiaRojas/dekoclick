@@ -45,13 +45,14 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
+    borderBottom: '1px solid #ffffff',
     ...theme.mixins.toolbar,
   },
   logoLarge: {
-    height: 60,
+    height: 85,
     display: 'block',
-    margin: 'auto',
-    padding: 10,
+    // margin: 'auto',
+    // padding: 10,
   },
   logoShort: {
     height: 45,

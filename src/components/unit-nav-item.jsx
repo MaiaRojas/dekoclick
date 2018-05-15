@@ -11,7 +11,7 @@ import BuildIcon from 'material-ui-icons/Build';
 import DoneIcon from 'material-ui-icons/Done';
 import WarningIcon from 'material-ui-icons/Warning';
 import TimerIcon from 'material-ui-icons/Timer';
-
+import CheckBoxOutlineBlankIcon from 'material-ui-icons/CheckBoxOutlineBlank';
 
 const propsToRoutePath = ({ partid, match }) =>
   `/cohorts/${match.params.cohortid}/courses/${match.params.courseid}` +
@@ -36,7 +36,8 @@ const styles = theme => ({
 
 const partTypeToIcon = (type) => {
   if (type === 'quiz') {
-    return <PollIcon />;
+    return <CheckBoxOutlineBlankIcon />;
+    // return <PollIcon />;
   }
   if (type === 'seminar') {
     return <SchoolIcon />;
@@ -65,7 +66,7 @@ const progressToIcon = (part, partProgress, partProgressStats) => {
 
 const UnitNavItem = props => (
   <ListItem
-    style={{ borderBottom: '1px solid #ffffff' }}
+    style={{ borderBottom: '1px solid #ffffff' , minHeight: '90px' }}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
     className={props.partid === props.match.params.partid ? props.classes.active : ''}
@@ -80,7 +81,8 @@ const UnitNavItem = props => (
           ? props.classes.read
           : props.classes.unread,
       }}
-      primary={`${props.order}. ${props.part.title}`}
+      primary={`${props.part.title}`}
+      secondary={`Parte: ${props.order}`}
     />
     <ListItemSecondaryAction>
       <IconButton disabled>

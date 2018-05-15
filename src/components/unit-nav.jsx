@@ -12,6 +12,7 @@ import UnitNavItem from './unit-nav-item';
 const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
+    overflowY: 'auto',
   },
   divider: {
     backgroundColor: theme.palette.common.white,
@@ -21,6 +22,7 @@ const styles = theme => ({
   },
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
+    // minHeight: '90px',
   },
   listItemIcon: {
     color: theme.palette.common.white,
@@ -73,7 +75,7 @@ const UnitNav = ({
         />))
       }
     </List>
-    <div className={classes.bottom}>
+    <div className={classes.logout}>
       <Divider className={classes.divider} />
       <ListItem
         button
