@@ -77,7 +77,8 @@ table {
   max-width: 100%;
 }
 
-.content .video-container {
+.content .video-container,
+.content .iframe-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
@@ -87,7 +88,10 @@ table {
 
 .content .video-container iframe,
 .content .video-container object,
-.content .video-container embed {
+.content .video-container embed,
+.content .iframe-container iframe,
+.content .iframe-container object,
+.content .iframe-container embed {
   position: absolute;
   top: 0;
   left: 0;
