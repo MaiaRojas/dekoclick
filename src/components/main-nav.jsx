@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -11,6 +14,7 @@ import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import { FormattedMessage } from 'react-intl';
 import LeftDrawer from './left-drawer';
+import { displayDrawer } from '../reducers/top-bar';
 
 
 const styles = theme => ({
@@ -30,7 +34,19 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.secondary,
   },
   active: {
-    // backgroundColor: theme.palette.primary[500],
+    backgroundColor: theme.palette.primary[500],
+    width: 0,
+    height: 0,
+    borderRight: '15px solid #ffe521',
+    borderTop: '12px solid transparent',
+    borderBottom: '12px solid transparent',
+    position: 'absolute',
+  },
+  open: {
+    right: 0,
+  },
+  close: {
+    left: '57px',
   },
   bottom: {
     position: 'absolute',
@@ -107,7 +123,7 @@ const MainNav = props => (
         style={{ display: 'none' }}
         button
         onClick={() => props.history.push('/')}
-        className={isActive(props, 'dashboard')}
+        // className={isActive(props, 'dashboard')}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <DashboardIcon />
@@ -120,7 +136,7 @@ const MainNav = props => (
       <ListItem
         button
         onClick={() => props.history.push('/courses')}
-        className={isActive(props, 'courses')}
+        // className={isActive(props, 'courses')}
         style={{minHeight: '60px'}}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
@@ -130,12 +146,14 @@ const MainNav = props => (
           className="mainNav-text"
           primary={<FormattedMessage id="main-nav.courses" />}
         />
+        <div className={ isActive(props, 'courses') && props.drawerOpen ? 'selectorActive open' : isActive(props, 'courses') ? 'selectorActive close' : '' }>
+        </div>
       </ListItem>
       {props.profile && props.profile.roles && props.profile.roles.admin &&
         <ListItem
           button
           onClick={() => props.history.push('/cohorts')}
-          className={isActive(props, 'cohorts')}
+          // className={isActive(props, 'cohorts')}
           style={{minHeight: '60px'}}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
@@ -145,13 +163,15 @@ const MainNav = props => (
             className="mainNav-text"
             primary="Cohorts"
           />
+        <div className={ isActive(props, 'cohorts') && props.drawerOpen ? 'selectorActive open' : isActive(props, 'cohorts') ? 'selectorActive close' : '' }>
+        </div>
         </ListItem>
       }
 
       <ListItem
         button
         onClick={() => props.history.push('/settings')}
-        className={isActive(props, 'settings')}
+        // className={isActive(props, 'settings')}
         style={{minHeight: '60px'}}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
@@ -161,6 +181,8 @@ const MainNav = props => (
           className="mainNav-text"
           primary={<FormattedMessage id="main-nav.settings" />}
         />
+        <div className={ props.drawerOpen && isActive(props, 'settings') ? 'selectorActive open' : isActive(props, 'settings') ? 'selectorActive close' : '' }>
+        </div>
       </ListItem>
 
       <div className={props.classes.bottom}>
@@ -184,6 +206,9 @@ const MainNav = props => (
   </LeftDrawer>
 );
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 MainNav.propTypes = {
   auth: PropTypes.shape({
@@ -226,4 +251,7 @@ MainNav.defaultProps = {
 };
 
 
-export default withStyles(styles)(MainNav);
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles),
+)(MainNav);

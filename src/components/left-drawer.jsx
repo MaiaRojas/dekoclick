@@ -40,13 +40,28 @@ const styles = theme => ({
     },
   },
   toolbar: {
-    maxHeight: 90,
+    minHeight: 90,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
     borderBottom: '1px solid #ffffff',
-    ...theme.mixins.toolbar,
+    // [theme.breakpoints.up('md')]: {
+    //   backgroundColor: 'red',
+    // },
+    // ...theme.mixins.toolbar,
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  primary: {
+    order : 1,
+    color: theme.palette.text.secondary,
+    fontWeight: 'bold',
+  },
+  secondary: {
+    order : 0,
   },
   logoLarge: {
     height: 85,
@@ -94,7 +109,12 @@ const LeftDrawerUnit = ({
         <ChevronLeftIcon />
       </ListItemIcon>
       <ListItemText
-        className="leftDrawer-text"
+        // className="leftDrawer-text"
+        classes={{
+          root : classes.root,
+          primary: classes.primary,
+          secondary: classes.secondary,
+        }}
         secondary={`Unidad ${getUnitOrder(unit, match)}`}
         primary={`${unit.title}`}
       />

@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import { ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -11,7 +14,7 @@ import BuildIcon from 'material-ui-icons/Build';
 import DoneIcon from 'material-ui-icons/Done';
 import WarningIcon from 'material-ui-icons/Warning';
 import TimerIcon from 'material-ui-icons/Timer';
-import CheckBoxOutlineBlankIcon from 'material-ui-icons/CheckBoxOutlineBlank';
+import Checkbox from 'material-ui/Checkbox';
 
 const propsToRoutePath = ({ partid, match }) =>
   `/cohorts/${match.params.cohortid}/courses/${match.params.courseid}` +
@@ -19,6 +22,17 @@ const propsToRoutePath = ({ partid, match }) =>
 
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  primary: {
+    order : 1,
+    fontWeight: 'bold',
+  },
+  secondary: {
+    order : 0,
+  },
   active: {
     backgroundColor: theme.palette.primary[500],
   },
@@ -36,8 +50,7 @@ const styles = theme => ({
 
 const partTypeToIcon = (type) => {
   if (type === 'quiz') {
-    return <CheckBoxOutlineBlankIcon />;
-    // return <PollIcon />;
+    return <PollIcon />;
   }
   if (type === 'seminar') {
     return <SchoolIcon />;
@@ -69,7 +82,7 @@ const UnitNavItem = props => (
     style={{ borderBottom: '1px solid #ffffff' , minHeight: '90px' }}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
-    className={props.partid === props.match.params.partid ? props.classes.active : ''}
+    // className={props.partid === props.match.params.partid ? props.classes.active : ''}
   >
     <ListItemIcon className={props.classes.icon}>
       {partTypeToIcon(props.part.type)}
@@ -77,9 +90,14 @@ const UnitNavItem = props => (
     <ListItemText
       className="unitNav-text"
       classes={{
-        primary: (props.partProgress || {}).openedAt
-          ? props.classes.read
-          : props.classes.unread,
+        root : props.classes.root,
+        primary: classNames(
+          props.classes.primary,
+          (props.partProgress || {}).openedAt
+            ? props.classes.read
+            : props.classes.unread,
+        ),
+        secondary: props.classes.secondary,
       }}
       primary={`${props.part.title}`}
       secondary={`Parte: ${props.order}`}
@@ -89,6 +107,9 @@ const UnitNavItem = props => (
         {progressToIcon(props.part, props.partProgress, props.partProgressStats)}
       </IconButton>
     </ListItemSecondaryAction>
+    <div
+      className={ props.partid === props.match.params.partid && props.drawerOpen ? 'selectorActive open' : props.partid === props.match.params.partid ? 'selectorActive close' : '' }>
+    </div>
   </ListItem>
 );
 
@@ -118,6 +139,10 @@ UnitNavItem.propTypes = {
   order: PropTypes.number.isRequired,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
+
 
 UnitNavItem.defaultProps = {
   partProgress: undefined,
@@ -125,4 +150,7 @@ UnitNavItem.defaultProps = {
 };
 
 
-export default withStyles(styles)(UnitNavItem);
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles),
+)(UnitNavItem);

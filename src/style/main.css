@@ -238,10 +238,18 @@ span > span {
   }
 }
 
-.triangulo_izq {
+.selectorActive {
   width: 0;
   height: 0;
-  border-top: 50px solid transparent;
-  border-right: 100px solid #000;
-  border-bottom: 50px solid transparent;
+  border-right: 15px solid #fff;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  position: absolute;
+}
+.open {
+  right: 0;
+}
+
+.close {
+  left: 57px;
 }
