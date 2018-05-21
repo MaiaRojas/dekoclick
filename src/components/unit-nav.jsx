@@ -22,11 +22,18 @@ const styles = theme => ({
   },
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTop: '1px solid white',
     // minHeight: '90px',
   },
   listItemIcon: {
     color: theme.palette.common.white,
   },
+  logout: {
+    display: 'flex',
+    height: '90px',
+  }
 });
 
 
@@ -76,7 +83,6 @@ const UnitNav = ({
       }
     </List>
     <div className={classes.logout}>
-      <Divider className={classes.divider} />
       <ListItem
         button
         className={classes.signoutBtn}

@@ -12,7 +12,7 @@ import PartTitle from './part-title';
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    // width: '100%',
     maxWidth: theme.maxContentWidth,
     height: '100%',
     margin: '0 auto',

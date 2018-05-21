@@ -11,10 +11,10 @@ const styles = theme => ({
   main: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: `${theme.spacing.unit * 3}px  ${theme.spacing.unit * 15}px`,
-    // [theme.breakpoints.up('md')]: {
-    //   marginLeft: theme.leftDrawerWidth,
-    // },
+    padding: `${theme.spacing.unit * 0}px  ${theme.spacing.unit * 3}px`,
+    [theme.breakpoints.up('md')]: {
+      padding: `${theme.spacing.unit * 3}px  ${theme.spacing.unit * 15}px`,
+    },
   },
   flex: {
     flex: 1,

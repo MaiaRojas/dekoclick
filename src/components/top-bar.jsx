@@ -58,8 +58,11 @@ const styles = theme => ({
     margin: 'auto',
   },
   spaceMenu: {
-    minHeight: '90px',
+    height: '90px',
     padding: `${theme.spacing.unit * 0}px ${theme.spacing.unit * 3}px`,
+    [theme.breakpoints.up('md')]: {
+      height: 90,
+    },
   },
 });
 

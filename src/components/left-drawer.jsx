@@ -40,14 +40,14 @@ const styles = theme => ({
     },
   },
   toolbar: {
-    minHeight: 90,
+    height: 90,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
     borderBottom: '1px solid #ffffff',
     // [theme.breakpoints.up('md')]: {
-    //   backgroundColor: 'red',
+    //   height: 90,
     // },
     // ...theme.mixins.toolbar,
   },
