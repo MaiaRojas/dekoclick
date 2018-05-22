@@ -126,8 +126,16 @@ span > span {
   max-width: 100%;
 }
 
-.content .video-container,
-.content .iframe-container {
+.content .audio-container {
+  position: relative;
+  padding-bottom: 20%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}
+
+.content .video-container ,
+.content .slide-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
@@ -138,9 +146,12 @@ span > span {
 .content .video-container iframe,
 .content .video-container object,
 .content .video-container embed,
-.content .iframe-container iframe,
-.content .iframe-container object,
-.content .iframe-container embed {
+.content .slide-container iframe,
+.content .slide-container object,
+.content .slide-container embed,
+.content .audio-container iframe,
+.content .audio-container object,
+.content .audio-container embed {
   position: absolute;
   top: 0;
   left: 0;

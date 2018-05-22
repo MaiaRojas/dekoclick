@@ -22,8 +22,8 @@ const styles = theme => ({
   },
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     borderTop: '1px solid white',
     // minHeight: '90px',
   },

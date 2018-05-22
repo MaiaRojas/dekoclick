@@ -40,7 +40,7 @@ const styles = theme => ({
     },
   },
   toolbar: {
-    height: 90,
+    minHeight: 90,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
