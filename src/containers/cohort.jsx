@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
-import { CircularProgress } from 'material-ui/Progress';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import List from 'material-ui/List';
@@ -25,6 +24,7 @@ import { toggleCohortCourseAddDialog } from '../reducers/cohort-course-add-dialo
 import { toggleCohortUserAddDialog } from '../reducers/cohort-user-add-dialog';
 import { parse as parseCohortid } from '../util/cohort';
 import programs from '../util/programs';
+import Loader from '../components/loader';
 
 const drawerWidth = 320;
 const styles = theme => ({
@@ -96,9 +96,9 @@ const Cohort = ({
   drawerOpen,
 }) => {
   if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
-    return (<CircularProgress />);
+    return (<Loader />);
   }
-
+// return (<CircularProgress />);
   const { cohortid } = match.params;
 
   const {

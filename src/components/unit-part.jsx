@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
 import { withStyles } from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
 import Content from './content';
 import SelfAssessment from './self-assessment';
-import QuizTitle from './quiz-title';
 import PartTitle from './part-title';
 
 
@@ -16,7 +14,7 @@ const styles = theme => ({
     maxWidth: theme.maxContentWidth,
     height: '100%',
     margin: '0 auto',
-    padding: theme.spacing.unit * 4,
+    // padding: theme.spacing.unit * 4,
     background: '#fff',
   },
   meta: {
@@ -114,10 +112,6 @@ const processTypeFormUrls = (part, unitProgress, auth, profile, { params }, intl
 // );
 
 class UnitPart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleTypeformSubmit = this.handleTypeformSubmit.bind(this);
-  }
 
   componentDidMount() {
     if (partHasTypeforms(this.props.part)) {
@@ -131,12 +125,6 @@ class UnitPart extends React.Component {
     }
   }
 
-  handleTypeformSubmit(event) {
-    // console.log('handleTypeformSubmit', event);
-    if (event.data === 'form-submit') {
-      // ...
-    }
-  }
 
   render() {
     const {
@@ -151,18 +139,9 @@ class UnitPart extends React.Component {
       classes,
       match,
     } = this.props;
-    return console.log(this.props) || (
+    return (
       <div className={classes.root}>
-        <div className={classes.meta}>
-          <Chip
-            className={classes.metaChip}
-            label={`Tipo: ${part.type}`}
-          />
-          <Chip
-            className={classes.metaChip}
-            label={`Formato: ${part.format}`}
-          />
-        </div>
+        <PartTitle unit={this.props} type={part.type} />
         {part.type === 'self-assessment' &&
           <SelfAssessment
             match={match}

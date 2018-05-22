@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import { ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -14,7 +13,6 @@ import BuildIcon from 'material-ui-icons/Build';
 import DoneIcon from 'material-ui-icons/Done';
 import WarningIcon from 'material-ui-icons/Warning';
 import TimerIcon from 'material-ui-icons/Timer';
-import Checkbox from 'material-ui/Checkbox';
 
 const propsToRoutePath = ({ partid, match }) =>
   `/cohorts/${match.params.cohortid}/courses/${match.params.courseid}` +
@@ -27,23 +25,33 @@ const styles = theme => ({
     flexDirection: 'column',
   },
   primary: {
-    order : 1,
-    fontWeight: 'bold',
+    order: 1,
+    color: theme.palette.text.secondary,
+    fontWeight: 500,
+    fontSize: theme.typography.fontSize,
+    lineHeight: '125%',
   },
   secondary: {
-    order : 0,
+    order: 0,
+    color: theme.palette.text.secondary,
+    fontSize: '14px',
   },
   active: {
-    backgroundColor: theme.palette.primary[500],
+    opacity: 1,
+    color: theme.palette.text.secondary,
+  },
+  inactive: {
+    opacity: 0.7,
   },
   read: {
-    fontWeight: 300,
+    fontWeight: 500,
   },
   unread: {
-    fontWeight: 700,
+    fontWeight: 500,
   },
   icon: {
-    color: theme.palette.primary.main,
+    color: theme.palette.text.secondary,
+    opacity: 'inherit',
   },
 });
 
@@ -77,26 +85,39 @@ const progressToIcon = (part, partProgress, partProgressStats) => {
 };
 
 
+const isOpenMenu = (props) => {
+  if (props.partid === props.match.params.partid && props.drawerOpen) {
+    return 'selectorActive open';
+  }
+  if (props.partid === props.match.params.partid) {
+    return 'selectorActive close';
+  }
+  return '';
+};
+
 const UnitNavItem = props => (
   <ListItem
-    style={{ borderBottom: '1px solid #ffffff' , minHeight: '90px' }}
+    style={{ borderBottom: '1px solid #f1f1f1', minHeight: '90px' }}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
-    // className={props.partid === props.match.params.partid ? props.classes.active : ''}
+    className={props.partid === props.match.params.partid ?
+      props.classes.active :
+      props.classes.inactive
+    }
   >
     <ListItemIcon className={props.classes.icon}>
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
     <ListItemText
-      className="unitNav-text"
       classes={{
-        root : props.classes.root,
-        primary: classNames(
-          props.classes.primary,
-          (props.partProgress || {}).openedAt
-            ? props.classes.read
-            : props.classes.unread,
-        ),
+        root: props.classes.root,
+        primary: props.classes.primary,
+        // primary: classNames(
+        //   props.classes.primary,
+        //   (props.partProgress || {}).openedAt
+        //     ? props.classes.read
+        //     : props.classes.unread,
+        // ),
         secondary: props.classes.secondary,
       }}
       primary={`${props.part.title}`}
@@ -107,36 +128,38 @@ const UnitNavItem = props => (
         {progressToIcon(props.part, props.partProgress, props.partProgressStats)}
       </IconButton>
     </ListItemSecondaryAction>
-    <div
-      className={ props.partid === props.match.params.partid && props.drawerOpen ? 'selectorActive open' : props.partid === props.match.params.partid ? 'selectorActive close' : '' }>
-    </div>
+    <div className={isOpenMenu(props)} />
   </ListItem>
 );
 
 
 UnitNavItem.propTypes = {
-  partid: PropTypes.string.isRequired,
   part: PropTypes.shape({
     title: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
   }).isRequired,
   partProgress: PropTypes.shape({}),
   partProgressStats: PropTypes.shape({}),
+  partid: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
     read: PropTypes.string.isRequired,
     unread: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      partid: PropTypes.string.isRequired,
-    }).isRequired,
+    root: PropTypes.string.isRequired,
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+    inactive: PropTypes.string.isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
   order: PropTypes.number.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = ({ topbar }) => ({

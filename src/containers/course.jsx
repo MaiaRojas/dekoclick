@@ -11,6 +11,7 @@ import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
+import Loader from '../components/loader';
 
 
 const drawerWidth = 320;
@@ -43,7 +44,7 @@ const styles = theme => ({
 
 const Course = (props) => {
   if (!props.course || props.cohortUser === undefined || props.courseProgressStats === undefined) {
-    return (<CircularProgress />);
+    return (<Loader />);
   }
 
   const isAdmin = props.profile.roles && props.profile.roles.admin;

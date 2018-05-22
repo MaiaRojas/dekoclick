@@ -2,12 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import CoursesList from '../components/courses-list';
+import Loader from '../components/loader';
+
+
+const drawerWidth = 320;
+const styles = theme => ({
+  appBar: {
+    width: '100%',
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100% - 73px)',
+      marginLeft: '73px',
+    },
+  },
+  appBarShift: {
+    width: '100%',
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+});
 
 
 const Courses = ({
@@ -16,12 +47,18 @@ const Courses = ({
   profile,
   history,
   drawerOpen,
+  classes,
 }) => (
   <div className="courses">
     <TopBar title={<FormattedMessage id="courses.title" />} />
-    {!cohorts && <CircularProgress />}
+    {!cohorts && <Loader />}
     {cohorts && !cohorts.length && (
-      <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+      <div
+        position="absolute"
+        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
+      >
+        <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+      </div>
     )}
     {cohorts && cohorts.length > 0 && (
       [...cohorts].reverse().map(cohort => (
@@ -68,4 +105,5 @@ export default compose(
     cohorts: firestore.ordered[`users/${auth.uid}/cohorts`],
   })),
   connect(mapStateToProps),
+  withStyles(styles),
 )(Courses);

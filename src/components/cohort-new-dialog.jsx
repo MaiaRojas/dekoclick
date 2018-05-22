@@ -35,6 +35,9 @@ import programs from '../util/programs';
 
 
 const styles = theme => ({
+  root: {
+    color: theme.palette.text.primary,
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -180,11 +183,11 @@ const isNewCohort = (cohorts, cohortKey) =>
 const CohortNewDialogConfirm = props => (
   <DialogContent>
     {isNewCohort(props.cohorts, props.cohortKey) ?
-      <DialogContentText>
+      <DialogContentText className={props.classes.root}>
         Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
         Estás segura de que quieres hacer esto?
       </DialogContentText> :
-      <DialogContentText>
+      <DialogContentText className={props.classes.root}>
         Este cohort con el id <code>{props.cohortKey}</code> ya EXISTE, solo se
         actualizarán las fechas de inicio y fin. Estás segura de que quieres
         hacer esto?
@@ -197,6 +200,9 @@ const CohortNewDialogConfirm = props => (
 CohortNewDialogConfirm.propTypes = {
   cohorts: PropTypes.shape({}).isRequired,
   cohortKey: PropTypes.string.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 

@@ -11,12 +11,12 @@ import { FormattedMessage } from 'react-intl';
 import QuizConfirmationDialog from './quiz-confirmation-dialog';
 import QuizQuestion from './quiz-question';
 import QuizResults from './quiz-results';
-import QuizTitle from './quiz-title';
 import {
   toggleQuizConfirmationDialog,
   resetQuizConfirmationDialog,
 } from '../reducers/quiz-confirmation-dialog';
 import { updateProgress } from '../util/progress';
+import PartTitle from './part-title';
 
 
 const styles = theme => ({
@@ -105,8 +105,8 @@ const Quiz = (props) => {
     auth,
     match,
     startQuiz,
+    unit,
   } = props;
-
   const progress = props.partProgress || {};
 
   if (!progress.startedAt && startQuiz) {
@@ -144,10 +144,9 @@ const Quiz = (props) => {
       return (<CircularProgress />);
     }
   }
-
   return (
     <div className={classes.root}>
-      <QuizTitle />
+      <PartTitle unit={unit} type={part.type} />
       <div className={classes.content}>
         {progress.results && <QuizResults results={progress.results} />}
         {part.questions.map((question, idx) =>
@@ -202,6 +201,7 @@ Quiz.propTypes = {
   startQuiz: PropTypes.bool.isRequired,
   resetQuizConfirmationDialog: PropTypes.func.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,
+  unit: PropTypes.shape({}).isRequired,
 };
 
 

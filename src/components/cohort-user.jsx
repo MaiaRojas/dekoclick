@@ -18,6 +18,9 @@ import CohortUserOpenModalButton from './cohort-user-open-modal-button';
 
 
 const styles = theme => ({
+  subheader: {
+    color: theme.palette.text.primary,
+  },
   heading: {
     marginBottom: theme.spacing.unit,
   },
@@ -67,10 +70,12 @@ class AvailabilityCheck extends React.Component {
       }
     }
     this.state = { isFired };
-    this.handleChange = (isFired) => {
-      this.setState({ isFired });
-      this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ available: !isFired });
-    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(isFired) {
+    this.setState({ isFired });
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ available: !isFired });
   }
 
   render() {
@@ -104,7 +109,7 @@ AvailabilityCheck.propTypes = {
 
 AvailabilityCheck.defaultProps = {
   profile: undefined,
-}
+};
 
 
 const CohortUser = (props) => {
@@ -117,6 +122,7 @@ const CohortUser = (props) => {
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card>
         <CardHeader
+          classes={{ subheader: props.classes.subheader }}
           avatar={<UserAvatar user={props.profile} />}
           title={props.profile.name}
           subheader={`Role: ${props.cohortUser.role}`}
@@ -202,6 +208,7 @@ CohortUser.propTypes = {
   classes: PropTypes.shape({
     emailContainer: PropTypes.string.isRequired,
     truncate: PropTypes.string.isRequired,
+    subheader: PropTypes.string.isRequired,
   }).isRequired,
   parsedCohortId: PropTypes.shape({
     program: PropTypes.string.isRequired,

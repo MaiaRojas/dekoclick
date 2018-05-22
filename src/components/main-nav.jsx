@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -14,7 +13,7 @@ import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import { FormattedMessage } from 'react-intl';
 import LeftDrawer from './left-drawer';
-import { displayDrawer } from '../reducers/top-bar';
+// import { displayDrawer } from '../reducers/top-bar';
 
 
 const styles = theme => ({
@@ -22,6 +21,7 @@ const styles = theme => ({
     width: theme.leftDrawerWidth,
     color: theme.palette.common.white,
     backgroundColor: theme.palette.background.secondary,
+    position: 'static',
   },
   logo: {
     height: 20,
@@ -30,23 +30,26 @@ const styles = theme => ({
     padding: 10,
   },
   profileBadge: {
-    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     backgroundColor: theme.palette.background.secondary,
   },
   active: {
-    backgroundColor: theme.palette.primary[500],
-    width: 0,
-    height: 0,
-    borderRight: '15px solid #ffe521',
-    borderTop: '12px solid transparent',
-    borderBottom: '12px solid transparent',
-    position: 'absolute',
+    opacity: 1,
+    // color: theme.palette.text.secondary,
   },
   open: {
     right: 0,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   close: {
-    left: '57px',
+    left: '62px',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   bottom: {
     position: 'absolute',
@@ -57,15 +60,29 @@ const styles = theme => ({
     backgroundColor: theme.palette.common.black,
   },
   divider: {
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.background.default,
   },
   listItemIcon: {
     color: theme.palette.common.white,
+    marginLeft: theme.spacing.unit,
+    opacity: 'inherit',
   },
   avatar: {
     width: `${theme.spacing.unit * 5}px`,
     height: `${theme.spacing.unit * 5}px`,
     borderRadius: 0,
+    background: '#56f89a',
+    color: theme.palette.primary.secondary,
+  },
+  primary: {
+    color: 'inherit',
+    fontWeight: 500,
+  },
+  root: {
+    paddingLeft: theme.spacing.unit,
+  },
+  item: {
+    opacity: 0.7,
   },
 });
 
@@ -92,7 +109,7 @@ const isActive = ({ match, classes }, container) => {
       return match.path === '/' ? classes.active : '';
     case 'courses':
       return match.path === '/courses' || /^\/cohorts\/[^/]+\/courses/.test(match.path) ?
-        classes.active : '';
+        true : '';
     case 'cohorts':
       return match.path === '/cohorts' || /^\/cohorts\/[^/]+$/.test(match.path) ?
         classes.active : '';
@@ -104,16 +121,34 @@ const isActive = ({ match, classes }, container) => {
 };
 
 
+const isOpenMenu = (props, container) => {
+  if (isActive(props, container) && props.drawerOpen) {
+    return 'selectorActive open';
+  }
+  if (isActive(props, container)) {
+    return 'selectorActive close';
+  }
+  return '';
+  // if( isActive(props, container).indexOf('des') !== -1){
+  //   return '';
+  // }
+  // if (props.drawerOpen) {
+  //   return 'selectorActive open';
+  // } else {
+  //   return 'selectorActive close';
+  // }
+};
+
+
 const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
-      <Divider className={props.classes.divider} />
       <ListItem className={props.classes.profileBadge}>
         <Avatar className={props.classes.avatar} >
           {nameToInitials(getName(props.auth, props.profile))}
         </Avatar>
         <ListItemText
-          className="mainNav-email"
+          classes={{ primary: props.classes.primary }}
           primary={getName(props.auth, props.profile)}
           secondary={getEmail(props.auth, props.profile)}
         />
@@ -123,7 +158,6 @@ const MainNav = props => (
         style={{ display: 'none' }}
         button
         onClick={() => props.history.push('/')}
-        // className={isActive(props, 'dashboard')}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <DashboardIcon />
@@ -136,53 +170,53 @@ const MainNav = props => (
       <ListItem
         button
         onClick={() => props.history.push('/courses')}
-        // className={isActive(props, 'courses')}
-        style={{minHeight: '60px'}}
+        style={{ maxHeight: '48px', padding: '16px', marginTop: '16px' }}
+        className={isActive(props, 'courses') ? props.classes.active : props.classes.item}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <LocalLibraryIcon />
         </ListItemIcon>
         <ListItemText
-          className="mainNav-text"
+          classes={{ primary: props.classes.primary }}
           primary={<FormattedMessage id="main-nav.courses" />}
+          style={{ paddingLeft: '8px' }}
         />
-        <div className={ isActive(props, 'courses') && props.drawerOpen ? 'selectorActive open' : isActive(props, 'courses') ? 'selectorActive close' : '' }>
-        </div>
+        <div className={isOpenMenu(props, 'courses')} />
       </ListItem>
       {props.profile && props.profile.roles && props.profile.roles.admin &&
         <ListItem
           button
           onClick={() => props.history.push('/cohorts')}
-          // className={isActive(props, 'cohorts')}
-          style={{minHeight: '60px'}}
+          style={{ maxHeight: '48px', padding: '16px' }}
+          className={isActive(props, 'cohorts') ? props.classes.active : props.classes.item}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
             <GroupIcon />
           </ListItemIcon>
           <ListItemText
-            className="mainNav-text"
+            classes={{ primary: props.classes.primary }}
             primary="Cohorts"
+            style={{ paddingLeft: '8px' }}
           />
-        <div className={ isActive(props, 'cohorts') && props.drawerOpen ? 'selectorActive open' : isActive(props, 'cohorts') ? 'selectorActive close' : '' }>
-        </div>
+          <div className={isOpenMenu(props, 'cohorts')} />
         </ListItem>
       }
 
       <ListItem
         button
         onClick={() => props.history.push('/settings')}
-        // className={isActive(props, 'settings')}
-        style={{minHeight: '60px'}}
+        style={{ maxHeight: '48px', padding: '16px' }}
+        className={isActive(props, 'settings') ? props.classes.active : props.classes.item}
       >
         <ListItemIcon className={props.classes.listItemIcon}>
           <SettingsIcon />
         </ListItemIcon>
         <ListItemText
-          className="mainNav-text"
+          classes={{ primary: props.classes.primary }}
           primary={<FormattedMessage id="main-nav.settings" />}
+          style={{ paddingLeft: '8px' }}
         />
-        <div className={ props.drawerOpen && isActive(props, 'settings') ? 'selectorActive open' : isActive(props, 'settings') ? 'selectorActive close' : '' }>
-        </div>
+        <div className={isOpenMenu(props, 'settings')} />
       </ListItem>
 
       <div className={props.classes.bottom}>
@@ -191,14 +225,15 @@ const MainNav = props => (
           button
           className={props.classes.signoutBtn}
           onClick={() => props.firebase.logout()}
-          style={{minHeight: '90px'}}
+          style={{ minHeight: '90px', padding: '16px' }}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
             <ExitToAppIcon />
           </ListItemIcon>
           <ListItemText
-            className="mainNav-text"
+            classes={{ primary: props.classes.primary }}
             primary={<FormattedMessage id="main-nav.signout" />}
+            style={{ paddingLeft: '8px' }}
           />
         </ListItem>
       </div>
@@ -206,9 +241,6 @@ const MainNav = props => (
   </LeftDrawer>
 );
 
-const mapStateToProps = ({ topbar }) => ({
-  drawerOpen: topbar.drawerOpen,
-});
 
 MainNav.propTypes = {
   auth: PropTypes.shape({
@@ -232,6 +264,8 @@ MainNav.propTypes = {
     divider: PropTypes.string.isRequired,
     listItemIcon: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
+    primary: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
   }).isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   match: PropTypes.shape({
@@ -244,6 +278,11 @@ MainNav.propTypes = {
     logout: PropTypes.func.isRequired,
   }).isRequired,
 };
+
+
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 
 MainNav.defaultProps = {

@@ -8,13 +8,8 @@ import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import Hidden from 'material-ui/Hidden';
-import FolderIcon from 'material-ui-icons/FolderOpen';
-import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
-import TopBar from '../components/top-bar';
 
 
 const styles = theme => ({
@@ -57,7 +52,6 @@ const styles = theme => ({
 
 const CourseCard = props => (
   <Card
-    // className={props.classes.card}
     className={
       classNames(props.classes.card, props.drawerOpen && props.classes.cardClose)
     }
@@ -99,13 +93,6 @@ const CourseCard = props => (
   </Card>
 );
 
-{/* <Button
-variant="raised"
-size="small"
-color="primary"
->
-<FormattedMessage id={`course-card.${props.progress ? 'continue' : 'start'}`} />
-</Button> */}
 
 CourseCard.propTypes = {
   course: PropTypes.shape({
@@ -126,6 +113,7 @@ CourseCard.propTypes = {
     count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
     cardContent: PropTypes.string.isRequired,
+    cardClose: PropTypes.string.isRequired,
   }).isRequired,
   drawerOpen: PropTypes.bool,
 };

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { withStyles } from 'material-ui/styles';
 import { withFirestore } from 'react-redux-firebase';
 import {
   ListItem,
@@ -13,12 +15,19 @@ import FolderIcon from 'material-ui-icons/Folder';
 import DeleteIcon from 'material-ui-icons/Delete';
 
 
+const styles = theme => ({
+  secondary: {
+    color: theme.palette.text.primary,
+  },
+});
+
 const CohortCourse = ({
   cohortid,
   courseid,
   course,
   history,
   firestore,
+  classes,
 }) => (
   <ListItem
     button
@@ -32,6 +41,7 @@ const CohortCourse = ({
       </Avatar>
     </ListItemAvatar>
     <ListItemText
+      classes={{ secondary: classes.secondary }}
       primary={course.title}
       secondary={course.stats.durationString}
     />
@@ -68,7 +78,13 @@ CohortCourse.propTypes = {
   firestore: PropTypes.shape({
     delete: PropTypes.func.isRequired,
   }).isRequired,
+  classes: PropTypes.shape({
+    secondary: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 
-export default withFirestore(CohortCourse);
+export default compose(
+  withStyles(styles),
+  withFirestore,
+)(CohortCourse);

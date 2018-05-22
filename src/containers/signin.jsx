@@ -26,7 +26,7 @@ import {
 import SignInForm from '../components/signin-form';
 import Alert from '../components/alert';
 import { parse as parseCohortId } from '../util/cohort';
-
+import Loader from '../components/loader';
 
 // handle successful signup (add profile data and assign cohort)
 const postSignUp = (props, userRecord) => {
@@ -290,7 +290,7 @@ const SignIn = (props) => {
   }
 
   if (props.signup && (props.cohort === undefined || !props.campuses)) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (props.fbPasswordPrompt && props.fbPasswordPrompt.open) {

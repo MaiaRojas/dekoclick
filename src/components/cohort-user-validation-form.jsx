@@ -173,7 +173,7 @@ class ValidationForm extends React.Component {
       <GithubCard
         url={url}
         pos={index}
-        key={index}
+        key={this.props.uid}
         firebase={this.props.firebase}
         uid={this.props.uid}
       />
@@ -186,25 +186,22 @@ class ValidationForm extends React.Component {
 
     if (detail.length === 0) {
       return this.props.firebase.firestore().collection('users').doc(authorUid).get()
-        .then((adminUser) => {
-          return userDocRef.update({
+        .then(() =>
+          userDocRef.update({
             [`recommendations.${authorUid}`]: this.props.firebase.firestore.FieldValue.delete(),
-          });
-        });
-    } else {
-      return this.props.firebase.firestore().collection('users').doc(authorUid).get()
-        .then((adminUser) => {
-          return userDocRef.update({
-            [`recommendations.${authorUid}`]: {
-              from: adminUser.data().name,
-              authorLinkedin: adminUser.data().linkedin,
-              company: 'Laboratoria',
-              companyUrl: 'www.laboratoria.la',
-              detail: detail,
-            },
-          });
-        });
+          }));
     }
+    return this.props.firebase.firestore().collection('users').doc(authorUid).get()
+      .then(adminUser =>
+        userDocRef.update({
+          [`recommendations.${authorUid}`]: {
+            from: adminUser.data().name,
+            authorLinkedin: adminUser.data().linkedin,
+            company: 'Laboratoria',
+            companyUrl: 'www.laboratoria.la',
+            detail,
+          },
+        }));
   }
 
   endorseForm() {

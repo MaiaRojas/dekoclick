@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { CircularProgress } from 'material-ui/Progress';
 import Intl from '../intl';
 import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
@@ -16,11 +15,12 @@ import Cohort from './cohort';
 import Settings from './settings';
 import Course from './course';
 import Unit from './unit';
+import Loader from '../components/loader';
 
-
+// return (<CircularProgress />);
 const App = (props) => {
   if (!props.auth.isLoaded || !props.profile.isLoaded) {
-    return (<CircularProgress />);
+    return (<Loader />);
   }
 
   return (

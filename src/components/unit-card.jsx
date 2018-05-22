@@ -6,8 +6,6 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
-import FolderIcon from 'material-ui-icons/FolderOpen';
-import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
 import UnitCardLock from './unit-card-lock';
@@ -101,7 +99,8 @@ const UnitCard = (props) => {
       // component={Link}
       // disabled={!depsCheck.ok}
       style={!depsCheck.ok ? { position: 'relative' } : {}}
-      className={props.classes.card}>
+      className={props.classes.card}
+    >
       {!depsCheck.ok && (<UnitCardLock depsCheck={depsCheck} syllabus={props.syllabus} />)}
       <CardContent
         style={!depsCheck.ok ? { opacity: 0.2 } : {}}
@@ -115,7 +114,7 @@ const UnitCard = (props) => {
             courseSettings={props.courseSettings}
             syllabus={props.syllabus}
             courseProgressStats={props.courseProgressStats}
-            style={{position:'relative'}}
+            style={{ position: 'relative' }}
           />
         }
         <Typography variant="title">

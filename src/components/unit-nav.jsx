@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { FormattedMessage } from 'react-intl';
-import Divider from 'material-ui/Divider';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
 import UnitNavItem from './unit-nav-item';
@@ -15,7 +14,7 @@ const styles = theme => ({
     overflowY: 'auto',
   },
   divider: {
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: '#f1f1f1',
   },
   icon: {
     color: theme.palette.primary.main,
@@ -30,10 +29,19 @@ const styles = theme => ({
   listItemIcon: {
     color: theme.palette.common.white,
   },
+  primary: {
+    fontWeight: 700,
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.fontSize,
+    lineHeight: '125%',
+  },
   logout: {
     display: 'flex',
     height: '90px',
-  }
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
 });
 
 
@@ -68,7 +76,7 @@ const UnitNav = ({
     history={history}
   >
     <List disablePadding className={classes.list}>
-      <Divider className={classes.divider} />
+      {/* <Divider className={classes.divider} /> */}
       {parts.map((part, idx) =>
         (<UnitNavItem
           key={part.id}
@@ -92,7 +100,8 @@ const UnitNav = ({
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText
-          className="unitNav-text"
+          // className="unitNav-text"
+          classes={{ primary: classes.primary }}
           primary={<FormattedMessage id="main-nav.signout" />}
         />
       </ListItem>

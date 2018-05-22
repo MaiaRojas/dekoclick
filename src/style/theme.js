@@ -23,16 +23,16 @@ const theme = createMuiTheme({
   typography: {
     htmlFontSize: 16,
     color: '#ffffff',
-    fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
+    fontFamily: "'Open Sans', sans-serif",
     fontWeight: 100,
     fontSize: 16,
     lineHeight: '145%',
     body1: {
-      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
+      fontFamily: "'Open Sans', sans-serif",
       fontWeight: 100,
     },
     headline: {
-      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
+      fontFamily: "'Open Sans', sans-serif",
       textTransform: 'uppercase',
       fontWeight: 100,
       color: '#999',
@@ -50,7 +50,7 @@ const theme = createMuiTheme({
       fontWeight: 300,
     },
     button: {
-      fontFamily: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
+      fontFamily: "'Open Sans', sans-serif",
       fontWeight: 700,
       boxShadow: 'none !important',
       borderRadius: 0,
@@ -69,5 +69,5 @@ const theme = createMuiTheme({
   shadow : "1px 1px 0px 1px #e1e1e1",
 });
 
-console.log(theme);
+
 export default theme;

@@ -101,21 +101,6 @@ span > span {
   background-image: -moz-repeating-linear-gradient(75deg, transparent, transparent 1px, rgba(255,255,255,.5) 1px, rgba(255,255,255,.5) 2px);
 }
 
-.unitNav-text h3 {
-  color: #ffffff;
-}
-
-.leftDrawer-text h3,
-.mainNav-text h3,
-.mainNav-email h3 {
-  color: #ffffff;
-  font-weight: bold;
-}
-
-.mainNav-email p {
-  color: #ffffff;
-}
-
 .content p,
 .content ul,
 .content ol {
@@ -230,15 +215,17 @@ span > span {
 .selectorActive {
   width: 0;
   height: 0;
-  border-right: 15px solid #fff;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
+  border-right: 10px solid #f7f7f7;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
   position: absolute;
 }
 .open {
   right: 0;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 .close {
-  left: 57px;
+  left: 62px;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }

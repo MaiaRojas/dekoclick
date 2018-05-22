@@ -70,8 +70,8 @@ const UnitCardLock = ({ depsCheck, syllabus, classes }) => (
                   (!result.progress || !result.progress.completed)
                     ? (<span>Incompleto</span>)
                     : (result.dep.score && result.progress.completed === result.dep.completed.value)
-                      ? (<span>Puntiación insuficiente</span>)
-                      : (<span>Completedo</span>)
+                      ? (<span>Puntuación insuficiente</span>)
+                      : (<span>Completado</span>)
                 }
               />
             </ListItem>

@@ -108,6 +108,7 @@ const Unit = (props) => {
           match={props.match}
           auth={props.auth}
           profile={props.profile}
+          unitProgressStats={props.unitProgressStats}
         />
       </div>
     </div>

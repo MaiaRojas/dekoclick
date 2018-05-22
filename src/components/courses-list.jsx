@@ -5,13 +5,12 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import SettingsIcon from 'material-ui-icons/Settings';
-import EditIcon from 'material-ui-icons/Edit';
+import BorderColorIcon from 'material-ui-icons/BorderColor';
 import CourseCard from './course-card';
+import Loader from './loader';
 
 
 const drawerWidth = 320;
@@ -71,7 +70,7 @@ const CoursesList = ({
   drawerOpen,
 }) => {
   if (!courses) {
-    return (<CircularProgress />);
+    return (<Loader />);
   }
 
   const canManageCourse =
@@ -92,7 +91,7 @@ const CoursesList = ({
             aria-label="Manage"
             onClick={() => history.push(`/cohorts/${cohort.id}`)}
           >
-            <EditIcon />
+            <BorderColorIcon />
           </IconButton>
         )}
       </div>

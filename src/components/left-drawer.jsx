@@ -15,6 +15,7 @@ const styles = theme => ({
   drawer: {
     width: theme.leftDrawerWidth,
     backgroundColor: theme.palette.common.black,
+    borderRight: 0,
   },
   drawerPaper: {
     position: 'relative',
@@ -27,6 +28,7 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       position: 'fixed',
     },
+    borderRight: 0,
   },
   drawerPaperClose: {
     overflowX: 'hidden',
@@ -38,14 +40,16 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing.unit * 9,
     },
+    borderRight: 0,
   },
   toolbar: {
     minHeight: 90,
+    maxHeight: 90,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: '0 8px',
-    borderBottom: '1px solid #ffffff',
+    // padding: '0 8px',
+    borderBottom: '1px solid #f7f7f7',
     // [theme.breakpoints.up('md')]: {
     //   height: 90,
     // },
@@ -56,18 +60,20 @@ const styles = theme => ({
     flexDirection: 'column',
   },
   primary: {
-    order : 1,
+    order: 1,
     color: theme.palette.text.secondary,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    fontSize: theme.typography.fontSize,
+    lineHeight: '125%',
   },
   secondary: {
-    order : 0,
+    order: 0,
+    color: '#f1f1f1',
+    fontSize: '14px',
   },
   logoLarge: {
     height: 85,
     display: 'block',
-    // margin: 'auto',
-    // padding: 10,
   },
   logoShort: {
     height: 45,
@@ -109,9 +115,8 @@ const LeftDrawerUnit = ({
         <ChevronLeftIcon />
       </ListItemIcon>
       <ListItemText
-        // className="leftDrawer-text"
         classes={{
-          root : classes.root,
+          root: classes.root,
           primary: classes.primary,
           secondary: classes.secondary,
         }}
@@ -175,6 +180,7 @@ const LeftDrawer = (props) => {
             keepMounted: true, // Better open performance on mobile.
           }}
           anchor="left"
+          style={{ borderRight: 0 }}
         >
           { props.children.length > 1 ?
             (<LeftDrawerUnit {...props} />) :

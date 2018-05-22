@@ -41,7 +41,9 @@ const buildDepPath = ({ unitid, partid, formid }) =>
 
 const CompletedInput = (props) => {
   const key = !props.partid ? 'percent' : 'completed';
-  const value = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {})[key] || {}).value || 0;
+  const value = ((((props.unitSettings || {}).dependencies || {})[
+    buildDepPath(props)
+  ] || {})[key] || {}).value || 0;
 
   if (props.part && props.part.exercises) {
     return (
@@ -96,7 +98,9 @@ CompletedInput.propTypes = {
 
 
 const ScoreInput = (props) => {
-  const { value, operator } = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {}).score || {});
+  const { value, operator } = ((((props.unitSettings || {}).dependencies || {})[
+    buildDepPath(props)
+  ] || {}).score || {});
   return (
     <div style={{ marginLeft: 8 }}>
       <TextField
@@ -185,7 +189,7 @@ Dependency.propTypes = {
   formid: PropTypes.string,
   partid: PropTypes.string,
   unitid: PropTypes.string.isRequired,
-  children: PropTypes.array.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
 Dependency.defaultProps = {
