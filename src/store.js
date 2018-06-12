@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reactReduxFirebase } from 'react-redux-firebase';
 import { reduxFirestore } from 'redux-firestore';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/firestore';
 import reducers from './reducers';
 import apiMiddleware from './middleware';
@@ -15,6 +16,10 @@ firebase.initializeApp({
   storageBucket: `${process.env.FIREBASE_PROJECT}.appspot.com`,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
 });
+
+
+const firestore = firebase.firestore();
+firestore.settings({ timestampsInSnapshots: true });
 
 
 const middlewares = [apiMiddleware];

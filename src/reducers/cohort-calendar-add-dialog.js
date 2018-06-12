@@ -43,7 +43,6 @@ export const validateCalendarEventField = (key, value, state) => {
         err: (!trimmed) ? 'Title is required' : null,
         sanitized: trimmed,
       };
-    }
     case 'allDay':
       return {
         err: (typeof value !== 'boolean') ? 'allDay must be a boolean' : null,
@@ -178,8 +177,7 @@ const handleValidateAndSubmitAction = (state) => {
 // Reducer
 export default (state = { ...initialState }, action = {}) => {
   switch (action.type) {
-    case TOGGLE: {
-      // console.log(handleToggleAction(state, action.payload));
+    case TOGGLE:
       return handleToggleAction(state, action.payload);
     case UPDATE_FIELD:
       return handleUpdateFieldAction(state, action);

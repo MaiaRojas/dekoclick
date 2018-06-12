@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
+import firebase from 'firebase/app';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import { FormControlLabel } from 'material-ui/Form';
@@ -238,8 +239,8 @@ UnitPartTracker.propTypes = {
     embeds: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   partProgress: PropTypes.shape({
-    openedAt: PropTypes.instanceOf(Date),
-    readAt: PropTypes.instanceOf(Date),
+    openedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
+    readAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
     like: PropTypes.bool,
   }),
   auth: PropTypes.shape({

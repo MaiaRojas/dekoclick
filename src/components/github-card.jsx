@@ -249,9 +249,11 @@ class GithubCard extends React.Component {
               : project.tags
             }
             <br />
-            <a href={project.github} target="_blank">Repositorio en Github</a>
+            <a href={project.github} target="_blank" rel="noopener noreferrer">
+              Repositorio en Github
+            </a>
             <br />
-            <a href={project.demo} target="_blank">
+            <a href={project.demo} target="_blank" rel="noopener noreferrer">
               {error.demo ? 'Demo website no existe o presenta un error' : 'Website'}
             </a>
           </div>

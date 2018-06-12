@@ -88,12 +88,9 @@ const SignInForm = props => (
       disabled={props.forgot && props.forgotRequested}
       className={props.classes.submitBtn}
     >
-      { props.forgot
-          ? <FormattedMessage id="signin.forgot" />
-          : props.signup
-            ? <FormattedMessage id="signin.signup" />
-            : <FormattedMessage id="signin.signin" />
-      }
+      {props.forgot && <FormattedMessage id="signin.forgot" />}
+      {!props.forgot && props.signup && <FormattedMessage id="signin.signup" />}
+      {!props.forgot && !props.signup && <FormattedMessage id="signin.signin" />}
     </Button>
     <SignInResults
       authError={props.authError}

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import MainNav from '../../src/components/main-nav';
 
 
-describe('<MainNav />', () => {
+describe.skip('<MainNav />', () => {
 
   it('should warn when missing props: auth, match, history, firebase', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(jest.fn());

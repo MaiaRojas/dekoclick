@@ -9,7 +9,6 @@ export const updateProgress = (
   exerciseid,
   partProgressChanges,
 ) => {
-  const db = firestore.firestore();
   let partPath = `${cohortid}-${uid}-${courseid}-${unitid}-${partid}`;
   const partProgressDoc = {
     uid,
@@ -27,9 +26,9 @@ export const updateProgress = (
     partPath += `-${exerciseid}`;
   }
 
-  const docRef = db.doc(`progress/${partPath}`);
+  const docRef = firestore.doc(`progress/${partPath}`);
 
-  return db.runTransaction(t =>
+  return firestore.runTransaction(t =>
     t.get(docRef).then(docSnap =>
       t[docSnap.exists ? 'update' : 'set'](docRef, partProgressDoc)));
 };

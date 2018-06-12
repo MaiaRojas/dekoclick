@@ -88,12 +88,17 @@ const CompletedInput = (props) => {
 
 
 CompletedInput.propTypes = {
-  partid: PropTypes.string.isRequired,
-  unitSettings: PropTypes.string.isRequired,
+  partid: PropTypes.string,
+  unitSettings: PropTypes.shape({}).isRequired,
   part: PropTypes.shape({
-    exercises: PropTypes.string.isRequired,
-  }).isRequired,
-  updateDependencies: PropTypes.string.isRequired,
+    exercises: PropTypes.shape({}),
+  }),
+  updateDependencies: PropTypes.func.isRequired,
+};
+
+CompletedInput.defaultProps = {
+  partid: undefined,
+  part: undefined,
 };
 
 
@@ -137,8 +142,8 @@ const ScoreInput = (props) => {
 
 
 ScoreInput.propTypes = {
-  unitSettings: PropTypes.string.isRequired,
-  updateDependencies: PropTypes.string.isRequired,
+  unitSettings: PropTypes.shape({}).isRequired,
+  updateDependencies: PropTypes.func.isRequired,
 };
 
 
@@ -207,7 +212,7 @@ const selfAssessmentIsEnabled = (courseSettings, unitid) =>
 
 
 const UnitCardAdmin = (props) => {
-  const db = props.firestore.firestore();
+  const db = props.firebase.firestore();
   const courseSettingsDocPath = `cohorts/${props.cohort}/coursesSettings/${props.course}`;
   const courseSettingsDocRef = db.doc(courseSettingsDocPath);
   const courseSettings = props.courseSettings || { units: {} };
@@ -365,7 +370,7 @@ UnitCardAdmin.propTypes = {
   syllabus: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   openUnits: PropTypes.shape({}).isRequired,
   toggleAdminActions: PropTypes.func.isRequired,
-  firestore: PropTypes.shape({
+  firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
   }).isRequired,
 

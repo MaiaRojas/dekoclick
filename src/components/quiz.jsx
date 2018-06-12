@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
+import firebase from 'firebase/app';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
@@ -138,7 +139,7 @@ const Quiz = (props) => {
   }
 
   if (!progress.results && progress.startedAt) {
-    const startedAt = new Date(progress.startedAt);
+    const startedAt = progress.startedAt.toDate();
     if (startedAt < (Date.now() - (part.duration * 60 * 1000))) {
       setTimeout(() => handleSubmit(props)(), 10);
       return (<CircularProgress />);
@@ -177,8 +178,8 @@ Quiz.propTypes = {
   }).isRequired,
   partProgress: PropTypes.shape({
     results: PropTypes.shape({}),
-    startedAt: PropTypes.instanceOf(Date),
-    submittedAt: PropTypes.instanceOf(Date),
+    startedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
+    submittedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
   }),
   firestore: PropTypes.shape({
     update: PropTypes.func.isRequired,

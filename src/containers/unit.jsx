@@ -144,7 +144,6 @@ Unit.propTypes = {
   classes: PropTypes.shape({
     main: PropTypes.string.isRequired,
   }).isRequired,
-  profile: PropTypes.object.isRequired,
 };
 
 

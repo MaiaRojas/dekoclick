@@ -98,9 +98,8 @@ const Cohort = ({
   if (!cohort || typeof courses === 'undefined' || typeof users === 'undefined') {
     return (<Loader />);
   }
-// return (<CircularProgress />);
-  const { cohortid } = match.params;
 
+  const { cohortid } = match.params;
   const {
     students,
     instructors,
