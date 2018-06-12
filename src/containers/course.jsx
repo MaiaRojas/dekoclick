@@ -2,18 +2,48 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import { firestoreConnect } from 'react-redux-firebase';
-import { CircularProgress } from 'material-ui/Progress';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
 import TopBar from '../components/top-bar';
 import UnitCard from '../components/unit-card';
+import Loader from '../components/loader';
+
+
+const drawerWidth = 320;
+const styles = theme => ({
+  appBar: {
+    width: '100%',
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100% - 73px)',
+      marginLeft: '73px',
+    },
+  },
+  appBarShift: {
+    width: '100%',
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+});
 
 
 const Course = (props) => {
   if (!props.course || props.cohortUser === undefined || props.courseProgressStats === undefined) {
-    return (<CircularProgress />);
+    return (<Loader />);
   }
 
   const isAdmin = props.profile.roles && props.profile.roles.admin;
@@ -36,7 +66,12 @@ const Course = (props) => {
           />
         }
       </TopBar>
-      <div>
+      <div
+        position="absolute"
+        className={
+          classNames(props.classes.appBar, props.drawerOpen && props.classes.appBarShift)
+        }
+      >
         {props.syllabus && props.syllabus.map((unit, idx) => (
           <UnitCard
             key={unit.id}
@@ -75,6 +110,16 @@ Course.propTypes = {
       cohortid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  profile: PropTypes.shape({
+    roles: PropTypes.shape({
+      admin: PropTypes.bool.isRequired,
+    }),
+  }).isRequired,
+  classes: PropTypes.shape({
+    appBar: PropTypes.string.isRequired,
+    appBarShift: PropTypes.string.isRequired,
+  }).isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 
@@ -84,8 +129,12 @@ Course.defaultProps = {
   cohortUser: undefined,
   courseProgressStats: undefined,
   courseSettings: undefined,
+  drawerOpen: undefined,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 export default compose(
   firestoreConnect(({ auth, match: { params: { cohortid, courseid } } }) => [
@@ -109,7 +158,7 @@ export default compose(
       doc: courseid,
     },
   ]),
-  connect(({ firestore }, { auth, profile, match: { params: { cohortid, courseid } } }) => ({
+  connect(({ firestore }, { auth, match: { params: { cohortid, courseid } } }) => ({
     course: firestore.data[`cohorts/${cohortid}/courses`]
       ? firestore.data[`cohorts/${cohortid}/courses`][courseid]
       : undefined,
@@ -124,4 +173,6 @@ export default compose(
       ? firestore.data[`cohorts/${cohortid}/coursesSettings`][courseid]
       : undefined,
   })),
+  connect(mapStateToProps),
+  withStyles(styles),
 )(Course);

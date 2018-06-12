@@ -21,13 +21,15 @@ const styles = theme => ({
   root: {
     maxWidth: theme.maxContentWidth,
     margin: '0 auto',
+    padding: theme.spacing.unit * 4,
   },
   headline: {
-    margin: `${theme.spacing.unit * 4}px 0px`,
+    // margin: `${theme.spacing.unit * 4}px 0px`,
     fontWeight: 'bold',
   },
   paper: {
-    padding: theme.spacing.unit * 3,
+    // padding: theme.spacing.unit * 3,
+    boxShadow: 'none',
     marginBottom: theme.spacing.unit * 4,
   },
   fieldset: {
@@ -201,10 +203,6 @@ class SelfAssessment extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="headline" gutterBottom className={classes.headline}>
-          <FormattedMessage id="self-assessment.title" />
-        </Typography>
-
         <Paper className={classes.paper}>
           <FormControl
             error={!!this.state.errors.sentiment}
@@ -270,7 +268,7 @@ class SelfAssessment extends React.Component {
               <FormGroup>
                 {selfPacedParts.map((selfPacedPart, idx) => (
                   <FormControlLabel
-                    key={idx}
+                    key={selfPacedPart.id}
                     id={selfPacedPart.id}
                     idx={idx}
                     control={
@@ -331,7 +329,7 @@ class SelfAssessment extends React.Component {
 
 
 SelfAssessment.propTypes = {
-  unit: PropTypes.shape({}).isRequired,
+  // unit: PropTypes.shape({}).isRequired,
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   progress: PropTypes.shape({}),
   firestore: PropTypes.shape({
@@ -342,6 +340,14 @@ SelfAssessment.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({
     sentimentIcon: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      cohortid: PropTypes.string.isRequired,
+      courseid: PropTypes.string.isRequired,
+      unitid: PropTypes.string.isRequired,
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 

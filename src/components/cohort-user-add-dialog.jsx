@@ -31,6 +31,9 @@ import isEmail from '../util/isEmail';
 
 
 const styles = theme => ({
+  root: {
+    color: theme.palette.text.primary,
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -122,14 +125,14 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
         />
 
         {props.userRecord && (
-          <DialogContentText>
+          <DialogContentText classes={{ root: classes.root }}>
             Ya existe un usuario registrado con el correo <code>{props.email}</code>.
             Al agregarlo al cohort, NO se enviará invitación por email.
           </DialogContentText>
         )}
 
         {emailNotExists(props) && (
-          <DialogContentText>
+          <DialogContentText classes={{ root: classes.root }}>
             El correo <code>{props.email}</code> todavía no está registrado en
             el LMS. Al agregarlo al cohort, se le enviará una invitación por
             email automáticamente.

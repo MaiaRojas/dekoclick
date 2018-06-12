@@ -24,8 +24,9 @@ describe('<TopBar />', () => {
         <TopBar title="Blah blah blah" />
       </Provider>
     ));
+
     expect(component.get(0).tagName).toBe('header');
-    expect(component.hasClass('mui-fixed')).toBe(true);
+    expect(component.get(0).attribs).toMatchSnapshot();
     expect(component.find('h2').text()).toBe('Blah blah blah');
   });
 

@@ -5,7 +5,9 @@
 
 import './style/main.css';
 import './img/icon.svg';
-import './img/logo.svg';
+import './img/logo.png';
+import './img/logo+negro.png';
+import './img/menu+logo.png';
 import './worker.js';
 
 

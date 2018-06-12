@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import List, { ListItem, ListItemText } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import { FormattedMessage } from 'react-intl';
+import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import LeftDrawer from './left-drawer';
 import UnitNavItem from './unit-nav-item';
 
@@ -10,16 +11,38 @@ import UnitNavItem from './unit-nav-item';
 const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
+    overflowY: 'auto',
+  },
+  divider: {
+    backgroundColor: '#f1f1f1',
+  },
+  icon: {
+    color: theme.palette.primary.main,
+  },
+  signoutBtn: {
+    backgroundColor: theme.palette.common.black,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    borderTop: '1px solid white',
+    // minHeight: '90px',
+  },
+  listItemIcon: {
+    color: theme.palette.common.white,
+  },
+  primary: {
+    fontWeight: 700,
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.fontSize,
+    lineHeight: '125%',
+  },
+  logout: {
+    display: 'flex',
+    height: '90px',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
-
-
-const getUnitOrder = (unit, match) => {
-  if (typeof unit.order === 'number') {
-    return unit.order;
-  }
-  return parseInt(match.params.unitid.slice(0, 2), 10);
-};
 
 
 const getPartProgress = (partid, unitProgress) => (
@@ -44,20 +67,16 @@ const UnitNav = ({
   classes,
   match,
   history,
+  firebase,
 }) => (
-  <LeftDrawer>
+  <LeftDrawer
+    unit={unit}
+    parts={parts}
+    match={match}
+    history={history}
+  >
     <List disablePadding className={classes.list}>
-      <ListItem
-        button
-        onClick={() =>
-          history.push(`/cohorts/${match.params.cohortid}/courses/${match.params.courseid}`)
-        }
-      >
-        <ListItemText
-          primary={`Unidad ${getUnitOrder(unit, match)}: ${unit.title}`}
-        />
-      </ListItem>
-      <Divider />
+      {/* <Divider className={classes.divider} /> */}
       {parts.map((part, idx) =>
         (<UnitNavItem
           key={part.id}
@@ -71,6 +90,22 @@ const UnitNav = ({
         />))
       }
     </List>
+    <div className={classes.logout}>
+      <ListItem
+        button
+        className={classes.signoutBtn}
+        onClick={() => firebase.logout()}
+      >
+        <ListItemIcon className={classes.listItemIcon}>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        <ListItemText
+          // className="unitNav-text"
+          classes={{ primary: classes.primary }}
+          primary={<FormattedMessage id="main-nav.signout" />}
+        />
+      </ListItem>
+    </div>
   </LeftDrawer>
 );
 
@@ -92,6 +127,13 @@ UnitNav.propTypes = {
   }).isRequired,
   classes: PropTypes.shape({
     list: PropTypes.string.isRequired,
+    divider: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    signoutBtn: PropTypes.string.isRequired,
+    listItemIcon: PropTypes.string.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    logout: PropTypes.func.isRequired,
   }).isRequired,
 };
 

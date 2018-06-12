@@ -132,6 +132,7 @@ module.exports = env => {
 
   if (isProduction) { // Dist files
 
+    config.mode = 'production';
     config.plugins = [
       new Webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
@@ -148,6 +149,7 @@ module.exports = env => {
   }
   else { // Hot loader
 
+    config.mode = 'development';
     config.entry = [
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8081',

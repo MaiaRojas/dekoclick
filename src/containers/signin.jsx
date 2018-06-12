@@ -9,7 +9,6 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import {
   updateSignInField,
@@ -26,13 +25,13 @@ import {
 import SignInForm from '../components/signin-form';
 import Alert from '../components/alert';
 import { parse as parseCohortId } from '../util/cohort';
-
+import Loader from '../components/loader';
 
 // handle successful signup (add profile data and assign cohort)
 const postSignUp = (props, userRecord) => {
-  const db = props.firestore.firestore();
+  const db = props.firebase.firestore();
   const campus = props.campuses.find(
-    campus => campus.id === parseCohortId(props.cohortid).campus,
+    item => item.id === parseCohortId(props.cohortid).campus,
   );
   return db.doc(`users/${userRecord.uid}`).set({
     email: userRecord.email,
@@ -60,22 +59,34 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: '#F7F7F7',
+    textAlign: 'center',
+    flexDirection: 'column',
   },
   paper: {
     margin: theme.spacing.unit * 4,
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
     width: '100%',
     maxWidth: theme.leftDrawerWidth,
+    boxShadow: theme.shadow,
+  },
+  contentLogo: {
+    width: '100%',
+    maxWidth: theme.leftDrawerWidth,
   },
   logo: {
     width: '100%',
-    maxWidth: 200,
+    // maxWidth: 200,
     display: 'block',
     margin: `0 auto ${theme.spacing.unit}px`,
   },
   submitBtn: {
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
+    backgroundColor: '#ffe521',
+    width: '100%',
+    fontSize: 16,
+    lineHeight: '24px',
+    borderRadius: 0,
   },
   noCohortSelected: {
     textAlign: 'center',
@@ -83,6 +94,11 @@ const styles = theme => ({
   signupCohort: {
     marginTop: 32,
     textAlign: 'center',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
   },
 });
 
@@ -117,9 +133,9 @@ const SignInWithFacebookButton = props => (
     color="primary"
     style={{ marginTop: 50 }}
     onClick={() => {
-      const { firestore } = props;
-      const provider = new firestore.auth.FacebookAuthProvider();
-      const auth = firestore.auth();
+      const { firebase } = props;
+      const provider = new firebase.auth.FacebookAuthProvider();
+      const auth = firebase.auth();
 
       // provider.addScope('user_birthday');
       provider.addScope('public_profile');
@@ -128,14 +144,14 @@ const SignInWithFacebookButton = props => (
 
       // auth.languageCode = 'es_PE';
       auth.useDeviceLanguage();
-      // console.log(firestore.auth().languageCode);
+      // console.log(firebase.auth().languageCode);
 
       provider.setCustomParameters({
         display: 'popup',
       });
 
       auth.signInWithPopup(provider).then((result) => {
-        if (props.signup || result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+        if (props.signup || (result.additionalUserInfo && result.additionalUserInfo.isNewUser)) {
           postSignUp(props, result.user);
         }
         // // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -194,7 +210,9 @@ const SignInWithFacebookButton = props => (
 
 SignInWithFacebookButton.propTypes = {
   signup: PropTypes.bool.isRequired,
-  firestore: PropTypes.shape({}).isRequired,
+  firebase: PropTypes.shape({
+    auth: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 
@@ -229,7 +247,7 @@ const SignInFbPasswordPrompt = props => (
         onClick={() => {
           const { email } = props.data;
           const { password, pendingCred } = props.fbPasswordPrompt;
-          props.firestore.auth().signInWithEmailAndPassword(email, password)
+          props.firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {
               props.toggleFbPasswordPrompt('', null);
               return user;
@@ -245,16 +263,35 @@ const SignInFbPasswordPrompt = props => (
 );
 
 
+SignInFbPasswordPrompt.propTypes = {
+  data: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+  }).isRequired,
+  fbPasswordPrompt: PropTypes.shape({
+    password: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
+  }).isRequired,
+  updateFbPasswordPromptPassword: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    submitBtn: PropTypes.string.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    auth: PropTypes.string.isRequired,
+  }).isRequired,
+  toggleFbPasswordPrompt: PropTypes.shape({}).isRequired,
+};
+
+
 const SignIn = (props) => {
   const { email, password } = props.data;
-  const auth = props.firestore.auth();
+  const auth = props.firebase.auth();
 
   if (auth.currentUser) {
     return <Redirect to="/" />;
   }
 
   if (props.signup && (props.cohort === undefined || !props.campuses)) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (props.fbPasswordPrompt && props.fbPasswordPrompt.open) {
@@ -283,8 +320,10 @@ const SignIn = (props) => {
 
   return (
     <div className={props.classes.root}>
+      <div className={props.classes.contentLogo}>
+        <img className={props.classes.logo} src="/img/logo+negro.png" alt="Laboratoria LMS" />
+      </div>
       <Paper className={props.classes.paper}>
-        <img className={props.classes.logo} src="/img/logo.svg" alt="Laboratoria LMS" />
         {props.signup && (!props.cohort || !props.cohort.publicAdmission)
           ? (<div className={props.classes.noCohortSelected}>No cohort selected</div>)
           : (
@@ -326,7 +365,9 @@ SignIn.propTypes = {
   forgotResult: PropTypes.shape({}),
   signup: PropTypes.bool.isRequired,
   cohortid: PropTypes.string,
-  cohort: PropTypes.shape({}),
+  cohort: PropTypes.shape({
+    publicAdmission: PropTypes.string,
+  }),
   campuses: PropTypes.arrayOf(PropTypes.shape({})),
   updateSignInField: PropTypes.func.isRequired,
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
@@ -348,14 +389,19 @@ SignIn.propTypes = {
     error: PropTypes.string,
   }).isRequired,
   updateFbPasswordPromptPassword: PropTypes.func.isRequired,
-  firestore: PropTypes.shape({
+  firebase: PropTypes.shape({
     auth: PropTypes.func.isRequired,
+    firestore: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
+    contentLogo: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     submitBtn: PropTypes.string.isRequired,
+    noCohortSelected: PropTypes.string.isRequired,
+    signupCohort: PropTypes.string.isRequired,
+    textField: PropTypes.string.isRequired,
   }).isRequired,
 };
 

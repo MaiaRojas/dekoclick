@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
+import firebase from 'firebase/app';
 import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
@@ -11,11 +14,34 @@ import ThumbDownIcon from 'material-ui-icons/ThumbDown';
 import { FormattedMessage } from 'react-intl';
 import { updateProgress } from '../util/progress';
 
-
+const drawerWidth = 321;
 const styles = theme => ({
   hr: {
     maxWidth: theme.maxContentWidth,
     marginTop: theme.spacing.unit * 4,
+  },
+  appBar: {
+    width: '100%',
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: 'calc(100% - 73px)',
+      marginLeft: '73px',
+    },
+  },
+  appBarShift: {
+    width: '100%',
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
 });
 
@@ -153,6 +179,7 @@ class UnitPartTracker extends React.Component {
     const {
       component: Component,
       classes,
+      drawerOpen,
       ...rest
     } = this.props;
 
@@ -160,7 +187,10 @@ class UnitPartTracker extends React.Component {
     const liked = hasLikedOrDisliked && this.props.partProgress.like === true;
     const disliked = hasLikedOrDisliked && this.props.partProgress.like === false;
     return (
-      <div>
+      <div
+        position="absolute"
+        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
+      >
         <Component {...rest} />
         <hr className={classes.hr} />
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
@@ -198,6 +228,7 @@ class UnitPartTracker extends React.Component {
 
 
 UnitPartTracker.propTypes = {
+  drawerOpen: PropTypes.bool,
   component: PropTypes.oneOfType([
     PropTypes.func.isRequired,
     PropTypes.shape({}).isRequired,
@@ -208,8 +239,8 @@ UnitPartTracker.propTypes = {
     embeds: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   partProgress: PropTypes.shape({
-    openedAt: PropTypes.instanceOf(Date),
-    readAt: PropTypes.instanceOf(Date),
+    openedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
+    readAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
     like: PropTypes.bool,
   }),
   auth: PropTypes.shape({
@@ -228,16 +259,25 @@ UnitPartTracker.propTypes = {
     set: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
   }).isRequired,
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    hr: PropTypes.string.isRequired,
+    appBar: PropTypes.string.isRequired,
+    appBarShift: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 
 UnitPartTracker.defaultProps = {
   partProgress: undefined,
+  drawerOpen: undefined,
 };
 
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 const UnitPartTrackerWithStyles = compose(
+  connect(mapStateToProps),
   withStyles(styles),
   withFirestore,
 )(UnitPartTracker);

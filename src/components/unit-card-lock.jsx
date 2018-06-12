@@ -28,16 +28,17 @@ const styles = {
 
 
 // filters out nested deps when parent is incomplete or insuficient score
-const dedupeDeps = depsCheck => Object.keys(depsCheck.results || {}).sort().reduce((memo, depPath) => {
-  const depPathParts = depPath.split('/');
-  const dupe = depPathParts.reduce((dupe, part, idx) => {
-    if (memo.includes(depPathParts.slice(0, idx + 1).join('/'))) {
-      return depPathParts.slice(0, idx + 1).join('/');
-    }
-    return dupe;
-  }, null);
-  return dupe ? memo : [...memo, depPath];
-}, []);
+const dedupeDeps = depsCheck => Object.keys(depsCheck.results || {}).sort()
+  .reduce((memo, depPath) => {
+    const depPathParts = depPath.split('/');
+    const isDupe = depPathParts.reduce((dupe, part, idx) => {
+      if (memo.includes(depPathParts.slice(0, idx + 1).join('/'))) {
+        return depPathParts.slice(0, idx + 1).join('/');
+      }
+      return dupe;
+    }, null);
+    return isDupe ? memo : [...memo, depPath];
+  }, []);
 
 
 const UnitCardLock = ({ depsCheck, syllabus, classes }) => (
@@ -55,8 +56,8 @@ const UnitCardLock = ({ depsCheck, syllabus, classes }) => (
       )}
       <List dense>
         {dedupeDeps(depsCheck).map((depPath) => {
-          const [unitid, partid, embedCat, embedid] = depPath.split('/');
-          const unit = syllabus.find(unit => unit.id === unitid);
+          const [unitid, partid] = depPath.split('/');
+          const unit = syllabus.find(item => item.id === unitid);
           const result = depsCheck.results[depPath];
           return (
             <ListItem key={depPath}>
@@ -69,8 +70,8 @@ const UnitCardLock = ({ depsCheck, syllabus, classes }) => (
                   (!result.progress || !result.progress.completed)
                     ? (<span>Incompleto</span>)
                     : (result.dep.score && result.progress.completed === result.dep.completed.value)
-                      ? (<span>Puntiación insuficiente</span>)
-                      : (<span>Completedo</span>)
+                      ? (<span>Puntuación insuficiente</span>)
+                      : (<span>Completado</span>)
                 }
               />
             </ListItem>

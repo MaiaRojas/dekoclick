@@ -63,6 +63,7 @@ export default {
   'quiz.areYouSure': 'Are you sure you want to start the quiz now?',
   'quiz.start': 'Yes, start quiz',
   'quiz.send': 'Submit',
+  'quiz.title': 'Evaluation',
 
   'quiz-confirmation-dialog.title': 'Think twice...',
   'quiz-confirmation-dialog.content': `¿Are you absolutely sure that you want

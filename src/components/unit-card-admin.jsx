@@ -4,8 +4,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
-import { CardActions, CardContent } from 'material-ui/Card';
-import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import SettingsIcon from 'material-ui-icons/Settings';
 import {
@@ -13,13 +11,10 @@ import {
   FormControl,
   FormGroup,
   FormControlLabel,
-  FormHelperText,
 } from 'material-ui/Form';
 import Switch from 'material-ui/Switch';
-import Typography from 'material-ui/Typography';
 import Dialog, { DialogContent, DialogTitle } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
 import { toggleUnitCardAdminActions } from '../reducers/unit-card-admin';
 
@@ -29,6 +24,7 @@ const styles = theme => ({
     position: 'absolute',
     top: 8,
     right: 4,
+    zIndex: 1205,
   },
   headingButton: {
     top: theme.spacing.unit * -1,
@@ -45,7 +41,9 @@ const buildDepPath = ({ unitid, partid, formid }) =>
 
 const CompletedInput = (props) => {
   const key = !props.partid ? 'percent' : 'completed';
-  const value = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {})[key] || {}).value || 0;
+  const value = ((((props.unitSettings || {}).dependencies || {})[
+    buildDepPath(props)
+  ] || {})[key] || {}).value || 0;
 
   if (props.part && props.part.exercises) {
     return (
@@ -54,7 +52,7 @@ const CompletedInput = (props) => {
         id="number"
         label="Compl."
         value={value}
-        onChange={e => props.updateDependencies(key, props)}
+        onChange={() => props.updateDependencies(key, props)}
         type="number"
         className=""
         inputProps={{ max: 100, min: 0, size: 3 }}
@@ -69,7 +67,7 @@ const CompletedInput = (props) => {
       control={
         <Switch
           checked={!!value}
-          onChange={e => props.updateDependencies(
+          onChange={() => props.updateDependencies(
             key,
             props,
             {
@@ -89,8 +87,25 @@ const CompletedInput = (props) => {
 };
 
 
+CompletedInput.propTypes = {
+  partid: PropTypes.string,
+  unitSettings: PropTypes.shape({}).isRequired,
+  part: PropTypes.shape({
+    exercises: PropTypes.shape({}),
+  }),
+  updateDependencies: PropTypes.func.isRequired,
+};
+
+CompletedInput.defaultProps = {
+  partid: undefined,
+  part: undefined,
+};
+
+
 const ScoreInput = (props) => {
-  const { value, operator } = ((((props.unitSettings || {}).dependencies || {})[buildDepPath(props)] || {}).score || {});
+  const { value, operator } = ((((props.unitSettings || {}).dependencies || {})[
+    buildDepPath(props)
+  ] || {}).score || {});
   return (
     <div style={{ marginLeft: 8 }}>
       <TextField
@@ -123,6 +138,12 @@ const ScoreInput = (props) => {
       />
     </div>
   );
+};
+
+
+ScoreInput.propTypes = {
+  unitSettings: PropTypes.shape({}).isRequired,
+  updateDependencies: PropTypes.func.isRequired,
 };
 
 
@@ -169,6 +190,19 @@ const Dependency = props => (
 );
 
 
+Dependency.propTypes = {
+  formid: PropTypes.string,
+  partid: PropTypes.string,
+  unitid: PropTypes.string.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+};
+
+Dependency.defaultProps = {
+  formid: undefined,
+  partid: undefined,
+};
+
+
 const selfAssessmentIsEnabled = (courseSettings, unitid) =>
   (!(courseSettings
   && courseSettings.units
@@ -178,7 +212,7 @@ const selfAssessmentIsEnabled = (courseSettings, unitid) =>
 
 
 const UnitCardAdmin = (props) => {
-  const db = props.firestore.firestore();
+  const db = props.firebase.firestore();
   const courseSettingsDocPath = `cohorts/${props.cohort}/coursesSettings/${props.course}`;
   const courseSettingsDocRef = db.doc(courseSettingsDocPath);
   const courseSettings = props.courseSettings || { units: {} };
@@ -214,8 +248,10 @@ const UnitCardAdmin = (props) => {
         const unit = units[props.unit.id] || {};
         const deps = unit.dependencies || {};
         const prevDep = deps[depPath] || {};
-        const otherDeps = Object.keys(deps || {}).reduce((memo, k) => (k !== depPath ? { ...memo, [k]: deps[k] } : memo), {});
-        const prevDepOtherProps = Object.keys(prevDep || {}).reduce((memo, k) => (k !== key ? { ...memo, [k]: prevDep[k] } : memo), {});
+        const otherDeps = Object.keys(deps || {})
+          .reduce((memo, k) => (k !== depPath ? { ...memo, [k]: deps[k] } : memo), {});
+        const prevDepOtherProps = Object.keys(prevDep || {})
+          .reduce((memo, k) => (k !== key ? { ...memo, [k]: prevDep[k] } : memo), {});
         t[docSnap.exists ? 'update' : 'set'](courseSettingsDocRef, {
           ...data,
           units: {
@@ -283,26 +319,28 @@ const UnitCardAdmin = (props) => {
                     updateDependencies={updateDependencies}
                     unitSettings={courseSettings.units[props.unit.id]}
                   >
-                    {Object.keys((courseProgressStats.units[unit.id] || {}).parts || {}).map(partid => (
-                      <Dependency
-                        key={partid}
-                        unitid={unit.id}
-                        partid={partid}
-                        part={courseProgressStats.units[unit.id].parts[partid]}
-                        updateDependencies={updateDependencies}
-                        unitSettings={courseSettings.units[props.unit.id]}
-                      >
-                        {Object.keys(courseProgressStats.units[unit.id].parts[partid].forms || {}).map(formid => (
-                          <Dependency
-                            key={formid}
-                            unitid={unit.id}
-                            partid={partid}
-                            formid={formid}
-                            updateDependencies={updateDependencies}
-                            unitSettings={courseSettings.units[props.unit.id]}
-                          />
-                        ))}
-                      </Dependency>
+                    {Object.keys((courseProgressStats.units[unit.id] || {}).parts || {})
+                      .map(partid => (
+                        <Dependency
+                          key={partid}
+                          unitid={unit.id}
+                          partid={partid}
+                          part={courseProgressStats.units[unit.id].parts[partid]}
+                          updateDependencies={updateDependencies}
+                          unitSettings={courseSettings.units[props.unit.id]}
+                        >
+                          {Object.keys(courseProgressStats.units[unit.id].parts[partid].forms || {})
+                            .map(formid => (
+                              <Dependency
+                                key={formid}
+                                unitid={unit.id}
+                                partid={partid}
+                                formid={formid}
+                                updateDependencies={updateDependencies}
+                                unitSettings={courseSettings.units[props.unit.id]}
+                              />
+                          ))}
+                        </Dependency>
                     ))}
                   </Dependency>
                 ))}
@@ -320,6 +358,11 @@ UnitCardAdmin.propTypes = {
   unit: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    headingButton: PropTypes.string.isRequired,
+    formControl: PropTypes.string.isRequired,
+  }).isRequired,
   cohort: PropTypes.string.isRequired,
   course: PropTypes.string.isRequired,
   courseSettings: PropTypes.shape({}),
@@ -327,6 +370,10 @@ UnitCardAdmin.propTypes = {
   syllabus: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   openUnits: PropTypes.shape({}).isRequired,
   toggleAdminActions: PropTypes.func.isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+
 };
 
 
@@ -337,7 +384,7 @@ UnitCardAdmin.defaultProps = {
 
 
 export default compose(
-  firestoreConnect(props => []),
+  firestoreConnect(() => []),
   connect(({ unitCardAdmin }) => ({
     openUnits: unitCardAdmin.openUnits,
   }), {

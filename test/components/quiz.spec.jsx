@@ -23,13 +23,13 @@ describe('<Quiz />', () => {
   // cuando props.progress es un array es que ya tenemos respuestas
   // cuando props.progress es un objeto con propiedad `results` es que ya se envío
 
-  it('should show notice before starting quiz');
+  it.skip('should show notice before starting quiz', () => {});
 
-  it('should start quiz...');
+  it.skip('should start quiz...', () => {});
 
-  it('should save progress as we go');
+  it.skip('should save progress as we go', () => {});
 
-  it('should submit quiz...');
+  it.skip('should submit quiz...', () => {});
 
   it.skip('should...', () => {
     const component = render((

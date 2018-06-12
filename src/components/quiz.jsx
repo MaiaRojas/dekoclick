@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
+import firebase from 'firebase/app';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
@@ -16,6 +17,7 @@ import {
   resetQuizConfirmationDialog,
 } from '../reducers/quiz-confirmation-dialog';
 import { updateProgress } from '../util/progress';
+import PartTitle from './part-title';
 
 
 const styles = theme => ({
@@ -28,6 +30,9 @@ const styles = theme => ({
   },
   startButton: {
     marginTop: theme.spacing.unit,
+  },
+  content: {
+    marginBottom: theme.spacing.unit * 4,
   },
 });
 
@@ -101,8 +106,8 @@ const Quiz = (props) => {
     auth,
     match,
     startQuiz,
+    unit,
   } = props;
-
   const progress = props.partProgress || {};
 
   if (!progress.startedAt && startQuiz) {
@@ -134,31 +139,33 @@ const Quiz = (props) => {
   }
 
   if (!progress.results && progress.startedAt) {
-    const startedAt = new Date(progress.startedAt);
+    const startedAt = progress.startedAt.toDate();
     if (startedAt < (Date.now() - (part.duration * 60 * 1000))) {
       setTimeout(() => handleSubmit(props)(), 10);
       return (<CircularProgress />);
     }
   }
-
   return (
     <div className={classes.root}>
-      {progress.results && <QuizResults results={progress.results} />}
-      {part.questions.map((question, idx) =>
-        (<QuizQuestion
-          key={question.title}
-          idx={idx}
-          question={question}
-          progress={(idx in progress) ? objectToArray(progress[idx]) : ''}
-          hasResults={!!progress.results}
-          updateProgress={updateQuestionProgress(firestore, auth, match)}
-        />))
-      }
-      {!progress.results && (
-        <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
-          <FormattedMessage id="quiz.send" />
-        </Button>
-      )}
+      <PartTitle unit={unit} type={part.type} />
+      <div className={classes.content}>
+        {progress.results && <QuizResults results={progress.results} />}
+        {part.questions.map((question, idx) =>
+          (<QuizQuestion
+            key={question.title}
+            idx={idx}
+            question={question}
+            progress={(idx in progress) ? objectToArray(progress[idx]) : ''}
+            hasResults={!!progress.results}
+            updateProgress={updateQuestionProgress(firestore, auth, match)}
+          />))
+        }
+        {!progress.results && (
+          <Button variant="raised" color="primary" onClick={handleSubmit(props)}>
+            <FormattedMessage id="quiz.send" />
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
@@ -171,8 +178,8 @@ Quiz.propTypes = {
   }).isRequired,
   partProgress: PropTypes.shape({
     results: PropTypes.shape({}),
-    startedAt: PropTypes.instanceOf(Date),
-    submittedAt: PropTypes.instanceOf(Date),
+    startedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
+    submittedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
   }),
   firestore: PropTypes.shape({
     update: PropTypes.func.isRequired,
@@ -186,10 +193,16 @@ Quiz.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    p: PropTypes.string.isRequired,
+    startButton: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+  }).isRequired,
   startQuiz: PropTypes.bool.isRequired,
   resetQuizConfirmationDialog: PropTypes.func.isRequired,
   toggleQuizConfirmationDialog: PropTypes.func.isRequired,
+  unit: PropTypes.shape({}).isRequired,
 };
 
 

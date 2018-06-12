@@ -5,16 +5,15 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import green from 'material-ui/colors/green';
 import yellow from 'material-ui/colors/yellow';
-import red from 'material-ui/colors/red';
 import { FormattedMessage } from 'react-intl';
 
 
 const styles = theme => ({
   root: {
-    marginBottom: theme.spacing.unit * 4,
+    // marginBottom: theme.spacing.unit * 4,
     padding: theme.spacing.unit * 3,
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   body: {
@@ -22,15 +21,17 @@ const styles = theme => ({
   },
   green: {
     backgroundColor: green[500],
-    color: '#ffffff',
+    color: theme.palette.text.secondary,
   },
   yellow: {
     backgroundColor: yellow[500],
     color: '#333333',
   },
-  red: {
-    backgroundColor: red[500],
-    color: '#ffffff',
+  grey: {
+    backgroundColor: '#bdbdbd',
+    color: theme.palette.text.primary,
+    boxShadow: 'none',
+    borderRadius: 'none',
   },
 });
 
@@ -38,12 +39,12 @@ const styles = theme => ({
 const QuizResults = ({ results, classes }) => {
   const percent = Math.floor((results.passes / results.total) * 100);
 
-  let colorClass = classes.red;
-  if (percent > 79) {
-    colorClass = classes.green;
-  } else if (percent > 69) {
-    colorClass = classes.yellow;
-  }
+  const colorClass = classes.grey;
+  // if (percent > 79) {
+  //   colorClass = classes.green;
+  // } else if (percent > 69) {
+  //   colorClass = classes.yellow;
+  // }
 
   return (
     <Paper className={`${classes.root} ${colorClass}`}>

@@ -102,6 +102,9 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  subheader: {
+    color: theme.palette.text.primary,
+  },
 });
 
 
@@ -137,7 +140,7 @@ class GithubCard extends React.Component {
       const projectId = this.props.pos;
 
       this.props.firebase.firestore().doc(`/users/${this.props.uid}/`).get()
-        .then((res) => {
+        .then(() => {
           octokit.repos.get({ owner, repo }).then((res) => {
             const date = new Date(res.data.updated_at);
             octokit.repos.getReadme({ owner, repo }).then((result) => {
@@ -215,6 +218,7 @@ class GithubCard extends React.Component {
               <MoreVertIcon />
             </IconButton>
           }
+          classes={{ subheader: classes.subheader }}
           title={project.name}
           subheader={
             (error.where || error.where === null)
@@ -245,9 +249,11 @@ class GithubCard extends React.Component {
               : project.tags
             }
             <br />
-            <a href={project.github} target="_blank">Repositorio en Github</a>
+            <a href={project.github} target="_blank" rel="noopener noreferrer">
+              Repositorio en Github
+            </a>
             <br />
-            <a href={project.demo} target="_blank">
+            <a href={project.demo} target="_blank" rel="noopener noreferrer">
               {error.demo ? 'Demo website no existe o presenta un error' : 'Website'}
             </a>
           </div>

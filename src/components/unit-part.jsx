@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
 import { withStyles } from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
 import Content from './content';
 import SelfAssessment from './self-assessment';
+import PartTitle from './part-title';
 
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    // width: '100%',
     maxWidth: theme.maxContentWidth,
     height: '100%',
     margin: '0 auto',
-    padding: theme.spacing.unit * 4,
+    // padding: theme.spacing.unit * 4,
+    background: '#fff',
   },
   meta: {
     display: 'flex',
@@ -38,7 +39,7 @@ const paramsToQueryStrign = params =>
   );
 
 
-const typeformUrlPattern = /https:\/\/[a-z0-9\-]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
+const typeformUrlPattern = /https:\/\/[a-z0-9]+.typeform.com\/to\/([a-zA-Z0-9]+)/;
 
 
 const partHasTypeforms = part =>
@@ -111,11 +112,6 @@ const processTypeFormUrls = (part, unitProgress, auth, profile, { params }, intl
 // );
 
 class UnitPart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleTypeformSubmit = this.handleTypeformSubmit.bind(this);
-  }
-
   componentDidMount() {
     if (partHasTypeforms(this.props.part)) {
       window.addEventListener('message', this.handleTypeformSubmit);
@@ -128,12 +124,6 @@ class UnitPart extends React.Component {
     }
   }
 
-  handleTypeformSubmit(event) {
-    // console.log('handleTypeformSubmit', event);
-    if (event.data === 'form-submit') {
-      // ...
-    }
-  }
 
   render() {
     const {
@@ -150,16 +140,7 @@ class UnitPart extends React.Component {
     } = this.props;
     return (
       <div className={classes.root}>
-        <div className={classes.meta}>
-          <Chip
-            className={classes.metaChip}
-            label={`Tipo: ${part.type}`}
-          />
-          <Chip
-            className={classes.metaChip}
-            label={`Formato: ${part.format}`}
-          />
-        </div>
+        <PartTitle unit={this.props} type={part.type} />
         {part.type === 'self-assessment' &&
           <SelfAssessment
             match={match}
@@ -172,7 +153,7 @@ class UnitPart extends React.Component {
           <Content html={processTypeFormUrls(part, unitProgress, auth, profile, match, intl)} />
         )}
       </div>
-    )
+    );
   }
 }
 
@@ -200,6 +181,7 @@ UnitPart.propTypes = {
       partid: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  profile: PropTypes.shape({}).isRequired,
 };
 
 

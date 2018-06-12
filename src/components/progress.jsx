@@ -5,18 +5,23 @@ import { LinearProgress } from 'material-ui/Progress';
 import Tooltip from 'material-ui/Tooltip';
 
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     width: '100%',
-    margin: `${theme.spacing.unit}px 0`,
+    // margin: `${theme.spacing.unit}px 0`,
   },
 });
 
 
 const Progress = ({ value, classes }) => (
   <div className={classes.root}>
-    <Tooltip title={`${value}%`} placement="left">
-      <LinearProgress variant="determinate" value={value} />
+    <Tooltip title={`${value}%`} placement="top">
+      <LinearProgress
+        className="linea-progress"
+        variant="determinate"
+        value={value}
+        color="secondary"
+      />
     </Tooltip>
   </div>
 );

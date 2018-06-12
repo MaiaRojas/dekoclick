@@ -18,6 +18,9 @@ import CohortUserOpenModalButton from './cohort-user-open-modal-button';
 
 
 const styles = theme => ({
+  subheader: {
+    color: theme.palette.text.primary,
+  },
   heading: {
     marginBottom: theme.spacing.unit,
   },
@@ -67,10 +70,12 @@ class AvailabilityCheck extends React.Component {
       }
     }
     this.state = { isFired };
-    this.handleChange = (isFired) => {
-      this.setState({ isFired });
-      this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ available: !isFired });
-    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(isFired) {
+    this.setState({ isFired });
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ available: !isFired });
   }
 
   render() {
@@ -91,6 +96,22 @@ class AvailabilityCheck extends React.Component {
 }
 
 
+AvailabilityCheck.propTypes = {
+  profile: PropTypes.shape({
+    available: PropTypes.bool,
+  }),
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+};
+
+
+AvailabilityCheck.defaultProps = {
+  profile: undefined,
+};
+
+
 const CohortUser = (props) => {
   // Averigua si es un cohort de common core del bootcamp para saber si se puede
   // "migrar" al turno de la mañana o tarde según corresponda.
@@ -101,6 +122,7 @@ const CohortUser = (props) => {
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card>
         <CardHeader
+          classes={{ subheader: props.classes.subheader }}
           avatar={<UserAvatar user={props.profile} />}
           title={props.profile.name}
           subheader={`Role: ${props.cohortUser.role}`}
@@ -115,7 +137,11 @@ const CohortUser = (props) => {
           {props.profile.github &&
             <Typography>
               Github:&nbsp;
-              <a href={`https://github.com/${props.profile.github}`} target="_blank">
+              <a
+                href={`https://github.com/${props.profile.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {props.profile.github}
               </a>
             </Typography>}
@@ -186,6 +212,10 @@ CohortUser.propTypes = {
   classes: PropTypes.shape({
     emailContainer: PropTypes.string.isRequired,
     truncate: PropTypes.string.isRequired,
+    subheader: PropTypes.string.isRequired,
+  }).isRequired,
+  parsedCohortId: PropTypes.shape({
+    program: PropTypes.string.isRequired,
   }).isRequired,
 };
 

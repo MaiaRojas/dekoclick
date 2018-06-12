@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import { ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -12,21 +14,44 @@ import DoneIcon from 'material-ui-icons/Done';
 import WarningIcon from 'material-ui-icons/Warning';
 import TimerIcon from 'material-ui-icons/Timer';
 
-
 const propsToRoutePath = ({ partid, match }) =>
   `/cohorts/${match.params.cohortid}/courses/${match.params.courseid}` +
   `/${match.params.unitid}/${partid}`;
 
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  primary: {
+    order: 1,
+    color: theme.palette.text.secondary,
+    fontWeight: 500,
+    fontSize: theme.typography.fontSize,
+    lineHeight: '125%',
+  },
+  secondary: {
+    order: 0,
+    color: theme.palette.text.secondary,
+    fontSize: '14px',
+  },
   active: {
-    backgroundColor: theme.palette.primary[500],
+    opacity: 1,
+    color: theme.palette.text.secondary,
+  },
+  inactive: {
+    opacity: 0.7,
   },
   read: {
-    fontWeight: 300,
+    fontWeight: 500,
   },
   unread: {
-    fontWeight: 700,
+    fontWeight: 500,
+  },
+  icon: {
+    color: theme.palette.text.secondary,
+    opacity: 'inherit',
   },
 });
 
@@ -50,65 +75,96 @@ const partTypeToIcon = (type) => {
 
 const progressToIcon = (part, partProgress, partProgressStats) => {
   if (partProgressStats && partProgressStats.completed === 1) {
-    return <DoneIcon />;
+    return <DoneIcon className="progress-icon" />;
   } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {
-    return <TimerIcon />;
+    return <TimerIcon className="progress-icon" />;
   } else if (part.type === 'practice' && part.exercises && partProgressStats && partProgressStats && partProgressStats.completed) {
-    return <WarningIcon />;
+    return <WarningIcon className="progress-icon" />;
   }
   return null;
 };
 
 
+const isOpenMenu = (props) => {
+  if (props.partid === props.match.params.partid && props.drawerOpen) {
+    return 'selectorActive open';
+  }
+  if (props.partid === props.match.params.partid) {
+    return 'selectorActive close';
+  }
+  return '';
+};
+
 const UnitNavItem = props => (
   <ListItem
+    style={{ borderBottom: '1px solid #f1f1f1', minHeight: '90px' }}
     button
     onClick={() => props.history.push(propsToRoutePath(props))}
-    className={props.partid === props.match.params.partid ? props.classes.active : ''}
+    className={props.partid === props.match.params.partid ?
+      props.classes.active :
+      props.classes.inactive
+    }
   >
-    <ListItemIcon>
+    <ListItemIcon className={props.classes.icon}>
       {partTypeToIcon(props.part.type)}
     </ListItemIcon>
     <ListItemText
       classes={{
-        primary: (props.partProgress || {}).openedAt
-          ? props.classes.read
-          : props.classes.unread,
+        root: props.classes.root,
+        primary: props.classes.primary,
+        // primary: classNames(
+        //   props.classes.primary,
+        //   (props.partProgress || {}).openedAt
+        //     ? props.classes.read
+        //     : props.classes.unread,
+        // ),
+        secondary: props.classes.secondary,
       }}
-      primary={`${props.order}. ${props.part.title}`}
+      primary={`${props.part.title}`}
+      secondary={`Parte: ${props.order}`}
     />
     <ListItemSecondaryAction>
       <IconButton disabled>
         {progressToIcon(props.part, props.partProgress, props.partProgressStats)}
       </IconButton>
     </ListItemSecondaryAction>
+    <div className={isOpenMenu(props)} />
   </ListItem>
 );
 
 
 UnitNavItem.propTypes = {
-  partid: PropTypes.string.isRequired,
   part: PropTypes.shape({
     title: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
   }).isRequired,
   partProgress: PropTypes.shape({}),
   partProgressStats: PropTypes.shape({}),
+  partid: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
     read: PropTypes.string.isRequired,
     unread: PropTypes.string.isRequired,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      partid: PropTypes.string.isRequired,
-    }).isRequired,
+    icon: PropTypes.string.isRequired,
+    root: PropTypes.string.isRequired,
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+    inactive: PropTypes.string.isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
   order: PropTypes.number.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      partid: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
+
+const mapStateToProps = ({ topbar }) => ({
+  drawerOpen: topbar.drawerOpen,
+});
 
 
 UnitNavItem.defaultProps = {
@@ -117,4 +173,7 @@ UnitNavItem.defaultProps = {
 };
 
 
-export default withStyles(styles)(UnitNavItem);
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles),
+)(UnitNavItem);

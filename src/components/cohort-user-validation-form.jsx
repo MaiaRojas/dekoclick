@@ -1,11 +1,13 @@
+/* eslint react/no-multi-comp: "off" */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
-import { FormControl, FormLabel, FormHelperText } from 'material-ui/Form';
-import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
+import { InputLabel } from 'material-ui/Input';
 import Select from 'material-ui/Select';
 import GithubCard from '../components/github-card';
 import SettingsForm from '../components/settings-form';
@@ -24,9 +26,7 @@ const styles = theme => ({
 });
 
 
-
-class RecomendedAsForm extends React.Component {
-
+class RecommendedAsForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,41 +35,48 @@ class RecomendedAsForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({ recomendedAs: event.target.value });
-    this.props.firebase.firestore().collection ('users').doc(this.props.uid).update ( { recomendedAs : event.target.value} )
-  };
-
   componentWillMount() {
     this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
       .then(res => this.setState({ recomendedAs: res.data().recomendedAs }));
   }
 
-  render () {
+  handleChange(event) {
+    this.setState({ recomendedAs: event.target.value });
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).update({ recomendedAs: event.target.value });
+  }
+
+  render() {
     return (
-    <FormControl  >
-      <InputLabel htmlFor="recomended-as">Perfil</InputLabel>
-      <Select
-        native
-        value={this.state.recomendedAs}
-        onChange={this.handleChange}
-        inputProps={{
-          id: 'recomended-as',
-        }}
-      >
-        <option value="" />
-        <option value={'UX Designer'}>UX Designer</option>
-        <option value={'Frontend Developer'}>Frontend Developer</option>
-        <option value={'Frontend Designer'}>Frontend Designer</option>
-      </Select>
-    </FormControl>
-    )
+      <FormControl>
+        <InputLabel htmlFor="recomended-as">Perfil</InputLabel>
+        <Select
+          native
+          value={this.state.recomendedAs}
+          onChange={this.handleChange}
+          inputProps={{
+            id: 'recomended-as',
+          }}
+        >
+          <option value="" />
+          <option value="UX Designer">UX Designer</option>
+          <option value="Frontend Developer">Frontend Developer</option>
+          <option value="Frontend Designer">Frontend Designer</option>
+        </Select>
+      </FormControl>
+    );
   }
 }
 
 
-class EnglishLevelForm extends React.Component {
+RecommendedAsForm.propTypes = {
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+};
 
+
+class EnglishLevelForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,46 +85,54 @@ class EnglishLevelForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillMount() {
+    this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
+      .then(res => this.setState({ englishLevel: res.data().englishLevel }));
+  }
+
   handleChange(event) {
     this.setState({ englishLevel: event.target.value });
     this.props.firebase.firestore().collection('users').doc(this.props.uid).update({
-      englishLevel: event.target.value
+      englishLevel: event.target.value,
     });
-  };
-
-  componentWillMount() {
-    this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
-      .then (res => this.setState({ englishLevel: res.data().englishLevel }));
   }
 
-  render () {
+  render() {
     return (
-    <FormControl  >
-      <InputLabel htmlFor="english-level">Nivel de Ingles</InputLabel>
-      <Select
-        native
-        value={this.state.englishLevel}
-        onChange={this.handleChange}
-        inputProps={{
-          id: 'english-level',
-        }}
-      >
-        <option value="" />
-        <option value={'basic'}>Básico</option>
-        <option value={'intermediate'}>Intermedio</option>
-        <option value={'advanced'}>Avanzado</option>
-      </Select>
-    </FormControl>
-    )
+      <FormControl>
+        <InputLabel htmlFor="english-level">Nivel de Ingles</InputLabel>
+        <Select
+          native
+          value={this.state.englishLevel}
+          onChange={this.handleChange}
+          inputProps={{
+            id: 'english-level',
+          }}
+        >
+          <option value="" />
+          <option value="basic">Básico</option>
+          <option value="intermediate">Intermedio</option>
+          <option value="advanced">Avanzado</option>
+        </Select>
+      </FormControl>
+    );
   }
 }
+
+
+EnglishLevelForm.propTypes = {
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+};
 
 
 class ValidationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      githubUrls: [],
+      // githubUrls: [],
       recommendation: '',
       selectedTab: 0,
       githubUrls: {},
@@ -126,88 +141,6 @@ class ValidationForm extends React.Component {
     this.handleChange = (event, selectedTab) => {
       this.setState({ ...this.state, selectedTab });
     };
-  }
-
-  projectsForm() {
-    return this.state.githubUrls && Object.values(this.state.githubUrls).map((url, index) => (
-      <GithubCard
-        url={url}
-        pos={index}
-        key={index}
-        firebase={this.props.firebase}
-        uid={this.props.uid}
-      />
-    ));
-  }
-
-  updateRecommendations (authorUid, detail) {
-    const db = this.props.firebase.firestore();
-    const userDocRef = db.collection('users').doc(this.props.uid);
-
-    if (detail.length === 0) {
-      return this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
-        return  userDocRef.update({
-          [`recommendations.${authorUid}`]: this.props.firebase.firestore.FieldValue.delete(),
-        });
-      })
-    }
-    else {
-      return this.props.firebase.firestore().collection('users').doc(authorUid).get().then (adminUser => {
-        return userDocRef.update({
-          [`recommendations.${authorUid}`]: {
-            from: adminUser.data().name,
-            authorLinkedin : adminUser.data().linkedin,
-            company: 'Laboratoria',
-            companyUrl: 'www.laboratoria.la',
-            detail: detail,
-          },
-        });
-      })
-    }
-  }
-
-  endorseForm() {
-    const { uid, auth, profile, firebase, classes } = this.props;
-    const db = firebase.firestore();
-    const userDocRef = db.collection('users').doc(uid);
-
-    return (
-      <div>
-        <LifeSkillsForm firebase={firebase} uid={uid} auth={auth} />
-        <FormControl component="fieldset" fullWidth>
-          <TextField
-            id="recommendation"
-            label={`Escribe una recomendación para ${profile.name}`}
-            value={this.state.recommendation || ''}
-            multiline
-            rowsMax="5"
-            className={classes.textField}
-            margin="normal"
-            error={this.state.recommendation.length > 280}
-            helperText={
-              this.state.recommendation.length > 280
-                ? 'Error: use solo 280 caracteres'
-                : 'Puedes usar hasta 280 caracteres.'
-            }
-            margin="dense"
-            onChange={(e) => {
-              this.setState({ recommendation: e.target.value });
-              this.updateRecommendations(this.props.auth.uid,  e.target.value);
-            }}
-          />
-        </FormControl>
-      </div>
-    );
-  }
-
-  settingsForm() {
-    return (
-      <div component="div" style={{ padding: 8 * 3 }}>
-        <RecomendedAsForm {...this.props}/>
-        <EnglishLevelForm {...this.props}/>
-        <SettingsForm {...this.props} />
-      </div>
-    );
   }
 
   componentWillMount() {
@@ -225,6 +158,85 @@ class ValidationForm extends React.Component {
         });
       }
     }
+  }
+
+  settingsForm() {
+    return (
+      <div component="div" style={{ padding: 8 * 3 }}>
+        <RecommendedAsForm {...this.props} />
+        <EnglishLevelForm {...this.props} />
+        <SettingsForm {...this.props} />
+      </div>
+    );
+  }
+
+  projectsForm() {
+    return this.state.githubUrls && Object.values(this.state.githubUrls).map((url, index) => (
+      <GithubCard
+        url={url}
+        pos={index}
+        key={this.props.uid}
+        firebase={this.props.firebase}
+        uid={this.props.uid}
+      />
+    ));
+  }
+
+  updateRecommendations(authorUid, detail) {
+    const db = this.props.firebase.firestore();
+    const userDocRef = db.collection('users').doc(this.props.uid);
+
+    if (detail.length === 0) {
+      return this.props.firebase.firestore().collection('users').doc(authorUid).get()
+        .then(() =>
+          userDocRef.update({
+            [`recommendations.${authorUid}`]: this.props.firebase.firestore.FieldValue.delete(),
+          }));
+    }
+    return this.props.firebase.firestore().collection('users').doc(authorUid).get()
+      .then(adminUser =>
+        userDocRef.update({
+          [`recommendations.${authorUid}`]: {
+            from: adminUser.data().name,
+            authorLinkedin: adminUser.data().linkedin,
+            company: 'Laboratoria',
+            companyUrl: 'www.laboratoria.la',
+            detail,
+          },
+        }));
+  }
+
+  endorseForm() {
+    const {
+      uid, auth, profile, firebase,
+    } = this.props;
+
+    return (
+      <div>
+        <LifeSkillsForm firebase={firebase} uid={uid} auth={auth} />
+        <FormControl component="fieldset" fullWidth>
+          <TextField
+            id="recommendation"
+            label={`Escribe una recomendación para ${profile.name}`}
+            value={this.state.recommendation || ''}
+            multiline
+            rowsMax="5"
+            // margin="normal"
+            error={this.state.recommendation.length > 280}
+            helperText={
+              this.state.recommendation.length > 280
+                ? 'Error: use solo 280 caracteres'
+                : 'Puedes usar hasta 280 caracteres.'
+            }
+            margin="dense"
+            onChange={(e) => {
+              this.setState({ recommendation: e.target.value });
+              this.updateRecommendations(this.props.auth.uid, e.target.value);
+            }}
+          />
+        </FormControl>
+      </div>
+    );
   }
 
   render() {
@@ -257,6 +269,14 @@ ValidationForm.propTypes = {
     paper: PropTypes.string.isRequired,
     legend: PropTypes.string.isRequired,
   }).isRequired,
+  firebase: PropTypes.shape({
+    firestore: PropTypes.func.isRequired,
+  }).isRequired,
+  uid: PropTypes.string.isRequired,
+  auth: PropTypes.shape({
+    uid: PropTypes.string.isRequired,
+  }).isRequired,
+  profile: PropTypes.shape({}).isRequired,
 };
 
 

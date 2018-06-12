@@ -29,8 +29,12 @@ const SignInForm = props => (
           margin="normal"
         />
       )}
+
       <TextField
         id="email"
+        InputLabelProps={{
+          shrink: true,
+        }}
         label={<FormattedMessage id="signin.email" />}
         autoComplete="email"
         value={props.data.email}
@@ -40,10 +44,14 @@ const SignInForm = props => (
         onChange={e => props.updateSignInField('email', e.target.value)}
         fullWidth
         margin="normal"
+        className={props.classes.TextField}
       />
       {!props.forgot &&
         <TextField
           id="password"
+          InputLabelProps={{
+            shrink: true,
+          }}
           label={<FormattedMessage id="signin.password" />}
           value={props.data.password}
           type="password"
@@ -80,13 +88,9 @@ const SignInForm = props => (
       disabled={props.forgot && props.forgotRequested}
       className={props.classes.submitBtn}
     >
-      {
-        props.forgot
-          ? <FormattedMessage id="signin.forgot" />
-          : props.signup
-            ? <FormattedMessage id="signin.signup" />
-            : <FormattedMessage id="signin.signin" />
-      }
+      {props.forgot && <FormattedMessage id="signin.forgot" />}
+      {!props.forgot && props.signup && <FormattedMessage id="signin.signup" />}
+      {!props.forgot && !props.signup && <FormattedMessage id="signin.signin" />}
     </Button>
     <SignInResults
       authError={props.authError}
@@ -104,11 +108,13 @@ SignInForm.propTypes = {
     email: PropTypes.string,
     password: PropTypes.string,
     password2: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   errors: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,
     password2: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   forgot: PropTypes.bool.isRequired,
   signup: PropTypes.bool.isRequired,
@@ -117,8 +123,9 @@ SignInForm.propTypes = {
   validateAndSubmitSignInForm: PropTypes.func.isRequired,
   updateSignInField: PropTypes.func.isRequired,
   classes: PropTypes.shape({
-    submitBtn: PropTypes.string.isRequired,
-  }).isRequired,
+    submitBtn: PropTypes.string,
+    TextField: PropTypes.string,
+  }),
   authError: PropTypes.shape({}),
   signupError: PropTypes.shape({}),
   signinError: PropTypes.shape({}),
@@ -130,6 +137,7 @@ SignInForm.defaultProps = {
   authError: undefined,
   signupError: undefined,
   signinError: undefined,
+  classes: undefined,
 };
 
 

@@ -158,7 +158,7 @@ class SettingsForm extends React.Component {
       <GithubCard
         url={url}
         pos={index}
-        key={index}
+        key={url}
         firebase={this.props.firebase}
         uid={this.props.uid}
       />
@@ -178,7 +178,8 @@ class SettingsForm extends React.Component {
 
     return (
       <React.Fragment>
-        {this.props.showOptsInSettings && (
+        {
+          this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
               <FormLabel component="legend" className={props.classes.legend}>
@@ -195,7 +196,7 @@ class SettingsForm extends React.Component {
           </Paper>
         )}
 
-        {this.props.showOptsInSettings && (
+        { this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl>
               <FormLabel component="legend" className={props.classes.legend}>
@@ -384,6 +385,7 @@ class SettingsForm extends React.Component {
               <a
                 href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Ver mi perfil en talento.laboratoria.la!
               </a>
@@ -429,7 +431,7 @@ FormControlWrapper.propTypes = {
   helperText: PropTypes.string,
   disabled: PropTypes.string,
   updateValueOnProfile: PropTypes.func.isRequired,
-  usePaperContainer: PropTypes.bool.isRequired,
+  usePaperContainer: PropTypes.bool,
 };
 
 FormControlWrapper.defaultProps = {
@@ -439,6 +441,7 @@ FormControlWrapper.defaultProps = {
   helperText: undefined,
   inputLabel: undefined,
   disabled: undefined,
+  usePaperContainer: undefined,
 };
 
 SettingsForm.propTypes = {

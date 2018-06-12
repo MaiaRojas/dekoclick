@@ -6,8 +6,6 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
-import FolderIcon from 'material-ui-icons/FolderOpen';
-import ScheduleIcon from 'material-ui-icons/Schedule';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
 import UnitCardLock from './unit-card-lock';
@@ -17,6 +15,7 @@ import UnitCardAdmin from './unit-card-admin';
 const styles = theme => ({
   card: {
     marginBottom: theme.spacing.unit * 4,
+    boxShadow: theme.shadow,
   },
   cardContent: {
     position: 'relative',
@@ -37,9 +36,9 @@ const styles = theme => ({
 });
 
 
-const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
+const checkDependencies = (unitSettings, courseProgressStats) =>
   Object.keys(unitSettings.dependencies || {}).sort().reduce((memo, depPath) => {
-    const [unitid, partid, embedCat, formid] = depPath.split('/');
+    const [unitid, partid, formid] = depPath.split('/');
     const unitProgressStats = courseProgressStats.units[unitid] || { parts: {} };
     const partProgressStats = unitProgressStats.parts[partid] || {};
     const dep = unitSettings.dependencies[depPath] || {};
@@ -92,12 +91,21 @@ const UnitCard = (props) => {
   const unitSettings = courseSettings.units[props.unit.id] || {};
   const courseProgressStats = props.courseProgressStats || { units: {} };
   const unitProgressStats = courseProgressStats.units[props.unit.id];
-  const depsCheck = checkDependencies(props.unit.id, unitSettings, courseProgressStats);
+  const depsCheck = checkDependencies(unitSettings, courseProgressStats);
 
   return (
-    <Card style={!depsCheck.ok ? { position: 'relative' } : {}} className={props.classes.card}>
+    <Card
+      // to={`/cohorts/${props.cohort}/courses/${props.course}/${props.unit.id}`}
+      // component={Link}
+      // disabled={!depsCheck.ok}
+      style={!depsCheck.ok ? { position: 'relative' } : {}}
+      className={props.classes.card}
+    >
       {!depsCheck.ok && (<UnitCardLock depsCheck={depsCheck} syllabus={props.syllabus} />)}
-      <CardContent style={!depsCheck.ok ? { opacity: 0.2 } : {}} className={props.classes.cardContent}>
+      <CardContent
+        style={!depsCheck.ok ? { opacity: 0.2 } : {}}
+        className={props.classes.cardContent}
+      >
         {props.canManageCourse &&
           <UnitCardAdmin
             unit={props.unit}
@@ -106,6 +114,7 @@ const UnitCard = (props) => {
             courseSettings={props.courseSettings}
             syllabus={props.syllabus}
             courseProgressStats={props.courseProgressStats}
+            style={{ position: 'relative' }}
           />
         }
         <Typography variant="title">
@@ -120,7 +129,7 @@ const UnitCard = (props) => {
       <CardActions className={props.classes.cardActions}>
         {props.unit.stats && props.unit.stats.partCount && (
           <div className={props.classes.count}>
-            <FolderIcon />
+            {/* <FolderIcon /> */}
             <Typography className={props.classes.countText}>
               <FormattedMessage
                 id="unit-card.parts"
@@ -129,9 +138,14 @@ const UnitCard = (props) => {
             </Typography>
           </div>
         )}
+        <div className={props.classes.count}>
+          <Typography className={props.classes.countText}>
+            |
+          </Typography>
+        </div>
         {props.unit.stats && props.unit.stats.durationString &&
           <div className={props.classes.count}>
-            <ScheduleIcon />
+            {/* <ScheduleIcon /> */}
             <Typography className={props.classes.countText}>
               <Hidden smDown><FormattedMessage id="unit-card.estimatedDuration" />: </Hidden>
               {props.unit.stats.durationString}
@@ -175,6 +189,7 @@ UnitCard.propTypes = {
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
+    cardContent: PropTypes.string.isRequired,
     count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
   }).isRequired,

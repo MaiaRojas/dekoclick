@@ -26,9 +26,9 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 4}px`,
     width: '100%',
     minHeight: '100vh',
-    [theme.breakpoints.up('md')]: {
-      marginLeft: theme.leftDrawerWidth,
-    },
+    // [theme.breakpoints.up('md')]: {
+    //   marginLeft: theme.leftDrawerWidth,
+    // },
   },
 });
 
@@ -108,6 +108,7 @@ const Unit = (props) => {
           match={props.match}
           auth={props.auth}
           profile={props.profile}
+          unitProgressStats={props.unitProgressStats}
         />
       </div>
     </div>
@@ -133,6 +134,9 @@ Unit.propTypes = {
   }).isRequired,
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
+  }).isRequired,
+  profile: PropTypes.shape({
+    name: PropTypes.string.isRequired,
   }).isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
