@@ -63,11 +63,10 @@ const CourseCard = props => (
         {props.course.title}
       </Typography>
     </CardContent>
-    <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
+    <Progress value={props.progress && props.progress.percent || 0} />
     <CardActions className={props.classes.cardActions}>
       {props.course.stats && props.course.stats.unitCount && (
         <div className={props.classes.count}>
-          {/* <FolderIcon /> */}
           <Typography className={props.classes.countText}>
             <FormattedMessage
               id="course-card.units"
@@ -77,13 +76,10 @@ const CourseCard = props => (
         </div>
       )}
       <div className={props.classes.count}>
-        <Typography className={props.classes.countText}>
-          |
-        </Typography>
+        <Typography className={props.classes.countText}>|</Typography>
       </div>
       {props.course.stats && props.course.stats.durationString &&
         <div className={props.classes.count}>
-          {/* <ScheduleIcon /> */}
           <Typography className={props.classes.countText}>
             {props.course.stats.durationString}
           </Typography>

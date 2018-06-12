@@ -28,6 +28,9 @@ const styles = theme => ({
   legend: {
     marginBottom: theme.spacing.unit * 2,
   },
+  root: {
+    color: theme.palette.text.primary,
+  },
 });
 
 
@@ -43,6 +46,11 @@ const FormControlWrapper = (props) => {
         className={props.classes.textField}
         error={!!props.error}
         helperText={props.helperText}
+        FormHelperTextProps={{
+          classes: {
+            root: props.classes.root,
+          },
+        }}
         margin="dense"
         disabled={props.disabled}
         onChange={(e) => {
@@ -178,8 +186,7 @@ class SettingsForm extends React.Component {
 
     return (
       <React.Fragment>
-        {
-          this.props.showOptsInSettings && (
+        {this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl component="fieldset">
               <FormLabel component="legend" className={props.classes.legend}>
@@ -196,7 +203,7 @@ class SettingsForm extends React.Component {
           </Paper>
         )}
 
-        { this.props.showOptsInSettings && (
+        {this.props.showOptsInSettings && (
           <Paper className={props.classes.paper}>
             <FormControl>
               <FormLabel component="legend" className={props.classes.legend}>
@@ -425,6 +432,7 @@ FormControlWrapper.propTypes = {
   classes: PropTypes.shape({
     textField: PropTypes.string,
     paper: PropTypes.string,
+    root: PropTypes.string,
   }),
   error: PropTypes.bool,
   helperText: PropTypes.string,

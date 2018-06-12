@@ -23,7 +23,7 @@ body {
 .scroll-style::-webkit-scrollbar-thumb {
 	background: #000;
 	border-radius: 10px;
-	border:1px solid rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.3);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -212,7 +212,7 @@ span > span {
   }
 }
 
-.selectorActive {
+.triangle {
   width: 0;
   height: 0;
   border-right: 10px solid #f7f7f7;
@@ -220,12 +220,10 @@ span > span {
   border-bottom: 10px solid transparent;
   position: absolute;
 }
-.open {
+.expanded {
   right: 0;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
-.close {
+.collapsed {
   left: 62px;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }

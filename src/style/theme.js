@@ -60,9 +60,6 @@ const theme = createMuiTheme({
       color: '#000000',
     },
   },
-  spacing: {
-    unit1:7,
-  },
   maxContentWidth: 760,
   leftDrawerWidth: 320,
   leftDrawerWidthMin: 73,

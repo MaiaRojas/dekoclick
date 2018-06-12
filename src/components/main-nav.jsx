@@ -13,7 +13,6 @@ import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import { FormattedMessage } from 'react-intl';
 import LeftDrawer from './left-drawer';
-// import { displayDrawer } from '../reducers/top-bar';
 
 
 const styles = theme => ({
@@ -35,7 +34,6 @@ const styles = theme => ({
   },
   active: {
     opacity: 1,
-    // color: theme.palette.text.secondary,
   },
   open: {
     right: 0,
@@ -103,40 +101,21 @@ const getEmail = (auth, profile) =>
   (profile || {}).email || auth.email;
 
 
-const isActive = ({ match, classes }, container) => {
+const isActive = ({ match }, container) => {
   switch (container) {
     case 'dashboard':
-      return match.path === '/' ? classes.active : '';
+      return match.path === '/' ? true : false;
     case 'courses':
       return match.path === '/courses' || /^\/cohorts\/[^/]+\/courses/.test(match.path) ?
-        true : '';
+      true : false;
     case 'cohorts':
       return match.path === '/cohorts' || /^\/cohorts\/[^/]+$/.test(match.path) ?
-        classes.active : '';
+      true : false;
     case 'settings':
-      return match.path === '/settings' ? classes.active : '';
+      return match.path === '/settings' ? true : false;
     default:
       return '';
   }
-};
-
-
-const isOpenMenu = (props, container) => {
-  if (isActive(props, container) && props.drawerOpen) {
-    return 'selectorActive open';
-  }
-  if (isActive(props, container)) {
-    return 'selectorActive close';
-  }
-  return '';
-  // if( isActive(props, container).indexOf('des') !== -1){
-  //   return '';
-  // }
-  // if (props.drawerOpen) {
-  //   return 'selectorActive open';
-  // } else {
-  //   return 'selectorActive close';
-  // }
 };
 
 
@@ -181,7 +160,9 @@ const MainNav = props => (
           primary={<FormattedMessage id="main-nav.courses" />}
           style={{ paddingLeft: '8px' }}
         />
-        <div className={isOpenMenu(props, 'courses')} />
+        <div className={!isActive(props, 'courses') ? '' : props.drawerOpen ?
+          'expanded triangle' : 'triangle collapsed'}
+        />
       </ListItem>
       {props.profile && props.profile.roles && props.profile.roles.admin &&
         <ListItem
@@ -198,7 +179,9 @@ const MainNav = props => (
             primary="Cohorts"
             style={{ paddingLeft: '8px' }}
           />
-          <div className={isOpenMenu(props, 'cohorts')} />
+          <div className={!isActive(props, 'cohorts') ? '' : props.drawerOpen ?
+            'expanded triangle' : 'triangle collapsed'}
+          />
         </ListItem>
       }
 
@@ -216,7 +199,9 @@ const MainNav = props => (
           primary={<FormattedMessage id="main-nav.settings" />}
           style={{ paddingLeft: '8px' }}
         />
-        <div className={isOpenMenu(props, 'settings')} />
+        <div className={!isActive(props, 'settings') ? '' : props.drawerOpen ?
+          'expanded triangle' : 'triangle collapsed'}
+        />
       </ListItem>
 
       <div className={props.classes.bottom}>

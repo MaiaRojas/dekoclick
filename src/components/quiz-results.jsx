@@ -10,7 +10,6 @@ import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   root: {
-    // marginBottom: theme.spacing.unit * 4,
     padding: theme.spacing.unit * 3,
     display: 'flex',
     justifyContent: 'flex-start',
@@ -40,11 +39,6 @@ const QuizResults = ({ results, classes }) => {
   const percent = Math.floor((results.passes / results.total) * 100);
 
   const colorClass = classes.grey;
-  // if (percent > 79) {
-  //   colorClass = classes.green;
-  // } else if (percent > 69) {
-  //   colorClass = classes.yellow;
-  // }
 
   return (
     <Paper className={`${classes.root} ${colorClass}`}>

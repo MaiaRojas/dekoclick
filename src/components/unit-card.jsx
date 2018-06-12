@@ -139,9 +139,7 @@ const UnitCard = (props) => {
           </div>
         )}
         <div className={props.classes.count}>
-          <Typography className={props.classes.countText}>
-            |
-          </Typography>
+          <Typography className={props.classes.countText}>|</Typography>
         </div>
         {props.unit.stats && props.unit.stats.durationString &&
           <div className={props.classes.count}>
