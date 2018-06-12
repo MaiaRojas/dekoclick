@@ -24,7 +24,7 @@ const styles = theme => ({
 });
 
 
-class RecomendedAsForm extends React.Component {
+class RecommendedAsForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,7 +66,7 @@ class RecomendedAsForm extends React.Component {
 }
 
 
-RecomendedAsForm.propTypes = {
+RecommendedAsForm.propTypes = {
   firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
   }).isRequired,
@@ -161,7 +161,7 @@ class ValidationForm extends React.Component {
   settingsForm() {
     return (
       <div component="div" style={{ padding: 8 * 3 }}>
-        <RecomendedAsForm {...this.props} />
+        <RecommendedAsForm {...this.props} />
         <EnglishLevelForm {...this.props} />
         <SettingsForm {...this.props} />
       </div>
