@@ -330,7 +330,7 @@ CohortNewDialog.propTypes = {
 
 
 const mapStateToProps = ({ firestore, cohortNewDialog }) => ({
-  cohorts: firestore.data.cohorts,
+  cohorts: (firestore.data.cohorts === null) ? {} : firestore.data.cohorts,
   open: cohortNewDialog.open,
   campus: cohortNewDialog.campus,
   program: cohortNewDialog.program,

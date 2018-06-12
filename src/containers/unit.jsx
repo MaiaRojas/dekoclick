@@ -135,6 +135,9 @@ Unit.propTypes = {
   auth: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  profile: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,

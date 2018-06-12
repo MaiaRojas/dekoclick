@@ -32,7 +32,7 @@ import Loader from '../components/loader';
 const postSignUp = (props, userRecord) => {
   const db = props.firestore.firestore();
   const campus = props.campuses.find(
-    campus => campus.id === parseCohortId(props.cohortid).campus,
+    item => item.id === parseCohortId(props.cohortid).campus,
   );
   return db.doc(`users/${userRecord.uid}`).set({
     email: userRecord.email,

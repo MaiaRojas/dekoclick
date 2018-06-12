@@ -127,45 +127,55 @@ const initialState = () => ({
 });
 
 
+const handleUpdateFieldAction = (state, action) => {
+  const { key, value } = action.payload;
+  const { err, sanitized } = validateField(key, value, state);
+
+  if (err) {
+    return {
+      ...state,
+      isValid: undefined,
+      data: { ...state.data, [key]: sanitized },
+      errors: { ...state.errors, [key]: err },
+    };
+  }
+  return {
+    ...state,
+    isValid: undefined,
+    data: { ...state.data, [key]: sanitized },
+    errors: !state.errors[key]
+      ? state.errors
+      : Object.keys(state.errors).reduce((memo, errorKey) => {
+        if (errorKey === key) {
+          return memo;
+        }
+        return { ...memo, [errorKey]: state.errors[errorKey] };
+      }, {}),
+  };
+};
+
+
+const handleValidateAndSubmitAction = (state) => {
+  const errors = Object.keys(state.data).reduce((memo, key) => {
+    const { err } = validateField(key, state.data[key], state);
+    return (err) ? { ...memo, [key]: err } : memo;
+  }, {});
+
+  return {
+    ...state,
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+};
+
+
 // Reducer
 export default (state = initialState(), action = {}) => {
   switch (action.type) {
-    case UPDATE_FIELD: {
-      const { key, value } = action.payload;
-      const { err, sanitized } = validateField(key, value, state);
-      if (err) {
-        return {
-          ...state,
-          isValid: undefined,
-          data: { ...state.data, [key]: sanitized },
-          errors: { ...state.errors, [key]: err },
-        };
-      }
-      return {
-        ...state,
-        isValid: undefined,
-        data: { ...state.data, [key]: sanitized },
-        errors: !state.errors[key]
-          ? state.errors
-          : Object.keys(state.errors).reduce((memo, errorKey) => {
-            if (errorKey === key) {
-              return memo;
-            }
-            return { ...memo, [errorKey]: state.errors[errorKey] };
-          }, {}),
-      };
-    }
-    case VALIDATE_AND_SUBMIT: {
-      const errors = Object.keys(state.data).reduce((memo, key) => {
-        const { err } = validateField(key, state.data[key], state);
-        return (err) ? { ...memo, [key]: err } : memo;
-      }, {});
-      return {
-        ...state,
-        isValid: Object.keys(errors).length === 0,
-        errors,
-      };
-    }
+    case UPDATE_FIELD:
+      return handleUpdateFieldAction(state, action);
+    case VALIDATE_AND_SUBMIT:
+      return handleValidateAndSubmitAction(state);
     case RESET:
       return initialState();
     case TOGGLE_FORGOT:
