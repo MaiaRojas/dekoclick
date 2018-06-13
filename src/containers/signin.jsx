@@ -9,7 +9,6 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import {
   updateSignInField,
@@ -30,9 +29,9 @@ import Loader from '../components/loader';
 
 // handle successful signup (add profile data and assign cohort)
 const postSignUp = (props, userRecord) => {
-  const db = props.firestore.firestore();
+  const db = props.firebase.firestore();
   const campus = props.campuses.find(
-    campus => campus.id === parseCohortId(props.cohortid).campus,
+    item => item.id === parseCohortId(props.cohortid).campus,
   );
   return db.doc(`users/${userRecord.uid}`).set({
     email: userRecord.email,
@@ -134,9 +133,9 @@ const SignInWithFacebookButton = props => (
     color="primary"
     style={{ marginTop: 50 }}
     onClick={() => {
-      const { firestore } = props;
-      const provider = new firestore.auth.FacebookAuthProvider();
-      const auth = firestore.auth();
+      const { firebase } = props;
+      const provider = new firebase.auth.FacebookAuthProvider();
+      const auth = firebase.auth();
 
       // provider.addScope('user_birthday');
       provider.addScope('public_profile');
@@ -145,7 +144,7 @@ const SignInWithFacebookButton = props => (
 
       // auth.languageCode = 'es_PE';
       auth.useDeviceLanguage();
-      // console.log(firestore.auth().languageCode);
+      // console.log(firebase.auth().languageCode);
 
       provider.setCustomParameters({
         display: 'popup',
@@ -211,7 +210,9 @@ const SignInWithFacebookButton = props => (
 
 SignInWithFacebookButton.propTypes = {
   signup: PropTypes.bool.isRequired,
-  firestore: PropTypes.shape({}).isRequired,
+  firebase: PropTypes.shape({
+    auth: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 
@@ -246,7 +247,7 @@ const SignInFbPasswordPrompt = props => (
         onClick={() => {
           const { email } = props.data;
           const { password, pendingCred } = props.fbPasswordPrompt;
-          props.firestore.auth().signInWithEmailAndPassword(email, password)
+          props.firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {
               props.toggleFbPasswordPrompt('', null);
               return user;
@@ -274,7 +275,7 @@ SignInFbPasswordPrompt.propTypes = {
   classes: PropTypes.shape({
     submitBtn: PropTypes.string.isRequired,
   }).isRequired,
-  firestore: PropTypes.shape({
+  firebase: PropTypes.shape({
     auth: PropTypes.string.isRequired,
   }).isRequired,
   toggleFbPasswordPrompt: PropTypes.shape({}).isRequired,
@@ -283,7 +284,7 @@ SignInFbPasswordPrompt.propTypes = {
 
 const SignIn = (props) => {
   const { email, password } = props.data;
-  const auth = props.firestore.auth();
+  const auth = props.firebase.auth();
 
   if (auth.currentUser) {
     return <Redirect to="/" />;
@@ -388,8 +389,9 @@ SignIn.propTypes = {
     error: PropTypes.string,
   }).isRequired,
   updateFbPasswordPromptPassword: PropTypes.func.isRequired,
-  firestore: PropTypes.shape({
+  firebase: PropTypes.shape({
     auth: PropTypes.func.isRequired,
+    firestore: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,

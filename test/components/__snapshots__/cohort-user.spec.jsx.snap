@@ -26,5 +26,9 @@ Array [
     "Warning: Failed prop type: The prop \`firebase\` is marked as required in \`CohortUser\`, but its value is \`undefined\`.
     in CohortUser",
   ],
+  Array [
+    "Warning: Failed prop type: The prop \`parsedCohortId\` is marked as required in \`CohortUser\`, but its value is \`undefined\`.
+    in CohortUser",
+  ],
 ]
 `;

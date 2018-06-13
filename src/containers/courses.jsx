@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import { firestoreConnect } from 'react-redux-firebase';
-import { CircularProgress } from 'material-ui/Progress';
 import { FormattedMessage } from 'react-intl';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
@@ -85,6 +84,7 @@ Courses.propTypes = {
   profile: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({}).isRequired,
   drawerOpen: PropTypes.bool,
+  classes: PropTypes.shape({}).isRequired,
 };
 
 

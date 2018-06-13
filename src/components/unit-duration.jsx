@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
@@ -24,7 +25,8 @@ class UnitDuration extends React.Component {
   }
 
   expiredQuiz() {
-    return this.props.progress.startedAt < (Date.now() - (this.props.part.duration * 60 * 1000));
+    const { progress, part } = this.props;
+    return progress.startedAt.toDate() < (Date.now() - (part.duration * 60 * 1000));
   }
 
   quizInProgress() {
@@ -58,7 +60,7 @@ class UnitDuration extends React.Component {
     }
 
     this.interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - progress.startedAt) / 1000, 10);
+      const elapsed = Math.floor((Date.now() - progress.startedAt.toDate()) / 1000, 10);
       this.setState({ elapsed });
     }, 1000);
   }
@@ -101,7 +103,7 @@ UnitDuration.propTypes = {
     type: PropTypes.string.isRequired,
   }).isRequired,
   progress: PropTypes.shape({
-    startedAt: PropTypes.instanceOf(Date),
+    startedAt: PropTypes.instanceOf(firebase.firestore.Timestamp),
     results: PropTypes.shape({}),
   }).isRequired,
 };

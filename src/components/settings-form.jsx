@@ -166,7 +166,7 @@ class SettingsForm extends React.Component {
       <GithubCard
         url={url}
         pos={index}
-        key={index}
+        key={url}
         firebase={this.props.firebase}
         uid={this.props.uid}
       />
@@ -392,6 +392,7 @@ class SettingsForm extends React.Component {
               <a
                 href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Ver mi perfil en talento.laboratoria.la!
               </a>

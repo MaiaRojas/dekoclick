@@ -63,7 +63,7 @@ const theme = createMuiTheme({
   maxContentWidth: 760,
   leftDrawerWidth: 320,
   leftDrawerWidthMin: 73,
-  shadow : "1px 1px 0px 1px #e1e1e1",
+  shadow: '1px 1px 0px 1px #e1e1e1',
 });
 
 

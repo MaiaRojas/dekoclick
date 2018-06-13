@@ -37,7 +37,7 @@ const styles = theme => ({
 });
 
 
-const checkDependencies = (unitid, unitSettings, courseProgressStats) =>
+const checkDependencies = (unitSettings, courseProgressStats) =>
   Object.keys(unitSettings.dependencies || {}).sort().reduce((memo, depPath) => {
     const [unitid, partid, formid] = depPath.split('/');
     const unitProgressStats = courseProgressStats.units[unitid] || { parts: {} };
@@ -92,7 +92,7 @@ const UnitCard = (props) => {
   const unitSettings = courseSettings.units[props.unit.id] || {};
   const courseProgressStats = props.courseProgressStats || { units: {} };
   const unitProgressStats = courseProgressStats.units[props.unit.id];
-  const depsCheck = checkDependencies(props.unit.id, unitSettings, courseProgressStats);
+  const depsCheck = checkDependencies(unitSettings, courseProgressStats);
 
   return (
     <Card

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import { firestoreConnect } from 'react-redux-firebase';
-import { CircularProgress } from 'material-ui/Progress';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import ScheduleIcon from 'material-ui-icons/Schedule';
@@ -159,7 +158,7 @@ export default compose(
       doc: courseid,
     },
   ]),
-  connect(({ firestore }, { auth, profile, match: { params: { cohortid, courseid } } }) => ({
+  connect(({ firestore }, { auth, match: { params: { cohortid, courseid } } }) => ({
     course: firestore.data[`cohorts/${cohortid}/courses`]
       ? firestore.data[`cohorts/${cohortid}/courses`][courseid]
       : undefined,

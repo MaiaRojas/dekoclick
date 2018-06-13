@@ -113,7 +113,6 @@ const processTypeFormUrls = (part, unitProgress, auth, profile, { params }, intl
 // );
 
 class UnitPart extends React.Component {
-
   componentDidMount() {
     if (partHasTypeforms(this.props.part)) {
       window.addEventListener('message', this.handleTypeformSubmit);

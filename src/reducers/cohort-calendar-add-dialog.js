@@ -29,6 +29,7 @@ const validTypes = ['classroom', 'webinar', 'interview', 'milestone', 'other'];
 
 
 export const validateCalendarEventField = (key, value, state) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
   switch (key) {
     case 'type':
       return {
@@ -37,13 +38,11 @@ export const validateCalendarEventField = (key, value, state) => {
           : null,
         sanitized: value,
       };
-    case 'title': {
-      const trimmed = (value || '').trim();
+    case 'title':
       return {
         err: (!trimmed) ? 'Title is required' : null,
         sanitized: trimmed,
       };
-    }
     case 'allDay':
       return {
         err: (typeof value !== 'boolean') ? 'allDay must be a boolean' : null,
@@ -135,49 +134,55 @@ const handleToggleAction = (state, payload) => {
 };
 
 
+const handleUpdateFieldAction = (state, action) => {
+  const { key, value } = action.payload;
+  const { err, sanitized } = validateCalendarEventField(key, value, state);
+  if (err) {
+    return {
+      ...state,
+      isValid: undefined,
+      data: { ...state.data, [key]: sanitized },
+      errors: { ...state.errors, [key]: err },
+    };
+  }
+  return {
+    ...state,
+    isValid: undefined,
+    data: { ...state.data, [key]: sanitized },
+    errors: !state.errors[key]
+      ? state.errors
+      : Object.keys(state.errors).reduce((memo, errorKey) => {
+        if (errorKey === key) {
+          return memo;
+        }
+        return { ...memo, [errorKey]: state.errors[errorKey] };
+      }, {}),
+  };
+};
+
+
+const handleValidateAndSubmitAction = (state) => {
+  const errors = Object.keys(state.data).reduce((memo, key) => {
+    const { err } = validateCalendarEventField(key, state.data[key], state);
+    return (err) ? { ...memo, [key]: err } : memo;
+  }, {});
+  return {
+    ...state,
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+};
+
+
 // Reducer
 export default (state = { ...initialState }, action = {}) => {
   switch (action.type) {
-    case TOGGLE: {
-      console.log(handleToggleAction(state, action.payload));
+    case TOGGLE:
       return handleToggleAction(state, action.payload);
-    }
-    case UPDATE_FIELD: {
-      const { key, value } = action.payload;
-      const { err, sanitized } = validateCalendarEventField(key, value, state);
-      if (err) {
-        return {
-          ...state,
-          isValid: undefined,
-          data: { ...state.data, [key]: sanitized },
-          errors: { ...state.errors, [key]: err },
-        };
-      }
-      return {
-        ...state,
-        isValid: undefined,
-        data: { ...state.data, [key]: sanitized },
-        errors: !state.errors[key]
-          ? state.errors
-          : Object.keys(state.errors).reduce((memo, errorKey) => {
-            if (errorKey === key) {
-              return memo;
-            }
-            return { ...memo, [errorKey]: state.errors[errorKey] };
-          }, {}),
-      };
-    }
-    case VALIDATE_AND_SUBMIT: {
-      const errors = Object.keys(state.data).reduce((memo, key) => {
-        const { err } = validateCalendarEventField(key, state.data[key], state);
-        return (err) ? { ...memo, [key]: err } : memo;
-      }, {});
-      return {
-        ...state,
-        isValid: Object.keys(errors).length === 0,
-        errors,
-      };
-    }
+    case UPDATE_FIELD:
+      return handleUpdateFieldAction(state, action);
+    case VALIDATE_AND_SUBMIT:
+      return handleValidateAndSubmitAction(state);
     case RESET:
       return { ...initialState };
     default:

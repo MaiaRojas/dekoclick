@@ -137,7 +137,11 @@ const CohortUser = (props) => {
           {props.profile.github &&
             <Typography>
               Github:&nbsp;
-              <a href={`https://github.com/${props.profile.github}`} target="_blank">
+              <a
+                href={`https://github.com/${props.profile.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {props.profile.github}
               </a>
             </Typography>}

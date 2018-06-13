@@ -17,7 +17,7 @@ import Course from './course';
 import Unit from './unit';
 import Loader from '../components/loader';
 
-// return (<CircularProgress />);
+
 const App = (props) => {
   if (!props.auth.isLoaded || !props.profile.isLoaded) {
     return (<Loader />);

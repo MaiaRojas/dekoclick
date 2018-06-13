@@ -39,7 +39,7 @@ const getLocale = (preferredLang, campuses) => {
   const pathnameParts = window.location.pathname.split('/').slice(1);
   if (pathnameParts[0] === 'signup') {
     const campusid = (pathnameParts[1] || '').split('-')[0];
-    const campus = campuses.find(campus => campus.id === campusid);
+    const campus = campuses.find(item => item.id === campusid);
     if (campus && campus.locale) {
       if (messages[campus.locale]) {
         return campus.locale;
@@ -90,7 +90,7 @@ Intl.defaultProps = {
 
 
 export default compose(
-  firestoreConnect(props => [{ collection: 'campuses' }]),
+  firestoreConnect(() => [{ collection: 'campuses' }]),
   connect(({ firestore }) => ({
     campuses: firestore.ordered.campuses,
   })),

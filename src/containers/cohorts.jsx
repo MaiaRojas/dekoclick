@@ -177,9 +177,9 @@ const Cohorts = (props) => {
               </Tooltip>
               <Tooltip
                 placement="left"
-                title={(Object.keys(cohort.coursesIndex || {}).length > 0 || cohort.usersCount > 0) ?
-                  'Antes de borrar un cohort debes borrar sus cursos y miembros' :
-                  'Borrar cohort'
+                title={(Object.keys(cohort.coursesIndex || {}).length > 0 || cohort.usersCount > 0)
+                  ? 'Antes de borrar un cohort debes borrar sus cursos y miembros'
+                  : 'Borrar cohort'
                 }
               >
                 <div>
@@ -190,7 +190,7 @@ const Cohorts = (props) => {
                     }
                     onClick={() =>
                       window.confirm(`Estás segura de que quieres borrar el cohort ${cohort.id}?`) &&
-                        props.firestore.firestore()
+                        props.firebase.firestore()
                           .doc(`cohorts/${cohort.id}`)
                           .delete()
                           .catch(console.error)
@@ -230,7 +230,7 @@ Cohorts.propTypes = {
     appBarShift: PropTypes.string.isRequired,
   }).isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  firestore: PropTypes.shape({
+  firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
   }).isRequired,
   drawerOpen: PropTypes.bool,
