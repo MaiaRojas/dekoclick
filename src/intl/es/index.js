@@ -23,6 +23,8 @@ export default {
   'main-nav.settings': 'Configuración',
   'main-nav.signout': 'Cerrar sesión',
 
+  'cohort.title': 'Grupo de trabajo',
+
   'courses.title': 'Mis Cursos',
   'courses.noCoursesWarning': [
     'Hmmm... parece que todavía no hay ningún curso asociado a',
@@ -30,14 +32,14 @@ export default {
     'training manager para verificar tu cuenta.',
   ].join(' '),
 
-  'course-card.units': '{count, plural, =0 { sin unidades } one {# unidad} other {# unidades}}',
+  'course-card.units': '{count, plural, =0 { Sin Unidades } one {# Unidad} other {# Unidades}}',
   'course-card.estimatedDuration': 'Duración estimada',
   'course-card.start': 'Empezar',
   'course-card.continue': 'Continuar',
   'course-list.content': 'Este cohort no contiene cursos asignados.',
 
   'unit-card.unit': 'Unidad',
-  'unit-card.parts': '{count, plural, =0 { sin partes } one {# parte} other {# partes}}',
+  'unit-card.parts': '{count, plural, =0 { Sin partes } one {# Parte} other {# Partes}}',
   'unit-card.estimatedDuration': 'Duración estimada',
   'unit-card.start': 'Empezar',
   'unit-card.continue': 'Continuar',

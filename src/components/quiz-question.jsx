@@ -12,7 +12,7 @@ import Content from './content';
 
 const styles = theme => ({
   paper: {
-    padding: theme.spacing.unit * 3 ,
+    padding: `${theme.spacing.unit * 1}px  ${theme.spacing.unit * 3}px`,
     boxShadow: 'none',
   },
   passes: {
@@ -23,9 +23,6 @@ const styles = theme => ({
     color: red[500],
     fontWeight: 'bold',
   },
-  description: {
-    padding: theme.spacing.unit,
-  }
 });
 
 
@@ -45,7 +42,7 @@ const QuizQuestion = props => (
   <Paper className={props.classes.paper}>
     <FormControl component="fieldset" required>
       <FormLabel component="legend">{props.question.title}</FormLabel>
-      <Content className={props.classes.description} html={props.question.description} />
+      <Content html={props.question.description} />
       {props.question.solution.length > 1 ?
         <QuizQuestionMulti {...props} labelClassName={labelClassName(props)} /> :
         <QuizQuestionSingle {...props} labelClassName={labelClassName(props)} />

@@ -14,8 +14,9 @@ import UnitCardAdmin from './unit-card-admin';
 
 const styles = theme => ({
   card: {
-    marginBottom: theme.spacing.unit * 4,
+    margin: `${theme.spacing.unit * 3}px auto`,
     boxShadow: theme.shadow,
+    maxWidth: theme.maxContentWidth,
   },
   cardContent: {
     position: 'relative',

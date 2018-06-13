@@ -30,9 +30,9 @@ const styles = theme => ({
   startButton: {
     marginTop: theme.spacing.unit,
   },
-  content: {
-    marginBottom: theme.spacing.unit * 4,
-  },
+  // content: {
+  //   marginBottom: theme.spacing.unit * 4,
+  // },
 });
 
 

@@ -10,11 +10,9 @@ import PartTitle from './part-title';
 
 const styles = theme => ({
   root: {
-    // width: '100%',
     maxWidth: theme.maxContentWidth,
     height: '100%',
     margin: '0 auto',
-    // padding: theme.spacing.unit * 4,
     background: '#fff',
   },
   meta: {
@@ -24,6 +22,9 @@ const styles = theme => ({
   },
   metaChip: {
     marginRight: theme.spacing.unit / 2,
+  },
+  content: {
+    padding: theme.spacing.unit * 4,
   },
 });
 
@@ -151,7 +152,9 @@ class UnitPart extends React.Component {
           />
         }
         {part.body && (
-          <Content html={processTypeFormUrls(part, unitProgress, auth, profile, match, intl)} />
+          <div className={classes.content}>
+            <Content html={processTypeFormUrls(part, unitProgress, auth, profile, match, intl)} />
+          </div>
         )}
       </div>
     );

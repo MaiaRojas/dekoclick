@@ -23,6 +23,8 @@ export default {
   'main-nav.settings': 'Settings',
   'main-nav.signout': 'Sign out',
 
+  'cohort.title': 'Workgroup',
+
   'courses.title': 'Courses',
   'courses.noCoursesWarning': [
     'It looks like no courses are associated to your account. If you think',
@@ -30,7 +32,7 @@ export default {
     'to verify your account.',
   ].join(' '),
 
-  'course-card.units': '{count, plural, =0 { no units } one {# unit} other {# units}}',
+  'course-card.units': '{count, plural, =0 { No units } one {# Unit} other {# Units}}',
   'course-card.estimatedDuration': 'Estimated duration',
   'course-card.start': 'Start',
   'course-card.continue': 'Continue',
@@ -38,7 +40,7 @@ export default {
 
 
   'unit-card.unit': 'Unit',
-  'unit-card.parts': '{count, plural, =0 { no parts } one {# part} other {# parts}}',
+  'unit-card.parts': '{count, plural, =0 { No parts } one {# Part} other {# Parts}}',
   'unit-card.estimatedDuration': 'Estimated duration',
   'unit-card.start': 'Start',
   'unit-card.continue': 'Continue',
