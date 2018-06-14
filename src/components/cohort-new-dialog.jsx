@@ -18,6 +18,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Switch from 'material-ui/Switch';
 import {
+  setInProgressCohortNewDialog,
   toggleCohortNewDialog,
   updateCohortNewDialogCampus,
   updateCohortNewDialogProgram,
@@ -268,49 +269,60 @@ const validate = (props) => {
 };
 
 
-const CohortNewDialog = ({ classes, ...props }) => (
-  <div className={classes.container}>
-    <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
-      <DialogTitle>
-        {isNewCohort(props.cohorts, props.cohortKey) ? 'New cohort' : 'Update cohort'}
-      </DialogTitle>
-      {props.cohortKey ?
-        <CohortNewDialogConfirm classes={classes} {...props} /> :
-        <CohortNewDialogForm classes={classes} {...props} />
-      }
-      <DialogActions>
-        <Button onClick={props.toggleCohortNewDialog} color="default">
-          Cancel
-        </Button>
-        <Button
-          variant="raised"
-          color="primary"
-          onClick={() => {
-            const { cohort, errors } = validate(props);
+class CohortNewDialog extends React.Component {
+  shouldComponentUpdate({ isInProgress, cohortKey }) {
+    return !(isInProgress && cohortKey);
+  }
 
-            if (errors && errors.length) {
-              return props.updateCohortNewDialogErrors(errors);
-            }
+  render() {
+    const { classes, ...props } = this.props;
+    return (
+      <div className={classes.container}>
+        <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
+          <DialogTitle>
+            {isNewCohort(props.cohorts, props.cohortKey) ? 'New cohort' : 'Update cohort'}
+          </DialogTitle>
+          {props.cohortKey ?
+            <CohortNewDialogConfirm classes={classes} {...props} /> :
+            <CohortNewDialogForm classes={classes} {...props} />
+          }
+          <DialogActions>
+            <Button onClick={props.toggleCohortNewDialog} color="default">
+              Cancel
+            </Button>
+            <Button
+              variant="raised"
+              color="primary"
+              onClick={() => {
+                const { cohort, errors } = validate(props);
 
-            props.updateCohortNewDialogErrors([]);
+                if (errors && errors.length) {
+                  return props.updateCohortNewDialogErrors(errors);
+                }
 
-            if (!props.cohortKey) {
-              return props.updateCohortNewDialogKey(cohort.key);
-            }
+                props.updateCohortNewDialogErrors([]);
 
-            return props.firebase.firestore()
-              .collection('cohorts')
-              .doc(props.cohortKey)
-              .set(cohort.value)
-              .then(props.resetCohortNewDialog, console.error);
-          }}
-        >
-          {isNewCohort(props.cohorts, props.cohortKey) ? 'Create' : 'Update'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  </div>
-);
+                if (!props.cohortKey) {
+                  return props.updateCohortNewDialogKey(cohort.key);
+                }
+
+                props.setInProgressCohortNewDialog();
+
+                return props.firebase.firestore()
+                  .collection('cohorts')
+                  .doc(props.cohortKey)
+                  .set(cohort.value)
+                  .then(props.resetCohortNewDialog, console.error);
+              }}
+            >
+              {isNewCohort(props.cohorts, props.cohortKey) ? 'Create' : 'Update'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+}
 
 
 CohortNewDialog.propTypes = {
@@ -322,6 +334,7 @@ CohortNewDialog.propTypes = {
   updateCohortNewDialogErrors: PropTypes.func.isRequired,
   updateCohortNewDialogKey: PropTypes.func.isRequired,
   resetCohortNewDialog: PropTypes.func.isRequired,
+  isInProgress: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}).isRequired,
   firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
@@ -341,10 +354,12 @@ const mapStateToProps = ({ firestore, cohortNewDialog }) => ({
   end: cohortNewDialog.end,
   errors: cohortNewDialog.errors,
   cohortKey: cohortNewDialog.key,
+  isInProgress: cohortNewDialog.isInProgress,
 });
 
 
 const mapDispatchToProps = {
+  setInProgressCohortNewDialog,
   toggleCohortNewDialog,
   updateCohortNewDialogCampus,
   updateCohortNewDialogProgram,
