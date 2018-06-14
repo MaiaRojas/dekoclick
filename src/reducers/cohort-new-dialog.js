@@ -15,7 +15,7 @@ const RESET = 'lms.laboratoria.la/cohortNewDialog/RESET';
 
 
 // Action Creators
-export const setInProgress = () => ({
+export const setInProgressCohortNewDialog = () => ({
   type: SET_IN_PROGRESS,
 });
 
