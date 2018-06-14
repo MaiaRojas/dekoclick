@@ -1,4 +1,6 @@
 // Action types
+
+const SET_IN_PROGRESS = 'lms.laboratoria.la/cohortNewDialog/SET_IN_PROGRESS';
 const TOGGLE = 'lms.laboratoria.la/cohortNewDialog/TOGGLE';
 const UPDATE_CAMPUS = 'lms.laboratoria.la/cohortNewDialog/UPDATE_CAMPUS';
 const UPDATE_PROGRAM = 'lms.laboratoria.la/cohortNewDialog/UPDATE_PROGRAM';
@@ -13,6 +15,10 @@ const RESET = 'lms.laboratoria.la/cohortNewDialog/RESET';
 
 
 // Action Creators
+export const setInProgressCohortNewDialog = () => ({
+  type: SET_IN_PROGRESS,
+});
+
 export const toggleCohortNewDialog = () => ({
   type: TOGGLE,
 });
@@ -79,12 +85,15 @@ const initialState = {
   end: (new Date()).toISOString().slice(0, 10),
   errors: {},
   key: '',
+  isInProgress: false,
 };
 
 
 // Reducer
 export default (state = { ...initialState }, action = {}) => {
   switch (action.type) {
+    case SET_IN_PROGRESS:
+      return { ...state, isInProgress: true };
     case TOGGLE:
       return { ...state, open: !state.open, key: '' };
     case UPDATE_CAMPUS:
