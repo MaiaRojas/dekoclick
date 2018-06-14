@@ -18,7 +18,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Switch from 'material-ui/Switch';
 import {
-  setInProgress,
+  setInProgressCohortNewDialog,
   toggleCohortNewDialog,
   updateCohortNewDialogCampus,
   updateCohortNewDialogProgram,
@@ -306,7 +306,7 @@ class CohortNewDialog extends React.Component {
                   return props.updateCohortNewDialogKey(cohort.key);
                 }
 
-                props.setInProgress();
+                props.setInProgressCohortNewDialog();
 
                 return props.firebase.firestore()
                   .collection('cohorts')
@@ -359,7 +359,7 @@ const mapStateToProps = ({ firestore, cohortNewDialog }) => ({
 
 
 const mapDispatchToProps = {
-  setInProgress,
+  setInProgressCohortNewDialog,
   toggleCohortNewDialog,
   updateCohortNewDialogCampus,
   updateCohortNewDialogProgram,
