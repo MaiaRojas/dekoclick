@@ -8,7 +8,6 @@ import Checkbox from 'material-ui/Checkbox';
 const styles = theme => ({
   root: {
     width: '100%',
-    // maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
 });
@@ -53,13 +52,10 @@ class CheckboxList extends React.Component {
     this.clearLifeSkill = (authorUid) => {
       this.props.firebase.firestore().collection('users').doc(this.props.uid).get()
         .then((doc) => {
-          const data = doc.data();
-          const [lifeSkills] = data;
+          const { lifeSkills } = doc.data();
           if (lifeSkills) {
             Object.keys(lifeSkills).forEach((skillKeyName) => {
-              // const lifeSkill = lifeSkills[skillKeyName];
-
-              if (data.lifeSkills[skillKeyName][authorUid]) {
+              if (lifeSkills[skillKeyName][authorUid]) {
                 const columnName = `lifeSkills/${skillKeyName}/${authorUid}`;
                 const fieldStructure = columnName.split('/').join('.');
                 this.props.firebase.firestore().collection('users').doc(this.props.uid)

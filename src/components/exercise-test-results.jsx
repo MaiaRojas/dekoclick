@@ -22,6 +22,9 @@ const styles = theme => ({
     color: '#fff',
     backgroundColor: red[500],
   },
+  secondary: {
+    color: theme.palette.text.primary,
+  },
 });
 
 
@@ -34,6 +37,7 @@ const Test = props => (
       <Avatar className={props.classes.redAvatar}><ErrorIcon /></Avatar>
     }
     <ListItemText
+      classes={{ secondary: props.classes.secondary }}
       primary={props.test.title}
       secondary={props.test.err ? props.test.err : 'ok'}
     />
@@ -50,6 +54,7 @@ Test.propTypes = {
   classes: PropTypes.shape({
     greenAvatar: PropTypes.string.isRequired,
     redAvatar: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
   }).isRequired,
 };
 

@@ -21,13 +21,11 @@ const styles = theme => ({
   },
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    borderTop: '1px solid white',
-    // minHeight: '90px',
+    borderTop: '1px solid #f7f7f7',
   },
   listItemIcon: {
     color: theme.palette.common.white,
+    marginLeft: theme.spacing.unit,
   },
   primary: {
     fontWeight: 700,
@@ -37,9 +35,8 @@ const styles = theme => ({
   },
   logout: {
     display: 'flex',
-    height: '90px',
-    position: 'absolute',
-    bottom: 0,
+    minHeight: '90px',
+    position: 'relative',
     width: '100%',
   },
 });
@@ -76,7 +73,6 @@ const UnitNav = ({
     history={history}
   >
     <List disablePadding className={classes.list}>
-      {/* <Divider className={classes.divider} /> */}
       {parts.map((part, idx) =>
         (<UnitNavItem
           key={part.id}
@@ -100,7 +96,6 @@ const UnitNav = ({
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText
-          // className="unitNav-text"
           classes={{ primary: classes.primary }}
           primary={<FormattedMessage id="main-nav.signout" />}
         />

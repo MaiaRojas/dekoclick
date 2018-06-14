@@ -53,46 +53,50 @@ const getUnitOrder = (unit, match) => {
 };
 
 
-const PartTitle = ({ classes, unit, type }) => (
-  <Card className={classes.card}>
-    <CardContent className={classes.cardContent}>
-      <ListItem>
-        { type === 'self-assessment' &&
+const isTrackedPart = type => type !== 'self-assessment' && type !== 'quiz';
+
+const getTitle = (type, unit) => {
+  if(isTrackedPart(type)){
+    return {
+      primary: `${unit.part.title}`,
+      secondary: `Unidad ${getUnitOrder(unit.unit, unit.match)}`,
+    }
+  }
+  if(type === 'self-assessment'){
+    return {
+      secondary: <FormattedMessage id="self-assessment.title" />,
+      primary: "Feedback"
+    }
+  }
+  if (type === 'quiz'){
+    return {
+      secondary: <FormattedMessage id="quiz.title" />,
+      primary: "Quiz"
+    }
+  }
+}
+
+const PartTitle = ({ classes, unit, type }) => {
+  const { primary, secondary } = getTitle(type, unit);
+  return(
+    <Card className={classes.card}>
+      <CardContent className={classes.cardContent}>
+        <ListItem>
           <ListItemText
             classes={{
               root: classes.root,
               primary: classes.primary,
               secondary: classes.secondary,
             }}
-            secondary={<FormattedMessage id="self-assessment.title" />}
-            primary="Feedback"
-          /> }
-        { type !== 'quiz' && type !== 'self-assessment' &&
-          <ListItemText
-            classes={{
-              root: classes.root,
-              primary: classes.primary,
-              secondary: classes.secondary,
-            }}
-            secondary={`Unidad ${getUnitOrder(unit.unit, unit.match)}`}
-            primary={`${unit.part.title}`}
-          />
-        }
-        { type === 'quiz' &&
-          <ListItemText
-            classes={{
-              root: classes.root,
-              primary: classes.primary,
-              secondary: classes.secondary,
-            }}
-            secondary="Quiz"
-            primary={<FormattedMessage id="quiz.title" />}
-          />}
-      </ListItem>
-    </CardContent>
-    { type !== 'self-assessment' && type !== 'quiz' && <Progress value={(unit.unitProgressStats || {}).percent || 0} /> }
-  </Card>
-);
+            secondary={secondary}
+            primary={primary}
+            />
+        </ListItem>
+      </CardContent>
+      { isTrackedPart(type) && <Progress value={(unit.unitProgressStats || {}).percent || 0} /> }
+    </Card>
+  )
+};
 
 
 PartTitle.propTypes = {

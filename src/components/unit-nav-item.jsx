@@ -43,15 +43,10 @@ const styles = theme => ({
   inactive: {
     opacity: 0.7,
   },
-  read: {
-    fontWeight: 500,
-  },
-  unread: {
-    fontWeight: 500,
-  },
   icon: {
     color: theme.palette.text.secondary,
     opacity: 'inherit',
+    marginLeft: theme.spacing.unit,
   },
 });
 
@@ -75,11 +70,11 @@ const partTypeToIcon = (type) => {
 
 const progressToIcon = (part, partProgress, partProgressStats) => {
   if (partProgressStats && partProgressStats.completed === 1) {
-    return <DoneIcon className="progress-icon" />;
+    return <DoneIcon style={{ color: '#56f89a' }} />;
   } else if (part.type === 'quiz' && partProgress && partProgress.startedAt && !partProgress.results) {
-    return <TimerIcon className="progress-icon" />;
+    return <TimerIcon style={{ color: '#56f89a' }} />;
   } else if (part.type === 'practice' && part.exercises && partProgressStats && partProgressStats && partProgressStats.completed) {
-    return <WarningIcon className="progress-icon" />;
+    return <WarningIcon style={{ color: '#56f89a' }} />;
   }
   return null;
 };
@@ -87,10 +82,10 @@ const progressToIcon = (part, partProgress, partProgressStats) => {
 
 const isOpenMenu = (props) => {
   if (props.partid === props.match.params.partid && props.drawerOpen) {
-    return 'selectorActive open';
+    return 'triangle expanded';
   }
   if (props.partid === props.match.params.partid) {
-    return 'selectorActive close';
+    return 'triangle collapsed';
   }
   return '';
 };
@@ -112,12 +107,6 @@ const UnitNavItem = props => (
       classes={{
         root: props.classes.root,
         primary: props.classes.primary,
-        // primary: classNames(
-        //   props.classes.primary,
-        //   (props.partProgress || {}).openedAt
-        //     ? props.classes.read
-        //     : props.classes.unread,
-        // ),
         secondary: props.classes.secondary,
       }}
       primary={`${props.part.title}`}
@@ -143,8 +132,6 @@ UnitNavItem.propTypes = {
   partid: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     active: PropTypes.string.isRequired,
-    read: PropTypes.string.isRequired,
-    unread: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     root: PropTypes.string.isRequired,
     primary: PropTypes.string.isRequired,

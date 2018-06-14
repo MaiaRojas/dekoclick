@@ -23,8 +23,7 @@ const styles = theme => ({
   },
   headline: {
     marginBottom: theme.spacing.unit * 2,
-    color: theme.palette.secondary.main,
-    textTransform: 'uppercase',
+    color: theme.palette.text.primary,
   },
   headingButton: {
     top: theme.spacing.unit * -1,
@@ -83,7 +82,7 @@ const CoursesList = ({
     >
       <div className={classes.heading}>
         <Typography variant="subheading" gutterBottom className={classes.headline}>
-          {cohort.id}
+          <FormattedMessage id="cohort.title" /> {': '}{cohort.id}
         </Typography>
         {canManageCourse && (
           <IconButton

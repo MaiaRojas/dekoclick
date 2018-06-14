@@ -21,6 +21,8 @@ export default {
   'main-nav.courses': 'Meus cursos',
   'main-nav.settings': 'Configurações',
   'main-nav.signout': 'Sair',
+  
+  'cohort.title': 'Grupo de trabalho',
 
   'courses.title': 'Cursos',
   'courses.noCoursesWarning': [
@@ -29,14 +31,14 @@ export default {
     'contato para que possamos verificar.',
   ].join(' '),
 
-  'course-card.units': '{count, plural, =0 { sin unidades } one {# unidad} other {# unidades}}',
+  'course-card.units': '{count, plural, =0 { Sin unidades } one {# Unidad} other {# Unidades}}',
   'course-card.estimatedDuration': 'Duração estimada',
   'course-card.start': 'Começar',
   'course-card.continue': 'Continuar',
   'course-list.content': 'Esta coorte não contém cursos atribuídos.',
 
   'unit-card.unit': 'Unidade',
-  'unit-card.parts': '{count, plural, =0 { sin partes } one {# parte} other {# partes}}',
+  'unit-card.parts': '{count, plural, =0 { Sin partes } one {# Parte} other {# Partes}}',
   'unit-card.estimatedDuration': 'Duração estimada',
   'unit-card.start': 'Começar',
   'unit-card.continue': 'Continuar',

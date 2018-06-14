@@ -12,8 +12,7 @@ import Content from './content';
 
 const styles = theme => ({
   paper: {
-    // padding: theme.spacing.unit * 3 ,
-    padding: `${theme.spacing.unit * 1.5}px ${theme.spacing.unit * 0}px`,
+    padding: `${theme.spacing.unit * 1}px  ${theme.spacing.unit * 3}px`,
     boxShadow: 'none',
   },
   passes: {

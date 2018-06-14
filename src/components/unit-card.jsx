@@ -14,8 +14,9 @@ import UnitCardAdmin from './unit-card-admin';
 
 const styles = theme => ({
   card: {
-    marginBottom: theme.spacing.unit * 4,
+    margin: `${theme.spacing.unit * 3}px auto`,
     boxShadow: theme.shadow,
+    maxWidth: theme.maxContentWidth,
   },
   cardContent: {
     position: 'relative',
@@ -139,9 +140,7 @@ const UnitCard = (props) => {
           </div>
         )}
         <div className={props.classes.count}>
-          <Typography className={props.classes.countText}>
-            |
-          </Typography>
+          <Typography className={props.classes.countText}>|</Typography>
         </div>
         {props.unit.stats && props.unit.stats.durationString &&
           <div className={props.classes.count}>

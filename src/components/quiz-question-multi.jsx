@@ -7,7 +7,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 const styles = theme => ({
   formGroup: {
-    margin: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit,
   },
 });
 

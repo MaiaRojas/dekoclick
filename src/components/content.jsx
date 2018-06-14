@@ -15,7 +15,6 @@ const styles = theme => ({
     fontWeightRegular: theme.typography.fontWeightRegular,
     maxWidth: theme.maxContentWidth,
     margin: '0 auto',
-    padding: theme.spacing.unit * 4,
   },
 });
 

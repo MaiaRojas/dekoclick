@@ -7,7 +7,7 @@ import Radio, { RadioGroup } from 'material-ui/Radio';
 
 const styles = theme => ({
   formGroup: {
-    margin: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit,
   },
 });
 

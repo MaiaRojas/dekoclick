@@ -366,7 +366,7 @@ SignIn.propTypes = {
   signup: PropTypes.bool.isRequired,
   cohortid: PropTypes.string,
   cohort: PropTypes.shape({
-    publicAdmission: PropTypes.string,
+    publicAdmission: PropTypes.bool,
   }),
   campuses: PropTypes.arrayOf(PropTypes.shape({})),
   updateSignInField: PropTypes.func.isRequired,

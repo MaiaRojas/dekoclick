@@ -48,12 +48,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    // padding: '0 8px',
     borderBottom: '1px solid #f7f7f7',
-    // [theme.breakpoints.up('md')]: {
-    //   height: 90,
-    // },
-    // ...theme.mixins.toolbar,
   },
   root: {
     display: 'flex',
@@ -71,11 +66,11 @@ const styles = theme => ({
     color: '#f1f1f1',
     fontSize: '14px',
   },
-  logoLarge: {
+  logoLg: {
     height: 85,
     display: 'block',
   },
-  logoShort: {
+  logoXs: {
     height: 45,
     display: 'block',
     margin: 'auto',
@@ -139,25 +134,22 @@ LeftDrawerUnit.propTypes = {
 const LeftDrawerMain = ({
   classes,
   drawerOpen,
-}) => (
-  <div className={classes.toolbar}>
-    <ListItem className={classes.center}>
-      { drawerOpen ?
-        (<img
-          alt="Laboratoria, código que transforma"
-          className={classes.logoLarge}
-          src="/img/logo.png"
-        />)
-        : (
-          <img
-            alt="Laboratoria, código que transforma"
-            className={classes.logoShort}
-            src="/img/menu+logo.png"
-          />
-      )}
-    </ListItem>
-  </div>
-);
+}) => {
+  const { className, src } = drawerOpen ?
+    { className: classes.logoLg, src: '/img/logo.png' } :
+    { className: classes.logoXs, src: '/img/menu+logo.png' };
+  return (
+    <div className={classes.toolbar}>
+      <ListItem className={classes.center}>
+        <img
+          alt="Laboratoria, talento que transforma"
+          className={className}
+          src={src}
+        />
+      </ListItem>
+    </div>
+  );
+};
 
 
 LeftDrawerMain.propTypes = {
@@ -217,8 +209,8 @@ LeftDrawer.propTypes = {
     drawerPaper: PropTypes.string.isRequired,
     drawerPaperClose: PropTypes.string.isRequired,
     toolbar: PropTypes.string.isRequired,
-    logoLarge: PropTypes.string.isRequired,
-    logoShort: PropTypes.string.isRequired,
+    logoLg: PropTypes.string.isRequired,
+    logoXs: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     center: PropTypes.string.isRequired,
   }).isRequired,

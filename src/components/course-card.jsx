@@ -30,9 +30,8 @@ const styles = theme => ({
     },
   },
   cardActions: {
-    // justifyContent: 'space-between',
     flexWrap: 'wrap',
-    height: 120,
+    height: 130,
   },
   count: {
     display: 'flex',
@@ -41,7 +40,7 @@ const styles = theme => ({
   countText: {
     display: 'inline-block',
     marginLeft: 6,
-    fontWeight: 700,
+    fontWeight: 500,
   },
   cardContent: {
     backgroundColor: theme.palette.primary.main,
@@ -49,6 +48,10 @@ const styles = theme => ({
   },
 });
 
+const getSummary = (elem) => {
+  const newSummary = elem.slice(0, 160).split('').reverse().join('');
+  return newSummary.slice(newSummary.search(' ')).split('').reverse().join('');
+};
 
 const CourseCard = props => (
   <Card
@@ -59,15 +62,20 @@ const CourseCard = props => (
     component={Link}
   >
     <CardContent className={props.classes.cardContent}>
-      <Typography variant="title">
+      <Typography variant="title" style={{ fontSize: '1.2rem', lineHeight: '1.5rem' }}>
         {props.course.title}
       </Typography>
     </CardContent>
-    <Progress value={props.progress && props.progress.percent ? props.progress.percent : 0} />
+    <Progress value={props.progress && props.progress.percent || 0} />
     <CardActions className={props.classes.cardActions}>
+      <Typography
+        style={{ marginLeft: '6px' }}
+        paragraph
+        component="p"
+        dangerouslySetInnerHTML={{ __html: `${getSummary(props.course.description)}...` }}
+      />
       {props.course.stats && props.course.stats.unitCount && (
         <div className={props.classes.count}>
-          {/* <FolderIcon /> */}
           <Typography className={props.classes.countText}>
             <FormattedMessage
               id="course-card.units"
@@ -77,13 +85,10 @@ const CourseCard = props => (
         </div>
       )}
       <div className={props.classes.count}>
-        <Typography className={props.classes.countText}>
-          |
-        </Typography>
+        <Typography className={props.classes.countText}>|</Typography>
       </div>
       {props.course.stats && props.course.stats.durationString &&
         <div className={props.classes.count}>
-          {/* <ScheduleIcon /> */}
           <Typography className={props.classes.countText}>
             {props.course.stats.durationString}
           </Typography>
@@ -98,6 +103,7 @@ CourseCard.propTypes = {
   course: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     stats: PropTypes.shape({
       durationString: PropTypes.string.isRequired,
       unitCount: PropTypes.number.isRequired,
