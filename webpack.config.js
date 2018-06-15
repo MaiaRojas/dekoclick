@@ -141,7 +141,7 @@ module.exports = env => {
       new UglifyJSPlugin(),
       new FaviconsWebpackPlugin({
         logo: './img/favicon.png',
-        background: '#f7b617',
+        background: '#ffe521',
         title: 'Laboratoria LMS',
       }),
     ].concat(config.plugins);

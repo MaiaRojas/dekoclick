@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
-import green from 'material-ui/colors/green';
-import yellow from 'material-ui/colors/yellow';
 import { FormattedMessage } from 'react-intl';
 
 
@@ -18,14 +16,6 @@ const styles = theme => ({
   body: {
     marginRight: theme.spacing.unit * 2,
   },
-  green: {
-    backgroundColor: green[500],
-    color: theme.palette.text.secondary,
-  },
-  yellow: {
-    backgroundColor: yellow[500],
-    color: '#333333',
-  },
   grey: {
     backgroundColor: '#bdbdbd',
     color: theme.palette.text.primary,
@@ -38,14 +28,12 @@ const styles = theme => ({
 const QuizResults = ({ results, classes }) => {
   const percent = Math.floor((results.passes / results.total) * 100);
 
-  const colorClass = classes.grey;
-
   return (
-    <Paper className={`${classes.root} ${colorClass}`}>
-      <Typography variant="body1" className={`${classes.body} ${colorClass}`}>
+    <Paper className={`${classes.root} ${classes.grey}`}>
+      <Typography variant="body1" className={`${classes.body} ${classes.grey}`}>
         <FormattedMessage id="quiz-results.score" />
       </Typography>
-      <Typography variant="display1" className={colorClass}>
+      <Typography variant="display1" className={classes.grey}>
         {`${percent}%`}
       </Typography>
     </Paper>

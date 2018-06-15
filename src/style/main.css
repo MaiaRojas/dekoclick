@@ -70,9 +70,11 @@ label ,legend {
   color: #000000 !important;
   font-weight: bold !important;
 }
+
 span > span {
   color: #000000;
 }
+
 .app {
   width: 100%;
   display: flex;
@@ -87,16 +89,8 @@ span > span {
   min-height: 100vh;
 }
 
-.progress-icon {
-  color: #ffffff;
-}
 
-.linea-progress {
-  background-color: #fafafa !important;
-  height: 15px !important;
-}
-
-.linea-progress div {
+.linear-progress div {
   background-image: -webkit-repeating-linear-gradient(75deg, transparent, transparent 1px, rgba(255,255,255,.5) 1px, rgba(255,255,255,.5) 2px);
   background-image: -moz-repeating-linear-gradient(75deg, transparent, transparent 1px, rgba(255,255,255,.5) 1px, rgba(255,255,255,.5) 2px);
 }

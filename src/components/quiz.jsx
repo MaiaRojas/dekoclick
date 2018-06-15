@@ -31,9 +31,6 @@ const styles = theme => ({
   startButton: {
     marginTop: theme.spacing.unit,
   },
-  // content: {
-  //   marginBottom: theme.spacing.unit * 4,
-  // },
 });
 
 
@@ -148,7 +145,7 @@ const Quiz = (props) => {
   return (
     <div className={classes.root}>
       <PartTitle unit={unit} type={part.type} />
-      <div className={classes.content}>
+      <div>
         {progress.results && <QuizResults results={progress.results} />}
         {part.questions.map((question, idx) =>
           (<QuizQuestion
@@ -197,7 +194,6 @@ Quiz.propTypes = {
     root: PropTypes.string.isRequired,
     p: PropTypes.string.isRequired,
     startButton: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
   }).isRequired,
   startQuiz: PropTypes.bool.isRequired,
   resetQuizConfirmationDialog: PropTypes.func.isRequired,

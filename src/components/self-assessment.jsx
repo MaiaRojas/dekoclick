@@ -24,11 +24,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
   },
   headline: {
-    // margin: `${theme.spacing.unit * 4}px 0px`,
     fontWeight: 'bold',
   },
   paper: {
-    // padding: theme.spacing.unit * 3,
     boxShadow: 'none',
     marginBottom: theme.spacing.unit * 4,
   },
@@ -139,7 +137,7 @@ class SelfAssessment extends React.Component {
 
     updateProgress(
       this.props.firestore,
-      this.props.firestore.auth().currentUser.uid,
+      this.props.firebase.auth().currentUser.uid,
       this.props.match.params.cohortid,
       this.props.match.params.courseid,
       this.props.match.params.unitid,
@@ -167,7 +165,7 @@ class SelfAssessment extends React.Component {
         <div className={classes.root}>
           <Typography variant="headline" gutterBottom className={classes.headline}>
             <FormattedMessage id="self-assessment.submittedOn" /> {' '}
-            <FormattedDate value={progress.submittedAt} />
+            <FormattedDate value={progress.submittedAt.toDate()} />
           </Typography>
           <Typography variant="subheading" gutterBottom>
             1. <FormattedMessage id="self-assessment.sentiment" />
@@ -329,14 +327,15 @@ class SelfAssessment extends React.Component {
 
 
 SelfAssessment.propTypes = {
-  // unit: PropTypes.shape({}).isRequired,
   parts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   progress: PropTypes.shape({}),
   firestore: PropTypes.shape({
-    auth: PropTypes.func.isRequired,
     get: PropTypes.func.isRequired,
     set: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
+  }).isRequired,
+  firebase: PropTypes.shape({
+    auth: PropTypes.func.isRequired,
   }).isRequired,
   classes: PropTypes.shape({
     sentimentIcon: PropTypes.string.isRequired,

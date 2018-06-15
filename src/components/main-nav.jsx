@@ -56,6 +56,9 @@ const styles = theme => ({
   },
   signoutBtn: {
     backgroundColor: theme.palette.common.black,
+    minHeight: '90px',
+    padding: theme.spacing.unit * 2,
+    borderTop: '1px solid #f1f1f1',
   },
   divider: {
     backgroundColor: theme.palette.background.default,
@@ -104,15 +107,13 @@ const getEmail = (auth, profile) =>
 const isActive = ({ match }, container) => {
   switch (container) {
     case 'dashboard':
-      return match.path === '/' ? true : false;
+      return match.path === '/';
     case 'courses':
-      return match.path === '/courses' || /^\/cohorts\/[^/]+\/courses/.test(match.path) ?
-      true : false;
+      return match.path === '/courses' || /^\/cohorts\/[^/]+\/courses/.test(match.path);
     case 'cohorts':
-      return match.path === '/cohorts' || /^\/cohorts\/[^/]+$/.test(match.path) ?
-      true : false;
+      return match.path === '/cohorts' || /^\/cohorts\/[^/]+$/.test(match.path);
     case 'settings':
-      return match.path === '/settings' ? true : false;
+      return match.path === '/settings';
     default:
       return '';
   }
@@ -210,7 +211,6 @@ const MainNav = props => (
           button
           className={props.classes.signoutBtn}
           onClick={() => props.firebase.logout()}
-          style={{ minHeight: '90px', padding: '16px' }}
         >
           <ListItemIcon className={props.classes.listItemIcon}>
             <ExitToAppIcon />
@@ -262,6 +262,7 @@ MainNav.propTypes = {
   firebase: PropTypes.shape({
     logout: PropTypes.func.isRequired,
   }).isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
 };
 
 

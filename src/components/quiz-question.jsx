@@ -16,11 +16,11 @@ const styles = theme => ({
     boxShadow: 'none',
   },
   passes: {
-    color: green[500],
+    color: `${green[500]} !important`,
     fontWeight: 'bold',
   },
   failures: {
-    color: red[500],
+    color: `${red[500]} !important`,
     fontWeight: 'bold',
   },
 });

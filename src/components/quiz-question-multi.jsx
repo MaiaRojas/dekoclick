@@ -1,15 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, FormControlLabel } from 'material-ui/Form';
-import { withStyles } from 'material-ui/styles';
 import Checkbox from 'material-ui/Checkbox';
-
-
-const styles = theme => ({
-  formGroup: {
-    paddingLeft: theme.spacing.unit,
-  },
-});
 
 
 const createCheckboxChangeHandler = (
@@ -40,7 +32,7 @@ const parseHTML = (str) => {
 
 
 const QuizQuestionMulti = props => (
-  <FormGroup className={props.classes.formGroup}>
+  <FormGroup>
     {props.question.answers.map((answer, idx) =>
       (<FormControlLabel
         key={answer}
@@ -78,10 +70,7 @@ QuizQuestionMulti.propTypes = {
   hasResults: PropTypes.bool.isRequired,
   updateProgress: PropTypes.func.isRequired,
   labelClassName: PropTypes.func.isRequired,
-  classes: PropTypes.shape({
-    formGroup: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 
-export default withStyles(styles)(QuizQuestionMulti);
+export default QuizQuestionMulti;

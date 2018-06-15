@@ -56,29 +56,27 @@ const getUnitOrder = (unit, match) => {
 const isTrackedPart = type => type !== 'self-assessment' && type !== 'quiz';
 
 const getTitle = (type, unit) => {
-  if(isTrackedPart(type)){
-    return {
-      primary: `${unit.part.title}`,
-      secondary: `Unidad ${getUnitOrder(unit.unit, unit.match)}`,
-    }
-  }
-  if(type === 'self-assessment'){
+  if (type === 'self-assessment') {
     return {
       secondary: <FormattedMessage id="self-assessment.title" />,
-      primary: "Feedback"
-    }
+      primary: 'Feedback',
+    };
   }
-  if (type === 'quiz'){
+  if (type === 'quiz') {
     return {
       secondary: <FormattedMessage id="quiz.title" />,
-      primary: "Quiz"
-    }
+      primary: 'Quiz',
+    };
   }
-}
+  return {
+    primary: `${unit.part.title}`,
+    secondary: `Unidad ${getUnitOrder(unit.unit, unit.match)}`,
+  };
+};
 
 const PartTitle = ({ classes, unit, type }) => {
   const { primary, secondary } = getTitle(type, unit);
-  return(
+  return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
         <ListItem>
@@ -90,12 +88,12 @@ const PartTitle = ({ classes, unit, type }) => {
             }}
             secondary={secondary}
             primary={primary}
-            />
+          />
         </ListItem>
       </CardContent>
       { isTrackedPart(type) && <Progress value={(unit.unitProgressStats || {}).percent || 0} /> }
     </Card>
-  )
+  );
 };
 
 

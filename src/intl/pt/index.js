@@ -21,7 +21,7 @@ export default {
   'main-nav.courses': 'Meus cursos',
   'main-nav.settings': 'Configurações',
   'main-nav.signout': 'Sair',
-  
+
   'cohort.title': 'Grupo de trabalho',
 
   'courses.title': 'Cursos',

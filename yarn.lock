@@ -6998,8 +6998,8 @@ redux-actions@^2.2.1:
     reduce-reducers "^0.1.0"
 
 redux-firestore@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/redux-firestore/-/redux-firestore-0.5.6.tgz#13621644f20047374f393ac55294f5d0542a93e8"
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/redux-firestore/-/redux-firestore-0.5.7.tgz#12595c61679bfeaa47d1ba0f4bfa87ea915dd80c"
   dependencies:
     lodash "^4.17.10"
     prop-types "^15.6.1"

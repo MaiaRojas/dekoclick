@@ -13,7 +13,7 @@ const styles = () => ({
 });
 
 
-const Loader = (props) => (
+const Loader = props => (
   <div className={props.classes.root} >
     <CircularProgress />
   </div>

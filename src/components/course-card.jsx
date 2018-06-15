@@ -31,16 +31,13 @@ const styles = theme => ({
   },
   cardActions: {
     flexWrap: 'wrap',
-    height: 130,
-  },
-  count: {
-    display: 'flex',
-    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px`,
+    position: 'relative',
   },
   countText: {
     display: 'inline-block',
-    marginLeft: 6,
     fontWeight: 500,
+    fontSize: '0.8rem',
   },
   cardContent: {
     backgroundColor: theme.palette.primary.main,
@@ -49,7 +46,7 @@ const styles = theme => ({
 });
 
 const getSummary = (elem) => {
-  const newSummary = elem.slice(0, 160).split('').reverse().join('');
+  const newSummary = elem.slice(0, 130).split('').reverse().join('');
   return newSummary.slice(newSummary.search(' ')).split('').reverse().join('');
 };
 
@@ -66,33 +63,28 @@ const CourseCard = props => (
         {props.course.title}
       </Typography>
     </CardContent>
-    <Progress value={props.progress && props.progress.percent || 0} />
-    <CardActions className={props.classes.cardActions}>
+    <Progress value={(props.progress && props.progress.percent) || 0} />
+    <div style={{ margin: '24px', height: '70px' }}>
       <Typography
-        style={{ marginLeft: '6px' }}
         paragraph
         component="p"
         dangerouslySetInnerHTML={{ __html: `${getSummary(props.course.description)}...` }}
       />
+    </div>
+    <CardActions className={props.classes.cardActions}>
       {props.course.stats && props.course.stats.unitCount && (
-        <div className={props.classes.count}>
-          <Typography className={props.classes.countText}>
-            <FormattedMessage
-              id="course-card.units"
-              values={{ count: props.course.stats.unitCount }}
-            />
-          </Typography>
-        </div>
+        <Typography className={props.classes.countText}>
+          <FormattedMessage
+            id="course-card.units"
+            values={{ count: props.course.stats.unitCount }}
+          />
+        </Typography>
       )}
-      <div className={props.classes.count}>
-        <Typography className={props.classes.countText}>|</Typography>
-      </div>
+      <Typography className={props.classes.countText}>|</Typography>
       {props.course.stats && props.course.stats.durationString &&
-        <div className={props.classes.count}>
-          <Typography className={props.classes.countText}>
-            {props.course.stats.durationString}
-          </Typography>
-        </div>
+        <Typography className={props.classes.countText}>
+          {props.course.stats.durationString}
+        </Typography>
       }
     </CardActions>
   </Card>
@@ -116,7 +108,6 @@ CourseCard.propTypes = {
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     cardActions: PropTypes.string.isRequired,
-    count: PropTypes.string.isRequired,
     countText: PropTypes.string.isRequired,
     cardContent: PropTypes.string.isRequired,
     cardClose: PropTypes.string.isRequired,

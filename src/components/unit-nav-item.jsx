@@ -46,7 +46,6 @@ const styles = theme => ({
   icon: {
     color: theme.palette.text.secondary,
     opacity: 'inherit',
-    marginLeft: theme.spacing.unit,
   },
 });
 

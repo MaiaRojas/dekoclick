@@ -12,6 +12,7 @@ const styles = theme => ({
   list: {
     width: theme.leftDrawerWidth,
     overflowY: 'auto',
+    height: 'calc(100% - 180px)',
   },
   divider: {
     backgroundColor: '#f1f1f1',
@@ -25,7 +26,6 @@ const styles = theme => ({
   },
   listItemIcon: {
     color: theme.palette.common.white,
-    marginLeft: theme.spacing.unit,
   },
   primary: {
     fontWeight: 700,
@@ -36,8 +36,9 @@ const styles = theme => ({
   logout: {
     display: 'flex',
     minHeight: '90px',
-    position: 'relative',
+    position: 'absolute',
     width: '100%',
+    bottom: 0,
   },
 });
 
