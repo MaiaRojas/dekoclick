@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import { FormattedMessage } from 'react-intl';
 import SignInResults from './signin-results';
+import Typography from 'material-ui/Typography';
 
 
 const SignInForm = props => (
@@ -18,7 +19,7 @@ const SignInForm = props => (
       {props.signup && (
         <TextField
           id="name"
-          label={<FormattedMessage id="signin.name" />}
+          label="Nombre"
           autoComplete="name"
           value={props.data.name}
           error={!!props.errors.name}
@@ -29,13 +30,24 @@ const SignInForm = props => (
           margin="normal"
         />
       )}
+      {props.signup && (
+        <TextField
+          id="lastname"
+          label="Apellido"
+          autoComplete="name"
+          value={props.data.name}
+          error={!!props.errors.name}
+          helperText={props.errors && props.errors.name &&
+            <FormattedMessage id={props.errors.name} />}
+          onChange={e => props.updateSignInField('lastname', e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+      )}
 
       <TextField
         id="email"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        label={<FormattedMessage id="signin.email" />}
+        label="Correo"
         autoComplete="email"
         value={props.data.email}
         error={!!props.errors.email}
@@ -49,10 +61,7 @@ const SignInForm = props => (
       {!props.forgot &&
         <TextField
           id="password"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          label={<FormattedMessage id="signin.password" />}
+          label="Contraseña"
           value={props.data.password}
           type="password"
           error={!!props.errors.password}
@@ -88,10 +97,11 @@ const SignInForm = props => (
       disabled={props.forgot && props.forgotRequested}
       className={props.classes.submitBtn}
     >
-      {props.forgot && <FormattedMessage id="signin.forgot" />}
+      {props.forgot && <FormattedMessage id="signin.recover" />}
       {!props.forgot && props.signup && <FormattedMessage id="signin.signup" />}
       {!props.forgot && !props.signup && <FormattedMessage id="signin.signin" />}
     </Button>
+
     <SignInResults
       authError={props.authError}
       forgot={props.forgot}

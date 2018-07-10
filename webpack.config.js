@@ -96,18 +96,18 @@ module.exports = env => {
   };
 
 
-  if (env && env.backend === 'laboratoria-la') { // backend de producción
+  if (env && env.backend === 'deko-produccion') { // backend de producción
     config.plugins.push(new Webpack.DefinePlugin({
       'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
-      'process.env.FIREBASE_API_KEY': `"AIzaSyAXbaEbpq8NOfn0r8mIrcoHvoGRkJThwdc"`,
-      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"378945761184"`,
+      'process.env.FIREBASE_API_KEY': `""`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `""`,
     }));
   }
-  else if (env && env.backend === 'laboratoria-la-staging') { // backend de staging
+  else if (env && env.backend === 'deko-staging') { // backend de staging
     config.plugins.push(new Webpack.DefinePlugin({
       'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
-      'process.env.FIREBASE_API_KEY': `"AIzaSyDp7fjc0jeFH3qWmrTEbLhDIuzkwXJRWFA"`,
-      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"190986695844"`,
+      'process.env.FIREBASE_API_KEY': `""`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `""`,
     }));
   }
   else {
@@ -140,9 +140,9 @@ module.exports = env => {
       new CleanWebpackPlugin([targetPathRel]),
       new UglifyJSPlugin(),
       new FaviconsWebpackPlugin({
-        logo: './img/favicon.png',
-        background: '#ffe521',
-        title: 'Laboratoria LMS',
+        logo: './img/ico.jpg',
+        background: '#FF5D51',
+        title: 'Dekoclick',
       }),
     ].concat(config.plugins);
 
@@ -152,7 +152,7 @@ module.exports = env => {
     config.mode = 'development';
     config.entry = [
       'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:8081',
+      'webpack-dev-server/client?http://localhost:8083',
       'webpack/hot/only-dev-server'
     ].concat(config.entry);
 
@@ -163,7 +163,7 @@ module.exports = env => {
       contentBase: targetPathAbs,
       publicPath: '/',
       historyApiFallback: true,
-      port: 8081
+      port: 8083
     };
 
     config.plugins.unshift(new Webpack.HotModuleReplacementPlugin());

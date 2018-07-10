@@ -2,6 +2,7 @@ export default {
   'signin.signin': 'Iniciar sesión',
   'signin.signup': 'Crear cuenta',
   'signin.forgot': '¿Olvidaste tu contraseña?',
+  'signin.recover': 'Restaurar contraseña',
   'signin.signupWithFacebook': 'Crear cuenta con Facebook',
   'signin.signinWithFacebook': 'Inicia sesión con Facebook',
   'signin.name': 'Nombre',

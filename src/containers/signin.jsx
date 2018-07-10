@@ -56,37 +56,36 @@ const postSignUp = (props, userRecord) => {
 const styles = theme => ({
   root: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#F7F7F7',
-    textAlign: 'center',
-    flexDirection: 'column',
+    flexDirection: 'wrap',
   },
   paper: {
     margin: theme.spacing.unit * 4,
     padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme.spacing.unit * 4}px`,
     width: '100%',
     maxWidth: theme.leftDrawerWidth,
-    boxShadow: theme.shadow,
+    boxShadow: 'none',
   },
-  contentLogo: {
+  contentImg: {
     width: '100%',
-    maxWidth: theme.leftDrawerWidth,
+    height: '100vh',
+    maxWidth: '416px',
   },
   logo: {
     width: '100%',
-    // maxWidth: 200,
+    height: '100%',
     display: 'block',
-    margin: `0 auto ${theme.spacing.unit}px`,
   },
   submitBtn: {
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
-    backgroundColor: '#ffe521',
-    width: '100%',
+    backgroundColor: '#fff',
+    width: '50%',
     fontSize: 16,
     lineHeight: '24px',
-    borderRadius: 0,
+    borderRadius: 5,
+    border: '2px solid #FF5D51 '
   },
   noCohortSelected: {
     textAlign: 'center',
@@ -105,6 +104,7 @@ const styles = theme => ({
 
 const SignInForgotToggle = props => (
   <Typography>
+     { !props.forgot && 'Haz click aquí '}
     <a
       href="/"
       onClick={(e) => {
@@ -320,33 +320,23 @@ const SignIn = (props) => {
 
   return (
     <div className={props.classes.root}>
-      <div className={props.classes.contentLogo}>
-        <img className={props.classes.logo} src="/img/logo+negro.png" alt="Laboratoria LMS" />
-      </div>
       <Paper className={props.classes.paper}>
-        {props.signup && (!props.cohort || !props.cohort.publicAdmission)
-          ? (<div className={props.classes.noCohortSelected}>No cohort selected</div>)
-          : (
-            <div>
-              {props.signup && (
-                <div className={props.classes.signupCohort}>
-                  <FormattedMessage
-                    id="signin.enrollment"
-                    values={{
-                      campus: (props.campuses.find(
-                        campus => campus.id === parseCohortId(props.cohortid).campus,
-                      ) || {}).name,
-                    }}
-                  />
-                </div>
-              )}
-              <SignInForm {...props} />
-              {!props.signup && <SignInForgotToggle {...props} />}
-              {false && <SignInWithFacebookButton {...props} />}
-            </div>
-          )
-        }
+        <div>
+          <Typography variant="display1">
+            {!props.forgot && !props.signup ? 'Inicia sesión' :
+             !props.signup && 'Restaura tu contraseña'}
+            {props.signup && 'Registrate aquí'}
+          </Typography>
+          <SignInForm {...props} />
+            {!props.signup && <SignInForgotToggle {...props} />}
+        </div>
       </Paper>
+      <div className={props.classes.contentImg}>
+        {!props.forgot ? 
+          (<img className={props.classes.logo} src="/img/home.png" alt="Dekoclick" />) :
+          (<img className={props.classes.logo} src="/img/restaurar-contrasena.png" alt="Dekoclick" />)
+        }
+      </div>
     </div>
   );
 };

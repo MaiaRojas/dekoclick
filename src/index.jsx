@@ -4,10 +4,9 @@
 
 
 import './style/main.css';
-import './img/icon.svg';
-import './img/logo.png';
-import './img/logo+negro.png';
-import './img/menu+logo.png';
+import './img/home.png';
+import './img/muestra-perfil.png';
+import './img/restaurar-contrasena.png';
 import './worker.js';
 
 

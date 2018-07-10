@@ -4,7 +4,7 @@ import { createMuiTheme } from 'material-ui/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#ffe521',
+      main: '#ff5d51',
       secondary: '#000000',
     },
     secondary: {
@@ -21,41 +21,41 @@ const theme = createMuiTheme({
   typography: {
     htmlFontSize: 16,
     color: '#ffffff',
-    fontFamily: "'Open Sans', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontWeight: 100,
     fontSize: 16,
     lineHeight: '145%',
     body1: {
-      fontFamily: "'Open Sans', sans-serif",
+      fontFamily: "'Montserrat', sans-serif",
       fontWeight: 100,
     },
     headline: {
-      fontFamily: "'Open Sans', sans-serif",
+      fontFamily: "'Montserrat', sans-serif",
       textTransform: 'uppercase',
       fontWeight: 100,
       color: '#999',
     },
     title: {
-      fontFamily: '"Bitter", serif, "Helvetica Neue", Arial',
-      // textTransform: 'uppercase',
+      fontFamily: "'Montserrat', sans-serif",
       fontWeight: 700,
       lineHeight: '2rem',
       fontSize: '1.5rem',
     },
     subheading: {
-      // fontFamily: '"Bitter", serif,"Helvetica Neue", Arial',
-      // textTransform: 'uppercase',
       fontWeight: 300,
     },
     button: {
-      fontFamily: "'Open Sans', sans-serif",
+      fontFamily: "'Montserrat', sans-serif",
       fontWeight: 700,
       boxShadow: 'none !important',
       borderRadius: 0,
+      textTransform: 'none',
     },
     display1: {
-      fontFamily: '"Bitter", serif, "Helvetica Neue", Arial',
-      color: '#000000',
+      fontFamily: "'Montserrat', sans-serif",
+      color: '#4c4c4c',
+      fontWeight: 700,
+      textTransform: 'none',
     },
   },
   maxContentWidth: 760,
