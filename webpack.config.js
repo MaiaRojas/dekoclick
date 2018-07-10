@@ -99,15 +99,15 @@ module.exports = env => {
   if (env && env.backend === 'deko-produccion') { // backend de producción
     config.plugins.push(new Webpack.DefinePlugin({
       'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
-      'process.env.FIREBASE_API_KEY': `""`,
-      'process.env.FIREBASE_MESSAGING_SENDER_ID': `""`,
+      'process.env.FIREBASE_API_KEY': `"xyz"`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"123"`,
     }));
   }
   else if (env && env.backend === 'deko-staging') { // backend de staging
     config.plugins.push(new Webpack.DefinePlugin({
       'process.env.FIREBASE_PROJECT': `"${env.backend}"`,
-      'process.env.FIREBASE_API_KEY': `""`,
-      'process.env.FIREBASE_MESSAGING_SENDER_ID': `""`,
+      'process.env.FIREBASE_API_KEY': `"qwe"`,
+      'process.env.FIREBASE_MESSAGING_SENDER_ID': `"456"`,
     }));
   }
   else {
