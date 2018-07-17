@@ -1,5 +1,5 @@
 const Dashboard = (props) => {
-  setTimeout(() => props.history.push('/courses'), 10);
+  setTimeout(() => props.history.push('/manager'), 10);
   return null;
 };
 

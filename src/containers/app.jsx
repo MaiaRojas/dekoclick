@@ -13,7 +13,7 @@ import Manager from './manager';
 import Cohorts from './cohorts';
 import Cohort from './cohort';
 import Designers from './designers';
-import Course from './course';
+import Project from './project';
 import Unit from './unit';
 import Loader from '../components/loader';
 
@@ -45,7 +45,7 @@ const App = (props) => {
                 />
                 <WrappedRoute
                   path="/groups/:groupid/projects/:projectid"
-                  component={Course}
+                  component={Project}
                   {...props}
                 />
                 <WrappedRoute path="/groups/:id" component={Cohort} {...props} />
