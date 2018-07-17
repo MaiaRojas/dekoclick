@@ -6,13 +6,14 @@ import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
-import DashboardIcon from 'material-ui-icons/Dashboard';
+import RemoveIcon from 'material-ui-icons/Remove';
 import LocalLibraryIcon from 'material-ui-icons/LocalLibrary';
 import GroupIcon from 'material-ui-icons/Group';
 import SettingsIcon from 'material-ui-icons/Settings';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import { FormattedMessage } from 'react-intl';
 import LeftDrawer from './left-drawer';
+import DetailsIcon from 'material-ui-icons/Details';
 
 
 const styles = theme => ({
@@ -31,6 +32,7 @@ const styles = theme => ({
   profileBadge: {
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
     backgroundColor: theme.palette.background.secondary,
+    minHeight: '90px',
   },
   active: {
     opacity: 1,
@@ -48,35 +50,17 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-  },
-  bottom: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-  },
-  signoutBtn: {
-    backgroundColor: theme.palette.common.black,
-    minHeight: '90px',
-    padding: theme.spacing.unit * 2,
-    borderTop: '1px solid #f1f1f1',
-  },
+  },  
   divider: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: '#969696',
   },
   listItemIcon: {
-    color: theme.palette.common.white,
+    color: '#969696',
     marginLeft: theme.spacing.unit,
     opacity: 'inherit',
   },
-  avatar: {
-    width: `${theme.spacing.unit * 5}px`,
-    height: `${theme.spacing.unit * 5}px`,
-    borderRadius: 0,
-    background: '#56f89a',
-    color: theme.palette.primary.secondary,
-  },
   primary: {
-    color: 'inherit',
+    color: '#777777',
     fontWeight: 500,
   },
   root: {
@@ -124,145 +108,107 @@ const MainNav = props => (
   <LeftDrawer>
     <List disablePadding className={props.classes.list}>
       <ListItem className={props.classes.profileBadge}>
-        <Avatar className={props.classes.avatar} >
-          {nameToInitials(getName(props.auth, props.profile))}
-        </Avatar>
+        <ListItemIcon className={props.classes.listItemIcon}>
+          <DetailsIcon />
+        </ListItemIcon>
         <ListItemText
           classes={{ primary: props.classes.primary }}
-          primary={getName(props.auth, props.profile)}
-          secondary={getEmail(props.auth, props.profile)}
+          primary={'Filtros'}
         />
       </ListItem>
       <Divider className={props.classes.divider} />
       <ListItem
-        style={{ display: 'none' }}
         button
-        onClick={() => props.history.push('/')}
-      >
-        <ListItemIcon className={props.classes.listItemIcon}>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText
-          className="mainNav-text"
-          primary="Dashboard"
-        />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => props.history.push('/courses')}
-        style={{ maxHeight: '48px', padding: '16px', marginTop: '16px' }}
-        className={isActive(props, 'courses') ? props.classes.active : props.classes.item}
-      >
-        <ListItemIcon className={props.classes.listItemIcon}>
-          <LocalLibraryIcon />
-        </ListItemIcon>
-        <ListItemText
-          classes={{ primary: props.classes.primary }}
-          primary={<FormattedMessage id="main-nav.courses" />}
-          style={{ paddingLeft: '8px' }}
-        />
-        <div className={!isActive(props, 'courses') ? '' : props.drawerOpen ?
-          'expanded triangle' : 'triangle collapsed'}
-        />
-      </ListItem>
-      {props.profile && props.profile.roles && props.profile.roles.admin &&
-        <ListItem
-          button
-          onClick={() => props.history.push('/cohorts')}
-          style={{ maxHeight: '48px', padding: '16px' }}
-          className={isActive(props, 'cohorts') ? props.classes.active : props.classes.item}
-        >
-          <ListItemIcon className={props.classes.listItemIcon}>
-            <GroupIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{ primary: props.classes.primary }}
-            primary="Cohorts"
-            style={{ paddingLeft: '8px' }}
-          />
-          <div className={!isActive(props, 'cohorts') ? '' : props.drawerOpen ?
-            'expanded triangle' : 'triangle collapsed'}
-          />
-        </ListItem>
-      }
-
-      <ListItem
-        button
-        onClick={() => props.history.push('/settings')}
         style={{ maxHeight: '48px', padding: '16px' }}
-        className={isActive(props, 'settings') ? props.classes.active : props.classes.item}
       >
-        <ListItemIcon className={props.classes.listItemIcon}>
-          <SettingsIcon />
-        </ListItemIcon>
         <ListItemText
           classes={{ primary: props.classes.primary }}
-          primary={<FormattedMessage id="main-nav.settings" />}
-          style={{ paddingLeft: '8px' }}
+          primary="Estado"
         />
-        <div className={!isActive(props, 'settings') ? '' : props.drawerOpen ?
-          'expanded triangle' : 'triangle collapsed'}
-        />
+        <ListItemIcon className={props.classes.listItemIcon}>
+          <RemoveIcon />
+        </ListItemIcon>
       </ListItem>
-
-      <div className={props.classes.bottom}>
-        <Divider className={props.classes.divider} />
-        <ListItem
-          button
-          className={props.classes.signoutBtn}
-          onClick={() => props.firebase.logout()}
-        >
-          <ListItemIcon className={props.classes.listItemIcon}>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{ primary: props.classes.primary }}
-            primary={<FormattedMessage id="main-nav.signout" />}
-            style={{ paddingLeft: '8px' }}
-          />
-        </ListItem>
-      </div>
+      <Divider className={props.classes.divider} />
+      <ListItem
+        button
+        style={{ maxHeight: '48px', padding: '16px'}}
+      >
+        <ListItemText
+          classes={{ primary: props.classes.primary }}
+          primary='Tipo'
+        />
+        <ListItemIcon className={props.classes.listItemIcon}>
+          <RemoveIcon />
+        </ListItemIcon>
+      </ListItem>
+      <Divider className={props.classes.divider} />
+      <ListItem
+        button
+        style={{ maxHeight: '48px', padding: '16px' }}
+      >
+        <ListItemText
+          classes={{ primary: props.classes.primary }}
+          primary="Estilo"
+        />
+        <ListItemIcon className={props.classes.listItemIcon}>
+          <RemoveIcon />
+        </ListItemIcon>
+      </ListItem>
+      <Divider className={props.classes.divider} />
+      <ListItem
+        button
+        style={{ maxHeight: '48px', padding: '16px' }}
+      >
+        <ListItemText
+          classes={{ primary: props.classes.primary }}
+          primary={'Tiempo'}
+        />
+        <ListItemIcon className={props.classes.listItemIcon}>
+          <RemoveIcon />
+        </ListItemIcon>
+      </ListItem>
     </List>
   </LeftDrawer>
 );
 
 
 MainNav.propTypes = {
-  auth: PropTypes.shape({
-    displayName: PropTypes.string,
-    email: PropTypes.string.isRequired,
-  }).isRequired,
-  profile: PropTypes.shape({
-    name: PropTypes.string,
-    github: PropTypes.string,
-    roles: PropTypes.shape({
-      admin: PropTypes.bool,
-    }),
-  }),
-  classes: PropTypes.shape({
-    list: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired,
-    profileBadge: PropTypes.string.isRequired,
-    active: PropTypes.string.isRequired,
-    bottom: PropTypes.string.isRequired,
-    signoutBtn: PropTypes.string.isRequired,
-    divider: PropTypes.string.isRequired,
-    listItemIcon: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
-    primary: PropTypes.string.isRequired,
-    item: PropTypes.string.isRequired,
-  }).isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  match: PropTypes.shape({
-    path: PropTypes.string.isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  firebase: PropTypes.shape({
-    logout: PropTypes.func.isRequired,
-  }).isRequired,
-  drawerOpen: PropTypes.bool.isRequired,
+  // auth: PropTypes.shape({
+  //   displayName: PropTypes.string,
+  //   email: PropTypes.string.isRequired,
+  // }).isRequired,
+  // profile: PropTypes.shape({
+  //   name: PropTypes.string,
+  //   github: PropTypes.string,
+  //   roles: PropTypes.shape({
+  //     admin: PropTypes.bool,
+  //   }),
+  // }),
+  // classes: PropTypes.shape({
+  //   list: PropTypes.string.isRequired,
+  //   logo: PropTypes.string.isRequired,
+  //   profileBadge: PropTypes.string.isRequired,
+  //   active: PropTypes.string.isRequired,
+  //   bottom: PropTypes.string.isRequired,
+  //   signoutBtn: PropTypes.string.isRequired,
+  //   divider: PropTypes.string.isRequired,
+  //   listItemIcon: PropTypes.string.isRequired,
+  //   avatar: PropTypes.string.isRequired,
+  //   primary: PropTypes.string.isRequired,
+  //   item: PropTypes.string.isRequired,
+  // }).isRequired,
+  // // eslint-disable-next-line react/no-unused-prop-types
+  // match: PropTypes.shape({
+  //   path: PropTypes.string.isRequired,
+  // }).isRequired,
+  // history: PropTypes.shape({
+  //   push: PropTypes.func.isRequired,
+  // }).isRequired,
+  // firebase: PropTypes.shape({
+  //   logout: PropTypes.func.isRequired,
+  // }).isRequired,
+  // drawerOpen: PropTypes.bool.isRequired,
 };
 
 

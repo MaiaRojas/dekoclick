@@ -70,7 +70,7 @@ const FormControlWrapper = (props) => {
 };
 
 
-class SettingsForm extends React.Component {
+class DesignerForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -452,7 +452,7 @@ FormControlWrapper.defaultProps = {
   usePaperContainer: undefined,
 };
 
-SettingsForm.propTypes = {
+DesignerForm.propTypes = {
   showOptsInSettings: PropTypes.bool,
   firebase: PropTypes.shape({
     firestore: PropTypes.func,
@@ -467,9 +467,9 @@ SettingsForm.propTypes = {
 };
 
 
-SettingsForm.defaultProps = {
+DesignerForm.defaultProps = {
   showOptsInSettings: undefined,
 };
 
 
-export default withStyles(styles)(SettingsForm);
+export default withStyles(styles)(DesignerForm);

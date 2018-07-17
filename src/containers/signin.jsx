@@ -71,7 +71,7 @@ const styles = theme => ({
   contentImg: {
     width: '100%',
     height: '100vh',
-    maxWidth: '416px',
+    maxWidth: '500px',
   },
   logo: {
     width: '100%',
@@ -81,6 +81,7 @@ const styles = theme => ({
   submitBtn: {
     margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 3}px`,
     backgroundColor: '#fff',
+    color: '#FF5D51',
     width: '50%',
     fontSize: 16,
     lineHeight: '24px',
@@ -98,13 +99,14 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
+    color: '#999999',
   },
 });
 
 
 const SignInForgotToggle = props => (
-  <Typography>
-     { !props.forgot && 'Haz click aquí '}
+  <Typography style={{ fontSize: '16px' }}>
+    { !props.forgot && 'Haz click aquí '}
     <a
       href="/"
       onClick={(e) => {
@@ -112,6 +114,7 @@ const SignInForgotToggle = props => (
         props.toggleForgot();
         return false;
       }}
+      style={{ color: '#FF5D51'}}
     >
       {props.forgot
         ? <FormattedMessage id="signin.signin" />
@@ -324,7 +327,7 @@ const SignIn = (props) => {
         <div>
           <Typography variant="display1">
             {!props.forgot && !props.signup ? 'Inicia sesión' :
-             !props.signup && 'Restaura tu contraseña'}
+              !props.signup && 'Restaura tu contraseña'}
             {props.signup && 'Registrate aquí'}
           </Typography>
           <SignInForm {...props} />
@@ -332,7 +335,7 @@ const SignIn = (props) => {
         </div>
       </Paper>
       <div className={props.classes.contentImg}>
-        {!props.forgot ? 
+        {!props.forgot ?
           (<img className={props.classes.logo} src="/img/home.png" alt="Dekoclick" />) :
           (<img className={props.classes.logo} src="/img/restaurar-contrasena.png" alt="Dekoclick" />)
         }
@@ -386,7 +389,7 @@ SignIn.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
-    contentLogo: PropTypes.string.isRequired,
+    // contentLogo: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     submitBtn: PropTypes.string.isRequired,
     noCohortSelected: PropTypes.string.isRequired,

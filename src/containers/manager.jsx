@@ -8,7 +8,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { FormattedMessage } from 'react-intl';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
-import CoursesList from '../components/courses-list';
+import ProjectList from '../components/project-list';
 import Loader from '../components/loader';
 
 
@@ -40,8 +40,8 @@ const styles = theme => ({
 });
 
 
-const Courses = ({
-  cohorts,
+const Manager = ({
+  groups,
   auth,
   profile,
   history,
@@ -49,9 +49,10 @@ const Courses = ({
   classes,
 }) => (
   <div className="courses">
-    <TopBar title={<FormattedMessage id="courses.title" />} />
-    {!cohorts && <Loader />}
-    {cohorts && !cohorts.length && (
+    <TopBar title={<FormattedMessage id="projects.title" />} />
+    {console.log(!groups)}
+    {!groups && <Loader />}
+    {groups && !groups.length && (
       <div
         position="absolute"
         className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
@@ -59,37 +60,40 @@ const Courses = ({
         <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
       </div>
     )}
-    {cohorts && cohorts.length > 0 && (
-      [...cohorts].reverse().map(cohort => (
-        <CoursesList
+    <div>
+      <h1>Proyectos</h1>
+      {groups && groups.length > 0 && (
+      [...groups].reverse().map(group => (
+        <ProjectList
           drawerOpen={drawerOpen}
-          key={cohort.id}
-          cohort={cohort}
+          key={group.id}
+          group={group}
           auth={auth}
           profile={profile}
           history={history}
         />
       ))
     )}
+    </div>
   </div>
 );
 
 
-Courses.propTypes = {
-  cohorts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-  })),
-  auth: PropTypes.shape({}).isRequired,
-  profile: PropTypes.shape({}).isRequired,
-  history: PropTypes.shape({}).isRequired,
-  drawerOpen: PropTypes.bool,
-  classes: PropTypes.shape({}).isRequired,
+Manager.propTypes = {
+  // projets: PropTypes.arrayOf(PropTypes.shape({
+  //   id: PropTypes.string.isRequired,
+  //   role: PropTypes.string.isRequired,
+  // })),
+  // auth: PropTypes.shape({}).isRequired,
+  // profile: PropTypes.shape({}).isRequired,
+  // history: PropTypes.shape({}).isRequired,
+  // drawerOpen: PropTypes.bool,
+  // classes: PropTypes.shape({}).isRequired,
 };
 
 
-Courses.defaultProps = {
-  cohorts: undefined,
+Manager.defaultProps = {
+  projets: undefined,
   drawerOpen: undefined,
 };
 
@@ -99,11 +103,11 @@ const mapStateToProps = ({ topbar }) => ({
 
 export default compose(
   firestoreConnect(({ auth }) => [{
-    collection: `users/${auth.uid}/cohorts`,
+    collection: `users/${auth.uid}/groups`,
   }]),
   connect(({ firestore }, { auth }) => ({
-    cohorts: firestore.ordered[`users/${auth.uid}/cohorts`],
+    groups: firestore.ordered[`users/${auth.uid}/groups`],
   })),
   connect(mapStateToProps),
   withStyles(styles),
-)(Courses);
+)(Manager);

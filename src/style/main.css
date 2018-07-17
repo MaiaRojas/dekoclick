@@ -67,12 +67,8 @@ table {
 }
 
 label ,legend {
-  color: #000000 !important;
+  color: #999999 !important;
   font-weight: bold !important;
-}
-
-span > span {
-  color: #000000;
 }
 
 .app {

@@ -10,7 +10,7 @@ import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import Select from 'material-ui/Select';
 import GithubCard from '../components/github-card';
-import SettingsForm from '../components/settings-form';
+import DesignerForm from '../components/designer-form';
 import LifeSkillsForm from '../components/life-skills-form';
 
 
@@ -160,12 +160,12 @@ class ValidationForm extends React.Component {
     }
   }
 
-  settingsForm() {
+  designerForm() {
     return (
       <div component="div" style={{ padding: 8 * 3 }}>
         <RecommendedAsForm {...this.props} />
         <EnglishLevelForm {...this.props} />
-        <SettingsForm {...this.props} />
+        <DesignerForm {...this.props} />
       </div>
     );
   }

@@ -36,7 +36,7 @@ export default {
   'course-card.estimatedDuration': 'Estimated duration',
   'course-card.start': 'Start',
   'course-card.continue': 'Continue',
-  'course-list.content': 'This cohort does not have any courses.',
+  'project-list.content': 'This group does not have any projects.',
 
 
   'unit-card.unit': 'Unit',

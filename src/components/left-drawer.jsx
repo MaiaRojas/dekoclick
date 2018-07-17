@@ -14,13 +14,13 @@ import { displayDrawer } from '../reducers/top-bar';
 const styles = theme => ({
   drawer: {
     width: theme.leftDrawerWidth,
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#fff',
     borderRight: 0,
   },
   drawerPaper: {
     position: 'relative',
     width: theme.leftDrawerWidth,
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#fff',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -45,10 +45,10 @@ const styles = theme => ({
   toolbar: {
     minHeight: 90,
     maxHeight: 90,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    borderBottom: '1px solid #f7f7f7',
+    // display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'flex-end',
+    // borderBottom: '1px solid #f7f7f7',
   },
   root: {
     display: 'flex',
@@ -140,13 +140,13 @@ const LeftDrawerMain = ({
     { className: classes.logoXs, src: '/img/menu+logo.png' };
   return (
     <div className={classes.toolbar}>
-      <ListItem className={classes.center}>
+      {/* <ListItem className={classes.center}>
         <img
-          alt="Laboratoria, talento que transforma"
+          alt="Dekoclick"
           className={className}
           src={src}
         />
-      </ListItem>
+      </ListItem> */}
     </div>
   );
 };

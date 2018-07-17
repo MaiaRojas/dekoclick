@@ -4,7 +4,6 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import { FormattedMessage } from 'react-intl';
 import SignInResults from './signin-results';
-import Typography from 'material-ui/Typography';
 
 
 const SignInForm = props => (

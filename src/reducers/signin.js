@@ -2,16 +2,16 @@ import isEmail from '../util/isEmail';
 
 
 // Action types
-const UPDATE_FIELD = 'lms.laboratoria.la/signin/UPDATE_FIELD';
-const VALIDATE_AND_SUBMIT = 'lms.laboratoria.la/signin/VALIDATE_AND_SUBMIT';
-const RESET = 'lms.laboratoria.la/signin/RESET';
-const TOGGLE_FORGOT = 'lms.laboratoria.la/signin/TOGGLE_FORGOT';
-const UPDATE_FORGOT_RESULT = 'lms.laboratoria.la/signin/UPDATE_FORGOT_RESULT';
-const FORGOT_REQUESTED = 'lms.laboratoria.la/signin/FORGOT_REQUESTED';
-const UPDATE_SIGNUP_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNUP_ERROR';
-const UPDATE_SIGNIN_ERROR = 'lms.laboratoria.la/signin/UPDATE_SIGNIN_ERROR';
-const TOGGLE_FB_PASSWORD_PROMPT = 'lms.laboratoria.la/signin/TOGGLE_FB_PASSWORD_PROMPT';
-const UPDATE_FB_PASSWORD_PROMPT_PASSWORD = 'lms.laboratoria.la/signin/UPDATE_FB_PASSWORD_PROMPT_PASSWORD';
+const UPDATE_FIELD = 'www.laboratoriodigital.pe/signin/UPDATE_FIELD';
+const VALIDATE_AND_SUBMIT = 'www.laboratoriodigital.pe/signin/VALIDATE_AND_SUBMIT';
+const RESET = 'www.laboratoriodigital.pe/signin/RESET';
+const TOGGLE_FORGOT = 'www.laboratoriodigital.pe/signin/TOGGLE_FORGOT';
+const UPDATE_FORGOT_RESULT = 'www.laboratoriodigital.pe/signin/UPDATE_FORGOT_RESULT';
+const FORGOT_REQUESTED = 'www.laboratoriodigital.pe/signin/FORGOT_REQUESTED';
+const UPDATE_SIGNUP_ERROR = 'www.laboratoriodigital.pe/signin/UPDATE_SIGNUP_ERROR';
+const UPDATE_SIGNIN_ERROR = 'www.laboratoriodigital.pe/signin/UPDATE_SIGNIN_ERROR';
+const TOGGLE_FB_PASSWORD_PROMPT = 'www.laboratoriodigital.pe/signin/TOGGLE_FB_PASSWORD_PROMPT';
+const UPDATE_FB_PASSWORD_PROMPT_PASSWORD = 'www.laboratoriodigital.pe/signin/UPDATE_FB_PASSWORD_PROMPT_PASSWORD';
 
 
 // Action Creators

@@ -50,73 +50,67 @@ const getSummary = (elem) => {
   return newSummary.slice(newSummary.search(' ')).split('').reverse().join('');
 };
 
-const CourseCard = props => (
+const ProjectCard = props => (
   <Card
     className={
       classNames(props.classes.card, props.drawerOpen && props.classes.cardClose)
     }
-    to={`/cohorts/${props.cohort}/courses/${props.course.id}`}
+    to={`/groups/${props.group}/projects/${props.project.id}`}
     component={Link}
   >
     <CardContent className={props.classes.cardContent}>
       <Typography variant="title" style={{ fontSize: '1.2rem', lineHeight: '1.5rem' }}>
-        {props.course.title}
+        {props.project.title}
       </Typography>
     </CardContent>
-    <Progress value={(props.progress && props.progress.percent) || 0} />
+    <Progress value={53} />
+    {/* <Progress value={(props.progress && props.progress.percent) || 0} /> */}
     <div style={{ margin: '24px', height: '70px' }}>
-      <Typography
+      {/* <Typography
         paragraph
         component="p"
         dangerouslySetInnerHTML={{ __html: `${getSummary(props.course.description)}...` }}
-      />
+      /> */}
     </div>
     <CardActions className={props.classes.cardActions}>
-      {props.course.stats && props.course.stats.unitCount && (
-        <Typography className={props.classes.countText}>
-          <FormattedMessage
-            id="course-card.units"
-            values={{ count: props.course.stats.unitCount }}
-          />
-        </Typography>
-      )}
+      <Typography className={props.classes.countText}>
+        Paquete Clásico
+      </Typography>
       <Typography className={props.classes.countText}>|</Typography>
-      {props.course.stats && props.course.stats.durationString &&
         <Typography className={props.classes.countText}>
-          {props.course.stats.durationString}
+          Ambiente: Sala
         </Typography>
-      }
     </CardActions>
   </Card>
 );
 
 
-CourseCard.propTypes = {
-  course: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    stats: PropTypes.shape({
-      durationString: PropTypes.string.isRequired,
-      unitCount: PropTypes.number.isRequired,
-    }),
-  }).isRequired,
-  cohort: PropTypes.string.isRequired,
-  progress: PropTypes.shape({
-    percent: PropTypes.number.isRequired,
-  }),
-  classes: PropTypes.shape({
-    card: PropTypes.string.isRequired,
-    cardActions: PropTypes.string.isRequired,
-    countText: PropTypes.string.isRequired,
-    cardContent: PropTypes.string.isRequired,
-    cardClose: PropTypes.string.isRequired,
-  }).isRequired,
-  drawerOpen: PropTypes.bool,
+ProjectCard.propTypes = {
+  // course: PropTypes.shape({
+  //   id: PropTypes.string.isRequired,
+  //   title: PropTypes.string.isRequired,
+  //   description: PropTypes.string.isRequired,
+  //   stats: PropTypes.shape({
+  //     durationString: PropTypes.string.isRequired,
+  //     unitCount: PropTypes.number.isRequired,
+  //   }),
+  // }).isRequired,
+  // cohort: PropTypes.string.isRequired,
+  // progress: PropTypes.shape({
+  //   percent: PropTypes.number.isRequired,
+  // }),
+  // classes: PropTypes.shape({
+  //   card: PropTypes.string.isRequired,
+  //   cardActions: PropTypes.string.isRequired,
+  //   countText: PropTypes.string.isRequired,
+  //   cardContent: PropTypes.string.isRequired,
+  //   cardClose: PropTypes.string.isRequired,
+  // }).isRequired,
+  // drawerOpen: PropTypes.bool,
 };
 
 
-CourseCard.defaultProps = {
+ProjectCard.defaultProps = {
   progress: undefined,
   drawerOpen: undefined,
 
@@ -129,14 +123,14 @@ const mapStateToProps = ({ topbar }) => ({
 
 export default compose(
   firestoreConnect(props => [{
-    collection: `cohorts/${props.cohort}/users/${props.auth.uid}/progress`,
-    doc: props.course.id,
+    collection: `groups/${props.group}/users/${props.auth.uid}/progress`,
+    doc: props.project.id,
   }]),
-  connect(({ firestore }, { cohort, auth, course }) => ({
-    progress: firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`]
-      ? firestore.data[`cohorts/${cohort}/users/${auth.uid}/progress`][course.id]
+  connect(({ firestore }, { group, auth, project }) => ({
+    progress: firestore.data[`groups/${group}/users/${auth.uid}/progress`]
+      ? firestore.data[`groups/${group}/users/${auth.uid}/progress`][project.id]
       : undefined,
   })),
   connect(mapStateToProps),
   withStyles(styles),
-)(CourseCard);
+)(ProjectCard);
