@@ -60,21 +60,16 @@ const styles = theme => ({
 
 
 const DesignerList = ({
-  group,
-  projects,
+  designer,
+  designers,
   classes,
   auth,
-  profile,
-  history,
   drawerOpen,
 }) => {
-  if (!projects) {
+  if (!designers) {
     return (<Loader />);
   }
   console.log(group);
-  const canManageCourse =
-    ['instructor', 'admin'].indexOf(group.role) > -1
-    || (profile.roles && profile.roles.admin);
   return (
     <div
       position="absolute"
@@ -84,18 +79,9 @@ const DesignerList = ({
         {/* <Typography variant="subheading" gutterBottom className={classes.headline}>
           <FormattedMessage id="group.title" /> {' : '}{group.id}
         </Typography> */}
-        {canManageCourse && (
-          <IconButton
-            className={classes.headingButton}
-            aria-label="Manage"
-            onClick={() => history.push(`/groups/${group.id}`)}
-          >
-            <BorderColorIcon />
-          </IconButton>
-        )}
       </div>
       <div className={classes.container}>
-        {!projects.length
+        {/* {!projects.length
           ? <FormattedMessage id="course-list.content" />
           : (projects.map(project => (
             <ProjectCard
@@ -104,7 +90,7 @@ const DesignerList = ({
               project={project}
               auth={auth}
             />
-          )))}
+          )))} */}
       </div>
     </div>
   );
@@ -140,11 +126,11 @@ DesignerList.defaultProps = {
 
 export default compose(
   firestoreConnect(props => [{
-    collection: `groups/${props.group.id}/projects`,
+    collection: `designers/${props.designer.id}`,
     orderBy: ['order'],
   }]),
   connect(({ firestore }, { group }) => ({
-    projects: firestore.ordered[`groups/${group.id}/projects`],
+    designer: firestore.ordered[`designers/${designer.id}`],
   })),
   withStyles(styles),
 )(DesignerList);

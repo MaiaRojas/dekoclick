@@ -51,7 +51,7 @@ const Designers = ({
   <div className="courses">
     <TopBar title={<FormattedMessage id="projects.title" />} />
     {console.log(designers)}
-    {/* {!designers && <Loader />}
+    {!designers && <Loader />}
     {designers && !designers.length && (
       <div
         position="absolute"
@@ -62,7 +62,7 @@ const Designers = ({
     )}
     <div>
       <h1>Diseñadores</h1>
-      {designers && designers.length > 0 && (
+      {/* {designers && designers.length > 0 && (
       [...designers].reverse().map(designer => (
         <DesignerList
           drawerOpen={drawerOpen}
@@ -73,8 +73,8 @@ const Designers = ({
           history={history}
         />
       ))
-    )}
-    </div> */}
+    )} */}
+    </div>
   </div>
 );
 

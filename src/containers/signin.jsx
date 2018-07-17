@@ -289,7 +289,7 @@ const SignIn = (props) => {
   const { email, password } = props.data;
   const auth = props.firebase.auth();
 
-  if (auth.currentUser) {
+  if (auth.currentUser && window.location.pathname !== '/') {
     return <Redirect to="/" />;
   }
 

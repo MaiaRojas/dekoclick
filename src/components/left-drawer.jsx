@@ -38,7 +38,7 @@ const styles = theme => ({
     }),
     width: theme.spacing.unit * 7,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 9,
+      width: 0,
     },
     borderRight: 0,
   },

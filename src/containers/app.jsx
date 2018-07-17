@@ -29,7 +29,7 @@ const App = (props) => {
         {props.auth.isEmpty
           ? (
             <Route
-              path="/:action?/:cohortid?"
+              path="/:action?/:groupid?"
               component={SignIn}
               authError={props.authError}
             />
@@ -38,17 +38,17 @@ const App = (props) => {
             <ScrollToTop>
               <Switch>
                 <WrappedRoute
-                  path="/cohorts/:cohortid/courses/:courseid/:unitid/:partid?/:exerciseid?"
+                  path="/groups/:groupid/projects/:projectid/:unitid/:partid?/:exerciseid?"
                   component={Unit}
                   mainNav={false}
                   {...props}
                 />
                 <WrappedRoute
-                  path="/cohorts/:cohortid/courses/:courseid"
+                  path="/groups/:groupid/projects/:projectid"
                   component={Course}
                   {...props}
                 />
-                <WrappedRoute path="/cohorts/:cohortid" component={Cohort} {...props} />
+                <WrappedRoute path="/groups/:id" component={Cohort} {...props} />
                 <WrappedRoute path="/cohorts" component={Cohorts} {...props} />
                 <WrappedRoute path="/manager" component={Manager} {...props} />
                 <WrappedRoute path="/designers" component={Designers} {...props} />
