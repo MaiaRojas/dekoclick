@@ -1,20 +1,20 @@
 // Action types
-const TOGGLE = 'lms.laboratoria.la/cohortCourseAddDialog/TOGGLE';
-const UPDATE_COURSE = 'lms.laboratoria.la/cohortCourseAddDialog/UPDATE_COURSE';
-const RESET = 'lms.laboratoria.la/cohortCourseAddDialog/RESET';
+const TOGGLE = 'www.laboratoriodigital.pe/projectCourseAddDialog/TOGGLE';
+const UPDATE_COURSE = 'www.laboratoriodigital.pe/projectCourseAddDialog/UPDATE_COURSE';
+const RESET = 'www.laboratoriodigital.pe/projectCourseAddDialog/RESET';
 
 
 // Action Creators
-export const toggleCohortCourseAddDialog = () => ({
+export const toggleProjectCourseAddDialog = () => ({
   type: TOGGLE,
 });
 
-export const updateCohortCourseAddDialogCourse = course => ({
+export const updateProjectCourseAddDialogCourse = course => ({
   type: UPDATE_COURSE,
   payload: course,
 });
 
-export const resetCohortCourseAddDialog = () => ({
+export const resetProjectCourseAddDialog = () => ({
   type: RESET,
 });
 

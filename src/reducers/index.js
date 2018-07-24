@@ -5,13 +5,13 @@ import { firestoreReducer as firestore } from 'redux-firestore';
 import signin from './signin';
 import exercise from './exercise';
 import topbar from './top-bar';
-import cohorts from './cohorts';
-import cohort from './cohort';
-import cohortNewDialog from './cohort-new-dialog';
-import cohortCalendarAddDialog from './cohort-calendar-add-dialog';
-import cohortUserAddDialog from './cohort-user-add-dialog';
-import cohortUserMoveDialog from './cohort-user-move-dialog';
-import cohortCourseAddDialog from './cohort-course-add-dialog';
+import projects from './projects';
+import project from './project';
+import projectNewDialog from './project-new-dialog';
+//import cohortCalendarAddDialog from './cohort-calendar-add-dialog';
+import projectUserAddDialog from './project-user-add-dialog';
+import projectUserMoveDialog from './project-user-move-dialog';
+import projectCourseAddDialog from './project-course-add-dialog';
 import quizConfirmationDialog from './quiz-confirmation-dialog';
 import unitCardAdmin from './unit-card-admin';
 
@@ -23,13 +23,13 @@ export default combineReducers({
   signin,
   exercise,
   topbar,
-  cohorts,
-  cohort,
-  cohortNewDialog,
-  cohortCalendarAddDialog,
-  cohortUserAddDialog,
-  cohortUserMoveDialog,
-  cohortCourseAddDialog,
+  projects,
+  project,
+  projectNewDialog,
+ // cohortCalendarAddDialog,
+  projectUserAddDialog,
+  projectUserMoveDialog,
+  projectCourseAddDialog,
   quizConfirmationDialog,
   unitCardAdmin,
 });

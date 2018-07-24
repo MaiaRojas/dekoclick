@@ -1,8 +1,8 @@
 // Action types
-const TAB_SELECT = 'lms.laboratoria.la/exercise/TAB_SELECT';
-const UPDATE_CODE = 'lms.laboratoria.la/exercise/UPDATE_CODE';
-const RUN_TESTS_START = 'lms.laboratoria.la/exercise/RUN_TESTS_START';
-const RUN_TESTS_END = 'lms.laboratoria.la/exercise/RUN_TESTS_END';
+const TAB_SELECT = 'www.laboratoriodigital.pe/exercise/TAB_SELECT';
+const UPDATE_CODE = 'www.laboratoriodigital.pe/exercise/UPDATE_CODE';
+const RUN_TESTS_START = 'www.laboratoriodigital.pe/exercise/RUN_TESTS_START';
+const RUN_TESTS_END = 'www.laboratoriodigital.pe/exercise/RUN_TESTS_END';
 
 
 // Action Creators

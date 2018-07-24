@@ -16,7 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import GithubCard from '../components/github-card';
 import isUrl from '../util/isUrl';
-import { parse as parseCohortid } from '../util/cohort';
+import { parse as parseCohortid } from '../util/project';
 
 
 const styles = theme => ({
@@ -235,7 +235,7 @@ class DesignerForm extends React.Component {
           {...props}
           inputLabel="GitHub"
           inputValue={this.state.github}
-          helperText="Ejemplo: Si tu github es: https://github.com/Laboratoria/, entonces escribir solamente el nick 'Laboratoria'"
+          helperText="Ejemplo: Si tu github es: entonces escribir solamente el nick"
           error={isUrl(this.state.github)}
           inputId="github"
           updateValueOnProfile={this.updateValueOnProfile}
@@ -390,11 +390,11 @@ class DesignerForm extends React.Component {
             <Paper className={props.classes.paper}>
               <Button onClick={this.handleOpen}> Verificar mis projectos de Github</Button>
               <a
-                href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`}
+                href={`https://profile/${this.props.uid}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ver mi perfil en talento.laboratoria.la!
+                Ver mi perfil en talento
               </a>
             </Paper>
 

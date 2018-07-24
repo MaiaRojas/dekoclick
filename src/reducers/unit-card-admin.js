@@ -1,5 +1,5 @@
 // Action types
-const TOGGLE_ACTIONS = 'lms.laboratoria.la/unit-card-admin/TOGGLE_ACTIONS';
+const TOGGLE_ACTIONS = 'www.laboratoriodigital.pe/unit-card-admin/TOGGLE_ACTIONS';
 
 
 // Action Creators

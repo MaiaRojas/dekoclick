@@ -1,75 +1,75 @@
 // Action types
 
-const SET_IN_PROGRESS = 'lms.laboratoria.la/cohortNewDialog/SET_IN_PROGRESS';
-const TOGGLE = 'lms.laboratoria.la/cohortNewDialog/TOGGLE';
-const UPDATE_CAMPUS = 'lms.laboratoria.la/cohortNewDialog/UPDATE_CAMPUS';
-const UPDATE_PROGRAM = 'lms.laboratoria.la/cohortNewDialog/UPDATE_PROGRAM';
-const UPDATE_TRACK = 'lms.laboratoria.la/cohortNewDialog/UPDATE_TRACK';
-const UPDATE_NAME = 'lms.laboratoria.la/cohortNewDialog/UPDATE_NAME';
-const UPDATE_PUBLIC_ADMISSION = 'lms.laboratoria.la/cohortNewDialog/UPDATE_PUBLIC_ADMISSION';
-const UPDATE_START = 'lms.laboratoria.la/cohortNewDialog/UPDATE_START';
-const UPDATE_END = 'lms.laboratoria.la/cohortNewDialog/UPDATE_END';
-const UPDATE_ERRORS = 'lms.laboratoria.la/cohortNewDialog/UPDATE_ERRORS';
-const UPDATE_KEY = 'lms.laboratoria.la/cohortNewDialog/UPDATE_KEY';
-const RESET = 'lms.laboratoria.la/cohortNewDialog/RESET';
+const SET_IN_PROGRESS = 'www.laboratoriodigital.pe/projectNewDialog/SET_IN_PROGRESS';
+const TOGGLE = 'www.laboratoriodigital.pe/projectNewDialog/TOGGLE';
+const UPDATE_CAMPUS = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_CAMPUS';
+const UPDATE_PROGRAM = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_PROGRAM';
+const UPDATE_TRACK = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_TRACK';
+const UPDATE_NAME = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_NAME';
+const UPDATE_PUBLIC_ADMISSION = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_PUBLIC_ADMISSION';
+const UPDATE_START = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_START';
+const UPDATE_END = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_END';
+const UPDATE_ERRORS = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_ERRORS';
+const UPDATE_KEY = 'www.laboratoriodigital.pe/projectNewDialog/UPDATE_KEY';
+const RESET = 'www.laboratoriodigital.pe/projectNewDialog/RESET';
 
 
 // Action Creators
-export const setInProgressCohortNewDialog = () => ({
+export const setInProgressProjectNewDialog = () => ({
   type: SET_IN_PROGRESS,
 });
 
-export const toggleCohortNewDialog = () => ({
+export const toggleProjectNewDialog = () => ({
   type: TOGGLE,
 });
 
-export const updateCohortNewDialogCampus = campus => ({
+export const updateProjectNewDialogCampus = campus => ({
   type: UPDATE_CAMPUS,
   payload: campus,
 });
 
-export const updateCohortNewDialogProgram = program => ({
+export const updateProjectNewDialogProgram = program => ({
   type: UPDATE_PROGRAM,
   payload: program,
 });
 
-export const updateCohortNewDialogTrack = track => ({
+export const updateProjectNewDialogTrack = track => ({
   type: UPDATE_TRACK,
   payload: track,
 });
 
-export const updateCohortNewDialogName = name => ({
+export const updateProjectNewDialogName = name => ({
   type: UPDATE_NAME,
   payload: name,
 });
 
-export const updateCohortNewDialogPublicAdmission = bool => ({
+export const updateProjectNewDialogPublicAdmission = bool => ({
   type: UPDATE_PUBLIC_ADMISSION,
   payload: bool,
 });
 
-export const updateCohortNewDialogStart = start => ({
+export const updateProjectNewDialogStart = start => ({
   type: UPDATE_START,
   payload: start,
 });
 
-export const updateCohortNewDialogEnd = end => ({
+export const updateProjectNewDialogEnd = end => ({
   type: UPDATE_END,
   payload: end,
 });
 
-export const updateCohortNewDialogErrors = errors => ({
+export const updateProjectNewDialogErrors = errors => ({
   type: UPDATE_ERRORS,
   payload: errors
     .reduce((memo, item) => ({ ...memo, [item.field]: item.message }), {}),
 });
 
-export const updateCohortNewDialogKey = key => ({
+export const updateProjectNewDialogKey = key => ({
   type: UPDATE_KEY,
   payload: key,
 });
 
-export const resetCohortNewDialog = () => ({
+export const resetProjectNewDialog = () => ({
   type: RESET,
 });
 

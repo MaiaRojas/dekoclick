@@ -1,28 +1,92 @@
 const programs = {
-  pre: {
-    id: 'pre',
+  // pre: {
+  //   id: 'pre',
+  //   order: 0,
+  //   name: 'Selección',
+  // },
+  // bc: {
+  //   id: 'bc',
+  //   order: 1,
+  //   name: 'Bootcamp',
+  // },
+  // jp: {
+  //   id: 'jp',
+  //   order: 2,
+  //   name: 'Job placement',
+  // },
+  // ec: {
+  //   id: 'ec',
+  //   order: 3,
+  //   name: 'Educación continua',
+  // },
+  // l4b: {
+  //   id: 'l4b',
+  //   order: 4,
+  //   name: 'L4B',
+  // },
+};
+
+const packages = {
+  classic: {
+    id: 'classic',
     order: 0,
-    name: 'Selección',
+    name: 'Clásico',
   },
-  bc: {
-    id: 'bc',
+  premium: {
+    id: 'premium',
     order: 1,
-    name: 'Bootcamp',
+    name: 'Premium',
   },
-  jp: {
-    id: 'jp',
+  exclusive: {
+    id: 'exclusive',
     order: 2,
-    name: 'Job placement',
+    name: 'Exclusivo',
   },
-  ec: {
-    id: 'ec',
+};
+
+const types = {
+  modern: {
+    id: 'modern',
+    order: 0,
+    name: 'Moderno',
+  },
+  electric: {
+    id: 'electric',
+    order: 1,
+    name: 'Eléctrico',
+  },
+  contemporary: {
+    id: 'contemporary',
+    order: 2,
+    name: 'Contemporáneo',
+  },
+  classic: {
+    id: 'classic',
     order: 3,
-    name: 'Educación continua',
+    name: 'Clásico',
   },
-  l4b: {
-    id: 'l4b',
-    order: 4,
-    name: 'L4B',
+};
+
+const times = {
+  two: {
+    id: 'two',
+    order: 0,
+    name: '2 días',
+  },
+  five: {
+    id: 'five',
+    order: 1,
+    name: '5 días',
+  },
+  eight: {
+    id: 'eight',
+    order: 2,
+    name: '8 días',
+  },
+  fifteen: {
+    id: 'fifteen',
+    order: 3,
+    name: '15 días',
   },
 };
 
@@ -52,6 +116,9 @@ const getById = id => programs[id];
 
 export default {
   programs,
+  packages,
+  types,
+  times,
   keys,
   sorted,
   getById,

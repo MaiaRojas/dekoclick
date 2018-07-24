@@ -2,19 +2,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
-import { firestoreConnect } from 'react-redux-firebase';
-import Avatar from 'material-ui/Avatar';
-import Chip from 'material-ui/Chip';
-import ScheduleIcon from 'material-ui-icons/Schedule';
+import AppBar from 'material-ui/AppBar';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import List from 'material-ui/List';
 import TopBar from '../components/top-bar';
-import UnitCard from '../components/unit-card';
+import Alert from '../components/alert';
+import ProjectSection from '../components/project-section';
+// import CohortCalendar from '../components/cohort-calendar';
+import ProjectCourse from '../components/project-course';
+import ProjectUsers from '../components/project-users';
+// import ProjectCalendarAddDialog from '../components/project-calendar-add-dialog';
+import ProjectUserAddDialog from '../components/project-user-add-dialog';
+import ProjectUserMoveDialog from '../components/project-user-move-dialog';
+import ProjectCourseAddDialog from '../components/project-course-add-dialog';
+import { selectProjectUsersTab } from '../reducers/project';
+// import { toggleProjectCalendarAddDialog } from '../reducers/project-calendar-add-dialog';
+import { toggleProjectCourseAddDialog } from '../reducers/project-course-add-dialog';
+import { toggleProjectUserAddDialog } from '../reducers/project-user-add-dialog';
+import { parse as parseProjectid } from '../util/project';
+import programs from '../util/programs';
 import Loader from '../components/loader';
-
 
 const drawerWidth = 320;
 const styles = theme => ({
+  root: {
+    width: '100%',
+  },
+  courseListWrapper: {
+    background: theme.palette.background.paper,
+  },
   appBar: {
     width: '100%',
     zIndex: theme.zIndex.drawer + 1,
@@ -41,51 +60,171 @@ const styles = theme => ({
 });
 
 
-const Project = (props) => {
-  // if (!props.project || props.cohortUser === undefined || props.courseProgressStats === undefined) {
-  //   return (<Loader />);
-  // }
+const usersByRole = users =>
+  users.reduce(
+    (memo, user) => ({
+      ...memo,
+      [`${user.role}s`]: [
+        ...memo[`${user.role}s`],
+        user,
+      ],
+    }),
+    {
+      students: [],
+      instructors: [],
+      admins: [],
+    },
+  );
 
-  // const isAdmin = props.profile.roles && props.profile.roles.admin;
 
-  // if (!props.cohortUser && !isAdmin) {
-  //   return null; // unauthorised?
-  // }
+const Project = ({
+  project,
+  courses,
+  users,
+  currentTab,
+  calendarAddDialogOpen,
+  courseAddDialogOpen,
+  userAddDialogOpen,
+  selectTab,
+  toggleCalendarAddDialog,
+  toggleUserAddDialog,
+  toggleCourseAddDialog,
+  match,
+  classes,
+  history,
+  auth,
+  drawerOpen,
+}) => {
+  if (!project || typeof courses === 'undefined' || typeof users === 'undefined') {
+    return (<Loader />);
+  }
 
-  // const canManageCourse =
-  //   isAdmin
-  //   || ['instructor', 'admin'].indexOf(props.cohortUser.role) > -1;
+  const { cohortid } = match.params;
+  const {
+    students,
+    instructors,
+    admins,
+  } = usersByRole(users);
+
+  const parsedProjectId = parseProjectid(projectid);
+  const program = programs.getById(parsedProjectId.program);
 
   return (
-    <div className="project">
-      <TopBar title=''>
-        {/* {props.course.stats && props.course.stats.durationString &&
-          <Chip
-            avatar={<Avatar><ScheduleIcon /></Avatar>}
-            label={props.course.stats.durationString}
-          />
-        } */}
-      </TopBar>
+    <div className={`project ${classes.root}`}>
+      <TopBar title={`Project : ${cohortid}`} />
       <div
         position="absolute"
-        className={
-          classNames(props.classes.appBar, props.drawerOpen && props.classes.appBarShift)
-        }
+        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
       >
-        <h1>Implementando ...</h1>
-        {/* {props.syllabus && props.syllabus.map((unit, idx) => (
-          <UnitCard
-            key={unit.id}
-            idx={idx}
-            unit={unit}
-            courseProgressStats={props.courseProgressStats}
-            course={props.match.params.projectid}
-            cohort={props.match.params.cohortid}
-            canManageCourse={canManageCourse}
-            courseSettings={props.courseSettings}
-            syllabus={props.syllabus}
+        <ProjectSection title="Overview">
+          <p>
+            Campus: {parsedProjectId.campus.toUpperCase()}<br />
+            Program: {program && program.name && program.name}<br />
+            Track: {parsedProjectId.track}
+          </p>
+        </ProjectSection>
+
+        {/*
+          <CohortSection
+            title="Agenda"
+            onAdd={toggleCalendarAddDialog}
+          >
+            <CohortCalendar
+              cohortid={cohortid}
+              cohort={cohort}
+              toggleCalendarAddDialog={toggleCalendarAddDialog}
+            />
+          </CohortSection>
+        */}
+
+        <ProjectSection
+          title="Cursos"
+          onAdd={toggleCourseAddDialog}
+        >
+          {!courses.length ?
+            (
+              <Alert
+                message="Todavía no se han añadido cursos a este cohort. Puedes
+                  añadir cursos usando el botón '+' a la derecha."
+              />
+            )
+            :
+            (
+              <div className={classes.courseListWrapper}>
+                <List dense={false}>
+                  {courses.map(course => (
+                    <ProjectCourse
+                      key={course.id}
+                      projectid={projectid}
+                      courseid={course.id}
+                      course={course}
+                      history={history}
+                    />
+                  ))}
+                </List>
+              </div>
+            )
+          }
+        </ProjectSection>
+
+        <ProjectSection
+          title={`Usuarixs (${users.length})`}
+          onAdd={toggleUserAddDialog}
+        >
+          {!users.length ?
+            (
+              <Alert
+                message="Todavía no se han añadido usuarios a este curso. Para
+                añadir alumnxs, instructorxs o admins usa el botón '+' a la
+                derecha."
+              />
+            )
+            :
+            (
+              <div>
+                <AppBar position="static">
+                  <Tabs value={currentTab} onChange={(e, val) => selectTab(val)}>
+                    <Tab label={`Alumnxs (${students.length})`} />
+                    <Tab label={`Instructorxs (${instructors.length})`} />
+                    <Tab label={`Admins (${admins.length})`} />
+                  </Tabs>
+                </AppBar>
+                {currentTab === 0 && (
+                  <ProjectUsers
+                    projectid={projectid}
+                    users={students}
+                    auth={auth}
+                    parsedProjectId={parsedProjectId}
+                  />
+                )}
+                {currentTab === 1 && (
+                  <ProjectUsers projectid={projectid} users={instructors} />
+                )}
+                {currentTab === 2 && (
+                  <ProjectUsers projectid={projectid} users={admins} />
+                )}
+              </div>
+            )
+          }
+        </ProjectSection>
+
+        {calendarAddDialogOpen && (
+          <CohortCalendarAddDialog
+            projectid={projectid}
+            users={users}
+            toggleCalendarAddDialog={toggleCalendarAddDialog}
           />
-        ))} */}
+        )}
+
+        {courseAddDialogOpen && (
+          <ProjectCourseAddDialog projectid={projectid} courses={courses} />
+        )}
+
+        {userAddDialogOpen && (
+          <ProjectUserAddDialog projectid={projectid} />
+        )}
+
+        <ProjectUserMoveDialog projectid={projectid} />
       </div>
     </div>
   );
@@ -93,87 +232,79 @@ const Project = (props) => {
 
 
 Project.propTypes = {
-  // course: PropTypes.shape({
-  //   title: PropTypes.string.isRequired,
-  //   stats: PropTypes.shape({
-  //     durationString: PropTypes.string.isRequired,
-  //   }),
-  // }),
-  // syllabus: PropTypes.arrayOf(PropTypes.shape({})),
-  // cohortUser: PropTypes.shape({
-  //   role: PropTypes.string.isRequired,
-  // }),
-  // courseProgressStats: PropTypes.shape({}),
-  // courseSettings: PropTypes.shape({}),
-  // match: PropTypes.shape({
-  //   params: PropTypes.shape({
-  //     projectid: PropTypes.string.isRequired,
-  //     cohortid: PropTypes.string.isRequired,
-  //   }).isRequired,
-  // }).isRequired,
-  // profile: PropTypes.shape({
-  //   roles: PropTypes.shape({
-  //     admin: PropTypes.bool.isRequired,
-  //   }),
-  // }).isRequired,
-  // classes: PropTypes.shape({
-  //   appBar: PropTypes.string.isRequired,
-  //   appBarShift: PropTypes.string.isRequired,
-  // }).isRequired,
-  // drawerOpen: PropTypes.bool,
+//   cohort: PropTypes.shape({}),
+//   users: PropTypes.arrayOf(PropTypes.shape({})),
+//   courses: PropTypes.arrayOf(PropTypes.shape({})),
+//   currentTab: PropTypes.number.isRequired,
+//   calendarAddDialogOpen: PropTypes.bool.isRequired,
+//   courseAddDialogOpen: PropTypes.bool.isRequired,
+//   userAddDialogOpen: PropTypes.bool.isRequired,
+//   selectTab: PropTypes.func.isRequired,
+//   toggleCalendarAddDialog: PropTypes.func.isRequired,
+//   toggleUserAddDialog: PropTypes.func.isRequired,
+//   toggleCourseAddDialog: PropTypes.func.isRequired,
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       cohortid: PropTypes.string.isRequired,
+//     }).isRequired,
+//   }).isRequired,
+//   history: PropTypes.shape({}).isRequired,
+//   auth: PropTypes.shape({}).isRequired,
+//   classes: PropTypes.shape({
+//     root: PropTypes.string.isRequired,
+//   }).isRequired,
+//   drawerOpen: PropTypes.bool.isRequired,
 };
 
 
 Project.defaultProps = {
-  course: undefined,
-  syllabus: undefined,
-  cohortUser: undefined,
-  courseProgressStats: undefined,
-  courseSettings: undefined,
-  drawerOpen: undefined,
+  // cohort: undefined,
+  // users: undefined,
+  // courses: undefined,
 };
 
-const mapStateToProps = ({ topbar }) => ({
+
+const mapStateToProps = ({
+  firestore,
+  project,
+  projectCalendarAddDialog,
+  projectUserAddDialog,
+  projectCourseAddDialog,
+  topbar,
+}, { match }) => ({
+  project: (firestore.data.projects || {})[match.params.projectid],
+  users: firestore.ordered[`projects/${match.params.projectid}/users`],
+  courses: firestore.ordered[`projects/${match.params.projectid}/courses`],
+  currentTab: project.currentTab,
+  calendarAddDialogOpen: projectCalendarAddDialog.open,
+  courseAddDialogOpen: projectCourseAddDialog.open,
+  userAddDialogOpen: projectUserAddDialog.open,
   drawerOpen: topbar.drawerOpen,
 });
+//
+
+const mapDispatchToProps = {
+  selectTab: selectProjectUsersTab,
+  toggleUserAddDialog: toggleProjectUserAddDialog,
+  toggleCourseAddDialog: toggleProjectCourseAddDialog,
+  //toggleCalendarAddDialog: toggleProjectCalendarAddDialog,
+};
+
 
 export default compose(
-  firestoreConnect(({ auth, match: { params: { groupid, projectid } } }) => [
+  firestoreConnect(({ match }) => ([
     {
-      collection: `groups/${groupid}/projects`,
-      doc: projectid,
+      collection: 'projects',
+      doc: match.params.id,
     },
-    // {
-    //   collection: `groups/${groupid}/coursesSettings`,
-    //   doc: projectid,
-    // },
-    // {
-    //   collection: `groups/${groupid}/projects/${projectid}/syllabus`,
-    // },
-    // {
-    //   collection: `groups/${groupid}/users`,
-    //   doc: auth.uid,
-    // },
-    // {
-    //   collection: `groups/${groupid}/users/${auth.uid}/progress`,
-    //   doc: projectid,
-    // },
-  ]),
-  connect(({ firestore }, { auth, match: { params: { groupid, projectid } } }) => ({
-    project: firestore.data[`groups/${groupid}/projects`]
-      ? firestore.data[`groups/${groupid}/projects`][projectid]
-      : undefined,
-    // syllabus: firestore.ordered[`groups/${groupid}/projects/${projectid}/syllabus`],
-    // cohortUser: firestore.data[`groups/${groupid}/users`]
-    //   ? firestore.data[`groups/${groupid}/users`][auth.uid] || null
-    //   : undefined,
-    // courseProgressStats: firestore.data[`groups/${groupid}/users/${auth.uid}/progress`]
-    //   ? firestore.data[`groups/${groupid}/users/${auth.uid}/progress`][projectid] || null
-    //   : undefined,
-    // courseSettings: firestore.data[`groups/${groupid}/coursesSettings`]
-    //   ? firestore.data[`groups/${groupid}/coursesSettings`][projectid]
-    //   : undefined,
-  })),
-  connect(mapStateToProps),
+    {
+      collection: `projects/${match.params.projectid}/users`,
+    },
+    {
+      collection: `projects/${match.params.projectid}/courses`,
+      orderBy: ['order'],
+    },
+  ])),
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(Project);

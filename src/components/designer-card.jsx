@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
 import { FormattedMessage } from 'react-intl';
 import Progress from './progress';
 
@@ -15,9 +16,9 @@ import Progress from './progress';
 const styles = theme => ({
   card: {
     width: '25%',
-    marginBottom: theme.spacing.unit * 4,
+    margin: theme.spacing.unit,
     borderBottom: 0,
-    boxShadow: 'none',
+    boxShadow: theme.shadow,
     [theme.breakpoints.down('md')]: {
       width: '100%',
     },
@@ -31,13 +32,8 @@ const styles = theme => ({
   },
   cardActions: {
     flexWrap: 'wrap',
-    padding: theme.spacing.unit,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px`,
     position: 'relative',
-  },
-  countTitle: {
-    display: 'inline-block',
-    fontWeight: 500,
-    fontSize: '1.2rem',
   },
   countText: {
     display: 'inline-block',
@@ -45,8 +41,8 @@ const styles = theme => ({
     fontSize: '0.8rem',
   },
   cardContent: {
-    backgroundColor: '#4C4C4C',
-    minHeight: '230px',
+    backgroundColor: theme.palette.primary.main,
+    minHeight: '60px',
   },
 });
 
@@ -55,35 +51,40 @@ const getSummary = (elem) => {
   return newSummary.slice(newSummary.search(' ')).split('').reverse().join('');
 };
 
-const ProjectCard = props => (
+const DesignerCard = props => console.log() || (
   <Card
-    to={`/projects/${props.project.id}`}
+    className={
+      classNames(props.classes.card, props.drawerOpen && props.classes.cardClose)
+    }
+    to={`/designers/${props.designer.id}`}
     component={Link}
   >
     <CardContent className={props.classes.cardContent}>
-      <Typography variant="title" style={{ fontSize: '1.2rem', lineHeight: '1.5rem' }}>
-        {props.project.title}
-      </Typography>
     </CardContent>
-    <Progress style={{ bordeRadius: '5px', margin: '5px 0'}} value={53} />
     <CardActions className={props.classes.cardActions}>
-      <Typography className={props.classes.countTitle}>
-        Paquete Clásico
+      <Typography variant="title">
+        Carla Rod
       </Typography>
-      <Typography className={props.classes.countText}>
-        Ambiente: Sala
-      </Typography>
+      <Button
+        size="small"
+        variant="raised"
+        color="primary"
+        to={`/designers/${props.designers}`}
+        component={Link}
+      >
+        Ver Perfil
+      </Button>
     </CardActions>
   </Card>
 );
 
 
-ProjectCard.propTypes = {
+DesignerCard.propTypes = {
 
 };
 
 
-ProjectCard.defaultProps = {
+DesignerCard.defaultProps = {
   progress: undefined,
   drawerOpen: undefined,
 
@@ -94,4 +95,4 @@ const mapStateToProps = ({ topbar }) => ({
 });
 
 
-export default withStyles(styles)(ProjectCard);
+export default withStyles(styles)(DesignerCard);

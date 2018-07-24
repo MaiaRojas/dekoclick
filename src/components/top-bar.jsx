@@ -12,6 +12,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { displayDrawer } from '../reducers/top-bar';
 import Avatar from 'material-ui/Avatar';
+import SimpleMenu from '../components/menu';
 
 
 const drawerWidth = 321;

@@ -48,7 +48,7 @@ const theme = createMuiTheme({
       fontFamily: "'Montserrat', sans-serif",
       fontWeight: 700,
       boxShadow: 'none !important',
-      borderRadius: 0,
+      // borderRadius: 0,
       textTransform: 'none',
     },
     display1: {

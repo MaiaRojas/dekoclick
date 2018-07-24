@@ -17,10 +17,10 @@ import Input, { InputLabel } from 'material-ui/Input';
 import Button from 'material-ui/Button';
 import Select from 'material-ui/Select';
 import {
-  toggleCohortCourseAddDialog,
-  updateCohortCourseAddDialogCourse,
-  resetCohortCourseAddDialog,
-} from '../reducers/cohort-course-add-dialog';
+  toggleProjectCourseAddDialog,
+  updateProjectCourseAddDialogCourse,
+  resetProjectCourseAddDialog,
+} from '../reducers/project-course-add-dialog';
 import hasOwnProperty from '../util/hasOwnProperty';
 
 
@@ -39,12 +39,12 @@ const styles = theme => ({
 });
 
 
-const CohortCourseAddDialogSelect = props => (
+const ProjectCourseAddDialogSelect = props => (
   <FormControl className={props.classes.formControl}>
     <InputLabel htmlFor="course">Curso</InputLabel>
     <Select
       value={props.course}
-      onChange={e => props.updateCohortCourseAddDialogCourse(e.target.value)}
+      onChange={e => props.updateProjectCourseAddDialogCourse(e.target.value)}
       input={<Input id="course" />}
     >
       {props.courses.map(course => (
@@ -57,7 +57,7 @@ const CohortCourseAddDialogSelect = props => (
 );
 
 
-CohortCourseAddDialogSelect.propTypes = {
+ProjectCourseAddDialogSelect.propTypes = {
   course: PropTypes.string.isRequired,
   courses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   updateCohortCourseAddDialogCourse: PropTypes.func.isRequired,
@@ -67,7 +67,7 @@ CohortCourseAddDialogSelect.propTypes = {
 };
 
 
-const CohortCourseAddDialog = ({ classes, ...props }) => {
+const ProjectCourseAddDialog = ({ classes, ...props }) => {
   let content = null;
 
   if (!props.courses) {
@@ -75,7 +75,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
   } else if (!props.courses.length) {
     content = (<DialogContentText>No hay más cursos disponibles</DialogContentText>);
   } else {
-    content = (<CohortCourseAddDialogSelect classes={classes} {...props} />);
+    content = (<ProjectCourseAddDialogSelect classes={classes} {...props} />);
   }
 
   return (
@@ -86,7 +86,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
           {content}
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.resetCohortCourseAddDialog} color="default">
+          <Button onClick={props.resetProjectCourseAddDialog} color="default">
             Cancelar
           </Button>
           <Button
@@ -98,7 +98,7 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
               const db = props.firebase.firestore();
               const courseRef = db.collection('courses').doc(course);
               const syllabusRef = courseRef.collection('syllabus');
-              const cohortCourseRef = db.collection(`cohorts/${cohortid}/courses`).doc(course);
+              const cohortCourseRef = db.collection(`projects/${cohortid}/courses`).doc(course);
               const cohortCourseSyllabusRef = cohortCourseRef.collection('syllabus');
               const batch = db.batch();
 
@@ -137,13 +137,13 @@ const CohortCourseAddDialog = ({ classes, ...props }) => {
 };
 
 
-CohortCourseAddDialog.propTypes = {
-  cohortid: PropTypes.string.isRequired,
+ProjectCourseAddDialog.propTypes = {
+  projectid: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   course: PropTypes.string,
   courses: PropTypes.arrayOf(PropTypes.shape({})),
-  toggleCohortCourseAddDialog: PropTypes.func.isRequired,
-  resetCohortCourseAddDialog: PropTypes.func.isRequired,
+  toggleProjectCourseAddDialog: PropTypes.func.isRequired,
+  resetProjectCourseAddDialog: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
   firebase: PropTypes.shape({
     firestore: PropTypes.func.isRequired,
@@ -151,30 +151,30 @@ CohortCourseAddDialog.propTypes = {
 };
 
 
-CohortCourseAddDialog.defaultProps = {
+ProjectCourseAddDialog.defaultProps = {
   course: '',
   courses: undefined,
 };
 
 
-const selectCourses = (cohortCourses, courses) => (
+const selectCourses = (projectCourses, courses) => (
   (!courses || !courses.length)
     ? courses
-    : courses.filter(item => !hasOwnProperty(cohortCourses || {}, item.id))
+    : courses.filter(item => !hasOwnProperty(projectCourses || {}, item.id))
 );
 
 
-const mapStateToProps = ({ firestore, cohortCourseAddDialog }, { courses }) => ({
+const mapStateToProps = ({ firestore, projectCourseAddDialog }, { courses }) => ({
   courses: selectCourses(courses, firestore.ordered.courses),
-  open: cohortCourseAddDialog.open,
-  course: cohortCourseAddDialog.course,
+  open: projectCourseAddDialog.open,
+  course: projectCourseAddDialog.course,
 });
 
 
 const mapDispatchToProps = {
-  toggleCohortCourseAddDialog,
-  updateCohortCourseAddDialogCourse,
-  resetCohortCourseAddDialog,
+  toggleProjectCourseAddDialog,
+  updateProjectCourseAddDialogCourse,
+  resetProjectCourseAddDialog,
 };
 
 
@@ -185,4 +185,4 @@ export default compose(
   }]),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
-)(CohortCourseAddDialog);
+)(ProjectCourseAddDialog);

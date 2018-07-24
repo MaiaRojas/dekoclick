@@ -5,19 +5,17 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { CircularProgress } from 'material-ui/Progress';
 import { addLocaleData, IntlProvider } from 'react-intl';
-import en from 'react-intl/locale-data/en';
+
 import es from 'react-intl/locale-data/es';
-import pt from 'react-intl/locale-data/pt';
+
 import messages from './messages';
 
 
-addLocaleData([...en, ...es, ...pt]);
+addLocaleData([ ...es]);
 
 
 const prefixToLocale = {
-  en: 'en-US',
   es: 'es-ES',
-  pt: 'pt-BR',
 };
 
 

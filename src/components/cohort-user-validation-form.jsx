@@ -199,8 +199,8 @@ class ValidationForm extends React.Component {
           [`recommendations.${authorUid}`]: {
             from: adminUser.data().name,
             authorLinkedin: adminUser.data().linkedin,
-            company: 'Laboratoria',
-            companyUrl: 'www.laboratoria.la',
+            company: 'Dekoclick',
+            companyUrl: 'Dekoclick',
             detail,
           },
         }));

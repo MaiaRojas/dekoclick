@@ -18,19 +18,19 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Switch from 'material-ui/Switch';
 import {
-  setInProgressCohortNewDialog,
-  toggleCohortNewDialog,
-  updateCohortNewDialogCampus,
-  updateCohortNewDialogProgram,
-  updateCohortNewDialogTrack,
-  updateCohortNewDialogName,
-  updateCohortNewDialogPublicAdmission,
-  updateCohortNewDialogStart,
-  updateCohortNewDialogEnd,
-  updateCohortNewDialogErrors,
-  updateCohortNewDialogKey,
-  resetCohortNewDialog,
-} from '../reducers/cohort-new-dialog';
+  setInProgressProjectNewDialog,
+  toggleProjectNewDialog,
+  updateProjectNewDialogCampus,
+  updateProjectNewDialogProgram,
+  updateProjectNewDialogTrack,
+  updateProjectNewDialogName,
+  updateProjectNewDialogPublicAdmission,
+  updateProjectNewDialogStart,
+  updateProjectNewDialogEnd,
+  updateProjectNewDialogErrors,
+  updateProjectNewDialogKey,
+  resetProjectNewDialog,
+} from '../reducers/project-new-dialog';
 import hasOwnProperty from '../util/hasOwnProperty';
 import programs from '../util/programs';
 
@@ -58,7 +58,7 @@ const styles = theme => ({
 });
 
 
-const CohortNewDialogForm = ({ classes, ...props }) => (
+const ProjectNewDialogForm = ({ classes, ...props }) => (
   <DialogContent>
     <FormControl
       error={hasOwnProperty(props.errors, 'campus')}
@@ -67,7 +67,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       <InputLabel htmlFor="campus">Campus</InputLabel>
       <Select
         value={props.campus}
-        onChange={e => props.updateCohortNewDialogCampus(e.target.value)}
+        onChange={e => props.updateProjectNewDialogCampus(e.target.value)}
         input={<Input id="campus" />}
       >
         {props.campuses.map(campus =>
@@ -81,7 +81,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       <InputLabel htmlFor="program">Program</InputLabel>
       <Select
         value={props.program}
-        onChange={e => props.updateCohortNewDialogProgram(e.target.value)}
+        onChange={e => props.updateProjectNewDialogProgram(e.target.value)}
         input={<Input id="program" />}
       >
         {programs.sorted.map(program => (
@@ -96,7 +96,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       <InputLabel htmlFor="track">Track</InputLabel>
       <Select
         value={props.track}
-        onChange={e => props.updateCohortNewDialogTrack(e.target.value)}
+        onChange={e => props.updateProjectNewDialogTrack(e.target.value)}
         input={<Input id="track" />}
       >
         <MenuItem value="core">Common core</MenuItem>
@@ -111,7 +111,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
         control={
           <Switch
             checked={props.publicAdmission}
-            onChange={(e, checked) => props.updateCohortNewDialogPublicAdmission(checked)}
+            onChange={(e, checked) => props.updateProjectNewDialogPublicAdmission(checked)}
           />
         }
         label="Public admission"
@@ -121,7 +121,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       id="name"
       className={classes.textField}
       value={props.name}
-      onChange={e => props.updateCohortNewDialogName(e.target.value)}
+      onChange={e => props.updateProjectNewDialogName(e.target.value)}
       error={hasOwnProperty(props.errors, 'name')}
       helperText="Lower case, no spaces. For example: am/pm for bootcamp or react for ec"
       margin="dense"
@@ -134,7 +134,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       id="start"
       className={classes.dateField}
       defaultValue={props.start}
-      onChange={e => props.updateCohortNewDialogStart(e.target.value)}
+      onChange={e => props.updateProjectNewDialogStart(e.target.value)}
       error={hasOwnProperty(props.errors, 'start')}
       margin="dense"
       label="Start"
@@ -145,7 +145,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
       id="end"
       className={classes.dateField}
       defaultValue={props.end}
-      onChange={e => props.updateCohortNewDialogEnd(e.target.value)}
+      onChange={e => props.updateProjectNewDialogEnd(e.target.value)}
       error={hasOwnProperty(props.errors, 'end')}
       margin="dense"
       label="End"
@@ -156,7 +156,7 @@ const CohortNewDialogForm = ({ classes, ...props }) => (
 );
 
 
-CohortNewDialogForm.propTypes = {
+ProjectNewDialogForm.propTypes = {
   campus: PropTypes.string.isRequired,
   program: PropTypes.string.isRequired,
   track: PropTypes.string.isRequired,
@@ -165,31 +165,31 @@ CohortNewDialogForm.propTypes = {
   start: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,
   errors: PropTypes.shape({}).isRequired,
-  updateCohortNewDialogCampus: PropTypes.func.isRequired,
-  updateCohortNewDialogProgram: PropTypes.func.isRequired,
-  updateCohortNewDialogTrack: PropTypes.func.isRequired,
-  updateCohortNewDialogName: PropTypes.func.isRequired,
-  updateCohortNewDialogPublicAdmission: PropTypes.func.isRequired,
-  updateCohortNewDialogStart: PropTypes.func.isRequired,
-  updateCohortNewDialogEnd: PropTypes.func.isRequired,
+  updateProjectNewDialogCampus: PropTypes.func.isRequired,
+  updateProjectNewDialogProgram: PropTypes.func.isRequired,
+  updateProjectNewDialogTrack: PropTypes.func.isRequired,
+  updateProjectNewDialogName: PropTypes.func.isRequired,
+  updateProjectNewDialogPublicAdmission: PropTypes.func.isRequired,
+  updateProjectNewDialogStart: PropTypes.func.isRequired,
+  updateProjectNewDialogEnd: PropTypes.func.isRequired,
   campuses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   classes: PropTypes.shape({}).isRequired,
 };
 
 
-const isNewCohort = (cohorts, cohortKey) =>
-  Object.keys(cohorts).indexOf(cohortKey) === -1;
+const isNewProject = (projects, projectKey) =>
+  Object.keys(projects).indexOf(projectKey) === -1;
 
 
-const CohortNewDialogConfirm = props => (
+const ProjectNewDialogConfirm = props => (
   <DialogContent>
-    {isNewCohort(props.cohorts, props.cohortKey) ?
+    {isNewProject(props.projects, props.projectKey) ?
       <DialogContentText className={props.classes.root}>
-        Estás a punto de crear un nuevo cohort con el id <code>{props.cohortKey}</code>.
+        Estás a punto de crear un nuevo cohort con el id <code>{props.projectKey}</code>.
         Estás segura de que quieres hacer esto?
       </DialogContentText> :
       <DialogContentText className={props.classes.root}>
-        Este cohort con el id <code>{props.cohortKey}</code> ya EXISTE, solo se
+        Este cohort con el id <code>{props.projectKey}</code> ya EXISTE, solo se
         actualizarán las fechas de inicio y fin. Estás segura de que quieres
         hacer esto?
       </DialogContentText>
@@ -198,9 +198,9 @@ const CohortNewDialogConfirm = props => (
 );
 
 
-CohortNewDialogConfirm.propTypes = {
-  cohorts: PropTypes.shape({}).isRequired,
-  cohortKey: PropTypes.string.isRequired,
+ProjectNewDialogConfirm.propTypes = {
+  projects: PropTypes.shape({}).isRequired,
+  projectKey: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     root: PropTypes.string.isRequired,
   }).isRequired,
@@ -269,7 +269,7 @@ const validate = (props) => {
 };
 
 
-class CohortNewDialog extends React.Component {
+class ProjectNewDialog extends React.Component {
   shouldComponentUpdate({ isInProgress, cohortKey }) {
     return !(isInProgress && cohortKey);
   }
@@ -278,44 +278,44 @@ class CohortNewDialog extends React.Component {
     const { classes, ...props } = this.props;
     return (
       <div className={classes.container}>
-        <Dialog open={props.open} onClose={props.toggleCohortNewDialog}>
+        <Dialog open={props.open} onClose={props.toggleProjectNewDialog}>
           <DialogTitle>
-            {isNewCohort(props.cohorts, props.cohortKey) ? 'New cohort' : 'Update cohort'}
+            {isNewProject(props.projects, props.projectKey) ? 'New Project' : 'Update project'}
           </DialogTitle>
           {props.cohortKey ?
-            <CohortNewDialogConfirm classes={classes} {...props} /> :
-            <CohortNewDialogForm classes={classes} {...props} />
+            <ProjectNewDialogConfirm classes={classes} {...props} /> :
+            <ProjectNewDialogForm classes={classes} {...props} />
           }
           <DialogActions>
-            <Button onClick={props.toggleCohortNewDialog} color="default">
+            <Button onClick={props.toggleProjectNewDialog} color="default">
               Cancel
             </Button>
             <Button
               variant="raised"
               color="primary"
               onClick={() => {
-                const { cohort, errors } = validate(props);
+                const { project, errors } = validate(props);
 
                 if (errors && errors.length) {
-                  return props.updateCohortNewDialogErrors(errors);
+                  return props.updateProjectNewDialogErrors(errors);
                 }
 
-                props.updateCohortNewDialogErrors([]);
+                props.updateProjectNewDialogErrors([]);
 
-                if (!props.cohortKey) {
-                  return props.updateCohortNewDialogKey(cohort.key);
+                if (!props.projectKey) {
+                  return props.updateProjectNewDialogKey(project.key);
                 }
 
-                props.setInProgressCohortNewDialog();
+                props.setInProgressProjectNewDialog();
 
                 return props.firebase.firestore()
-                  .collection('cohorts')
-                  .doc(props.cohortKey)
-                  .set(cohort.value)
-                  .then(props.resetCohortNewDialog, console.error);
+                  .collection('projects')
+                  .doc(props.projectKey)
+                  .set(project.value)
+                  .then(props.resetProjectNewDialog, console.error);
               }}
             >
-              {isNewCohort(props.cohorts, props.cohortKey) ? 'Create' : 'Update'}
+              {isNewProject(props.projects, props.projectKey) ? 'Create' : 'Update'}
             </Button>
           </DialogActions>
         </Dialog>
@@ -325,57 +325,57 @@ class CohortNewDialog extends React.Component {
 }
 
 
-CohortNewDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  cohorts: PropTypes.shape({}).isRequired,
-  cohortKey: PropTypes.string.isRequired,
-  errors: PropTypes.shape({}).isRequired,
-  toggleCohortNewDialog: PropTypes.func.isRequired,
-  updateCohortNewDialogErrors: PropTypes.func.isRequired,
-  updateCohortNewDialogKey: PropTypes.func.isRequired,
-  resetCohortNewDialog: PropTypes.func.isRequired,
-  isInProgress: PropTypes.bool.isRequired,
-  classes: PropTypes.shape({}).isRequired,
-  firebase: PropTypes.shape({
-    firestore: PropTypes.func.isRequired,
-  }).isRequired,
+ProjectNewDialog.propTypes = {
+  // open: PropTypes.bool.isRequired,
+  // cohorts: PropTypes.shape({}).isRequired,
+  // cohortKey: PropTypes.string.isRequired,
+  // errors: PropTypes.shape({}).isRequired,
+  // toggleCohortNewDialog: PropTypes.func.isRequired,
+  // updateCohortNewDialogErrors: PropTypes.func.isRequired,
+  // updateCohortNewDialogKey: PropTypes.func.isRequired,
+  // resetCohortNewDialog: PropTypes.func.isRequired,
+  // isInProgress: PropTypes.bool.isRequired,
+  // classes: PropTypes.shape({}).isRequired,
+  // firebase: PropTypes.shape({
+  //   firestore: PropTypes.func.isRequired,
+  // }).isRequired,
 };
 
 
-const mapStateToProps = ({ firestore, cohortNewDialog }) => ({
-  cohorts: (firestore.data.cohorts === null) ? {} : firestore.data.cohorts,
-  open: cohortNewDialog.open,
-  campus: cohortNewDialog.campus,
-  program: cohortNewDialog.program,
-  track: cohortNewDialog.track,
-  name: cohortNewDialog.name,
-  publicAdmission: cohortNewDialog.publicAdmission,
-  start: cohortNewDialog.start,
-  end: cohortNewDialog.end,
-  errors: cohortNewDialog.errors,
-  cohortKey: cohortNewDialog.key,
-  isInProgress: cohortNewDialog.isInProgress,
+const mapStateToProps = ({ firestore, projectNewDialog }) => ({
+  projects: (firestore.data.projects === null) ? {} : firestore.data.projects,
+  open: projectNewDialog.open,
+  campus: projectNewDialog.campus,
+  program: projectNewDialog.program,
+  track: projectNewDialog.track,
+  name: projectNewDialog.name,
+  publicAdmission: projectNewDialog.publicAdmission,
+  start: projectNewDialog.start,
+  end: projectNewDialog.end,
+  errors: projectNewDialog.errors,
+  projectKey: projectNewDialog.key,
+  isInProgress: projectNewDialog.isInProgress,
 });
 
 
 const mapDispatchToProps = {
-  setInProgressCohortNewDialog,
-  toggleCohortNewDialog,
-  updateCohortNewDialogCampus,
-  updateCohortNewDialogProgram,
-  updateCohortNewDialogTrack,
-  updateCohortNewDialogName,
-  updateCohortNewDialogPublicAdmission,
-  updateCohortNewDialogStart,
-  updateCohortNewDialogEnd,
-  updateCohortNewDialogErrors,
-  updateCohortNewDialogKey,
-  resetCohortNewDialog,
+  setInProgressProjectNewDialog,
+  toggleProjectNewDialog,
+  updateProjectNewDialogCampus,
+  updateProjectNewDialogProgram,
+  updateProjectNewDialogTrack,
+  updateProjectNewDialogName,
+  updateProjectNewDialogPublicAdmission,
+  updateProjectNewDialogStart,
+  updateProjectNewDialogEnd,
+  updateProjectNewDialogErrors,
+  updateProjectNewDialogKey,
+  resetProjectNewDialog,
 };
 
 
 export default compose(
-  firestoreConnect(() => ['cohorts']),
+  firestoreConnect(() => ['projects']),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
-)(CohortNewDialog);
+)(ProjectNewDialog);

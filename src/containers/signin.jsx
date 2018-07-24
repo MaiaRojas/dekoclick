@@ -24,7 +24,7 @@ import {
 } from '../reducers/signin';
 import SignInForm from '../components/signin-form';
 import Alert from '../components/alert';
-import { parse as parseCohortId } from '../util/cohort';
+import { parse as parseCohortId } from '../util/project';
 import Loader from '../components/loader';
 
 // handle successful signup (add profile data and assign cohort)

@@ -1,9 +1,9 @@
 // Action types
-const TAB_SELECT = 'lms.laboratoria.la/cohort/TAB_SELECT';
+const TAB_SELECT = 'www.laboratoriodigital.pe/project/TAB_SELECT';
 
 
 // Action Creators
-export const selectCohortUsersTab = id => ({
+export const selectProjectUsersTab = id => ({
   type: TAB_SELECT,
   payload: id,
 });

@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import TopBar from '../components/top-bar';
 import Alert from '../components/alert';
 import DesignerList from '../components/designer-list';
+import DesignerCard from '../components/designer-card';
 import Loader from '../components/loader';
 
 
@@ -37,6 +38,11 @@ const styles = theme => ({
       marginLeft: drawerWidth,
     },
   },
+  container: {
+    padding: theme.spacing.unit,
+    display: 'flex',
+    justifyContent: 'start',
+  },
 });
 
 
@@ -48,52 +54,48 @@ const Designers = ({
   drawerOpen,
   classes,
 }) => (
-  <div className="courses">
+  <div className="designers">
     <TopBar title={<FormattedMessage id="projects.title" />} />
-    {console.log(designers)}
-    {!designers && <Loader />}
-    {designers && !designers.length && (
-      <div
-        position="absolute"
-        className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
-      >
-        <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+      {!designers && <Loader />}
+      {designers && !designers.length && (
+        <div
+          position="absolute"
+          className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
+        >
+          <Alert message={<FormattedMessage id="courses.noCoursesWarning" />} />
+        </div>
+      )}
+
+    <div
+      position="absolute"
+      className={classNames(classes.appBar, drawerOpen && classes.appBarShift)}
+    >
+      <div className={classes.heading}>
+        <h1>Diseñadores</h1>
       </div>
-    )}
-    <div>
-      <h1>Diseñadores</h1>
-      {/* {designers && designers.length > 0 && (
-      [...designers].reverse().map(designer => (
-        <DesignerList
-          drawerOpen={drawerOpen}
-          key={designer.id}
-          designer={designer}
-          auth={auth}
-          profile={profile}
-          history={history}
-        />
-      ))
-    )} */}
+      <div className={classes.container}>
+        {designers && designers.length > 0 && (
+          [...designers].reverse().map(designer => (
+            <DesignerCard
+              drawerOpen={drawerOpen}
+              key={designer.id}
+              designer={designer}
+            />
+          ))
+        )}
+      </div>
     </div>
   </div>
 );
 
 
 Designers.propTypes = {
-  // projets: PropTypes.arrayOf(PropTypes.shape({
-  //   id: PropTypes.string.isRequired,
-  //   role: PropTypes.string.isRequired,
-  // })),
-  // auth: PropTypes.shape({}).isRequired,
-  // profile: PropTypes.shape({}).isRequired,
-  // history: PropTypes.shape({}).isRequired,
-  // drawerOpen: PropTypes.bool,
-  // classes: PropTypes.shape({}).isRequired,
+
 };
 
 
 Designers.defaultProps = {
-  projets: undefined,
+  designers: undefined,
   drawerOpen: undefined,
 };
 
@@ -111,9 +113,3 @@ export default compose(
   connect(mapStateToProps),
   withStyles(styles),
 )(Designers);
-
-// export default compose(
-//   firestoreConnect(() => ['cohorts', 'campuses']),
-//   connect(mapStateToProps, mapDispatchToProps),
-//   withStyles(styles),
-// )(Cohorts);

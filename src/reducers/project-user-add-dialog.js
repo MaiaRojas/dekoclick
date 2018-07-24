@@ -1,57 +1,57 @@
 // Action types
-const TOGGLE = 'lms.laboratoria.la/cohortUserAddDialog/TOGGLE';
-const UPDATE_EMAIL = 'lms.laboratoria.la/cohortUserAddDialog/UPDATE_EMAIL';
-const UPDATE_ROLE = 'lms.laboratoria.la/cohortUserAddDialog/UPDATE_ROLE';
-const UPDATE_NAME = 'lms.laboratoria.la/cohortUserAddDialog/UPDATE_NAME';
-const UPDATE_GITHUB = 'lms.laboratoria.la/cohortUserAddDialog/UPDATE_GITHUB';
-const UPDATE_ERRORS = 'lms.laboratoria.la/cohortUserAddDialog/UPDATE_ERRORS';
-const RESET = 'lms.laboratoria.la/cohortUserAddDialog/RESET';
-const FETCH_USER_PENDING = 'lms.laboratoria.la/cohortUserAddDialog/FETCH_USER_PENDING';
-const FETCH_USER_SUCCESS = 'lms.laboratoria.la/cohortUserAddDialog/FETCH_USER_SUCCESS';
-const FETCH_USER_FAILURE = 'lms.laboratoria.la/cohortUserAddDialog/FETCH_USER_FAILURE';
-const ADD_USER_PENDING = 'lms.laboratoria.la/cohortUserAddDialog/ADD_USER_PENDING';
-const ADD_USER_SUCCESS = 'lms.laboratoria.la/cohortUserAddDialog/ADD_USER_SUCCESS';
-const ADD_USER_FAILURE = 'lms.laboratoria.la/cohortUserAddDialog/ADD_USER_FAILURE';
+const TOGGLE = 'www.laboratoriodigital.pe/projectUserAddDialog/TOGGLE';
+const UPDATE_EMAIL = 'www.laboratoriodigital.pe/projectUserAddDialog/UPDATE_EMAIL';
+const UPDATE_ROLE = 'www.laboratoriodigital.pe/projectUserAddDialog/UPDATE_ROLE';
+const UPDATE_NAME = 'www.laboratoriodigital.pe/projectUserAddDialog/UPDATE_NAME';
+const UPDATE_GITHUB = 'www.laboratoriodigital.pe/projectUserAddDialog/UPDATE_GITHUB';
+const UPDATE_ERRORS = 'www.laboratoriodigital.pe/projectUserAddDialog/UPDATE_ERRORS';
+const RESET = 'www.laboratoriodigital.pe/projectUserAddDialog/RESET';
+const FETCH_USER_PENDING = 'www.laboratoriodigital.pe/projectUserAddDialog/FETCH_USER_PENDING';
+const FETCH_USER_SUCCESS = 'www.laboratoriodigital.pe/projectUserAddDialog/FETCH_USER_SUCCESS';
+const FETCH_USER_FAILURE = 'www.laboratoriodigital.pe/projectUserAddDialog/FETCH_USER_FAILURE';
+const ADD_USER_PENDING = 'www.laboratoriodigital.pe/projectUserAddDialog/ADD_USER_PENDING';
+const ADD_USER_SUCCESS = 'www.laboratoriodigital.pe/projectUserAddDialog/ADD_USER_SUCCESS';
+const ADD_USER_FAILURE = 'www.laboratoriodigital.pe/projectUserAddDialog/ADD_USER_FAILURE';
 
 
 // Action Creators
-export const toggleCohortUserAddDialog = () => ({
+export const toggleProjectUserAddDialog = () => ({
   type: TOGGLE,
 });
 
-export const updateCohortUserAddDialogEmail = email => ({
+export const updateProjectUserAddDialogEmail = email => ({
   type: UPDATE_EMAIL,
   payload: email,
 });
 
-export const updateCohortUserAddDialogRole = role => ({
+export const updateProjectUserAddDialogRole = role => ({
   type: UPDATE_ROLE,
   payload: role,
 });
 
-export const updateCohortUserAddDialogName = name => ({
+export const updateProjectUserAddDialogName = name => ({
   type: UPDATE_NAME,
   payload: name,
 });
 
-export const updateCohortUserAddDialogGithub = username => ({
+export const updateProjectUserAddDialogGithub = username => ({
   type: UPDATE_GITHUB,
   payload: username,
 });
 
-export const updateCohortUserAddDialogErrors = errors => ({
+export const updateProjectUserAddDialogErrors = errors => ({
   type: UPDATE_ERRORS,
   payload: errors
     .reduce((memo, item) => ({ ...memo, [item.field]: item.message }), {}),
 });
 
-export const resetCohortUserAddDialog = () => ({
+export const resetProjectUserAddDialog = () => ({
   type: RESET,
 });
 
 
-export const fetchCohortUserAddDialogUserRecord = email => ({
-  type: 'api.laboratoria.la',
+export const fetchProjectUserAddDialogUserRecord = email => ({
+  type: 'dekoclik.com',
   payload: {
     method: 'GET',
     path: `/users/${email}`,
@@ -60,8 +60,8 @@ export const fetchCohortUserAddDialogUserRecord = email => ({
 });
 
 
-export const addCohortUser = data => ({
-  type: 'api.laboratoria.la',
+export const addProjectUser = data => ({
+  type: 'dekoclik.com',
   payload: {
     method: 'PUT',
     path: `/users/${data.email}`,

@@ -8,9 +8,11 @@ import Tooltip from 'material-ui/Tooltip';
 const styles = theme => ({
   content: {
     width: '100%',
+    margin: '10px 0',
   },
   root: {
-    height: theme.spacing.unit * 2,
+    height: theme.spacing.unit,
+    borderRadius: '5px',
   },
   secundary: {
     backgroundColor: '#eee',

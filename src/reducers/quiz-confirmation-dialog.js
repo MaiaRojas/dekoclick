@@ -1,7 +1,7 @@
 // Action types
-const TOGGLE = 'lms.laboratoria.la/quizConfirmationDialog/TOGGLE';
-const START = 'lms.laboratoria.la/quizConfirmationDialog/START';
-const RESET = 'lms.laboratoria.la/quizConfirmationDialog/RESET';
+const TOGGLE = 'www.laboratoriodigital.pe/quizConfirmationDialog/TOGGLE';
+const START = 'www.laboratoriodigital.pe/quizConfirmationDialog/START';
+const RESET = 'www.laboratoriodigital.pe/quizConfirmationDialog/RESET';
 
 
 // Action Creators

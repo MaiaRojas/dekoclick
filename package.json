@@ -15,9 +15,11 @@
   "contributors": [
     "Glisse",
     "Milagros ",
-    "Maricarmen Rojas Tinco <maia@laboratoria.la> (https://github.com/MaiaRojas)"
+    "Maricarmen Rojas Tinco <maia.rt.46@gmail.com> (https://github.com/MaiaRojas)"
   ],
   "dependencies": {
+    "@material-ui/core": "^1.4.0",
+    "@material-ui/icons": "^1.1.0",
     "@octokit/rest": "^15.8.2",
     "ansi-html": "^0.0.7",
     "babel-core": "^6.26.0",

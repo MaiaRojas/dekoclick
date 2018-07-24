@@ -47,11 +47,11 @@ class CohortUserOpenModalButton extends React.Component {
           <DialogActions>
             <p>
               <a
-                href={`https://app.talentfest.laboratoria.la/profile/${this.props.uid}`}
+                href={`https:/profile/${this.props.uid}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ver su perfil en talento.laboratoria.la!
+                Ver su perfil.
               </a>
             </p>
             <Button onClick={this.handleClose} color="primary">

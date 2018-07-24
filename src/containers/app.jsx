@@ -9,12 +9,10 @@ import WrappedRoute from '../components/wrapped-route';
 import ScrollToTop from '../components/scroll-to-top';
 import SignIn from './signin';
 import Dashboard from './dashboard';
-import Manager from './manager';
-import Cohorts from './cohorts';
-import Cohort from './cohort';
-import Designers from './designers';
+import Projects from './projects';
 import Project from './project';
-import Unit from './unit';
+import Designers from './designers';
+// import Unit from './unit';
 import Loader from '../components/loader';
 
 
@@ -37,20 +35,19 @@ const App = (props) => {
           : (
             <ScrollToTop>
               <Switch>
-                <WrappedRoute
+                {/* <WrappedRoute
                   path="/groups/:groupid/projects/:projectid/:unitid/:partid?/:exerciseid?"
                   component={Unit}
                   mainNav={false}
                   {...props}
-                />
+                /> */}
                 <WrappedRoute
                   path="/groups/:groupid/projects/:projectid"
                   component={Project}
                   {...props}
                 />
-                <WrappedRoute path="/groups/:id" component={Cohort} {...props} />
-                <WrappedRoute path="/cohorts" component={Cohorts} {...props} />
-                <WrappedRoute path="/manager" component={Manager} {...props} />
+                <WrappedRoute path="/projects/:id" component={Project} {...props} />
+                <WrappedRoute path="/projects" component={Projects} {...props} />
                 <WrappedRoute path="/designers" component={Designers} {...props} />
                 <WrappedRoute exact path="/" component={Dashboard} {...props} />
               </Switch>

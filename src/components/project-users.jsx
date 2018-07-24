@@ -6,8 +6,8 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Grid from 'material-ui/Grid';
-import CohortUser from './cohort-user';
-import { toggleCohortUserMoveDialog } from '../reducers/cohort-user-move-dialog';
+import ProjectUser from './cohort-user';
+import { toggleProjectUserMoveDialog } from '../reducers/project-user-move-dialog';
 
 
 const styles = theme => ({
@@ -22,7 +22,7 @@ const profilesLoaded = profiles => Object.keys(profiles)
   .reduce((memo, uid) => memo && profiles[uid], true);
 
 
-const CohortUsers = (props) => {
+const ProjectUsers = (props) => {
   if (!profilesLoaded(props.profiles || {})) {
     return <CircularProgress />;
   }
@@ -31,7 +31,7 @@ const CohortUsers = (props) => {
     <div className={props.classes.root}>
       <Grid container>
         {props.users.map(cohortUser => (
-          <CohortUser
+          <ProjectUser
             key={cohortUser.id}
             uid={cohortUser.id}
             cohortUser={cohortUser}
@@ -49,21 +49,21 @@ const CohortUsers = (props) => {
 };
 
 
-CohortUsers.propTypes = {
-  cohortid: PropTypes.string.isRequired,
-  users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  profiles: PropTypes.shape({}).isRequired,
-  toggleMoveDialog: PropTypes.func.isRequired,
-  auth: PropTypes.shape({}),
-  parsedCohortId: PropTypes.shape({}),
-  firebase: PropTypes.shape({}).isRequired,
-  classes: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-  }).isRequired,
+ProjectUsers.propTypes = {
+  // cohortid: PropTypes.string.isRequired,
+  // users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  // profiles: PropTypes.shape({}).isRequired,
+  // toggleMoveDialog: PropTypes.func.isRequired,
+  // auth: PropTypes.shape({}),
+  // parsedCohortId: PropTypes.shape({}),
+  // firebase: PropTypes.shape({}).isRequired,
+  // classes: PropTypes.shape({
+  //   root: PropTypes.string.isRequired,
+  // }).isRequired,
 };
 
 
-CohortUsers.defaultProps = {
+ProjectUsers.defaultProps = {
   auth: undefined,
   parsedCohortId: undefined,
 };
@@ -78,7 +78,7 @@ const mapStateToProps = ({ firestore }, ownProps) => ({
 
 
 const mapDispatchToProps = {
-  toggleMoveDialog: toggleCohortUserMoveDialog,
+  toggleMoveDialog: toggleProjectUserMoveDialog,
 };
 
 
@@ -86,4 +86,4 @@ export default compose(
   firestoreConnect(props => props.users.map(obj => `users/${obj.id}`)),
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
-)(CohortUsers);
+)(ProjectUsers);

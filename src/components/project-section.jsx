@@ -25,7 +25,7 @@ const styles = theme => ({
 });
 
 
-const CohortSection = ({
+const ProjectSection = ({
   children,
   classes,
   title,
@@ -53,7 +53,7 @@ const CohortSection = ({
 );
 
 
-CohortSection.propTypes = {
+ProjectSection.propTypes = {
   children: PropTypes.element.isRequired,
   classes: PropTypes.shape({}).isRequired,
   title: PropTypes.string.isRequired,
@@ -61,9 +61,9 @@ CohortSection.propTypes = {
 };
 
 
-CohortSection.defaultProps = {
+ProjectSection.defaultProps = {
   onAdd: undefined,
 };
 
 
-export default withStyles(styles)(CohortSection);
+export default withStyles(styles)(ProjectSection);

@@ -1,8 +1,8 @@
 // Action types
-const TOGGLE = 'lms.laboratoria.la/cohortCalendarAddDialog/TOGGLE';
-const UPDATE_FIELD = 'lms.laboratoria.la/cohortCalendarAddDialog/UPDATE_FIELD';
-const VALIDATE_AND_SUBMIT = 'lms.laboratoria.la/cohortCalendarAddDialog/VALIDATE_AND_SUBMIT';
-const RESET = 'lms.laboratoria.la/cohortCalendarAddDialog/RESET';
+const TOGGLE = 'www.laboratoriodigital.pe/cohortCalendarAddDialog/TOGGLE';
+const UPDATE_FIELD = 'www.laboratoriodigital.pe/cohortCalendarAddDialog/UPDATE_FIELD';
+const VALIDATE_AND_SUBMIT = 'www.laboratoriodigital.pe/cohortCalendarAddDialog/VALIDATE_AND_SUBMIT';
+const RESET = 'www.laboratoriodigital.pe/cohortCalendarAddDialog/RESET';
 
 
 // Action Creators

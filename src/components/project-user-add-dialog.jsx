@@ -16,16 +16,16 @@ import TextField from 'material-ui/TextField';
 import Select from 'material-ui/Select';
 import Button from 'material-ui/Button';
 import {
-  toggleCohortUserAddDialog,
-  updateCohortUserAddDialogEmail,
-  updateCohortUserAddDialogRole,
-  updateCohortUserAddDialogName,
-  updateCohortUserAddDialogGithub,
-  updateCohortUserAddDialogErrors,
-  resetCohortUserAddDialog,
-  fetchCohortUserAddDialogUserRecord,
-  addCohortUser,
-} from '../reducers/cohort-user-add-dialog';
+  toggleProjectUserAddDialog,
+  updateProjectUserAddDialogEmail,
+  updateProjectUserAddDialogRole,
+  updateProjectUserAddDialogName,
+  updateProjectUserAddDialogGithub,
+  updateProjectUserAddDialogErrors,
+  resetProjectUserAddDialog,
+  fetchProjectUserAddDialogUserRecord,
+  addProjectUser,
+} from '../reducers/project-user-add-dialog';
 import hasOwnProperty from '../util/hasOwnProperty';
 import isEmail from '../util/isEmail';
 
@@ -105,16 +105,16 @@ const hasVerifiedEmail = ({ userRecord, userRecordError }) =>
   (userRecord || (userRecordError && userRecordError.statusCode === 404));
 
 
-const CohortUserAddDialog = ({ classes, ...props }) => (
+const ProjectUserAddDialog = ({ classes, ...props }) => (
   <div className={classes.container}>
-    <Dialog open={props.open} onClose={props.toggleCohortUserAddDialog}>
-      <DialogTitle>Añade usuario al cohort</DialogTitle>
+    <Dialog open={props.open} onClose={props.toggleProjectUserAddDialog}>
+      <DialogTitle>Añade un diseñador al projecto </DialogTitle>
       <DialogContent>
         <TextField
           id="email"
           className={classes.textField}
           value={props.email}
-          onChange={e => props.updateCohortUserAddDialogEmail(e.target.value)}
+          onChange={e => props.updateProjectUserAddDialogEmail(e.target.value)}
           error={hasOwnProperty(props.errors, 'email')}
           disabled={!!props.userRecord || !!props.userRecordLoading}
           margin="dense"
@@ -148,7 +148,7 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
               <InputLabel htmlFor="role">Rol</InputLabel>
               <Select
                 value={props.role}
-                onChange={e => props.updateCohortUserAddDialogRole(e.target.value)}
+                onChange={e => props.updateProjectUserAddDialogRole(e.target.value)}
                 input={<Input id="role" />}
               >
                 {['student', 'instructor', 'admin'].map(key =>
@@ -159,7 +159,7 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
               id="name"
               className={classes.textField}
               value={props.name}
-              onChange={e => props.updateCohortUserAddDialogName(e.target.value)}
+              onChange={e => props.updateProjectUserAddDialogName(e.target.value)}
               error={hasOwnProperty(props.errors, 'name')}
               margin="dense"
               label="Nombre completo"
@@ -170,7 +170,7 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
               id="github"
               className={classes.textField}
               value={props.github}
-              onChange={e => props.updateCohortUserAddDialogGithub(e.target.value)}
+              onChange={e => props.updateProjectUserAddDialogGithub(e.target.value)}
               error={hasOwnProperty(props.errors, 'github')}
               margin="dense"
               label="Usuario de GitHub"
@@ -181,7 +181,7 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.resetCohortUserAddDialog} color="default">
+        <Button onClick={props.resetProjectUserAddDialog} color="default">
           Cancelar
         </Button>
         <Button
@@ -192,16 +192,16 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
             const { data, errors } = validate(props, !hasVerifiedEmail(props));
 
             if (errors && errors.length) {
-              return props.updateCohortUserAddDialogErrors(errors);
+              return props.updateProjectUserAddDialogErrors(errors);
             }
 
-            props.updateCohortUserAddDialogErrors([]);
+            props.updateProjectUserAddDialogErrors([]);
 
             if (!hasVerifiedEmail(props)) {
-              return props.fetchCohortUserAddDialogUserRecord(props.email);
+              return props.fetchProjectUserAddDialogUserRecord(props.email);
             }
 
-            return props.addCohortUser(data);
+            return props.addProjectUser(data);
           }}
         >
           {hasVerifiedEmail(props) ? 'Añadir usuario' : 'Verificar email'}
@@ -212,7 +212,7 @@ const CohortUserAddDialog = ({ classes, ...props }) => (
 );
 
 
-CohortUserAddDialog.propTypes = {
+ProjectUserAddDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   email: PropTypes.string,
   role: PropTypes.string,
@@ -222,20 +222,20 @@ CohortUserAddDialog.propTypes = {
   userRecord: PropTypes.shape({}),
   userRecordLoading: PropTypes.bool.isRequired,
   addingUser: PropTypes.bool.isRequired,
-  toggleCohortUserAddDialog: PropTypes.func.isRequired,
-  updateCohortUserAddDialogEmail: PropTypes.func.isRequired,
-  updateCohortUserAddDialogRole: PropTypes.func.isRequired,
-  updateCohortUserAddDialogName: PropTypes.func.isRequired,
-  updateCohortUserAddDialogGithub: PropTypes.func.isRequired,
-  updateCohortUserAddDialogErrors: PropTypes.func.isRequired,
-  fetchCohortUserAddDialogUserRecord: PropTypes.func.isRequired,
-  resetCohortUserAddDialog: PropTypes.func.isRequired,
-  addCohortUser: PropTypes.func.isRequired,
+  toggleProjectUserAddDialog: PropTypes.func.isRequired,
+  updateProjectUserAddDialogEmail: PropTypes.func.isRequired,
+  updateProjectUserAddDialogRole: PropTypes.func.isRequired,
+  updateProjectUserAddDialogName: PropTypes.func.isRequired,
+  updateProjectUserAddDialogGithub: PropTypes.func.isRequired,
+  updateProjectUserAddDialogErrors: PropTypes.func.isRequired,
+  fetchProjectUserAddDialogUserRecord: PropTypes.func.isRequired,
+  resetProjectUserAddDialog: PropTypes.func.isRequired,
+  addProjectUser: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
 };
 
 
-CohortUserAddDialog.defaultProps = {
+ProjectUserAddDialog.defaultProps = {
   email: '',
   role: '',
   name: '',
@@ -245,36 +245,36 @@ CohortUserAddDialog.defaultProps = {
 };
 
 
-const mapStateToProps = ({ cohortUserAddDialog }) => ({
-  open: cohortUserAddDialog.open,
-  email: cohortUserAddDialog.email,
-  role: cohortUserAddDialog.role,
-  name: cohortUserAddDialog.name,
-  github: cohortUserAddDialog.github,
-  errors: cohortUserAddDialog.errors,
-  userRecord: cohortUserAddDialog.userRecord,
-  userRecordError: cohortUserAddDialog.userRecordError,
-  userRecordLoading: cohortUserAddDialog.userRecordLoading,
-  addingUser: cohortUserAddDialog.addingUser,
-  addUserError: cohortUserAddDialog.addUserError,
-  addUserSuccess: cohortUserAddDialog.addUserSuccess,
+const mapStateToProps = ({ propjectUserAddDialog }) => ({
+  open: propjectUserAddDialog.open,
+  email: propjectUserAddDialog.email,
+  role: propjectUserAddDialog.role,
+  name: propjectUserAddDialog.name,
+  github: propjectUserAddDialog.github,
+  errors: propjectUserAddDialog.errors,
+  userRecord: propjectUserAddDialog.userRecord,
+  userRecordError: propjectUserAddDialog.userRecordError,
+  userRecordLoading: propjectUserAddDialog.userRecordLoading,
+  addingUser: propjectUserAddDialog.addingUser,
+  addUserError: propjectUserAddDialog.addUserError,
+  addUserSuccess: propjectUserAddDialog.addUserSuccess,
 });
 
 
 const mapDispatchToProps = {
-  toggleCohortUserAddDialog,
-  updateCohortUserAddDialogEmail,
-  updateCohortUserAddDialogRole,
-  updateCohortUserAddDialogName,
-  updateCohortUserAddDialogGithub,
-  updateCohortUserAddDialogErrors,
-  resetCohortUserAddDialog,
-  fetchCohortUserAddDialogUserRecord,
-  addCohortUser,
+  toggleProjectUserAddDialog,
+  updateProjectUserAddDialogEmail,
+  updateProjectUserAddDialogRole,
+  updateProjectUserAddDialogName,
+  updateProjectUserAddDialogGithub,
+  updateProjectUserAddDialogErrors,
+  resetProjectUserAddDialog,
+  fetchProjectUserAddDialogUserRecord,
+  addProjectUser,
 };
 
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
-)(CohortUserAddDialog);
+)(ProjectUserAddDialog);

@@ -21,8 +21,8 @@ const styles = theme => ({
   },
 });
 
-const CohortCourse = ({
-  cohortid,
+const ProjectCourse = ({
+  projectid,
   courseid,
   course,
   history,
@@ -32,7 +32,7 @@ const CohortCourse = ({
   <ListItem
     button
     onClick={() => {
-      history.push(`/cohorts/${cohortid}/courses/${courseid}`);
+      history.push(`/projects/${projectid}/courses/${courseid}`);
     }}
   >
     <ListItemAvatar>
@@ -63,28 +63,28 @@ const CohortCourse = ({
 );
 
 
-CohortCourse.propTypes = {
-  cohortid: PropTypes.string.isRequired,
-  courseid: PropTypes.string.isRequired,
-  course: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    stats: PropTypes.shape({
-      durationString: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  firestore: PropTypes.shape({
-    delete: PropTypes.func.isRequired,
-  }).isRequired,
-  classes: PropTypes.shape({
-    secondary: PropTypes.string.isRequired,
-  }).isRequired,
+ProjectCourse.propTypes = {
+  // cohortid: PropTypes.string.isRequired,
+  // courseid: PropTypes.string.isRequired,
+  // course: PropTypes.shape({
+  //   title: PropTypes.string.isRequired,
+  //   stats: PropTypes.shape({
+  //     durationString: PropTypes.string.isRequired,
+  //   }).isRequired,
+  // }).isRequired,
+  // history: PropTypes.shape({
+  //   push: PropTypes.func.isRequired,
+  // }).isRequired,
+  // firestore: PropTypes.shape({
+  //   delete: PropTypes.func.isRequired,
+  // }).isRequired,
+  // classes: PropTypes.shape({
+  //   secondary: PropTypes.string.isRequired,
+  // }).isRequired,
 };
 
 
 export default compose(
   withStyles(styles),
   withFirestore,
-)(CohortCourse);
+)(ProjectCourse);

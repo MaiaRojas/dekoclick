@@ -63,13 +63,12 @@ const DesignerList = ({
   designer,
   designers,
   classes,
-  auth,
+  // auth,
   drawerOpen,
 }) => {
-  if (!designers) {
-    return (<Loader />);
-  }
-  console.log(group);
+  // if (!designers) {
+  //   return (<Loader />);
+  // }
   return (
     <div
       position="absolute"
@@ -81,21 +80,21 @@ const DesignerList = ({
         </Typography> */}
       </div>
       <div className={classes.container}>
-        {/* {!projects.length
+        {!designers.length
           ? <FormattedMessage id="course-list.content" />
-          : (projects.map(project => (
-            <ProjectCard
-              key={project.id}
-              group={group.id}
-              project={project}
+          : (projects.map(designer => (
+            <DesignerCard
+              key={designer.id}
+              designer={designer.id}
+              designer={designer}
               auth={auth}
             />
-          )))} */}
+          )))}
       </div>
     </div>
   );
 };
-
+// console.log(designer.id))};
 
 DesignerList.propTypes = {
   // drawerOpen: PropTypes.bool.isRequired,
@@ -118,19 +117,41 @@ DesignerList.propTypes = {
   // history: PropTypes.shape({}).isRequired,
 };
 
+// const mapStateToProps = ({
+//   firestore, designers, topbar,
+// }) => ({
+//   projects: filterProjects(firestore.ordered.projects, {
+//     campus: projects.campusFilter,
+//     program: projects.programFilter,
+//   }),
+//   campuses: firestore.ordered.campuses,
+//   estadoFilter: projects.estadoFilter,
+//   programFilter: projects.programFilter,
+//   newDialogOpen: projectNewDialog.open,
+//   drawerOpen: topbar.drawerOpen,
+// });
+
 
 DesignerList.defaultProps = {
   projects: undefined,
 };
 
 
-export default compose(
-  firestoreConnect(props => [{
-    collection: `designers/${props.designer.id}`,
-    orderBy: ['order'],
-  }]),
-  connect(({ firestore }, { group }) => ({
-    designer: firestore.ordered[`designers/${designer.id}`],
-  })),
-  withStyles(styles),
-)(DesignerList);
+export default
+  // compose(
+  //   firestoreConnect(() => ['designers']),
+  //   connect(({ firestore }, { designer }) => ({
+  //     designer: firestore.ordered[`designers/${designer.id}`],
+  //   })),
+  withStyles(styles)(DesignerList);
+
+// export default compose(
+//   firestoreConnect(({ auth }) => [{
+//     collection: `users/${auth.uid}/cohorts`,
+//   }]),
+//   connect(({ firestore }, { auth }) => ({
+//     cohorts: firestore.ordered[`users/${auth.uid}/cohorts`],
+//   })),
+//   connect(mapStateToProps),
+//   withStyles(styles),
+// )(Courses);

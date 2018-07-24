@@ -5,7 +5,7 @@ const baseUrl = `https://${process.env.FIREBASE_PROJECT}.firebaseapp.com`;
 
 
 const apiMiddleware = store => next => (action) => {
-  if (!/^api\.laboratoria\.la/.test(action.type)) {
+  if (!/^api\.dekoclik\.com/.test(action.type)) {
     return next(action);
   }
 

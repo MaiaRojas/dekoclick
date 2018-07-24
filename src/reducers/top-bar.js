@@ -1,5 +1,5 @@
 // Action types
-const DISPLAY_DRAWER = 'lms.laboratoria.la/topbar/DISPLAY_DRAWER';
+const DISPLAY_DRAWER = 'www.laboratoriodigital.pe/topbar/DISPLAY_DRAWER';
 
 
 // Action Creators

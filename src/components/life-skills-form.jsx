@@ -79,8 +79,8 @@ class CheckboxList extends React.Component {
               [`${fieldStructure}`]: {
                 author: adminUser.data().name,
                 authorLinkedin: adminUser.data().linkedin || '',
-                company: 'Laboratoria',
-                companyUrl: 'www.laboratoria.la',
+                company: 'Dekoclick',
+                companyUrl: 'Dekoclick',
               },
             });
         });

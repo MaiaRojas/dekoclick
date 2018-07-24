@@ -13,7 +13,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import SwapHorizIcon from 'material-ui-icons/SwapHoriz';
 import DirectionsWalkIcon from 'material-ui-icons/DirectionsWalk';
 import gravatarUrl from '../util/gravatarUrl';
-import { parse } from '../util/cohort';
+import { parse } from '../util/progress';
 import CohortUserOpenModalButton from './cohort-user-open-modal-button';
 
 
